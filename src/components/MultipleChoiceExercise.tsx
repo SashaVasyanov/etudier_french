@@ -1,4 +1,5 @@
 import type { Exercise, Word } from '../types';
+import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
 import { LessonChoiceButton } from './LessonChoiceButton';
 import { WordImage } from './WordImage';
@@ -31,18 +32,18 @@ export function MultipleChoiceExercise({
           <span className="eyebrow">Упражнение</span>
           <h2 className="exercise-title">{exercise.prompt}</h2>
           {isOriginalExercise ? (
-            <div className="question-block lesson-focus-copy">
-              <p className="question-primary lesson-word-title">{word.original}</p>
-              <p className="question-secondary">
-                {word.transcription} · {word.part_of_speech}
-              </p>
-            </div>
+            <CenteredWordBlock
+              title={word.original}
+              meta={`${word.transcription} · ${word.part_of_speech}`}
+              titleClassName="lesson-word-title"
+            />
           ) : null}
           {exercise.type === 'translation_to_original_choice' ? (
-            <div className="question-block lesson-focus-copy">
-              <p className="question-primary lesson-translation">{word.translation}</p>
-              <p className="question-secondary">Выберите французское слово</p>
-            </div>
+            <CenteredWordBlock
+              title={word.translation}
+              meta="Выберите французское слово"
+              titleClassName="lesson-translation"
+            />
           ) : null}
           {isAudioExercise ? (
             <div className="audio-panel lesson-audio-panel">

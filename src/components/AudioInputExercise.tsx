@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { Exercise, Word } from '../types';
+import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
 import { WordImage } from './WordImage';
 
@@ -36,6 +37,7 @@ export function AudioInputExercise({
         <header className="exercise-header lesson-focus-header">
           <span className="eyebrow">Аудио-ввод</span>
           <h2 className="exercise-title">{exercise.prompt}</h2>
+          <CenteredWordBlock title={word.translation} meta={`${word.transcription} · ${word.part_of_speech}`} titleClassName="lesson-translation" />
           <div className="audio-panel lesson-audio-panel">
             <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
               Повторить аудио

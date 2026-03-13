@@ -4,8 +4,8 @@ import { getPackByWord } from '../lib/packs';
 import { getWordProgress } from '../lib/storage';
 import type { AppStorage, DictionaryTab, Word, WordLevel, WordPack } from '../types';
 import { AppCard } from './AppCard';
+import { PackWordRow } from './PackWordRow';
 import { StatusBadge } from './StatusBadge';
-import { WordCard } from './WordCard';
 import { WordImage } from './WordImage';
 
 interface DictionaryScreenProps {
@@ -121,17 +121,12 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
           const wordPacks = getPackByWord(word, packs);
 
           return (
-            <WordCard
-              key={word.id}
-              media={<WordImage word={word} />}
-              header={
-                <>
-                  <div className="word-card-copy">
-                    <h2 className="word-title">{word.original}</h2>
-                    <p className="word-subtitle">
-                      {word.translation} · {word.transcription || 'транскрипция не указана'}
-                    </p>
-                  </div>
+            <AppCard key={word.id} as="article" className="word-card">
+              <PackWordRow
+                media={<WordImage word={word} />}
+                title={word.original}
+                subtitle={`${word.translation} · ${word.transcription || 'транскрипция не указана'}`}
+                action={
                   <button
                     type="button"
                     className="audio-button"
@@ -141,31 +136,31 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
                   >
                     Аудио
                   </button>
-                </>
-              }
-              badges={
-                <>
-                  <StatusBadge status={progress.status} />
-                  <span className="tag-badge">{word.level}</span>
-                  <span className="tag-badge">{word.part_of_speech}</span>
-                  {word.source === 'core' ? (
-                    <span className="tag-badge">Базовый курс</span>
-                  ) : (
-                    wordPacks.map((pack) => (
-                      <span key={pack.id} className="tag-badge">
-                        {pack.title}
-                      </span>
-                    ))
-                  )}
-                </>
-              }
-              details={
-                <div className="example-card">
-                  <p className="example-original">{word.example_original}</p>
-                  <p className="example-translation">{word.example_translation}</p>
-                </div>
-              }
-            />
+                }
+                badges={
+                  <>
+                    <StatusBadge status={progress.status} />
+                    <span className="tag-badge">{word.level}</span>
+                    <span className="tag-badge">{word.part_of_speech}</span>
+                    {word.source === 'core' ? (
+                      <span className="tag-badge">Базовый курс</span>
+                    ) : (
+                      wordPacks.map((pack) => (
+                        <span key={pack.id} className="tag-badge">
+                          {pack.title}
+                        </span>
+                      ))
+                    )}
+                  </>
+                }
+                details={
+                  <div className="example-card">
+                    <p className="example-original">{word.example_original}</p>
+                    <p className="example-translation">{word.example_translation}</p>
+                  </div>
+                }
+              />
+            </AppCard>
           );
         })}
       </section>

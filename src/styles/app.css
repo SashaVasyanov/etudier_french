@@ -624,6 +624,10 @@
   align-content: start;
 }
 
+.word-card {
+  align-self: stretch;
+}
+
 .word-card-media,
 .word-card-content,
 .word-card-details,
@@ -631,6 +635,46 @@
 .word-card-header,
 .word-card-copy {
   min-width: 0;
+}
+
+.centered-word-block,
+.centered-word-block-inner {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  text-align: center;
+  min-width: 0;
+  width: 100%;
+}
+
+.centered-word-block-inner {
+  max-width: min(100%, 560px);
+}
+
+.centered-word-title,
+.centered-word-subtitle,
+.centered-word-meta {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.centered-word-title {
+  color: var(--ink-strong);
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.centered-word-subtitle {
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.centered-word-meta {
+  color: var(--ink-soft);
+  line-height: 1.3;
 }
 
 .word-card-header {
@@ -663,6 +707,35 @@
 .pack-card strong {
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+.pack-word-row {
+  display: grid;
+  grid-template-columns: minmax(148px, 172px) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+  min-width: 0;
+}
+
+.pack-word-row-media,
+.pack-word-row-body,
+.pack-word-row-head,
+.pack-word-row-copy,
+.pack-word-row-details,
+.pack-word-row-action {
+  min-width: 0;
+}
+
+.pack-word-row-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.pack-word-row-copy {
+  display: grid;
+  gap: 4px;
 }
 
 .word-image-frame {
@@ -828,16 +901,28 @@
 
 .choice-button {
   min-height: 74px;
-  padding: 16px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  padding: 0;
+  display: grid;
+  place-items: center;
   background: rgba(255, 255, 255, 0.9);
   border-color: #d8e4f5;
   color: #1c3856;
   font-size: 1rem;
   font-weight: 700;
+  line-height: 1.35;
+}
+
+.choice-button-label {
+  width: 100%;
+  min-height: 74px;
+  padding: 16px 18px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  align-content: center;
+  justify-content: center;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   line-height: 1.35;
 }
 
@@ -896,6 +981,12 @@
   gap: 12px;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   min-width: 0;
+}
+
+.lesson-focus-header > .exercise-title {
+  max-width: min(100%, 580px);
+  margin-inline: auto;
+  text-align: center;
 }
 
 .module-nav-item {
@@ -1035,6 +1126,10 @@
 
   .packs-grid,
   .dictionary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pack-word-row {
     grid-template-columns: 1fr;
   }
 

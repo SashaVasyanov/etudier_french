@@ -1,4 +1,5 @@
 import type { Word } from '../types';
+import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
 import { WordImage } from './WordImage';
 
@@ -25,13 +26,13 @@ export function LessonWordPreview({
       header={
         <header className="exercise-header lesson-focus-header">
           <span className="eyebrow">Новые слова</span>
-          <h2 className="exercise-title lesson-word-title">{word.original}</h2>
-          <div className="question-block lesson-focus-copy">
-            <p className="question-primary lesson-translation">{word.translation}</p>
-            <p className="question-secondary">
-              {word.transcription} · {word.part_of_speech} · {word.level}
-            </p>
-          </div>
+          <CenteredWordBlock
+            title={word.original}
+            subtitle={word.translation}
+            meta={`${word.transcription} · ${word.part_of_speech} · ${word.level}`}
+            titleClassName="exercise-title lesson-word-title"
+            subtitleClassName="lesson-translation"
+          />
         </header>
       }
       visual={<WordImage word={word} size="large" className="lesson-word-image" />}

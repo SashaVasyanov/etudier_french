@@ -20,7 +20,7 @@ export function LessonChoiceButton({
       disabled={disabled}
       onClick={onClick}
     >
-      {children}
+      <span className="choice-button-label">{children}</span>
     </button>
   );
 }

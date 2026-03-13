@@ -5,8 +5,8 @@ import { getWordProgress } from '../lib/storage';
 import type { AppStorage, LessonDurationMinutes, WordPack } from '../types';
 import { AppCard } from './AppCard';
 import { LessonDurationSelector } from './LessonDurationSelector';
+import { PackWordRow } from './PackWordRow';
 import { StatusBadge } from './StatusBadge';
-import { WordCard } from './WordCard';
 import { WordImage } from './WordImage';
 
 interface PackDetailScreenProps {
@@ -138,17 +138,12 @@ export function PackDetailScreen({
           const progress = getWordProgress(storage, word.id);
 
           return (
-            <WordCard
-              key={word.id}
-              media={<WordImage word={word} />}
-              header={
-                <>
-                  <div className="word-card-copy">
-                    <h2 className="word-title">{word.original}</h2>
-                    <p className="word-subtitle">
-                      {word.translation} · {word.transcription || 'транскрипция не указана'}
-                    </p>
-                  </div>
+            <AppCard key={word.id} as="article" className="word-card">
+              <PackWordRow
+                media={<WordImage word={word} />}
+                title={word.original}
+                subtitle={`${word.translation} · ${word.transcription || 'транскрипция не указана'}`}
+                action={
                   <button
                     type="button"
                     className="audio-button"
@@ -159,22 +154,22 @@ export function PackDetailScreen({
                   >
                     {word.audio_original ? 'Аудио' : 'Нет аудио'}
                   </button>
-                </>
-              }
-              badges={
-                <>
-                  <StatusBadge status={progress.status} />
-                  <span className="tag-badge">{word.part_of_speech}</span>
-                  <span className="tag-badge">{word.level}</span>
-                </>
-              }
-              details={
-                <div className="example-card">
-                  <p className="example-original">{word.example_original}</p>
-                  <p className="example-translation">{word.example_translation}</p>
-                </div>
-              }
-            />
+                }
+                badges={
+                  <>
+                    <StatusBadge status={progress.status} />
+                    <span className="tag-badge">{word.part_of_speech}</span>
+                    <span className="tag-badge">{word.level}</span>
+                  </>
+                }
+                details={
+                  <div className="example-card">
+                    <p className="example-original">{word.example_original}</p>
+                    <p className="example-translation">{word.example_translation}</p>
+                  </div>
+                }
+              />
+            </AppCard>
           );
         })}
       </section>
