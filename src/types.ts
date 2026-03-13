@@ -1,6 +1,7 @@
 export type WordStatus = 'new' | 'learning' | 'review' | 'known' | 'mastered' | 'difficult';
 export type WordLevel = 'A1' | 'A2' | 'B1';
-export type LessonMode = 'default' | 'mistakes';
+export type LessonMode = 'default' | 'extra' | 'mistakes' | 'pack';
+export type LessonDurationMinutes = 10 | 20 | 30;
 export type DictionaryTab = 'all' | 'learning' | 'known' | 'mastered' | 'difficult';
 export type LessonModuleTheme = 'new' | 'practice' | 'review' | 'reinforcement' | 'mistakes';
 export type PackStatus = 'not_added' | 'added' | 'in_progress' | 'completed';
@@ -68,6 +69,7 @@ export interface LessonSession {
   id: string;
   title: string;
   mode: LessonMode;
+  durationMinutes: LessonDurationMinutes;
   startedAt: string;
   exerciseIds: string[];
   exercises: Exercise[];
@@ -110,6 +112,7 @@ export interface StudyHistoryEntry {
   completedAt: string;
   sessionId: string;
   mode: LessonMode;
+  durationMinutes: LessonDurationMinutes;
   moduleTitles: string[];
   modulesCompleted: number;
   wordsLearned: number;
@@ -140,6 +143,7 @@ export interface AppStorage {
   completedDailyLessons: DailyLessonRecord[];
   streakDays: number;
   lastLessonDate: string | null;
+  lessonDurationMinutes: LessonDurationMinutes;
   profile: UserProfile;
   studyHistory: StudyHistoryEntry[];
   packStates: Record<string, UserPackState>;

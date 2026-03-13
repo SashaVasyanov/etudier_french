@@ -31,7 +31,8 @@
 .dashboard-panel,
 .timeline-card,
 .pack-card,
-.lesson-header-card {
+.lesson-header-card,
+.duration-card {
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(206, 220, 239, 0.9);
   border-radius: 28px;
@@ -52,7 +53,8 @@
 .dashboard-panel,
 .timeline-card,
 .pack-card,
-.lesson-header-card {
+.lesson-header-card,
+.duration-card {
   padding: 22px;
 }
 
@@ -195,6 +197,12 @@
   align-content: start;
 }
 
+.home-path-grid,
+.duration-grid {
+  display: grid;
+  gap: 14px;
+}
+
 .profile-hero {
   grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
 }
@@ -300,9 +308,17 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.home-path-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .module-meta-grid,
 .module-nav,
 .pack-meta-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.duration-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
@@ -327,6 +343,11 @@
 
 .dashboard-panel {
   background: rgba(255, 255, 255, 0.88);
+}
+
+.duration-card {
+  display: grid;
+  gap: 16px;
 }
 
 .info-label {
@@ -408,6 +429,33 @@
 
 .timeline-item {
   gap: 10px;
+}
+
+.duration-option {
+  min-height: 118px;
+  padding: 18px;
+  text-align: left;
+  background: #f8fbff;
+  border: 1px solid #dce8fb;
+  border-radius: 22px;
+  color: #18345c;
+  display: grid;
+  gap: 8px;
+}
+
+.duration-option strong,
+.duration-option span {
+  margin: 0;
+}
+
+.duration-option span {
+  color: #61728c;
+}
+
+.duration-option.active {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(15, 157, 138, 0.14));
+  border-color: #8fb7ff;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12);
 }
 
 .module-nav-item {
@@ -689,6 +737,37 @@
   overflow: hidden;
 }
 
+.pack-card-actions,
+.pack-detail-head,
+.pack-detail-summary {
+  display: flex;
+  gap: 12px;
+}
+
+.pack-card-actions {
+  align-items: stretch;
+}
+
+.pack-card-actions > * {
+  flex: 1;
+}
+
+.pack-detail-head,
+.pack-detail-summary {
+  align-items: start;
+  justify-content: space-between;
+}
+
+.pack-detail-summary {
+  min-height: 56px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  border: 1px solid #d7e4fb;
+  background: #fff;
+  color: #61728c;
+  flex-direction: column;
+}
+
 .pack-card::before {
   content: '';
   position: absolute;
@@ -723,7 +802,8 @@
   .dashboard-feature-grid,
   .profile-stats-grid,
   .packs-grid,
-  .dictionary-grid {
+  .dictionary-grid,
+  .home-path-grid {
     grid-template-columns: 1fr;
   }
 
@@ -744,7 +824,8 @@
   .module-meta-grid,
   .module-nav,
   .tab-row,
-  .dictionary-toolbar-wide {
+  .dictionary-toolbar-wide,
+  .duration-grid {
     grid-template-columns: 1fr;
   }
 
@@ -758,7 +839,9 @@
   .module-header-top,
   .dictionary-summary,
   .word-card-header,
-  .timeline-item-head {
+  .timeline-item-head,
+  .pack-detail-head,
+  .pack-card-actions {
     align-items: start;
     flex-direction: column;
   }

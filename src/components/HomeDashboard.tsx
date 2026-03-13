@@ -1,6 +1,7 @@
 import { countWordsByStatus } from '../lib/exercises';
 import { getTodayDateKey, percentage } from '../lib/utils';
-import type { AppStorage, Word, WordProgress } from '../types';
+import type { AppStorage, DailyLessonRecord, LessonDurationMinutes, Word, WordProgress } from '../types';
+import { LessonDurationSelector } from './LessonDurationSelector';
 
 interface HomeDashboardProps {
   availableWords: Word[];
@@ -8,7 +9,10 @@ interface HomeDashboardProps {
   storage: AppStorage;
   progressList: WordProgress[];
   addedPacksCount: number;
+  lessonDurationMinutes: LessonDurationMinutes;
+  onLessonDurationChange: (value: LessonDurationMinutes) => void;
   onStartLesson: () => void;
+  onStartExtraLesson: () => void;
   onOpenCompletion: () => void;
   onOpenDictionary: () => void;
   onOpenProfile: () => void;
@@ -27,13 +31,28 @@ function getDueReviewCount(progressList: WordProgress[]): number {
   }).length;
 }
 
+function formatDailyStatus(todayCompletion: DailyLessonRecord | null, completedLessons: number | undefined): string {
+  if (todayCompletion) {
+    return 'Завершён';
+  }
+
+  if (completedLessons) {
+    return `${completedLessons} урок(а)`;
+  }
+
+  return 'Не начат';
+}
+
 export function HomeDashboard({
   availableWords,
   totalWords,
   storage,
   progressList,
   addedPacksCount,
+  lessonDurationMinutes,
+  onLessonDurationChange,
   onStartLesson,
+  onStartExtraLesson,
   onOpenCompletion,
   onOpenDictionary,
   onOpenProfile,
@@ -50,17 +69,18 @@ export function HomeDashboard({
     countWordsByStatus(progressList, 'learning') +
     countWordsByStatus(progressList, 'review') +
     countWordsByStatus(progressList, 'difficult');
+  const difficultCount = countWordsByStatus(progressList, 'difficult');
 
   return (
     <section className="dashboard-shell">
       <header className="hero-card home-hero">
         <div className="hero-copy">
-          <span className="eyebrow">Etudier French</span>
+          <span className="eyebrow">Главная</span>
           <h1 className="hero-title">Французский на сегодня</h1>
           <p className="hero-text">
             {todayCompletion
-              ? 'Дневной урок завершён. Откройте словарь, профиль или добавьте новый пак для следующего прогресса.'
-              : 'Начните модульный урок, продолжите активные слова и управляйте словарём через паки и профиль.'}
+              ? 'Ежедневный урок уже закрыт, но обучение не заканчивается: продолжайте в свободном режиме, откройте сложные слова или изучайте паки.'
+              : 'Сначала пройдите ежедневный урок, затем продолжайте обучение в дополнительном режиме без сброса дневного прогресса.'}
           </p>
         </div>
 
@@ -72,7 +92,10 @@ export function HomeDashboard({
           >
             {todayCompletion ? 'Открыть итог дня' : 'Начать ежедневный урок'}
           </button>
-          <button type="button" className="secondary-button" onClick={onOpenDictionary}>
+          <button type="button" className="secondary-button" onClick={onStartExtraLesson}>
+            Продолжить обучение
+          </button>
+          <button type="button" className="ghost-button" onClick={onOpenDictionary}>
             Открыть словарь
           </button>
           <button type="button" className="ghost-button" onClick={onOpenPacks}>
@@ -84,16 +107,14 @@ export function HomeDashboard({
         </div>
       </header>
 
+      <LessonDurationSelector value={lessonDurationMinutes} onChange={onLessonDurationChange} />
+
       <section className="stats-grid">
         <article className="info-card accent-card">
-          <span className="info-label">Сегодняшний урок</span>
-          <strong className="info-value">
-            {todayCompletion ? 'Завершён' : today ? `${today.completedLessons} урок(а)` : 'Не начат'}
-          </strong>
+          <span className="info-label">Ежедневный урок</span>
+          <strong className="info-value">{formatDailyStatus(todayCompletion ?? null, today?.completedLessons)}</strong>
           <p className="info-subtle">
-            {todayCompletion
-              ? `Пройдено модулей: ${todayCompletion.completedModules}`
-              : `Выучено сегодня: ${learnedToday}`}
+            {todayCompletion ? `Пройдено модулей: ${todayCompletion.completedModules}` : `Выучено сегодня: ${learnedToday}`}
           </p>
         </article>
 
@@ -116,6 +137,52 @@ export function HomeDashboard({
         </article>
       </section>
 
+      <section className="home-path-grid">
+        <article className="dashboard-panel">
+          <div className="chart-header">
+            <div>
+              <span className="eyebrow">Маршрут 1</span>
+              <h2 className="section-title">Ежедневный урок</h2>
+            </div>
+            <span className="info-subtle">Обязательный дневной поток с модулями и прогрессом</span>
+          </div>
+          <p className="hero-text">
+            Новые слова, тренировка, повторение и закрепление идут отдельными блоками. Прогресс сохраняется как итог дня.
+          </p>
+          <div className="badge-row wrap-row">
+            <span className="tag-badge">Текущая длительность: {lessonDurationMinutes} мин</span>
+            <span className="tag-badge">{todayCompletion ? 'На сегодня закрыт' : 'Готов к запуску'}</span>
+          </div>
+          <button
+            type="button"
+            className="primary-button full-width"
+            onClick={todayCompletion ? onOpenCompletion : onStartLesson}
+          >
+            {todayCompletion ? 'Посмотреть экран завершения' : 'Запустить ежедневный урок'}
+          </button>
+        </article>
+
+        <article className="dashboard-panel">
+          <div className="chart-header">
+            <div>
+              <span className="eyebrow">Маршрут 2</span>
+              <h2 className="section-title">Дополнительное обучение</h2>
+            </div>
+            <span className="info-subtle">Свободный режим после дневного лимита</span>
+          </div>
+          <p className="hero-text">
+            Берёт сложные, изучаемые и оставшиеся новые слова. Этот режим не меняет статус ежедневного урока и доступен всегда.
+          </p>
+          <div className="badge-row wrap-row">
+            <span className="tag-badge">Сложных слов: {difficultCount}</span>
+            <span className="tag-badge">Активно изучаются: {activeWords}</span>
+          </div>
+          <button type="button" className="secondary-button full-width" onClick={onStartExtraLesson}>
+            Продолжить обучение
+          </button>
+        </article>
+      </section>
+
       <section className="dashboard-feature-grid">
         <article className="dashboard-panel">
           <div className="progress-meta">
@@ -126,25 +193,24 @@ export function HomeDashboard({
             <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
           </div>
           <p className="info-subtle">
-            Учится: {activeWords} · Уже известные: {countWordsByStatus(progressList, 'known')} · Выученные:{' '}
-            {masteredCount}
+            Учится: {activeWords} · Уже известные: {countWordsByStatus(progressList, 'known')} · Выученные: {masteredCount}
           </p>
         </article>
 
         <article className="dashboard-panel">
           <div className="chart-header">
             <h2 className="section-title">Что делать дальше</h2>
-            <span className="info-subtle">Ясные следующие действия</span>
+            <span className="info-subtle">Все основные разделы доступны без тупиков</span>
           </div>
           <div className="next-actions-list">
-            <button type="button" className="secondary-button full-width" onClick={onStartLesson}>
-              Продолжить урок
+            <button type="button" className="secondary-button full-width" onClick={onStartExtraLesson}>
+              Дополнительная практика
             </button>
             <button type="button" className="ghost-button full-width" onClick={onOpenDictionary}>
               Проверить словарь и фильтры
             </button>
             <button type="button" className="ghost-button full-width" onClick={onOpenPacks}>
-              Добавить тематический пак
+              Открыть паки и посмотреть слова
             </button>
           </div>
         </article>
@@ -152,20 +218,20 @@ export function HomeDashboard({
 
       <section className="quick-grid quick-grid-wide" aria-label="Ключевые разделы">
         <article className="quick-card">
-          <strong>Модульный урок</strong>
-          <span>Новые слова, тренировка, повторение и закрепление с явным прогрессом по дню.</span>
+          <strong>Ежедневный урок</strong>
+          <span>Модульный путь с явным прогрессом дня и отдельным экраном завершения.</span>
         </article>
         <article className="quick-card">
-          <strong>Словарь</strong>
-          <span>Чистые карточки, поиск, фильтры по статусам и по активным пакам.</span>
+          <strong>Свободный режим</strong>
+          <span>Продолжает обучение после закрытия дневного урока на той же базе слов.</span>
         </article>
         <article className="quick-card">
           <strong>Паки</strong>
-          <span>Добавлено паков: {addedPacksCount}. Активируйте нужные темы, не перегружая ежедневный поток.</span>
+          <span>Добавлено паков: {addedPacksCount}. Теперь каждый пак можно открыть и просмотреть целиком.</span>
         </article>
         <article className="quick-card">
           <strong>Профиль и история</strong>
-          <span>Серия дней, история по датам, ошибки, модули и накопленный локальный прогресс.</span>
+          <span>Серия дней, история уроков, ошибки и локально сохранённый прогресс.</span>
         </article>
       </section>
     </section>

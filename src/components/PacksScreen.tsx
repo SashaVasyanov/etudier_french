@@ -6,6 +6,7 @@ interface PacksScreenProps {
   packs: WordPack[];
   storage: AppStorage;
   onAddPack: (packId: string) => void;
+  onOpenPack: (packId: string) => void;
 }
 
 function getStatusLabel(status: ReturnType<typeof derivePackStatus>): string {
@@ -24,7 +25,7 @@ function getStatusLabel(status: ReturnType<typeof derivePackStatus>): string {
   return 'не добавлен';
 }
 
-export default function PacksScreen({ packs, storage, onAddPack }: PacksScreenProps) {
+export default function PacksScreen({ packs, storage, onAddPack, onOpenPack }: PacksScreenProps) {
   const addedCount = packs.filter((pack) => derivePackStatus(pack, storage) !== 'not_added').length;
 
   return (
@@ -96,14 +97,19 @@ export default function PacksScreen({ packs, storage, onAddPack }: PacksScreenPr
                 ))}
               </div>
 
-              <button
-                type="button"
-                className="primary-button"
-                disabled={status !== 'not_added'}
-                onClick={() => onAddPack(pack.id)}
-              >
-                {status === 'not_added' ? 'Добавить пак' : 'Пак добавлен'}
-              </button>
+              <div className="pack-card-actions">
+                <button type="button" className="ghost-button" onClick={() => onOpenPack(pack.id)}>
+                  Смотреть слова
+                </button>
+                <button
+                  type="button"
+                  className="primary-button"
+                  disabled={status !== 'not_added'}
+                  onClick={() => onAddPack(pack.id)}
+                >
+                  {status === 'not_added' ? 'Добавить пак' : 'Пак добавлен'}
+                </button>
+              </div>
             </article>
           );
         })}

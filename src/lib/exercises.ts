@@ -3,6 +3,7 @@ import type {
   Exercise,
   ExerciseOption,
   ExerciseType,
+  LessonDurationMinutes,
   LessonMode,
   LessonModule,
   LessonSession,
@@ -14,15 +15,43 @@ import type {
 import { getWordProgress } from './storage';
 import { isReviewDue, shuffleArray } from './utils';
 
-const NEW_WORDS_PER_LESSON = 6;
-const LEARNING_WORDS_PER_LESSON = 6;
+const LESSON_LIMITS: Record<
+  LessonDurationMinutes,
+  {
+    newWords: number;
+    activeWords: number;
+    reinforcementWords: number;
+    mistakesWords: number;
+  }
+> = {
+  10: {
+    newWords: 3,
+    activeWords: 4,
+    reinforcementWords: 4,
+    mistakesWords: 4,
+  },
+  20: {
+    newWords: 6,
+    activeWords: 6,
+    reinforcementWords: 6,
+    mistakesWords: 6,
+  },
+  30: {
+    newWords: 8,
+    activeWords: 8,
+    reinforcementWords: 10,
+    mistakesWords: 8,
+  },
+};
 
 interface CreateLessonSessionInput {
   mode: LessonMode;
   words: Word[];
   storage: AppStorage;
+  durationMinutes: LessonDurationMinutes;
   wordIds?: string[];
   activePackIds?: string[];
+  title?: string;
 }
 
 function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'original'): ExerciseOption[] {
@@ -118,14 +147,14 @@ function sortByCurriculum(left: Word, right: Word): number {
   return left.id.localeCompare(right.id);
 }
 
-function pickNewWords(words: Word[], storage: AppStorage): Word[] {
+function pickNewWords(words: Word[], storage: AppStorage, limit: number): Word[] {
   return words
     .filter((word) => getWordProgress(storage, word.id).status === 'new')
     .sort(sortByCurriculum)
-    .slice(0, NEW_WORDS_PER_LESSON);
+    .slice(0, limit);
 }
 
-function pickLearningWords(words: Word[], storage: AppStorage): Word[] {
+function pickLearningWords(words: Word[], storage: AppStorage, limit: number): Word[] {
   const activeLearning = words.filter((word) => {
     const progress = getWordProgress(storage, word.id);
     return progress.status === 'learning' || progress.status === 'difficult';
@@ -150,12 +179,213 @@ function pickLearningWords(words: Word[], storage: AppStorage): Word[] {
 
       return rightProgress.wrong_count - leftProgress.wrong_count;
     })
-    .slice(0, LEARNING_WORDS_PER_LESSON);
+    .slice(0, limit);
 }
 
 function getPoolFromIds(words: Word[], wordIds: string[]): Word[] {
   const idSet = new Set(wordIds);
   return words.filter((word) => idSet.has(word.id));
+}
+
+function uniqueWords(words: Word[]): Word[] {
+  return Array.from(new Map(words.map((word) => [word.id, word])).values());
+}
+
+function pickExtraFocusWords(words: Word[], storage: AppStorage, limit: number): Word[] {
+  const difficultWords = words.filter((word) => getWordProgress(storage, word.id).status === 'difficult');
+  const reviewWords = words.filter((word) => {
+    const progress = getWordProgress(storage, word.id);
+    return progress.status === 'review' && isReviewDue(progress.next_review_at);
+  });
+  const learningWords = words.filter((word) => getWordProgress(storage, word.id).status === 'learning');
+  const untouchedWords = words.filter((word) => getWordProgress(storage, word.id).status === 'new');
+
+  return uniqueWords([
+    ...difficultWords.sort((left, right) => getWordProgress(storage, right.id).wrong_count - getWordProgress(storage, left.id).wrong_count),
+    ...reviewWords,
+    ...learningWords,
+    ...untouchedWords.sort(sortByCurriculum),
+  ]).slice(0, limit);
+}
+
+function createMistakesSession(
+  words: Word[],
+  activePackIds: string[],
+  durationMinutes: LessonDurationMinutes,
+): LessonSession | null {
+  if (words.length === 0) {
+    return null;
+  }
+
+  const limits = LESSON_LIMITS[durationMinutes];
+  const mistakeWords = words.slice(0, limits.mistakesWords);
+  const reviewModule = createExerciseModule(
+    'module-mistakes',
+    'Сложные слова',
+    'Точечное повторение слов, где были ошибки.',
+    mistakeWords,
+    ['original_to_translation_choice', 'audio_to_original_input'],
+  );
+  const modules = renumberModules([reviewModule.module]);
+  const steps = buildSteps(modules, {
+    [reviewModule.module.id]: reviewModule.exercises,
+  });
+
+  return {
+    id: `mistakes-${Date.now()}`,
+    title: 'Повтор ошибок',
+    mode: 'mistakes',
+    durationMinutes,
+    startedAt: new Date().toISOString(),
+    exerciseIds: reviewModule.exercises.map((exercise) => exercise.id),
+    exercises: reviewModule.exercises,
+    sourceWordIds: mistakeWords.map((word) => word.id),
+    modules,
+    steps,
+    activePackIds,
+  };
+}
+
+function createDailySession(
+  words: Word[],
+  storage: AppStorage,
+  activePackIds: string[],
+  durationMinutes: LessonDurationMinutes,
+): LessonSession | null {
+  const limits = LESSON_LIMITS[durationMinutes];
+  const newWords = pickNewWords(words, storage, limits.newWords);
+  const learningWords = pickLearningWords(words, storage, limits.activeWords);
+  const reviewWords = learningWords.filter((word) => {
+    const progress = getWordProgress(storage, word.id);
+    return progress.status === 'review' || progress.status === 'difficult' || progress.status === 'learning';
+  });
+  const reinforcementWords = shuffleArray(uniqueWords([...newWords, ...learningWords])).slice(
+    0,
+    limits.reinforcementWords,
+  );
+
+  if (newWords.length === 0 && learningWords.length === 0 && reinforcementWords.length === 0) {
+    return null;
+  }
+
+  const module1 = createPreviewModule(newWords);
+  const module2 = createExerciseModule(
+    'module-training-new',
+    'Тренировка новых слов',
+    'Быстрое закрепление слов, которые вы только что увидели.',
+    newWords,
+    ['audio_to_translation_choice', 'translation_to_original_choice'],
+  );
+  const module3 = createExerciseModule(
+    'module-review-learning',
+    'Повторение не до конца выученных слов',
+    'Возврат к словам, которые еще требуют внимания.',
+    reviewWords,
+    ['original_to_translation_choice', 'audio_to_original_input'],
+  );
+  const module4 = createExerciseModule(
+    'module-reinforcement',
+    'Закрепление',
+    'Финальный смешанный блок для фиксации результата дня.',
+    reinforcementWords,
+    ['audio_to_translation_choice', 'original_to_translation_choice'],
+  );
+
+  const modules = renumberModules(
+    [module1, module2.module, module3.module, module4.module].filter((module) => module.wordIds.length > 0),
+  );
+  const exercises = [...module2.exercises, ...module3.exercises, ...module4.exercises];
+  const steps = buildSteps(modules, {
+    [module2.module.id]: module2.exercises,
+    [module3.module.id]: module3.exercises,
+    [module4.module.id]: module4.exercises,
+  });
+
+  return {
+    id: `default-${Date.now()}`,
+    title: 'Сегодняшний урок',
+    mode: 'default',
+    durationMinutes,
+    startedAt: new Date().toISOString(),
+    exerciseIds: exercises.map((exercise) => exercise.id),
+    exercises,
+    sourceWordIds: uniqueWords([...newWords, ...learningWords, ...reinforcementWords]).map((word) => word.id),
+    modules,
+    steps,
+    activePackIds,
+  };
+}
+
+function createExtraSession(
+  mode: 'extra' | 'pack',
+  words: Word[],
+  storage: AppStorage,
+  activePackIds: string[],
+  durationMinutes: LessonDurationMinutes,
+  title?: string,
+): LessonSession | null {
+  const limits = LESSON_LIMITS[durationMinutes];
+  const focusWords = pickExtraFocusWords(words, storage, limits.activeWords);
+  const newWords = words
+    .filter((word) => getWordProgress(storage, word.id).status === 'new' && !focusWords.some((item) => item.id === word.id))
+    .sort(sortByCurriculum)
+    .slice(0, limits.newWords);
+  const mixedWords = shuffleArray(uniqueWords([...focusWords, ...newWords])).slice(0, limits.reinforcementWords);
+
+  if (focusWords.length === 0 && newWords.length === 0 && mixedWords.length === 0) {
+    return null;
+  }
+
+  const module1 = createPreviewModule(newWords);
+  const module2 = createExerciseModule(
+    mode === 'pack' ? 'module-pack-focus' : 'module-extra-focus',
+    mode === 'pack' ? 'Практика слов пака' : 'Дополнительная практика',
+    mode === 'pack'
+      ? 'Тренируйте слова выбранного пака вне ежедневного лимита.'
+      : 'Продолжайте обучение после завершения ежедневного урока.',
+    focusWords,
+    ['audio_to_translation_choice', 'original_to_translation_choice'],
+  );
+  const module3 = createExerciseModule(
+    mode === 'pack' ? 'module-pack-new' : 'module-extra-new',
+    mode === 'pack' ? 'Новые слова из пака' : 'Новые слова вне дневного лимита',
+    mode === 'pack'
+      ? 'Просмотрите и закрепите новые слова, которые лежат внутри выбранного пака.'
+      : 'Здесь появляются слова, которые еще не попали в дневной урок.',
+    newWords,
+    ['audio_to_translation_choice', 'translation_to_original_choice'],
+  );
+  const module4 = createExerciseModule(
+    mode === 'pack' ? 'module-pack-mixed' : 'module-extra-mixed',
+    'Смешанное закрепление',
+    'Финальный блок на закрепление активных и новых слов.',
+    mixedWords,
+    ['audio_to_translation_choice', 'audio_to_original_input'],
+  );
+
+  const modules = renumberModules(
+    [module1, module2.module, module3.module, module4.module].filter((module) => module.wordIds.length > 0),
+  );
+  const exercises = [...module2.exercises, ...module3.exercises, ...module4.exercises];
+  const steps = buildSteps(modules, {
+    [module2.module.id]: module2.exercises,
+    [module3.module.id]: module3.exercises,
+    [module4.module.id]: module4.exercises,
+  });
+
+  return {
+    id: `${mode}-${Date.now()}`,
+    title: title ?? (mode === 'pack' ? 'Практика пака' : 'Дополнительное обучение'),
+    mode,
+    durationMinutes,
+    startedAt: new Date().toISOString(),
+    exerciseIds: exercises.map((exercise) => exercise.id),
+    exercises,
+    sourceWordIds: uniqueWords([...focusWords, ...newWords, ...mixedWords]).map((word) => word.id),
+    modules,
+    steps,
+    activePackIds,
+  };
 }
 
 function renumberModules(modules: LessonModule[]): LessonModule[] {
@@ -224,6 +454,7 @@ function createExerciseModule(
 
 function buildSteps(modules: LessonModule[], moduleExercises: Record<string, Exercise[]>): LessonStep[] {
   const steps: LessonStep[] = [];
+  const markKnownModuleIds = new Set(['module-new-words', 'module-training-new', 'module-extra-new', 'module-pack-new']);
 
   modules.forEach((module) => {
     if (module.kind === 'preview') {
@@ -236,7 +467,7 @@ function buildSteps(modules: LessonModule[], moduleExercises: Record<string, Exe
           moduleTheme: module.theme,
           modulePosition: module.position,
           moduleCount: modules.length,
-          allowMarkKnown: module.id === 'module-new-words',
+          allowMarkKnown: module.theme === 'new',
           kind: 'preview',
           wordId,
           indexInModule: index + 1,
@@ -256,7 +487,7 @@ function buildSteps(modules: LessonModule[], moduleExercises: Record<string, Exe
         moduleTheme: module.theme,
         modulePosition: module.position,
         moduleCount: modules.length,
-        allowMarkKnown: module.id === 'module-training-new',
+        allowMarkKnown: markKnownModuleIds.has(module.id),
         kind: 'exercise',
         exercise,
         wordId: exercise.wordId,
@@ -273,103 +504,24 @@ export function createLessonSession({
   mode,
   words,
   storage,
+  durationMinutes,
   wordIds,
   activePackIds = [],
+  title,
 }: CreateLessonSessionInput): LessonSession | null {
   if (mode === 'mistakes' && wordIds?.length) {
-    const mistakeWords = getPoolFromIds(words, wordIds);
-    if (mistakeWords.length === 0) {
-      return null;
-    }
-    const reviewModule = createExerciseModule(
-      'module-mistakes',
-      'Сложные слова',
-      'Точечное повторение слов, где были ошибки.',
-      mistakeWords,
-      ['original_to_translation_choice', 'audio_to_original_input'],
-    );
-    const modules = renumberModules([reviewModule.module]);
-    const steps = buildSteps(modules, {
-      [reviewModule.module.id]: reviewModule.exercises,
-    });
-
-    return {
-      id: `${mode}-${Date.now()}`,
-      title: 'Повтор ошибок',
-      mode,
-      startedAt: new Date().toISOString(),
-      exerciseIds: reviewModule.exercises.map((exercise) => exercise.id),
-      exercises: reviewModule.exercises,
-      sourceWordIds: mistakeWords.map((word) => word.id),
-      modules,
-      steps,
-      activePackIds,
-    };
+    return createMistakesSession(getPoolFromIds(words, wordIds), activePackIds, durationMinutes);
   }
 
-  const newWords = pickNewWords(words, storage);
-  const learningWords = pickLearningWords(words, storage);
-  const reviewWords = learningWords.filter((word) => {
-    const progress = getWordProgress(storage, word.id);
-    return progress.status === 'review' || progress.status === 'difficult' || progress.status === 'learning';
-  });
-  const reinforcementWords = shuffleArray(
-    Array.from(new Map([...newWords, ...learningWords].map((word) => [word.id, word])).values()),
-  ).slice(0, Math.max(newWords.length, learningWords.length, 6));
-
-  if (newWords.length === 0 && learningWords.length === 0 && reinforcementWords.length === 0) {
-    return null;
+  if (mode === 'default') {
+    return createDailySession(words, storage, activePackIds, durationMinutes);
   }
 
-  const module1 = createPreviewModule(newWords);
-  const module2 = createExerciseModule(
-    'module-training-new',
-    'Тренировка новых слов',
-    'Быстрое закрепление слов, которые вы только что увидели.',
-    newWords,
-    ['audio_to_translation_choice', 'translation_to_original_choice'],
-  );
-  const module3 = createExerciseModule(
-    'module-review-learning',
-    'Повторение не до конца выученных слов',
-    'Возврат к словам, которые еще требуют внимания.',
-    reviewWords,
-    ['original_to_translation_choice', 'audio_to_original_input'],
-  );
-  const module4 = createExerciseModule(
-    'module-reinforcement',
-    'Закрепление',
-    'Финальный смешанный блок для фиксации результата дня.',
-    reinforcementWords,
-    ['audio_to_translation_choice', 'original_to_translation_choice'],
-  );
+  if (mode === 'extra' || mode === 'pack') {
+    return createExtraSession(mode, words, storage, activePackIds, durationMinutes, title);
+  }
 
-  const modules = renumberModules(
-    [module1, module2.module, module3.module, module4.module].filter((module) => module.wordIds.length > 0),
-  );
-  const exercises = [
-    ...module2.exercises,
-    ...module3.exercises,
-    ...module4.exercises,
-  ];
-  const steps = buildSteps(modules, {
-    [module2.module.id]: module2.exercises,
-    [module3.module.id]: module3.exercises,
-    [module4.module.id]: module4.exercises,
-  });
-
-  return {
-    id: `${mode}-${Date.now()}`,
-    title: 'Сегодняшний урок',
-    mode,
-    startedAt: new Date().toISOString(),
-    exerciseIds: exercises.map((exercise) => exercise.id),
-    exercises,
-    sourceWordIds: Array.from(new Set([...newWords, ...learningWords, ...reinforcementWords].map((word) => word.id))),
-    modules,
-    steps,
-    activePackIds,
-  };
+  return null;
 }
 
 export function countWordsByStatus(progressList: WordProgress[], status: WordProgress['status']): number {

@@ -3,6 +3,7 @@ import type {
   DailyLessonCompletionPayload,
   DailyLessonRecord,
   ExerciseOutcome,
+  LessonDurationMinutes,
   StudyHistoryEntry,
   UserPackState,
   UserProfile,
@@ -31,6 +32,7 @@ function createDefaultStorage(): AppStorage {
     completedDailyLessons: [],
     streakDays: 0,
     lastLessonDate: null,
+    lessonDurationMinutes: 20,
     profile: createDefaultProfile(),
     studyHistory: [],
     packStates: {},
@@ -81,6 +83,7 @@ function normalizeHistoryEntry(entry: Partial<StudyHistoryEntry>): StudyHistoryE
     completedAt: entry.completedAt,
     sessionId: entry.sessionId,
     mode: entry.mode,
+    durationMinutes: (entry.durationMinutes as LessonDurationMinutes | undefined) ?? 20,
     moduleTitles: entry.moduleTitles ?? [],
     modulesCompleted: entry.modulesCompleted ?? 0,
     wordsLearned: entry.wordsLearned ?? 0,
@@ -133,6 +136,8 @@ export function loadStorage(): AppStorage {
           timeSpentSeconds: item.timeSpentSeconds ?? 0,
         }))
         .slice(-180),
+      lessonDurationMinutes:
+        parsed.lessonDurationMinutes === 10 || parsed.lessonDurationMinutes === 30 ? parsed.lessonDurationMinutes : 20,
       profile: normalizeProfile(parsed.profile),
       studyHistory: (parsed.studyHistory ?? [])
         .map((entry) => normalizeHistoryEntry(entry))
@@ -375,6 +380,24 @@ export function completeDailyLesson(
   };
 }
 
+export function recordStudyHistory(currentStorage: AppStorage, historyEntry: StudyHistoryEntry): AppStorage {
+  const studyHistory = currentStorage.studyHistory
+    .filter((item) => item.id !== historyEntry.id)
+    .concat(historyEntry)
+    .sort((left, right) => left.completedAt.localeCompare(right.completedAt))
+    .slice(-180);
+
+  return {
+    ...currentStorage,
+    studyHistory,
+    profile: {
+      ...currentStorage.profile,
+      lastStudiedAt: historyEntry.completedAt,
+      updatedAt: historyEntry.completedAt,
+    },
+  };
+}
+
 export function updateProfileName(currentStorage: AppStorage, displayName: string): AppStorage {
   const normalizedName = displayName.trim() || 'Ученик';
 
@@ -385,6 +408,16 @@ export function updateProfileName(currentStorage: AppStorage, displayName: strin
       displayName: normalizedName,
       updatedAt: new Date().toISOString(),
     },
+  };
+}
+
+export function setLessonDurationPreference(
+  currentStorage: AppStorage,
+  lessonDurationMinutes: LessonDurationMinutes,
+): AppStorage {
+  return {
+    ...currentStorage,
+    lessonDurationMinutes,
   };
 }
 

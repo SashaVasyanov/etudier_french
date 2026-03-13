@@ -53,6 +53,22 @@ export default function ProfileScreen({
   const history = useMemo(() => [...storage.studyHistory].reverse(), [storage.studyHistory]);
   const summary = useMemo(() => summarizeHistory(storage.studyHistory), [storage.studyHistory]);
 
+  function getModeLabel(mode: StudyHistoryEntry['mode']): string {
+    if (mode === 'default') {
+      return 'ежедневный урок';
+    }
+
+    if (mode === 'extra') {
+      return 'дополнительное обучение';
+    }
+
+    if (mode === 'pack') {
+      return 'практика пака';
+    }
+
+    return 'повтор ошибок';
+  }
+
   return (
     <section className="dashboard-shell">
       <header className="hero-card profile-hero">
@@ -152,15 +168,14 @@ export default function ProfileScreen({
                     <strong>{formatLongDateLabel(entry.date)}</strong>
                     <p className="info-subtle">{formatDateTimeLabel(entry.completedAt)}</p>
                   </div>
-                  <span className="status-badge review">
-                    {entry.mode === 'default' ? 'ежедневный урок' : 'повтор ошибок'}
-                  </span>
+                  <span className="status-badge review">{getModeLabel(entry.mode)}</span>
                 </div>
 
                 <div className="timeline-stats">
                   <span>Модулей: {entry.modulesCompleted}</span>
                   <span>Слов выучено: {entry.wordsLearned}</span>
                   <span>Ошибок: {entry.mistakesMade}</span>
+                  <span>Формат: {entry.durationMinutes} мин</span>
                   <span>Время: {formatDurationLabel(entry.timeSpentSeconds)}</span>
                 </div>
 
