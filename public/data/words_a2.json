@@ -1,0 +1,6381 @@
+[
+  {
+    "id": "a2-aeroport-25",
+    "original": "aéroport",
+    "translation": "аэропорт",
+    "transcription": "[aеroport]",
+    "audio_original": "",
+    "example_original": "Je vois l'aéroport aujourd'hui.",
+    "example_translation": "Я вижу аэропорт сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city"
+    ]
+  },
+  {
+    "id": "a2-universite-38",
+    "original": "université",
+    "translation": "университет",
+    "transcription": "[енiversitе]",
+    "audio_original": "",
+    "example_original": "Je vois l'université aujourd'hui.",
+    "example_translation": "Я вижу университет сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-ecran-46",
+    "original": "écran",
+    "translation": "экран",
+    "transcription": "[еcrан]",
+    "audio_original": "",
+    "example_original": "Je vois l'écran aujourd'hui.",
+    "example_translation": "Я вижу экран сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-clavier-47",
+    "original": "clavier",
+    "translation": "клавиатура",
+    "transcription": "[clavier]",
+    "audio_original": "",
+    "example_original": "Je vois le clavier aujourd'hui.",
+    "example_translation": "Я вижу клавиатура сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "work"
+    ]
+  },
+  {
+    "id": "a2-voisin-63",
+    "original": "voisin",
+    "translation": "сосед",
+    "transcription": "[vуаsэн]",
+    "audio_original": "",
+    "example_original": "Je vois un voisin aujourd'hui.",
+    "example_translation": "Я вижу сосед сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "people",
+      "home"
+    ]
+  },
+  {
+    "id": "a2-serveur-67",
+    "original": "serveur",
+    "translation": "официант",
+    "transcription": "[servёr]",
+    "audio_original": "",
+    "example_original": "Je vois le serveur aujourd'hui.",
+    "example_translation": "Я вижу официант сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service"
+    ]
+  },
+  {
+    "id": "a2-client-68",
+    "original": "client",
+    "translation": "клиент",
+    "transcription": "[cliанt]",
+    "audio_original": "",
+    "example_original": "Je vois le client aujourd'hui.",
+    "example_translation": "Я вижу клиент сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service"
+    ]
+  },
+  {
+    "id": "a2-chef-69",
+    "original": "chef",
+    "translation": "начальник",
+    "transcription": "[шef]",
+    "audio_original": "",
+    "example_original": "Je vois le chef aujourd'hui.",
+    "example_translation": "Я вижу начальник сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "work",
+      "people"
+    ]
+  },
+  {
+    "id": "a2-collegue-70",
+    "original": "collègue",
+    "translation": "коллега",
+    "transcription": "[collеgue]",
+    "audio_original": "",
+    "example_original": "Je vois un collègue aujourd'hui.",
+    "example_translation": "Я вижу коллега сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "work",
+      "people"
+    ]
+  },
+  {
+    "id": "a2-tout-de-suite-85",
+    "original": "tout de suite",
+    "translation": "сразу",
+    "transcription": "[tуt de suite]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « tout de suite ».",
+    "example_translation": "Мы часто говорим: « сразу ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "time",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-fraise-105",
+    "original": "fraise",
+    "translation": "клубника",
+    "transcription": "[frэse]",
+    "audio_original": "",
+    "example_original": "Je vois une fraise aujourd'hui.",
+    "example_translation": "Я вижу клубника сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "food",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-pomme-de-terre-108",
+    "original": "pomme de terre",
+    "translation": "картофель",
+    "transcription": "[pomme de terre]",
+    "audio_original": "",
+    "example_original": "Je vois la pomme de terre aujourd'hui.",
+    "example_translation": "Я вижу картофель сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "food",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-addition-115",
+    "original": "addition",
+    "translation": "счёт",
+    "transcription": "[additiон]",
+    "audio_original": "",
+    "example_original": "Je vois l'addition aujourd'hui.",
+    "example_translation": "Я вижу счёт сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "food",
+      "service"
+    ]
+  },
+  {
+    "id": "a2-marche-119",
+    "original": "marché",
+    "translation": "рынок",
+    "transcription": "[marше]",
+    "audio_original": "",
+    "example_original": "Je vois le marché aujourd'hui.",
+    "example_translation": "Я вижу рынок сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "shopping",
+      "city"
+    ]
+  },
+  {
+    "id": "a2-vetement-120",
+    "original": "vêtement",
+    "translation": "одежда",
+    "transcription": "[vеtemанt]",
+    "audio_original": "",
+    "example_original": "Je vois le vêtement aujourd'hui.",
+    "example_translation": "Я вижу одежда сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "shopping",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-chemise-121",
+    "original": "chemise",
+    "translation": "рубашка",
+    "transcription": "[шemise]",
+    "audio_original": "",
+    "example_original": "Je vois la chemise aujourd'hui.",
+    "example_translation": "Я вижу рубашка сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "shopping",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-pantalon-122",
+    "original": "pantalon",
+    "translation": "брюки",
+    "transcription": "[pанtalон]",
+    "audio_original": "",
+    "example_original": "Je vois le pantalon aujourd'hui.",
+    "example_translation": "Я вижу брюки сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "shopping",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-chaussure-123",
+    "original": "chaussure",
+    "translation": "обувь",
+    "transcription": "[шоssure]",
+    "audio_original": "",
+    "example_original": "Je vois la chaussure aujourd'hui.",
+    "example_translation": "Я вижу обувь сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "shopping",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-serie-130",
+    "original": "série",
+    "translation": "сериал",
+    "transcription": "[sеrie]",
+    "audio_original": "",
+    "example_original": "Je vois la série aujourd'hui.",
+    "example_translation": "Я вижу сериал сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "media",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-journal-131",
+    "original": "journal",
+    "translation": "газета",
+    "transcription": "[jуrnal]",
+    "audio_original": "",
+    "example_original": "Je vois le journal aujourd'hui.",
+    "example_translation": "Я вижу газета сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "media",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-nouvelle-132",
+    "original": "nouvelle",
+    "translation": "новость",
+    "transcription": "[nуvelle]",
+    "audio_original": "",
+    "example_original": "Je vois la nouvelle aujourd'hui.",
+    "example_translation": "Я вижу новость сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "media",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-sante-133",
+    "original": "santé",
+    "translation": "здоровье",
+    "transcription": "[sанtе]",
+    "audio_original": "",
+    "example_original": "Je vois la santé aujourd'hui.",
+    "example_translation": "Я вижу здоровье сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "health",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-bras-137",
+    "original": "bras",
+    "translation": "рука до плеча",
+    "transcription": "[bras]",
+    "audio_original": "",
+    "example_original": "Je vois le bras aujourd'hui.",
+    "example_translation": "Я вижу рука до плеча сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "health",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-c-ur-141",
+    "original": "cœur",
+    "translation": "сердце",
+    "transcription": "[cёur]",
+    "audio_original": "",
+    "example_original": "Je vois le cœur aujourd'hui.",
+    "example_translation": "Я вижу сердце сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "health",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-visage-142",
+    "original": "visage",
+    "translation": "лицо",
+    "transcription": "[visage]",
+    "audio_original": "",
+    "example_original": "Je vois le visage aujourd'hui.",
+    "example_translation": "Я вижу лицо сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "health",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-amour-143",
+    "original": "amour",
+    "translation": "любовь",
+    "transcription": "[amуr]",
+    "audio_original": "",
+    "example_original": "Je vois l'amour aujourd'hui.",
+    "example_translation": "Я вижу любовь сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-bonheur-144",
+    "original": "bonheur",
+    "translation": "счастье",
+    "transcription": "[bонhёr]",
+    "audio_original": "",
+    "example_original": "Je vois le bonheur aujourd'hui.",
+    "example_translation": "Я вижу счастье сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-peur-145",
+    "original": "peur",
+    "translation": "страх",
+    "transcription": "[pёr]",
+    "audio_original": "",
+    "example_original": "Je vois la peur aujourd'hui.",
+    "example_translation": "Я вижу страх сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-probleme-146",
+    "original": "problème",
+    "translation": "проблема",
+    "transcription": "[problеme]",
+    "audio_original": "",
+    "example_original": "Je vois le problème aujourd'hui.",
+    "example_translation": "Я вижу проблема сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-solution-147",
+    "original": "solution",
+    "translation": "решение",
+    "transcription": "[solutiон]",
+    "audio_original": "",
+    "example_original": "Je vois la solution aujourd'hui.",
+    "example_translation": "Я вижу решение сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-idee-148",
+    "original": "idée",
+    "translation": "идея",
+    "transcription": "[idеe]",
+    "audio_original": "",
+    "example_original": "Je vois l'idée aujourd'hui.",
+    "example_translation": "Я вижу идея сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-besoin-149",
+    "original": "besoin",
+    "translation": "потребность",
+    "transcription": "[besуаn]",
+    "audio_original": "",
+    "example_original": "Je vois le besoin aujourd'hui.",
+    "example_translation": "Я вижу потребность сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking"
+    ]
+  },
+  {
+    "id": "a2-choix-150",
+    "original": "choix",
+    "translation": "выбор",
+    "transcription": "[шуаx]",
+    "audio_original": "",
+    "example_original": "Je vois le choix aujourd'hui.",
+    "example_translation": "Я вижу выбор сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-reve-151",
+    "original": "rêve",
+    "translation": "мечта",
+    "transcription": "[rеve]",
+    "audio_original": "",
+    "example_original": "Je vois le rêve aujourd'hui.",
+    "example_translation": "Я вижу мечта сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-chance-152",
+    "original": "chance",
+    "translation": "удача",
+    "transcription": "[шанce]",
+    "audio_original": "",
+    "example_original": "Je vois la chance aujourd'hui.",
+    "example_translation": "Я вижу удача сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "feelings"
+    ]
+  },
+  {
+    "id": "a2-voyage-161",
+    "original": "voyage",
+    "translation": "путешествие",
+    "transcription": "[voyage]",
+    "audio_original": "",
+    "example_original": "Je vois le voyage aujourd'hui.",
+    "example_translation": "Я вижу путешествие сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-vacances-162",
+    "original": "vacances",
+    "translation": "каникулы",
+    "transcription": "[vacанces]",
+    "audio_original": "",
+    "example_original": "Je vois les vacances aujourd'hui.",
+    "example_translation": "Я вижу каникулы сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-plage-163",
+    "original": "plage",
+    "translation": "пляж",
+    "transcription": "[plage]",
+    "audio_original": "",
+    "example_original": "Je vois la plage aujourd'hui.",
+    "example_translation": "Я вижу пляж сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "nature"
+    ]
+  },
+  {
+    "id": "a2-montagne-164",
+    "original": "montagne",
+    "translation": "гора",
+    "transcription": "[mонtaньe]",
+    "audio_original": "",
+    "example_original": "Je vois la montagne aujourd'hui.",
+    "example_translation": "Я вижу гора сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "nature"
+    ]
+  },
+  {
+    "id": "a2-mer-165",
+    "original": "mer",
+    "translation": "море",
+    "transcription": "[mer]",
+    "audio_original": "",
+    "example_original": "Je vois la mer aujourd'hui.",
+    "example_translation": "Я вижу море сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "nature"
+    ]
+  },
+  {
+    "id": "a2-vent-168",
+    "original": "vent",
+    "translation": "ветер",
+    "transcription": "[vанt]",
+    "audio_original": "",
+    "example_original": "Je vois le vent aujourd'hui.",
+    "example_translation": "Я вижу ветер сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "nature",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-neige-169",
+    "original": "neige",
+    "translation": "снег",
+    "transcription": "[nэge]",
+    "audio_original": "",
+    "example_original": "Je vois la neige aujourd'hui.",
+    "example_translation": "Я вижу снег сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "nature",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-oiseau-173",
+    "original": "oiseau",
+    "translation": "птица",
+    "transcription": "[уаso]",
+    "audio_original": "",
+    "example_original": "Je vois l'oiseau aujourd'hui.",
+    "example_translation": "Я вижу птица сегодня.",
+    "part_of_speech": "noun",
+    "level": "A2",
+    "tags": [
+      "nature",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-vieux-185",
+    "original": "vieux",
+    "translation": "старый",
+    "transcription": "[viёx]",
+    "audio_original": "",
+    "example_original": "Ce mot est vieux.",
+    "example_translation": "Это слово старый.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-joli-190",
+    "original": "joli",
+    "translation": "милый",
+    "transcription": "[joli]",
+    "audio_original": "",
+    "example_original": "Ce mot est joli.",
+    "example_translation": "Это слово милый.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-important-191",
+    "original": "important",
+    "translation": "важный",
+    "transcription": "[importанt]",
+    "audio_original": "",
+    "example_original": "Ce mot est important.",
+    "example_translation": "Это слово важный.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-possible-192",
+    "original": "possible",
+    "translation": "возможный",
+    "transcription": "[possible]",
+    "audio_original": "",
+    "example_original": "Ce mot est possible.",
+    "example_translation": "Это слово возможный.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "thinking"
+    ]
+  },
+  {
+    "id": "a2-lent-196",
+    "original": "lent",
+    "translation": "медленный",
+    "transcription": "[lанt]",
+    "audio_original": "",
+    "example_original": "Ce mot est lent.",
+    "example_translation": "Это слово медленный.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-content-199",
+    "original": "content",
+    "translation": "довольный",
+    "transcription": "[cонtанt]",
+    "audio_original": "",
+    "example_original": "Ce mot est content.",
+    "example_translation": "Это слово довольный.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-fatigue-202",
+    "original": "fatigué",
+    "translation": "уставший",
+    "transcription": "[fatiguе]",
+    "audio_original": "",
+    "example_original": "Ce mot est fatigué.",
+    "example_translation": "Это слово уставший.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-pret-203",
+    "original": "prêt",
+    "translation": "готовый",
+    "transcription": "[prеt]",
+    "audio_original": "",
+    "example_original": "Ce mot est prêt.",
+    "example_translation": "Это слово готовый.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "qualities"
+    ]
+  },
+  {
+    "id": "a2-occupe-204",
+    "original": "occupé",
+    "translation": "занятый",
+    "transcription": "[occupе]",
+    "audio_original": "",
+    "example_original": "Ce mot est occupé.",
+    "example_translation": "Это слово занятый.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-libre-205",
+    "original": "libre",
+    "translation": "свободный",
+    "transcription": "[libre]",
+    "audio_original": "",
+    "example_original": "Ce mot est libre.",
+    "example_translation": "Это слово свободный.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "qualities"
+    ]
+  },
+  {
+    "id": "a2-calme-206",
+    "original": "calme",
+    "translation": "спокойный",
+    "transcription": "[calme]",
+    "audio_original": "",
+    "example_original": "Ce mot est calme.",
+    "example_translation": "Это слово спокойный.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-fort-207",
+    "original": "fort",
+    "translation": "сильный",
+    "transcription": "[fort]",
+    "audio_original": "",
+    "example_original": "Ce mot est fort.",
+    "example_translation": "Это слово сильный.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-simple-211",
+    "original": "simple",
+    "translation": "простой",
+    "transcription": "[simple]",
+    "audio_original": "",
+    "example_original": "Ce mot est simple.",
+    "example_translation": "Это слово простой.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-utile-212",
+    "original": "utile",
+    "translation": "полезный",
+    "transcription": "[utile]",
+    "audio_original": "",
+    "example_original": "Ce mot est utile.",
+    "example_translation": "Это слово полезный.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-vrai-213",
+    "original": "vrai",
+    "translation": "настоящий",
+    "transcription": "[vrэ]",
+    "audio_original": "",
+    "example_original": "Ce mot est vrai.",
+    "example_translation": "Это слово настоящий.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-trop-222",
+    "original": "trop",
+    "translation": "слишком",
+    "transcription": "[trop]",
+    "audio_original": "",
+    "example_original": "Il utilise « trop » dans une phrase simple.",
+    "example_translation": "Он использует « слишком » в простом предложении.",
+    "part_of_speech": "adverb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "qualities"
+    ]
+  },
+  {
+    "id": "a2-assez-223",
+    "original": "assez",
+    "translation": "достаточно",
+    "transcription": "[assez]",
+    "audio_original": "",
+    "example_original": "Il utilise « assez » dans une phrase simple.",
+    "example_translation": "Он использует « достаточно » в простом предложении.",
+    "part_of_speech": "adverb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "qualities"
+    ]
+  },
+  {
+    "id": "a2-peut-etre-224",
+    "original": "peut-être",
+    "translation": "может быть",
+    "transcription": "[pёt еtre]",
+    "audio_original": "",
+    "example_original": "Il utilise « peut-être » dans une phrase simple.",
+    "example_translation": "Он использует « может быть » в простом предложении.",
+    "part_of_speech": "adverb",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-loin-227",
+    "original": "loin",
+    "translation": "далеко",
+    "transcription": "[lуаn]",
+    "audio_original": "",
+    "example_original": "Il utilise « loin » dans une phrase simple.",
+    "example_translation": "Он использует « далеко » в простом предложении.",
+    "part_of_speech": "adverb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "space"
+    ]
+  },
+  {
+    "id": "a2-pres-228",
+    "original": "près",
+    "translation": "близко",
+    "transcription": "[prеs]",
+    "audio_original": "",
+    "example_original": "Il utilise « près » dans une phrase simple.",
+    "example_translation": "Он использует « близко » в простом предложении.",
+    "part_of_speech": "adverb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "space"
+    ]
+  },
+  {
+    "id": "a2-seul-230",
+    "original": "seul",
+    "translation": "один",
+    "transcription": "[sёl]",
+    "audio_original": "",
+    "example_original": "Ce mot est seul.",
+    "example_translation": "Это слово один.",
+    "part_of_speech": "adjective",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-trouver-241",
+    "original": "trouver",
+    "translation": "находить",
+    "transcription": "[trуver]",
+    "audio_original": "",
+    "example_original": "Je veux trouver aujourd'hui.",
+    "example_translation": "Я хочу находить сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking"
+    ]
+  },
+  {
+    "id": "a2-comprendre-243",
+    "original": "comprendre",
+    "translation": "понимать",
+    "transcription": "[comprанdre]",
+    "audio_original": "",
+    "example_original": "Je veux comprendre aujourd'hui.",
+    "example_translation": "Я хочу понимать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "study",
+      "thinking"
+    ]
+  },
+  {
+    "id": "a2-connaitre-245",
+    "original": "connaître",
+    "translation": "знать",
+    "transcription": "[cонnaиtre]",
+    "audio_original": "",
+    "example_original": "Je veux connaître aujourd'hui.",
+    "example_translation": "Я хочу знать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-penser-247",
+    "original": "penser",
+    "translation": "думать",
+    "transcription": "[pанser]",
+    "audio_original": "",
+    "example_original": "Je veux penser aujourd'hui.",
+    "example_translation": "Я хочу думать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-devoir-251",
+    "original": "devoir",
+    "translation": "быть должным",
+    "transcription": "[devуаr]",
+    "audio_original": "",
+    "example_original": "Je veux devoir aujourd'hui.",
+    "example_translation": "Я хочу быть должным сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "grammar"
+    ]
+  },
+  {
+    "id": "a2-falloir-252",
+    "original": "falloir",
+    "translation": "нужно",
+    "transcription": "[fallуаr]",
+    "audio_original": "",
+    "example_original": "Je veux falloir aujourd'hui.",
+    "example_translation": "Я хочу нужно сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "grammar"
+    ]
+  },
+  {
+    "id": "a2-mettre-254",
+    "original": "mettre",
+    "translation": "класть",
+    "transcription": "[mettre]",
+    "audio_original": "",
+    "example_original": "Je veux mettre aujourd'hui.",
+    "example_translation": "Я хочу класть сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "home"
+    ]
+  },
+  {
+    "id": "a2-porter-255",
+    "original": "porter",
+    "translation": "носить",
+    "transcription": "[porter]",
+    "audio_original": "",
+    "example_original": "Je veux porter aujourd'hui.",
+    "example_translation": "Я хочу носить сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "shopping"
+    ]
+  },
+  {
+    "id": "a2-rester-260",
+    "original": "rester",
+    "translation": "оставаться",
+    "transcription": "[rester]",
+    "audio_original": "",
+    "example_original": "Je veux rester aujourd'hui.",
+    "example_translation": "Я хочу оставаться сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "space"
+    ]
+  },
+  {
+    "id": "a2-continuer-263",
+    "original": "continuer",
+    "translation": "продолжать",
+    "transcription": "[cонtэнuer]",
+    "audio_original": "",
+    "example_original": "Je veux continuer aujourd'hui.",
+    "example_translation": "Я хочу продолжать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "time"
+    ]
+  },
+  {
+    "id": "a2-monter-267",
+    "original": "monter",
+    "translation": "подниматься",
+    "transcription": "[mонter]",
+    "audio_original": "",
+    "example_original": "Je veux monter aujourd'hui.",
+    "example_translation": "Я хочу подниматься сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-descendre-268",
+    "original": "descendre",
+    "translation": "спускаться",
+    "transcription": "[descанdre]",
+    "audio_original": "",
+    "example_original": "Je veux descendre aujourd'hui.",
+    "example_translation": "Я хочу спускаться сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-cuisiner-271",
+    "original": "cuisiner",
+    "translation": "готовить",
+    "transcription": "[cuisэнer]",
+    "audio_original": "",
+    "example_original": "Je veux cuisiner aujourd'hui.",
+    "example_translation": "Я хочу готовить сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "food",
+      "home"
+    ]
+  },
+  {
+    "id": "a2-gagner-274",
+    "original": "gagner",
+    "translation": "зарабатывать",
+    "transcription": "[gaньer]",
+    "audio_original": "",
+    "example_original": "Je veux gagner aujourd'hui.",
+    "example_translation": "Я хочу зарабатывать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-repeter-279",
+    "original": "répéter",
+    "translation": "повторять",
+    "transcription": "[rеpеter]",
+    "audio_original": "",
+    "example_original": "Je veux répéter aujourd'hui.",
+    "example_translation": "Я хочу повторять сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-courir-282",
+    "original": "courir",
+    "translation": "бежать",
+    "transcription": "[cуrir]",
+    "audio_original": "",
+    "example_original": "Je veux courir aujourd'hui.",
+    "example_translation": "Я хочу бежать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "health"
+    ]
+  },
+  {
+    "id": "a2-nager-283",
+    "original": "nager",
+    "translation": "плавать",
+    "transcription": "[nager]",
+    "audio_original": "",
+    "example_original": "Je veux nager aujourd'hui.",
+    "example_translation": "Я хочу плавать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "health"
+    ]
+  },
+  {
+    "id": "a2-se-reveiller-285",
+    "original": "se réveiller",
+    "translation": "просыпаться",
+    "transcription": "[se rеvэйr]",
+    "audio_original": "",
+    "example_original": "Je veux se réveiller aujourd'hui.",
+    "example_translation": "Я хочу просыпаться сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "health"
+    ]
+  },
+  {
+    "id": "a2-adorer-288",
+    "original": "adorer",
+    "translation": "обожать",
+    "transcription": "[adorer]",
+    "audio_original": "",
+    "example_original": "Je veux adorer aujourd'hui.",
+    "example_translation": "Я хочу обожать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-preferer-289",
+    "original": "préférer",
+    "translation": "предпочитать",
+    "transcription": "[prеfеrer]",
+    "audio_original": "",
+    "example_original": "Je veux préférer aujourd'hui.",
+    "example_translation": "Я хочу предпочитать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking"
+    ]
+  },
+  {
+    "id": "a2-rencontrer-291",
+    "original": "rencontrer",
+    "translation": "встречать",
+    "transcription": "[rанcонtrer]",
+    "audio_original": "",
+    "example_original": "Je veux rencontrer aujourd'hui.",
+    "example_translation": "Я хочу встречать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-inviter-292",
+    "original": "inviter",
+    "translation": "приглашать",
+    "transcription": "[энviter]",
+    "audio_original": "",
+    "example_original": "Je veux inviter aujourd'hui.",
+    "example_translation": "Я хочу приглашать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-visiter-293",
+    "original": "visiter",
+    "translation": "посещать",
+    "transcription": "[visiter]",
+    "audio_original": "",
+    "example_original": "Je veux visiter aujourd'hui.",
+    "example_translation": "Я хочу посещать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-telephoner-294",
+    "original": "téléphoner",
+    "translation": "звонить",
+    "transcription": "[tеlефонer]",
+    "audio_original": "",
+    "example_original": "Je veux téléphoner aujourd'hui.",
+    "example_translation": "Я хочу звонить сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-envoyer-295",
+    "original": "envoyer",
+    "translation": "отправлять",
+    "transcription": "[анvoyer]",
+    "audio_original": "",
+    "example_original": "Je veux envoyer aujourd'hui.",
+    "example_translation": "Я хочу отправлять сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-recevoir-296",
+    "original": "recevoir",
+    "translation": "получать",
+    "transcription": "[recevуаr]",
+    "audio_original": "",
+    "example_original": "Je veux recevoir aujourd'hui.",
+    "example_translation": "Я хочу получать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-utiliser-297",
+    "original": "utiliser",
+    "translation": "использовать",
+    "transcription": "[utiliser]",
+    "audio_original": "",
+    "example_original": "Je veux utiliser aujourd'hui.",
+    "example_translation": "Я хочу использовать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "technology"
+    ]
+  },
+  {
+    "id": "a2-changer-298",
+    "original": "changer",
+    "translation": "менять",
+    "transcription": "[шанger]",
+    "audio_original": "",
+    "example_original": "Je veux changer aujourd'hui.",
+    "example_translation": "Я хочу менять сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking"
+    ]
+  },
+  {
+    "id": "a2-essayer-299",
+    "original": "essayer",
+    "translation": "пробовать",
+    "transcription": "[essayer]",
+    "audio_original": "",
+    "example_original": "Je veux essayer aujourd'hui.",
+    "example_translation": "Я хочу пробовать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking"
+    ]
+  },
+  {
+    "id": "a2-choisir-300",
+    "original": "choisir",
+    "translation": "выбирать",
+    "transcription": "[шуаsir]",
+    "audio_original": "",
+    "example_original": "Je veux choisir aujourd'hui.",
+    "example_translation": "Я хочу выбирать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking"
+    ]
+  },
+  {
+    "id": "a2-oublier-301",
+    "original": "oublier",
+    "translation": "забывать",
+    "transcription": "[уblier]",
+    "audio_original": "",
+    "example_original": "Je veux oublier aujourd'hui.",
+    "example_translation": "Я хочу забывать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-preparer-310",
+    "original": "préparer",
+    "translation": "готовить, подготавливать",
+    "transcription": "[prеparer]",
+    "audio_original": "",
+    "example_original": "Je veux préparer aujourd'hui.",
+    "example_translation": "Я хочу готовить, подготавливать сегодня.",
+    "part_of_speech": "verb",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "work"
+    ]
+  },
+  {
+    "id": "a2-par-351",
+    "original": "par",
+    "translation": "через, по",
+    "transcription": "[par]",
+    "audio_original": "",
+    "example_original": "Il utilise « par » dans une phrase simple.",
+    "example_translation": "Он использует « через, по » в простом предложении.",
+    "part_of_speech": "preposition",
+    "level": "A2",
+    "tags": [
+      "grammar",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-chez-352",
+    "original": "chez",
+    "translation": "у, к",
+    "transcription": "[шez]",
+    "audio_original": "",
+    "example_original": "Il utilise « chez » dans une phrase simple.",
+    "example_translation": "Он использует « у, к » в простом предложении.",
+    "part_of_speech": "preposition",
+    "level": "A2",
+    "tags": [
+      "grammar",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-entre-353",
+    "original": "entre",
+    "translation": "между",
+    "transcription": "[анtre]",
+    "audio_original": "",
+    "example_original": "Il utilise « entre » dans une phrase simple.",
+    "example_translation": "Он использует « между » в простом предложении.",
+    "part_of_speech": "preposition",
+    "level": "A2",
+    "tags": [
+      "grammar",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-pendant-356",
+    "original": "pendant",
+    "translation": "во время",
+    "transcription": "[pанdанt]",
+    "audio_original": "",
+    "example_original": "Il utilise « pendant » dans une phrase simple.",
+    "example_translation": "Он использует « во время » в простом предложении.",
+    "part_of_speech": "preposition",
+    "level": "A2",
+    "tags": [
+      "time",
+      "grammar"
+    ]
+  },
+  {
+    "id": "a2-depuis-357",
+    "original": "depuis",
+    "translation": "с, начиная с",
+    "transcription": "[depuis]",
+    "audio_original": "",
+    "example_original": "Il utilise « depuis » dans une phrase simple.",
+    "example_translation": "Он использует « с, начиная с » в простом предложении.",
+    "part_of_speech": "preposition",
+    "level": "A2",
+    "tags": [
+      "time",
+      "grammar"
+    ]
+  },
+  {
+    "id": "a2-parce-que-361",
+    "original": "parce que",
+    "translation": "потому что",
+    "transcription": "[parce кe]",
+    "audio_original": "",
+    "example_original": "Il utilise « parce que » dans une phrase simple.",
+    "example_translation": "Он использует « потому что » в простом предложении.",
+    "part_of_speech": "conjunction",
+    "level": "A2",
+    "tags": [
+      "grammar",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-si-362",
+    "original": "si",
+    "translation": "если",
+    "transcription": "[si]",
+    "audio_original": "",
+    "example_original": "Il utilise « si » dans une phrase simple.",
+    "example_translation": "Он использует « если » в простом предложении.",
+    "part_of_speech": "conjunction",
+    "level": "A2",
+    "tags": [
+      "grammar",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-quelque-chose-372",
+    "original": "quelque chose",
+    "translation": "что-то",
+    "transcription": "[кelкe шose]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « quelque chose ».",
+    "example_translation": "Мы часто говорим: « что-то ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "grammar",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-je-suis-pret-381",
+    "original": "je suis prêt",
+    "translation": "я готов",
+    "transcription": "[je suis prеt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis prêt ».",
+    "example_translation": "Мы часто говорим: « я готов ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "feelings"
+    ]
+  },
+  {
+    "id": "a2-je-suis-fatigue-382",
+    "original": "je suis fatigué",
+    "translation": "я устал",
+    "transcription": "[je suis fatiguе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis fatigué ».",
+    "example_translation": "Мы часто говорим: « я устал ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "feelings"
+    ]
+  },
+  {
+    "id": "a2-je-suis-content-383",
+    "original": "je suis content",
+    "translation": "я доволен",
+    "transcription": "[je suis cонtанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis content ».",
+    "example_translation": "Мы часто говорим: « я доволен ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "feelings"
+    ]
+  },
+  {
+    "id": "a2-je-suis-desole-384",
+    "original": "je suis désolé",
+    "translation": "мне жаль",
+    "transcription": "[je suis dеsolе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis désolé ».",
+    "example_translation": "Мы часто говорим: « мне жаль ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "communication"
+    ]
+  },
+  {
+    "id": "a2-je-pense-que-385",
+    "original": "je pense que",
+    "translation": "я думаю, что",
+    "transcription": "[je pанse кe]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je pense que ».",
+    "example_translation": "Мы часто говорим: « я думаю, что ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-il-faut-388",
+    "original": "il faut",
+    "translation": "нужно",
+    "transcription": "[il fоt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut ».",
+    "example_translation": "Мы часто говорим: « нужно ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "grammar"
+    ]
+  },
+  {
+    "id": "a2-pas-du-tout-390",
+    "original": "pas du tout",
+    "translation": "совсем нет",
+    "transcription": "[pas du tуt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « pas du tout ».",
+    "example_translation": "Мы часто говорим: « совсем нет ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "communication"
+    ]
+  },
+  {
+    "id": "a2-bien-sur-391",
+    "original": "bien sûr",
+    "translation": "конечно",
+    "transcription": "[biан sюr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « bien sûr ».",
+    "example_translation": "Мы часто говорим: « конечно ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "communication"
+    ]
+  },
+  {
+    "id": "a2-pas-mal-393",
+    "original": "pas mal",
+    "translation": "неплохо",
+    "transcription": "[pas mal]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « pas mal ».",
+    "example_translation": "Мы часто говорим: « неплохо ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "communication"
+    ]
+  },
+  {
+    "id": "a2-par-exemple-395",
+    "original": "par exemple",
+    "translation": "например",
+    "transcription": "[par exemple]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « par exemple ».",
+    "example_translation": "Мы часто говорим: « например ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "communication"
+    ]
+  },
+  {
+    "id": "a2-a-cote-de-396",
+    "original": "à côté de",
+    "translation": "рядом с",
+    "transcription": "[а cоtе de]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « à côté de ».",
+    "example_translation": "Мы часто говорим: « рядом с ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "space",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-en-face-de-397",
+    "original": "en face de",
+    "translation": "напротив",
+    "transcription": "[ан face de]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « en face de ».",
+    "example_translation": "Мы часто говорим: « напротив ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "space",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-au-centre-400",
+    "original": "au centre",
+    "translation": "в центре",
+    "transcription": "[о cанtre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « au centre ».",
+    "example_translation": "Мы часто говорим: « в центре ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "space",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-tout-le-monde-401",
+    "original": "tout le monde",
+    "translation": "все",
+    "transcription": "[tуt le mонde]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « tout le monde ».",
+    "example_translation": "Мы часто говорим: « все ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-en-vacances-411",
+    "original": "en vacances",
+    "translation": "в отпуске",
+    "transcription": "[ан vacанces]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « en vacances ».",
+    "example_translation": "Мы часто говорим: « в отпуске ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-en-retard-415",
+    "original": "en retard",
+    "translation": "с опозданием",
+    "transcription": "[ан retard]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « en retard ».",
+    "example_translation": "Мы часто говорим: « с опозданием ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "time",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-a-l-heure-416",
+    "original": "à l'heure",
+    "translation": "вовремя",
+    "transcription": "[а l'hёre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « à l'heure ».",
+    "example_translation": "Мы часто говорим: « вовремя ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "time",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-a-la-fin-419",
+    "original": "à la fin",
+    "translation": "в конце",
+    "transcription": "[а la fэн]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « à la fin ».",
+    "example_translation": "Мы часто говорим: « в конце ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "time",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-avoir-besoin-de-422",
+    "original": "avoir besoin de",
+    "translation": "нуждаться в",
+    "transcription": "[avуаr besуаn de]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « avoir besoin de ».",
+    "example_translation": "Мы часто говорим: « нуждаться в ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking"
+    ]
+  },
+  {
+    "id": "a2-avoir-envie-de-423",
+    "original": "avoir envie de",
+    "translation": "хотеть",
+    "transcription": "[avуаr анvie de]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « avoir envie de ».",
+    "example_translation": "Мы часто говорим: « хотеть ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-faire-attention-425",
+    "original": "faire attention",
+    "translation": "быть внимательным",
+    "transcription": "[fэre attанtiон]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « faire attention ».",
+    "example_translation": "Мы часто говорим: « быть внимательным ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking"
+    ]
+  },
+  {
+    "id": "a2-se-sentir-bien-428",
+    "original": "se sentir bien",
+    "translation": "чувствовать себя хорошо",
+    "transcription": "[se sанtir biан]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « se sentir bien ».",
+    "example_translation": "Мы часто говорим: « чувствовать себя хорошо ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-se-sentir-mal-429",
+    "original": "se sentir mal",
+    "translation": "чувствовать себя плохо",
+    "transcription": "[se sанtir mal]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « se sentir mal ».",
+    "example_translation": "Мы часто говорим: « чувствовать себя плохо ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-faire-une-pause-431",
+    "original": "faire une pause",
+    "translation": "сделать паузу",
+    "transcription": "[fэre енe pоse]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « faire une pause ».",
+    "example_translation": "Мы часто говорим: « сделать паузу ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-maison-433",
+    "original": "je cherche la maison",
+    "translation": "я ищу дом",
+    "transcription": "[je шerшe la mэsон]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la maison ».",
+    "example_translation": "Мы часто говорим: « я ищу дом ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-maison-436",
+    "original": "où est la maison ?",
+    "translation": "где дом?",
+    "transcription": "[oю est la mэsон ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la maison ? ».",
+    "example_translation": "Мы часто говорим: « где дом? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-l-appartement-438",
+    "original": "je cherche l'appartement",
+    "translation": "я ищу квартира",
+    "transcription": "[je шerшe l'appartemанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche l'appartement ».",
+    "example_translation": "Мы часто говорим: « я ищу квартира ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-l-appartement-441",
+    "original": "où est l'appartement ?",
+    "translation": "где квартира?",
+    "transcription": "[oю est l'appartemанt ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est l'appartement ? ».",
+    "example_translation": "Мы часто говорим: « где квартира? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-chambre-443",
+    "original": "je cherche la chambre",
+    "translation": "я ищу комната",
+    "transcription": "[je шerшe la шambre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la chambre ».",
+    "example_translation": "Мы часто говорим: « я ищу комната ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-chambre-446",
+    "original": "où est la chambre ?",
+    "translation": "где комната?",
+    "transcription": "[oю est la шambre ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la chambre ? ».",
+    "example_translation": "Мы часто говорим: « где комната? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-porte-448",
+    "original": "je cherche la porte",
+    "translation": "я ищу дверь",
+    "transcription": "[je шerшe la porte]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la porte ».",
+    "example_translation": "Мы часто говорим: « я ищу дверь ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "objects",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-porte-451",
+    "original": "où est la porte ?",
+    "translation": "где дверь?",
+    "transcription": "[oю est la porte ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la porte ? ».",
+    "example_translation": "Мы часто говорим: « где дверь? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "objects",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-fenetre-453",
+    "original": "je cherche la fenêtre",
+    "translation": "я ищу окно",
+    "transcription": "[je шerшe la fанеtre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la fenêtre ».",
+    "example_translation": "Мы часто говорим: « я ищу окно ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "objects",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-fenetre-456",
+    "original": "où est la fenêtre ?",
+    "translation": "где окно?",
+    "transcription": "[oю est la fанеtre ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la fenêtre ? ».",
+    "example_translation": "Мы часто говорим: « где окно? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "objects",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-table-458",
+    "original": "je cherche la table",
+    "translation": "я ищу стол",
+    "transcription": "[je шerшe la table]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la table ».",
+    "example_translation": "Мы часто говорим: « я ищу стол ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "objects",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-table-461",
+    "original": "où est la table ?",
+    "translation": "где стол?",
+    "transcription": "[oю est la table ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la table ? ».",
+    "example_translation": "Мы часто говорим: « где стол? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "objects",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-chaise-463",
+    "original": "je cherche la chaise",
+    "translation": "я ищу стул",
+    "transcription": "[je шerшe la шэse]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la chaise ».",
+    "example_translation": "Мы часто говорим: « я ищу стул ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "objects",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-chaise-466",
+    "original": "où est la chaise ?",
+    "translation": "где стул?",
+    "transcription": "[oю est la шэse ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la chaise ? ».",
+    "example_translation": "Мы часто говорим: « где стул? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "objects",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-lit-468",
+    "original": "je cherche le lit",
+    "translation": "я ищу кровать",
+    "transcription": "[je шerшe le lit]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le lit ».",
+    "example_translation": "Мы часто говорим: « я ищу кровать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "objects",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-lit-471",
+    "original": "où est le lit ?",
+    "translation": "где кровать?",
+    "transcription": "[oю est le lit ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le lit ? ».",
+    "example_translation": "Мы часто говорим: « где кровать? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "objects",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-cuisine-473",
+    "original": "je cherche la cuisine",
+    "translation": "я ищу кухня",
+    "transcription": "[je шerшe la cuisэнe]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la cuisine ».",
+    "example_translation": "Мы часто говорим: « я ищу кухня ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-cuisine-476",
+    "original": "où est la cuisine ?",
+    "translation": "где кухня?",
+    "transcription": "[oю est la cuisэнe ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la cuisine ? ».",
+    "example_translation": "Мы часто говорим: « где кухня? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-salle-de-bain-478",
+    "original": "je cherche la salle de bain",
+    "translation": "я ищу ванная",
+    "transcription": "[je шerшe la salle de bэn]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la salle de bain ».",
+    "example_translation": "Мы часто говорим: « я ищу ванная ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-salle-de-bain-481",
+    "original": "où est la salle de bain ?",
+    "translation": "где ванная?",
+    "transcription": "[oю est la salle de bэn ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la salle de bain ? ».",
+    "example_translation": "Мы часто говорим: « где ванная? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-jardin-483",
+    "original": "je cherche le jardin",
+    "translation": "я ищу сад",
+    "transcription": "[je шerшe le jardэн]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le jardin ».",
+    "example_translation": "Мы часто говорим: « я ищу сад ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "nature",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-jardin-486",
+    "original": "où est le jardin ?",
+    "translation": "где сад?",
+    "transcription": "[oю est le jardэн ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le jardin ? ».",
+    "example_translation": "Мы часто говорим: « где сад? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "nature",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-ville-488",
+    "original": "je cherche la ville",
+    "translation": "я ищу город",
+    "transcription": "[je шerшe la vий]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la ville ».",
+    "example_translation": "Мы часто говорим: « я ищу город ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "city",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-ville-491",
+    "original": "où est la ville ?",
+    "translation": "где город?",
+    "transcription": "[oю est la vий ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la ville ? ».",
+    "example_translation": "Мы часто говорим: « где город? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "city",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-village-493",
+    "original": "je cherche le village",
+    "translation": "я ищу деревня",
+    "transcription": "[je шerшe le village]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le village ».",
+    "example_translation": "Мы часто говорим: « я ищу деревня ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "city",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-village-496",
+    "original": "où est le village ?",
+    "translation": "где деревня?",
+    "transcription": "[oю est le village ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le village ? ».",
+    "example_translation": "Мы часто говорим: « где деревня? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "city",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-rue-498",
+    "original": "je cherche la rue",
+    "translation": "я ищу улица",
+    "transcription": "[je шerшe la rue]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la rue ».",
+    "example_translation": "Мы часто говорим: « я ищу улица ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "city",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-rue-501",
+    "original": "où est la rue ?",
+    "translation": "где улица?",
+    "transcription": "[oю est la rue ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la rue ? ».",
+    "example_translation": "Мы часто говорим: « где улица? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "city",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-route-503",
+    "original": "je cherche la route",
+    "translation": "я ищу дорога",
+    "transcription": "[je шerшe la rуte]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la route ».",
+    "example_translation": "Мы часто говорим: « я ищу дорога ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-route-506",
+    "original": "où est la route ?",
+    "translation": "где дорога?",
+    "transcription": "[oю est la rуte ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la route ? ».",
+    "example_translation": "Мы часто говорим: « где дорога? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-gare-508",
+    "original": "je cherche la gare",
+    "translation": "я ищу вокзал",
+    "transcription": "[je шerшe la gare]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la gare ».",
+    "example_translation": "Мы часто говорим: « я ищу вокзал ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-gare-511",
+    "original": "où est la gare ?",
+    "translation": "где вокзал?",
+    "transcription": "[oю est la gare ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la gare ? ».",
+    "example_translation": "Мы часто говорим: « где вокзал? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-j-aime-l-aeroport-512",
+    "original": "j'aime l'aéroport",
+    "translation": "мне нравится аэропорт",
+    "transcription": "[j'эme l'aеroport]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « j'aime l'aéroport ».",
+    "example_translation": "Мы часто говорим: « мне нравится аэропорт ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-l-aeroport-513",
+    "original": "je cherche l'aéroport",
+    "translation": "я ищу аэропорт",
+    "transcription": "[je шerшe l'aеroport]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche l'aéroport ».",
+    "example_translation": "Мы часто говорим: « я ищу аэропорт ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-vois-l-aeroport-514",
+    "original": "je vois l'aéroport",
+    "translation": "я вижу аэропорт",
+    "transcription": "[je vуаs l'aеroport]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je vois l'aéroport ».",
+    "example_translation": "Мы часто говорим: « я вижу аэропорт ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-y-a-l-aeroport-515",
+    "original": "il y a l'aéroport",
+    "translation": "есть аэропорт",
+    "transcription": "[il y a l'aеroport]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il y a l'aéroport ».",
+    "example_translation": "Мы часто говорим: « есть аэропорт ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-l-aeroport-516",
+    "original": "où est l'aéroport ?",
+    "translation": "где аэропорт?",
+    "transcription": "[oю est l'aеroport ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est l'aéroport ? ».",
+    "example_translation": "Мы часто говорим: « где аэропорт? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-station-518",
+    "original": "je cherche la station",
+    "translation": "я ищу станция",
+    "transcription": "[je шerшe la statiон]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la station ».",
+    "example_translation": "Мы часто говорим: « я ищу станция ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-station-521",
+    "original": "où est la station ?",
+    "translation": "где станция?",
+    "transcription": "[oю est la statiон ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la station ? ».",
+    "example_translation": "Мы часто говорим: « где станция? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-bus-523",
+    "original": "je cherche le bus",
+    "translation": "я ищу автобус",
+    "transcription": "[je шerшe le bus]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le bus ».",
+    "example_translation": "Мы часто говорим: « я ищу автобус ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-bus-526",
+    "original": "où est le bus ?",
+    "translation": "где автобус?",
+    "transcription": "[oю est le bus ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le bus ? ».",
+    "example_translation": "Мы часто говорим: « где автобус? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-train-528",
+    "original": "je cherche le train",
+    "translation": "я ищу поезд",
+    "transcription": "[je шerшe le trэn]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le train ».",
+    "example_translation": "Мы часто говорим: « я ищу поезд ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-train-531",
+    "original": "où est le train ?",
+    "translation": "где поезд?",
+    "transcription": "[oю est le trэn ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le train ? ».",
+    "example_translation": "Мы часто говорим: « где поезд? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-metro-533",
+    "original": "je cherche le métro",
+    "translation": "я ищу метро",
+    "transcription": "[je шerшe le mеtro]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le métro ».",
+    "example_translation": "Мы часто говорим: « я ищу метро ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-metro-536",
+    "original": "où est le métro ?",
+    "translation": "где метро?",
+    "transcription": "[oю est le mеtro ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le métro ? ».",
+    "example_translation": "Мы часто говорим: « где метро? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-velo-538",
+    "original": "je cherche le vélo",
+    "translation": "я ищу велосипед",
+    "transcription": "[je шerшe le vеlo]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le vélo ».",
+    "example_translation": "Мы часто говорим: « я ищу велосипед ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-velo-541",
+    "original": "où est le vélo ?",
+    "translation": "где велосипед?",
+    "transcription": "[oю est le vеlo ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le vélo ? ».",
+    "example_translation": "Мы часто говорим: « где велосипед? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-voiture-543",
+    "original": "je cherche la voiture",
+    "translation": "я ищу машина",
+    "transcription": "[je шerшe la vуаture]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la voiture ».",
+    "example_translation": "Мы часто говорим: « я ищу машина ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-voiture-546",
+    "original": "où est la voiture ?",
+    "translation": "где машина?",
+    "transcription": "[oю est la vуаture ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la voiture ? ».",
+    "example_translation": "Мы часто говорим: « где машина? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-taxi-548",
+    "original": "je cherche le taxi",
+    "translation": "я ищу такси",
+    "transcription": "[je шerшe le taxi]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le taxi ».",
+    "example_translation": "Мы часто говорим: « я ищу такси ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-taxi-551",
+    "original": "où est le taxi ?",
+    "translation": "где такси?",
+    "transcription": "[oю est le taxi ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le taxi ? ».",
+    "example_translation": "Мы часто говорим: « где такси? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-billet-553",
+    "original": "je cherche le billet",
+    "translation": "я ищу билет",
+    "transcription": "[je шerшe le bийt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le billet ».",
+    "example_translation": "Мы часто говорим: « я ищу билет ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-billet-556",
+    "original": "où est le billet ?",
+    "translation": "где билет?",
+    "transcription": "[oю est le bийt ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le billet ? ».",
+    "example_translation": "Мы часто говорим: « где билет? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-l-hotel-558",
+    "original": "je cherche l'hôtel",
+    "translation": "я ищу отель",
+    "transcription": "[je шerшe l'hоtel]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche l'hôtel ».",
+    "example_translation": "Мы часто говорим: « я ищу отель ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-l-hotel-561",
+    "original": "où est l'hôtel ?",
+    "translation": "где отель?",
+    "transcription": "[oю est l'hоtel ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est l'hôtel ? ».",
+    "example_translation": "Мы часто говорим: « где отель? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-travail-563",
+    "original": "je cherche le travail",
+    "translation": "я ищу работа",
+    "transcription": "[je шerшe le travэl]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le travail ».",
+    "example_translation": "Мы часто говорим: « я ищу работа ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-travail-566",
+    "original": "où est le travail ?",
+    "translation": "где работа?",
+    "transcription": "[oю est le travэl ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le travail ? ».",
+    "example_translation": "Мы часто говорим: « где работа? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-bureau-568",
+    "original": "je cherche le bureau",
+    "translation": "я ищу офис",
+    "transcription": "[je шerшe le buro]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le bureau ».",
+    "example_translation": "Мы часто говорим: « я ищу офис ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-bureau-571",
+    "original": "où est le bureau ?",
+    "translation": "где офис?",
+    "transcription": "[oю est le buro ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le bureau ? ».",
+    "example_translation": "Мы часто говорим: « где офис? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-l-ecole-573",
+    "original": "je cherche l'école",
+    "translation": "я ищу школа",
+    "transcription": "[je шerшe l'еcole]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche l'école ».",
+    "example_translation": "Мы часто говорим: « я ищу школа ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-l-ecole-576",
+    "original": "où est l'école ?",
+    "translation": "где школа?",
+    "transcription": "[oю est l'еcole ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est l'école ? ».",
+    "example_translation": "Мы часто говорим: « где школа? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-j-aime-l-universite-577",
+    "original": "j'aime l'université",
+    "translation": "мне нравится университет",
+    "transcription": "[j'эme l'енiversitе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « j'aime l'université ».",
+    "example_translation": "Мы часто говорим: « мне нравится университет ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-l-universite-578",
+    "original": "je cherche l'université",
+    "translation": "я ищу университет",
+    "transcription": "[je шerшe l'енiversitе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche l'université ».",
+    "example_translation": "Мы часто говорим: « я ищу университет ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-vois-l-universite-579",
+    "original": "je vois l'université",
+    "translation": "я вижу университет",
+    "transcription": "[je vуаs l'енiversitе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je vois l'université ».",
+    "example_translation": "Мы часто говорим: « я вижу университет ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-y-a-l-universite-580",
+    "original": "il y a l'université",
+    "translation": "есть университет",
+    "transcription": "[il y a l'енiversitе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il y a l'université ».",
+    "example_translation": "Мы часто говорим: « есть университет ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-l-universite-581",
+    "original": "où est l'université ?",
+    "translation": "где университет?",
+    "transcription": "[oю est l'енiversitе ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est l'université ? ».",
+    "example_translation": "Мы часто говорим: « где университет? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-classe-583",
+    "original": "je cherche la classe",
+    "translation": "я ищу класс",
+    "transcription": "[je шerшe la classe]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la classe ».",
+    "example_translation": "Мы часто говорим: « я ищу класс ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-classe-586",
+    "original": "où est la classe ?",
+    "translation": "где класс?",
+    "transcription": "[oю est la classe ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la classe ? ».",
+    "example_translation": "Мы часто говорим: « где класс? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-livre-588",
+    "original": "je cherche le livre",
+    "translation": "я ищу книга",
+    "transcription": "[je шerшe le livre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le livre ».",
+    "example_translation": "Мы часто говорим: « я ищу книга ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "objects",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-livre-591",
+    "original": "où est le livre ?",
+    "translation": "где книга?",
+    "transcription": "[oю est le livre ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le livre ? ».",
+    "example_translation": "Мы часто говорим: « где книга? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "objects",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-cahier-593",
+    "original": "je cherche le cahier",
+    "translation": "я ищу тетрадь",
+    "transcription": "[je шerшe le cahier]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le cahier ».",
+    "example_translation": "Мы часто говорим: « я ищу тетрадь ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "objects",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-cahier-596",
+    "original": "où est le cahier ?",
+    "translation": "где тетрадь?",
+    "transcription": "[oю est le cahier ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le cahier ? ».",
+    "example_translation": "Мы часто говорим: « где тетрадь? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "objects",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-stylo-598",
+    "original": "je cherche le stylo",
+    "translation": "я ищу ручка",
+    "transcription": "[je шerшe le stylo]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le stylo ».",
+    "example_translation": "Мы часто говорим: « я ищу ручка ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "objects",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-stylo-601",
+    "original": "où est le stylo ?",
+    "translation": "где ручка?",
+    "transcription": "[oю est le stylo ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le stylo ? ».",
+    "example_translation": "Мы часто говорим: « где ручка? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "objects",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-papier-603",
+    "original": "je cherche le papier",
+    "translation": "я ищу бумага",
+    "transcription": "[je шerшe le papier]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le papier ».",
+    "example_translation": "Мы часто говорим: « я ищу бумага ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "objects",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-papier-606",
+    "original": "où est le papier ?",
+    "translation": "где бумага?",
+    "transcription": "[oю est le papier ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le papier ? ».",
+    "example_translation": "Мы часто говорим: « где бумага? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "objects",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-l-ordinateur-608",
+    "original": "je cherche l'ordinateur",
+    "translation": "я ищу компьютер",
+    "transcription": "[je шerшe l'ordэнatёr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche l'ordinateur ».",
+    "example_translation": "Мы часто говорим: « я ищу компьютер ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "technology",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-l-ordinateur-611",
+    "original": "où est l'ordinateur ?",
+    "translation": "где компьютер?",
+    "transcription": "[oю est l'ordэнatёr ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est l'ordinateur ? ».",
+    "example_translation": "Мы часто говорим: « где компьютер? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "technology",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-telephone-613",
+    "original": "je cherche le téléphone",
+    "translation": "я ищу телефон",
+    "transcription": "[je шerшe le tеlефонe]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le téléphone ».",
+    "example_translation": "Мы часто говорим: « я ищу телефон ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-telephone-616",
+    "original": "où est le téléphone ?",
+    "translation": "где телефон?",
+    "transcription": "[oю est le tеlефонe ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le téléphone ? ».",
+    "example_translation": "Мы часто говорим: « где телефон? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-j-aime-l-ecran-617",
+    "original": "j'aime l'écran",
+    "translation": "мне нравится экран",
+    "transcription": "[j'эme l'еcrан]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « j'aime l'écran ».",
+    "example_translation": "Мы часто говорим: « мне нравится экран ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-l-ecran-618",
+    "original": "je cherche l'écran",
+    "translation": "я ищу экран",
+    "transcription": "[je шerшe l'еcrан]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche l'écran ».",
+    "example_translation": "Мы часто говорим: « я ищу экран ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-vois-l-ecran-619",
+    "original": "je vois l'écran",
+    "translation": "я вижу экран",
+    "transcription": "[je vуаs l'еcrан]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je vois l'écran ».",
+    "example_translation": "Мы часто говорим: « я вижу экран ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-y-a-l-ecran-620",
+    "original": "il y a l'écran",
+    "translation": "есть экран",
+    "transcription": "[il y a l'еcrан]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il y a l'écran ».",
+    "example_translation": "Мы часто говорим: « есть экран ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-l-ecran-621",
+    "original": "où est l'écran ?",
+    "translation": "где экран?",
+    "transcription": "[oю est l'еcrан ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est l'écran ? ».",
+    "example_translation": "Мы часто говорим: « где экран? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-j-aime-le-clavier-622",
+    "original": "j'aime le clavier",
+    "translation": "мне нравится клавиатура",
+    "transcription": "[j'эme le clavier]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « j'aime le clavier ».",
+    "example_translation": "Мы часто говорим: « мне нравится клавиатура ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "work",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-clavier-623",
+    "original": "je cherche le clavier",
+    "translation": "я ищу клавиатура",
+    "transcription": "[je шerшe le clavier]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le clavier ».",
+    "example_translation": "Мы часто говорим: « я ищу клавиатура ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "work",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-vois-le-clavier-624",
+    "original": "je vois le clavier",
+    "translation": "я вижу клавиатура",
+    "transcription": "[je vуаs le clavier]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je vois le clavier ».",
+    "example_translation": "Мы часто говорим: « я вижу клавиатура ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "work",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-y-a-le-clavier-625",
+    "original": "il y a le clavier",
+    "translation": "есть клавиатура",
+    "transcription": "[il y a le clavier]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il y a le clavier ».",
+    "example_translation": "Мы часто говорим: « есть клавиатура ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "work",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-clavier-626",
+    "original": "où est le clavier ?",
+    "translation": "где клавиатура?",
+    "transcription": "[oю est le clavier ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le clavier ? ».",
+    "example_translation": "Мы часто говорим: « где клавиатура? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "work",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-internet-628",
+    "original": "je cherche internet",
+    "translation": "я ищу интернет",
+    "transcription": "[je шerшe энternet]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche internet ».",
+    "example_translation": "Мы часто говорим: « я ищу интернет ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-internet-631",
+    "original": "où est internet ?",
+    "translation": "где интернет?",
+    "transcription": "[oю est энternet ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est internet ? ».",
+    "example_translation": "Мы часто говорим: « где интернет? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "technology",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-message-633",
+    "original": "je cherche le message",
+    "translation": "я ищу сообщение",
+    "transcription": "[je шerшe le message]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le message ».",
+    "example_translation": "Мы часто говорим: « я ищу сообщение ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-message-636",
+    "original": "où est le message ?",
+    "translation": "где сообщение?",
+    "transcription": "[oю est le message ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le message ? ».",
+    "example_translation": "Мы часто говорим: « где сообщение? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-question-638",
+    "original": "je cherche la question",
+    "translation": "я ищу вопрос",
+    "transcription": "[je шerшe la кestiон]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la question ».",
+    "example_translation": "Мы часто говорим: « я ищу вопрос ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-question-641",
+    "original": "où est la question ?",
+    "translation": "где вопрос?",
+    "transcription": "[oю est la кestiон ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la question ? ».",
+    "example_translation": "Мы часто говорим: « где вопрос? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-reponse-643",
+    "original": "je cherche la réponse",
+    "translation": "я ищу ответ",
+    "transcription": "[je шerшe la rеpонse]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la réponse ».",
+    "example_translation": "Мы часто говорим: « я ищу ответ ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-reponse-646",
+    "original": "où est la réponse ?",
+    "translation": "где ответ?",
+    "transcription": "[oю est la rеpонse ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la réponse ? ».",
+    "example_translation": "Мы часто говорим: « где ответ? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-un-ami-648",
+    "original": "je cherche un ami",
+    "translation": "я ищу друг",
+    "transcription": "[je шerшe ен ami]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche un ami ».",
+    "example_translation": "Мы часто говорим: « я ищу друг ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-un-ami-651",
+    "original": "où est un ami ?",
+    "translation": "где друг?",
+    "transcription": "[oю est ен ami ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est un ami ? ».",
+    "example_translation": "Мы часто говорим: « где друг? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-une-amie-653",
+    "original": "je cherche une amie",
+    "translation": "я ищу подруга",
+    "transcription": "[je шerшe енe amie]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche une amie ».",
+    "example_translation": "Мы часто говорим: « я ищу подруга ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-une-amie-656",
+    "original": "où est une amie ?",
+    "translation": "где подруга?",
+    "transcription": "[oю est енe amie ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est une amie ? ».",
+    "example_translation": "Мы часто говорим: « где подруга? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-famille-658",
+    "original": "je cherche la famille",
+    "translation": "я ищу семья",
+    "transcription": "[je шerшe la famий]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la famille ».",
+    "example_translation": "Мы часто говорим: « я ищу семья ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-famille-661",
+    "original": "où est la famille ?",
+    "translation": "где семья?",
+    "transcription": "[oю est la famий ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la famille ? ».",
+    "example_translation": "Мы часто говорим: « где семья? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-pere-663",
+    "original": "je cherche le père",
+    "translation": "я ищу отец",
+    "transcription": "[je шerшe le pеre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le père ».",
+    "example_translation": "Мы часто говорим: « я ищу отец ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "family",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-pere-666",
+    "original": "où est le père ?",
+    "translation": "где отец?",
+    "transcription": "[oю est le pеre ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le père ? ».",
+    "example_translation": "Мы часто говорим: « где отец? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "family",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-mere-668",
+    "original": "je cherche la mère",
+    "translation": "я ищу мать",
+    "transcription": "[je шerшe la mеre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la mère ».",
+    "example_translation": "Мы часто говорим: « я ищу мать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "family",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-mere-671",
+    "original": "où est la mère ?",
+    "translation": "где мать?",
+    "transcription": "[oю est la mеre ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la mère ? ».",
+    "example_translation": "Мы часто говорим: « где мать? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "family",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-frere-673",
+    "original": "je cherche le frère",
+    "translation": "я ищу брат",
+    "transcription": "[je шerшe le frеre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le frère ».",
+    "example_translation": "Мы часто говорим: « я ищу брат ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "family",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-frere-676",
+    "original": "où est le frère ?",
+    "translation": "где брат?",
+    "transcription": "[oю est le frеre ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le frère ? ».",
+    "example_translation": "Мы часто говорим: « где брат? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "family",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-la-s-ur-678",
+    "original": "je cherche la sœur",
+    "translation": "я ищу сестра",
+    "transcription": "[je шerшe la sёur]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche la sœur ».",
+    "example_translation": "Мы часто говорим: « я ищу сестра ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "family",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-la-s-ur-681",
+    "original": "où est la sœur ?",
+    "translation": "где сестра?",
+    "transcription": "[oю est la sёur ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est la sœur ? ».",
+    "example_translation": "Мы часто говорим: « где сестра? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "family",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-un-enfant-683",
+    "original": "je cherche un enfant",
+    "translation": "я ищу ребёнок",
+    "transcription": "[je шerшe ен анfанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche un enfant ».",
+    "example_translation": "Мы часто говорим: « я ищу ребёнок ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "family",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-un-enfant-686",
+    "original": "où est un enfant ?",
+    "translation": "где ребёнок?",
+    "transcription": "[oю est ен анfанt ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est un enfant ? ».",
+    "example_translation": "Мы часто говорим: « где ребёнок? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "family",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-un-homme-688",
+    "original": "je cherche un homme",
+    "translation": "я ищу мужчина",
+    "transcription": "[je шerшe ен homme]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche un homme ».",
+    "example_translation": "Мы часто говорим: « я ищу мужчина ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-un-homme-691",
+    "original": "où est un homme ?",
+    "translation": "где мужчина?",
+    "transcription": "[oю est ен homme ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est un homme ? ».",
+    "example_translation": "Мы часто говорим: « где мужчина? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-une-femme-693",
+    "original": "je cherche une femme",
+    "translation": "я ищу женщина",
+    "transcription": "[je шerшe енe femme]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche une femme ».",
+    "example_translation": "Мы часто говорим: « я ищу женщина ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-une-femme-696",
+    "original": "où est une femme ?",
+    "translation": "где женщина?",
+    "transcription": "[oю est енe femme ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est une femme ? ».",
+    "example_translation": "Мы часто говорим: « где женщина? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-une-personne-698",
+    "original": "je cherche une personne",
+    "translation": "я ищу человек",
+    "transcription": "[je шerшe енe persонne]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche une personne ».",
+    "example_translation": "Мы часто говорим: « я ищу человек ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-une-personne-701",
+    "original": "où est une personne ?",
+    "translation": "где человек?",
+    "transcription": "[oю est енe persонne ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est une personne ? ».",
+    "example_translation": "Мы часто говорим: « где человек? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-j-aime-un-voisin-702",
+    "original": "j'aime un voisin",
+    "translation": "мне нравится сосед",
+    "transcription": "[j'эme ен vуаsэн]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « j'aime un voisin ».",
+    "example_translation": "Мы часто говорим: « мне нравится сосед ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "home",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-un-voisin-703",
+    "original": "je cherche un voisin",
+    "translation": "я ищу сосед",
+    "transcription": "[je шerшe ен vуаsэн]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche un voisin ».",
+    "example_translation": "Мы часто говорим: « я ищу сосед ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "home",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-vois-un-voisin-704",
+    "original": "je vois un voisin",
+    "translation": "я вижу сосед",
+    "transcription": "[je vуаs ен vуаsэн]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je vois un voisin ».",
+    "example_translation": "Мы часто говорим: « я вижу сосед ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "home",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-y-a-un-voisin-705",
+    "original": "il y a un voisin",
+    "translation": "есть сосед",
+    "transcription": "[il y a ен vуаsэн]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il y a un voisin ».",
+    "example_translation": "Мы часто говорим: « есть сосед ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "home",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-un-voisin-706",
+    "original": "où est un voisin ?",
+    "translation": "где сосед?",
+    "transcription": "[oю est ен vуаsэн ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est un voisin ? ».",
+    "example_translation": "Мы часто говорим: « где сосед? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "home",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-professeur-708",
+    "original": "je cherche le professeur",
+    "translation": "я ищу учитель",
+    "transcription": "[je шerшe le professёr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le professeur ».",
+    "example_translation": "Мы часто говорим: « я ищу учитель ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "people",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-professeur-711",
+    "original": "où est le professeur ?",
+    "translation": "где учитель?",
+    "transcription": "[oю est le professёr ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le professeur ? ».",
+    "example_translation": "Мы часто говорим: « где учитель? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "people",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-un-eleve-713",
+    "original": "je cherche un élève",
+    "translation": "я ищу ученик",
+    "transcription": "[je шerшe ен еlеve]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche un élève ».",
+    "example_translation": "Мы часто говорим: « я ищу ученик ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "people",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-un-eleve-716",
+    "original": "où est un élève ?",
+    "translation": "где ученик?",
+    "transcription": "[oю est ен еlеve ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est un élève ? ».",
+    "example_translation": "Мы часто говорим: « где ученик? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "people",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-medecin-718",
+    "original": "je cherche le médecin",
+    "translation": "я ищу врач",
+    "transcription": "[je шerшe le mеdecэн]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le médecin ».",
+    "example_translation": "Мы часто говорим: « я ищу врач ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "health",
+      "people",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-medecin-721",
+    "original": "où est le médecin ?",
+    "translation": "где врач?",
+    "transcription": "[oю est le mеdecэн ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le médecin ? ».",
+    "example_translation": "Мы часто говорим: « где врач? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "health",
+      "people",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-j-aime-le-serveur-722",
+    "original": "j'aime le serveur",
+    "translation": "мне нравится официант",
+    "transcription": "[j'эme le servёr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « j'aime le serveur ».",
+    "example_translation": "Мы часто говорим: « мне нравится официант ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-serveur-723",
+    "original": "je cherche le serveur",
+    "translation": "я ищу официант",
+    "transcription": "[je шerшe le servёr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le serveur ».",
+    "example_translation": "Мы часто говорим: « я ищу официант ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-vois-le-serveur-724",
+    "original": "je vois le serveur",
+    "translation": "я вижу официант",
+    "transcription": "[je vуаs le servёr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je vois le serveur ».",
+    "example_translation": "Мы часто говорим: « я вижу официант ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-y-a-le-serveur-725",
+    "original": "il y a le serveur",
+    "translation": "есть официант",
+    "transcription": "[il y a le servёr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il y a le serveur ».",
+    "example_translation": "Мы часто говорим: « есть официант ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-serveur-726",
+    "original": "où est le serveur ?",
+    "translation": "где официант?",
+    "transcription": "[oю est le servёr ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le serveur ? ».",
+    "example_translation": "Мы часто говорим: « где официант? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-j-aime-le-client-727",
+    "original": "j'aime le client",
+    "translation": "мне нравится клиент",
+    "transcription": "[j'эme le cliанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « j'aime le client ».",
+    "example_translation": "Мы часто говорим: « мне нравится клиент ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-cherche-le-client-728",
+    "original": "je cherche le client",
+    "translation": "я ищу клиент",
+    "transcription": "[je шerшe le cliанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je cherche le client ».",
+    "example_translation": "Мы часто говорим: « я ищу клиент ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-je-vois-le-client-729",
+    "original": "je vois le client",
+    "translation": "я вижу клиент",
+    "transcription": "[je vуаs le cliанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je vois le client ».",
+    "example_translation": "Мы часто говорим: « я вижу клиент ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-y-a-le-client-730",
+    "original": "il y a le client",
+    "translation": "есть клиент",
+    "transcription": "[il y a le cliанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il y a le client ».",
+    "example_translation": "Мы часто говорим: « есть клиент ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-ou-est-le-client-731",
+    "original": "où est le client ?",
+    "translation": "где клиент?",
+    "transcription": "[oю est le cliанt ?]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « où est le client ? ».",
+    "example_translation": "Мы часто говорим: « где клиент? ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "service",
+      "phrase",
+      "question"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-ville-733",
+    "original": "je suis à ville",
+    "translation": "я нахожусь в город",
+    "transcription": "[je suis а vий]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à ville ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в город ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "city",
+      "daily",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-village-736",
+    "original": "je suis à village",
+    "translation": "я нахожусь в деревня",
+    "transcription": "[je suis а village]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à village ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в деревня ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "city",
+      "daily",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-rue-739",
+    "original": "je suis à rue",
+    "translation": "я нахожусь в улица",
+    "transcription": "[je suis а rue]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à rue ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в улица ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "city",
+      "daily",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-route-742",
+    "original": "je suis à route",
+    "translation": "я нахожусь в дорога",
+    "transcription": "[je suis а rуte]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à route ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в дорога ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-gare-745",
+    "original": "je suis à gare",
+    "translation": "я нахожусь в вокзал",
+    "transcription": "[je suis а gare]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à gare ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в вокзал ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-l-aeroport-748",
+    "original": "je suis à l'aéroport",
+    "translation": "я нахожусь в аэропорт",
+    "transcription": "[je suis а l'aеroport]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à l'aéroport ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в аэропорт ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-station-751",
+    "original": "je suis à station",
+    "translation": "я нахожусь в станция",
+    "transcription": "[je suis а statiон]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à station ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в станция ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-bus-754",
+    "original": "je suis à bus",
+    "translation": "я нахожусь в автобус",
+    "transcription": "[je suis а bus]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à bus ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в автобус ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-train-757",
+    "original": "je suis à train",
+    "translation": "я нахожусь в поезд",
+    "transcription": "[je suis а trэn]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à train ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в поезд ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-metro-760",
+    "original": "je suis à métro",
+    "translation": "я нахожусь в метро",
+    "transcription": "[je suis а mеtro]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à métro ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в метро ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-velo-763",
+    "original": "je suis à vélo",
+    "translation": "я нахожусь в велосипед",
+    "transcription": "[je suis а vеlo]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à vélo ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в велосипед ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-voiture-766",
+    "original": "je suis à voiture",
+    "translation": "я нахожусь в машина",
+    "transcription": "[je suis а vуаture]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à voiture ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в машина ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-taxi-769",
+    "original": "je suis à taxi",
+    "translation": "я нахожусь в такси",
+    "transcription": "[je suis а taxi]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à taxi ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в такси ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-billet-772",
+    "original": "je suis à billet",
+    "translation": "я нахожусь в билет",
+    "transcription": "[je suis а bийt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à billet ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в билет ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-je-suis-a-l-hotel-775",
+    "original": "je suis à l'hôtel",
+    "translation": "я нахожусь в отель",
+    "transcription": "[je suis а l'hоtel]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je suis à l'hôtel ».",
+    "example_translation": "Мы часто говорим: « я нахожусь в отель ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "a2-il-faut-etre-779",
+    "original": "il faut être",
+    "translation": "нужно быть",
+    "transcription": "[il fоt еtre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut être ».",
+    "example_translation": "Мы часто говорим: « нужно быть ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "grammar",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-avoir-783",
+    "original": "il faut avoir",
+    "translation": "нужно иметь",
+    "transcription": "[il fоt avуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut avoir ».",
+    "example_translation": "Мы часто говорим: « нужно иметь ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "grammar",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-aller-787",
+    "original": "il faut aller",
+    "translation": "нужно идти",
+    "transcription": "[il fоt aller]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut aller ».",
+    "example_translation": "Мы часто говорим: « нужно идти ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-venir-791",
+    "original": "il faut venir",
+    "translation": "нужно приходить",
+    "transcription": "[il fоt vанir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut venir ».",
+    "example_translation": "Мы часто говорим: « нужно приходить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-faire-795",
+    "original": "il faut faire",
+    "translation": "нужно делать",
+    "transcription": "[il fоt fэre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut faire ».",
+    "example_translation": "Мы часто говорим: « нужно делать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "work",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-dire-799",
+    "original": "il faut dire",
+    "translation": "нужно говорить",
+    "transcription": "[il fоt dire]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut dire ».",
+    "example_translation": "Мы часто говорим: « нужно говорить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-parler-803",
+    "original": "il faut parler",
+    "translation": "нужно говорить",
+    "transcription": "[il fоt parler]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut parler ».",
+    "example_translation": "Мы часто говорим: « нужно говорить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-ecouter-807",
+    "original": "il faut écouter",
+    "translation": "нужно слушать",
+    "transcription": "[il fоt еcуter]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut écouter ».",
+    "example_translation": "Мы часто говорим: « нужно слушать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-regarder-811",
+    "original": "il faut regarder",
+    "translation": "нужно смотреть",
+    "transcription": "[il fоt regarder]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut regarder ».",
+    "example_translation": "Мы часто говорим: « нужно смотреть ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "media",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-voir-815",
+    "original": "il faut voir",
+    "translation": "нужно видеть",
+    "transcription": "[il fоt vуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut voir ».",
+    "example_translation": "Мы часто говорим: « нужно видеть ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "space",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-trouver-819",
+    "original": "il faut trouver",
+    "translation": "нужно находить",
+    "transcription": "[il fоt trуver]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut trouver ».",
+    "example_translation": "Мы часто говорим: « нужно находить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-chercher-823",
+    "original": "il faut chercher",
+    "translation": "нужно искать",
+    "transcription": "[il fоt шerшer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut chercher ».",
+    "example_translation": "Мы часто говорим: « нужно искать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-comprendre-827",
+    "original": "il faut comprendre",
+    "translation": "нужно понимать",
+    "transcription": "[il fоt comprанdre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut comprendre ».",
+    "example_translation": "Мы часто говорим: « нужно понимать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-apprendre-831",
+    "original": "il faut apprendre",
+    "translation": "нужно учить",
+    "transcription": "[il fоt apprанdre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut apprendre ».",
+    "example_translation": "Мы часто говорим: « нужно учить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-connaitre-835",
+    "original": "il faut connaître",
+    "translation": "нужно знать",
+    "transcription": "[il fоt cонnaиtre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut connaître ».",
+    "example_translation": "Мы часто говорим: « нужно знать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-savoir-839",
+    "original": "il faut savoir",
+    "translation": "нужно знать",
+    "transcription": "[il fоt savуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut savoir ».",
+    "example_translation": "Мы часто говорим: « нужно знать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-penser-843",
+    "original": "il faut penser",
+    "translation": "нужно думать",
+    "transcription": "[il fоt pанser]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut penser ».",
+    "example_translation": "Мы часто говорим: « нужно думать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-croire-847",
+    "original": "il faut croire",
+    "translation": "нужно верить",
+    "transcription": "[il fоt crуаre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut croire ».",
+    "example_translation": "Мы часто говорим: « нужно верить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "thinking",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-vouloir-851",
+    "original": "il faut vouloir",
+    "translation": "нужно хотеть",
+    "transcription": "[il fоt vуlуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut vouloir ».",
+    "example_translation": "Мы часто говорим: « нужно хотеть ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "feelings",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-pouvoir-855",
+    "original": "il faut pouvoir",
+    "translation": "нужно мочь",
+    "transcription": "[il fоt pуvуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut pouvoir ».",
+    "example_translation": "Мы часто говорим: « нужно мочь ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "grammar",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-devoir-859",
+    "original": "il faut devoir",
+    "translation": "нужно быть должным",
+    "transcription": "[il fоt devуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut devoir ».",
+    "example_translation": "Мы часто говорим: « нужно быть должным ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "grammar",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-falloir-863",
+    "original": "il faut falloir",
+    "translation": "нужно нужно",
+    "transcription": "[il fоt fallуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut falloir ».",
+    "example_translation": "Мы часто говорим: « нужно нужно ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "grammar",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-prendre-867",
+    "original": "il faut prendre",
+    "translation": "нужно брать",
+    "transcription": "[il fоt prанdre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut prendre ».",
+    "example_translation": "Мы часто говорим: « нужно брать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "shopping",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-mettre-871",
+    "original": "il faut mettre",
+    "translation": "нужно класть",
+    "transcription": "[il fоt mettre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut mettre ».",
+    "example_translation": "Мы часто говорим: « нужно класть ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "home",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-porter-875",
+    "original": "il faut porter",
+    "translation": "нужно носить",
+    "transcription": "[il fоt porter]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut porter ».",
+    "example_translation": "Мы часто говорим: « нужно носить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "shopping",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-ouvrir-879",
+    "original": "il faut ouvrir",
+    "translation": "нужно открывать",
+    "transcription": "[il fоt уvrir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut ouvrir ».",
+    "example_translation": "Мы часто говорим: « нужно открывать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-fermer-883",
+    "original": "il faut fermer",
+    "translation": "нужно закрывать",
+    "transcription": "[il fоt fermer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut fermer ».",
+    "example_translation": "Мы часто говорим: « нужно закрывать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "home",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-entrer-887",
+    "original": "il faut entrer",
+    "translation": "нужно входить",
+    "transcription": "[il fоt анtrer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut entrer ».",
+    "example_translation": "Мы часто говорим: « нужно входить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "space",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-sortir-891",
+    "original": "il faut sortir",
+    "translation": "нужно выходить",
+    "transcription": "[il fоt sortir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut sortir ».",
+    "example_translation": "Мы часто говорим: « нужно выходить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "space",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-rester-895",
+    "original": "il faut rester",
+    "translation": "нужно оставаться",
+    "transcription": "[il fоt rester]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut rester ».",
+    "example_translation": "Мы часто говорим: « нужно оставаться ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "space",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-commencer-899",
+    "original": "il faut commencer",
+    "translation": "нужно начинать",
+    "transcription": "[il fоt commанcer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut commencer ».",
+    "example_translation": "Мы часто говорим: « нужно начинать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "time",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-finir-903",
+    "original": "il faut finir",
+    "translation": "нужно заканчивать",
+    "transcription": "[il fоt fэнir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut finir ».",
+    "example_translation": "Мы часто говорим: « нужно заканчивать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "time",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-continuer-907",
+    "original": "il faut continuer",
+    "translation": "нужно продолжать",
+    "transcription": "[il fоt cонtэнuer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut continuer ».",
+    "example_translation": "Мы часто говорим: « нужно продолжать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "time",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-attendre-911",
+    "original": "il faut attendre",
+    "translation": "нужно ждать",
+    "transcription": "[il fоt attанdre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut attendre ».",
+    "example_translation": "Мы часто говорим: « нужно ждать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "time",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-arriver-915",
+    "original": "il faut arriver",
+    "translation": "нужно прибывать",
+    "transcription": "[il fоt arriver]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut arriver ».",
+    "example_translation": "Мы часто говорим: « нужно прибывать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-partir-919",
+    "original": "il faut partir",
+    "translation": "нужно уезжать",
+    "transcription": "[il fоt partir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut partir ».",
+    "example_translation": "Мы часто говорим: « нужно уезжать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-monter-923",
+    "original": "il faut monter",
+    "translation": "нужно подниматься",
+    "transcription": "[il fоt mонter]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut monter ».",
+    "example_translation": "Мы часто говорим: « нужно подниматься ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-descendre-927",
+    "original": "il faut descendre",
+    "translation": "нужно спускаться",
+    "transcription": "[il fоt descанdre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut descendre ».",
+    "example_translation": "Мы часто говорим: « нужно спускаться ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-manger-931",
+    "original": "il faut manger",
+    "translation": "нужно есть",
+    "transcription": "[il fоt mанger]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut manger ».",
+    "example_translation": "Мы часто говорим: « нужно есть ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "food",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-boire-935",
+    "original": "il faut boire",
+    "translation": "нужно пить",
+    "transcription": "[il fоt bуаre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut boire ».",
+    "example_translation": "Мы часто говорим: « нужно пить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "food",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-cuisiner-939",
+    "original": "il faut cuisiner",
+    "translation": "нужно готовить",
+    "transcription": "[il fоt cuisэнer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut cuisiner ».",
+    "example_translation": "Мы часто говорим: « нужно готовить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "food",
+      "home",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-acheter-943",
+    "original": "il faut acheter",
+    "translation": "нужно покупать",
+    "transcription": "[il fоt aшeter]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut acheter ».",
+    "example_translation": "Мы часто говорим: « нужно покупать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "shopping",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-payer-947",
+    "original": "il faut payer",
+    "translation": "нужно платить",
+    "transcription": "[il fоt payer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut payer ».",
+    "example_translation": "Мы часто говорим: « нужно платить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "shopping",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-gagner-951",
+    "original": "il faut gagner",
+    "translation": "нужно зарабатывать",
+    "transcription": "[il fоt gaньer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut gagner ».",
+    "example_translation": "Мы часто говорим: « нужно зарабатывать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-travailler-955",
+    "original": "il faut travailler",
+    "translation": "нужно работать",
+    "transcription": "[il fоt travaийr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut travailler ».",
+    "example_translation": "Мы часто говорим: « нужно работать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-etudier-959",
+    "original": "il faut étudier",
+    "translation": "нужно учиться",
+    "transcription": "[il fоt еtudier]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut étudier ».",
+    "example_translation": "Мы часто говорим: « нужно учиться ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-ecrire-963",
+    "original": "il faut écrire",
+    "translation": "нужно писать",
+    "transcription": "[il fоt еcrire]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut écrire ».",
+    "example_translation": "Мы часто говорим: « нужно писать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-lire-967",
+    "original": "il faut lire",
+    "translation": "нужно читать",
+    "transcription": "[il fоt lire]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut lire ».",
+    "example_translation": "Мы часто говорим: « нужно читать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-repeter-971",
+    "original": "il faut répéter",
+    "translation": "нужно повторять",
+    "transcription": "[il fоt rеpеter]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut répéter ».",
+    "example_translation": "Мы часто говорим: « нужно повторять ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-jouer-975",
+    "original": "il faut jouer",
+    "translation": "нужно играть",
+    "transcription": "[il fоt jуer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut jouer ».",
+    "example_translation": "Мы часто говорим: « нужно играть ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "leisure",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-marcher-979",
+    "original": "il faut marcher",
+    "translation": "нужно идти пешком",
+    "transcription": "[il fоt marшer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut marcher ».",
+    "example_translation": "Мы часто говорим: « нужно идти пешком ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "travel",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-courir-983",
+    "original": "il faut courir",
+    "translation": "нужно бежать",
+    "transcription": "[il fоt cуrir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut courir ».",
+    "example_translation": "Мы часто говорим: « нужно бежать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "health",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-nager-987",
+    "original": "il faut nager",
+    "translation": "нужно плавать",
+    "transcription": "[il fоt nager]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut nager ».",
+    "example_translation": "Мы часто говорим: « нужно плавать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "health",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-dormir-991",
+    "original": "il faut dormir",
+    "translation": "нужно спать",
+    "transcription": "[il fоt dormir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut dormir ».",
+    "example_translation": "Мы часто говорим: « нужно спать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "health",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-se-reveiller-995",
+    "original": "il faut se réveiller",
+    "translation": "нужно просыпаться",
+    "transcription": "[il fоt se rеvэйr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut se réveiller ».",
+    "example_translation": "Мы часто говорим: « нужно просыпаться ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "health",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-vivre-999",
+    "original": "il faut vivre",
+    "translation": "нужно жить",
+    "transcription": "[il fоt vivre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut vivre ».",
+    "example_translation": "Мы часто говорим: « нужно жить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "people",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-aimer-1003",
+    "original": "il faut aimer",
+    "translation": "нужно любить",
+    "transcription": "[il fоt эmer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut aimer ».",
+    "example_translation": "Мы часто говорим: « нужно любить ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-adorer-1007",
+    "original": "il faut adorer",
+    "translation": "нужно обожать",
+    "transcription": "[il fоt adorer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut adorer ».",
+    "example_translation": "Мы часто говорим: « нужно обожать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-preferer-1011",
+    "original": "il faut préférer",
+    "translation": "нужно предпочитать",
+    "transcription": "[il fоt prеfеrer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut préférer ».",
+    "example_translation": "Мы часто говорим: « нужно предпочитать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-il-faut-aider-1015",
+    "original": "il faut aider",
+    "translation": "нужно помогать",
+    "transcription": "[il fоt эder]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « il faut aider ».",
+    "example_translation": "Мы часто говорим: « нужно помогать ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-rouge-1019",
+    "original": "trop rouge",
+    "translation": "слишком красный",
+    "transcription": "[trop rуge]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop rouge ».",
+    "example_translation": "Мы часто говорим: « слишком красный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "colors",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-bleu-1023",
+    "original": "trop bleu",
+    "translation": "слишком синий",
+    "transcription": "[trop blё]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop bleu ».",
+    "example_translation": "Мы часто говорим: « слишком синий ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "colors",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-vert-1027",
+    "original": "trop vert",
+    "translation": "слишком зелёный",
+    "transcription": "[trop vert]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop vert ».",
+    "example_translation": "Мы часто говорим: « слишком зелёный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "colors",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-blanc-1031",
+    "original": "trop blanc",
+    "translation": "слишком белый",
+    "transcription": "[trop blанc]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop blanc ».",
+    "example_translation": "Мы часто говорим: « слишком белый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "colors",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-noir-1035",
+    "original": "trop noir",
+    "translation": "слишком чёрный",
+    "transcription": "[trop nуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop noir ».",
+    "example_translation": "Мы часто говорим: « слишком чёрный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "colors",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-grand-1039",
+    "original": "trop grand",
+    "translation": "слишком большой",
+    "transcription": "[trop grанd]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop grand ».",
+    "example_translation": "Мы часто говорим: « слишком большой ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-petit-1043",
+    "original": "trop petit",
+    "translation": "слишком маленький",
+    "transcription": "[trop petit]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop petit ».",
+    "example_translation": "Мы часто говорим: « слишком маленький ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-jeune-1047",
+    "original": "trop jeune",
+    "translation": "слишком молодой",
+    "transcription": "[trop jёne]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop jeune ».",
+    "example_translation": "Мы часто говорим: « слишком молодой ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "people",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-vieux-1049",
+    "original": "c'est vieux",
+    "translation": "это старый",
+    "transcription": "[c'est viёx]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est vieux ».",
+    "example_translation": "Мы часто говорим: « это старый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-vieux-1050",
+    "original": "très vieux",
+    "translation": "очень старый",
+    "transcription": "[trеs viёx]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très vieux ».",
+    "example_translation": "Мы часто говорим: « очень старый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-vieux-1051",
+    "original": "trop vieux",
+    "translation": "слишком старый",
+    "transcription": "[trop viёx]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop vieux ».",
+    "example_translation": "Мы часто говорим: « слишком старый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-nouveau-1055",
+    "original": "trop nouveau",
+    "translation": "слишком новый",
+    "transcription": "[trop nуvo]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop nouveau ».",
+    "example_translation": "Мы часто говорим: « слишком новый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-bon-1059",
+    "original": "trop bon",
+    "translation": "слишком хороший",
+    "transcription": "[trop bон]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop bon ».",
+    "example_translation": "Мы часто говорим: « слишком хороший ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-mauvais-1063",
+    "original": "trop mauvais",
+    "translation": "слишком плохой",
+    "transcription": "[trop mоvэs]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop mauvais ».",
+    "example_translation": "Мы часто говорим: « слишком плохой ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-beau-1067",
+    "original": "trop beau",
+    "translation": "слишком красивый",
+    "transcription": "[trop bo]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop beau ».",
+    "example_translation": "Мы часто говорим: « слишком красивый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-joli-1069",
+    "original": "c'est joli",
+    "translation": "это милый",
+    "transcription": "[c'est joli]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est joli ».",
+    "example_translation": "Мы часто говорим: « это милый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-joli-1070",
+    "original": "très joli",
+    "translation": "очень милый",
+    "transcription": "[trеs joli]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très joli ».",
+    "example_translation": "Мы часто говорим: « очень милый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-joli-1071",
+    "original": "trop joli",
+    "translation": "слишком милый",
+    "transcription": "[trop joli]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop joli ».",
+    "example_translation": "Мы часто говорим: « слишком милый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-important-1073",
+    "original": "c'est important",
+    "translation": "это важный",
+    "transcription": "[c'est importанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est important ».",
+    "example_translation": "Мы часто говорим: « это важный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-important-1074",
+    "original": "très important",
+    "translation": "очень важный",
+    "transcription": "[trеs importанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très important ».",
+    "example_translation": "Мы часто говорим: « очень важный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-important-1075",
+    "original": "trop important",
+    "translation": "слишком важный",
+    "transcription": "[trop importанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop important ».",
+    "example_translation": "Мы часто говорим: « слишком важный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-possible-1077",
+    "original": "c'est possible",
+    "translation": "это возможный",
+    "transcription": "[c'est possible]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est possible ».",
+    "example_translation": "Мы часто говорим: « это возможный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-possible-1078",
+    "original": "très possible",
+    "translation": "очень возможный",
+    "transcription": "[trеs possible]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très possible ».",
+    "example_translation": "Мы часто говорим: « очень возможный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-possible-1079",
+    "original": "trop possible",
+    "translation": "слишком возможный",
+    "transcription": "[trop possible]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop possible ».",
+    "example_translation": "Мы часто говорим: « слишком возможный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-facile-1083",
+    "original": "trop facile",
+    "translation": "слишком лёгкий",
+    "transcription": "[trop facile]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop facile ».",
+    "example_translation": "Мы часто говорим: « слишком лёгкий ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-difficile-1087",
+    "original": "trop difficile",
+    "translation": "слишком трудный",
+    "transcription": "[trop difficile]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop difficile ».",
+    "example_translation": "Мы часто говорим: « слишком трудный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "study",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-rapide-1091",
+    "original": "trop rapide",
+    "translation": "слишком быстрый",
+    "transcription": "[trop rapide]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop rapide ».",
+    "example_translation": "Мы часто говорим: « слишком быстрый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-lent-1093",
+    "original": "c'est lent",
+    "translation": "это медленный",
+    "transcription": "[c'est lанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est lent ».",
+    "example_translation": "Мы часто говорим: « это медленный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-lent-1094",
+    "original": "très lent",
+    "translation": "очень медленный",
+    "transcription": "[trеs lанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très lent ».",
+    "example_translation": "Мы часто говорим: « очень медленный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-lent-1095",
+    "original": "trop lent",
+    "translation": "слишком медленный",
+    "transcription": "[trop lанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop lent ».",
+    "example_translation": "Мы часто говорим: « слишком медленный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-chaud-1099",
+    "original": "trop chaud",
+    "translation": "слишком тёплый",
+    "transcription": "[trop шоd]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop chaud ».",
+    "example_translation": "Мы часто говорим: « слишком тёплый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "nature",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-froid-1103",
+    "original": "trop froid",
+    "translation": "слишком холодный",
+    "transcription": "[trop frуаd]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop froid ».",
+    "example_translation": "Мы часто говорим: « слишком холодный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "nature",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-content-1105",
+    "original": "c'est content",
+    "translation": "это довольный",
+    "transcription": "[c'est cонtанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est content ».",
+    "example_translation": "Мы часто говорим: « это довольный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-content-1106",
+    "original": "très content",
+    "translation": "очень довольный",
+    "transcription": "[trеs cонtанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très content ».",
+    "example_translation": "Мы часто говорим: « очень довольный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-content-1107",
+    "original": "trop content",
+    "translation": "слишком довольный",
+    "transcription": "[trop cонtанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop content ».",
+    "example_translation": "Мы часто говорим: « слишком довольный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-triste-1111",
+    "original": "trop triste",
+    "translation": "слишком грустный",
+    "transcription": "[trop triste]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop triste ».",
+    "example_translation": "Мы часто говорим: « слишком грустный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-heureux-1115",
+    "original": "trop heureux",
+    "translation": "слишком счастливый",
+    "transcription": "[trop hёrёx]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop heureux ».",
+    "example_translation": "Мы часто говорим: « слишком счастливый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-fatigue-1117",
+    "original": "c'est fatigué",
+    "translation": "это уставший",
+    "transcription": "[c'est fatiguе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est fatigué ».",
+    "example_translation": "Мы часто говорим: « это уставший ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-fatigue-1118",
+    "original": "très fatigué",
+    "translation": "очень уставший",
+    "transcription": "[trеs fatiguе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très fatigué ».",
+    "example_translation": "Мы часто говорим: « очень уставший ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-fatigue-1119",
+    "original": "trop fatigué",
+    "translation": "слишком уставший",
+    "transcription": "[trop fatiguе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop fatigué ».",
+    "example_translation": "Мы часто говорим: « слишком уставший ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-pret-1121",
+    "original": "c'est prêt",
+    "translation": "это готовый",
+    "transcription": "[c'est prеt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est prêt ».",
+    "example_translation": "Мы часто говорим: « это готовый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-pret-1122",
+    "original": "très prêt",
+    "translation": "очень готовый",
+    "transcription": "[trеs prеt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très prêt ».",
+    "example_translation": "Мы часто говорим: « очень готовый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-pret-1123",
+    "original": "trop prêt",
+    "translation": "слишком готовый",
+    "transcription": "[trop prеt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop prêt ».",
+    "example_translation": "Мы часто говорим: « слишком готовый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-occupe-1125",
+    "original": "c'est occupé",
+    "translation": "это занятый",
+    "transcription": "[c'est occupе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est occupé ».",
+    "example_translation": "Мы часто говорим: « это занятый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-occupe-1126",
+    "original": "très occupé",
+    "translation": "очень занятый",
+    "transcription": "[trеs occupе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très occupé ».",
+    "example_translation": "Мы часто говорим: « очень занятый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-occupe-1127",
+    "original": "trop occupé",
+    "translation": "слишком занятый",
+    "transcription": "[trop occupе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop occupé ».",
+    "example_translation": "Мы часто говорим: « слишком занятый ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "work",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-libre-1129",
+    "original": "c'est libre",
+    "translation": "это свободный",
+    "transcription": "[c'est libre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est libre ».",
+    "example_translation": "Мы часто говорим: « это свободный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-libre-1130",
+    "original": "très libre",
+    "translation": "очень свободный",
+    "transcription": "[trеs libre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très libre ».",
+    "example_translation": "Мы часто говорим: « очень свободный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-libre-1131",
+    "original": "trop libre",
+    "translation": "слишком свободный",
+    "transcription": "[trop libre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop libre ».",
+    "example_translation": "Мы часто говорим: « слишком свободный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "daily",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-calme-1133",
+    "original": "c'est calme",
+    "translation": "это спокойный",
+    "transcription": "[c'est calme]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est calme ».",
+    "example_translation": "Мы часто говорим: « это спокойный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-calme-1134",
+    "original": "très calme",
+    "translation": "очень спокойный",
+    "transcription": "[trеs calme]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très calme ».",
+    "example_translation": "Мы часто говорим: « очень спокойный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-calme-1135",
+    "original": "trop calme",
+    "translation": "слишком спокойный",
+    "transcription": "[trop calme]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop calme ».",
+    "example_translation": "Мы часто говорим: « слишком спокойный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-fort-1137",
+    "original": "c'est fort",
+    "translation": "это сильный",
+    "transcription": "[c'est fort]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est fort ».",
+    "example_translation": "Мы часто говорим: « это сильный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-fort-1138",
+    "original": "très fort",
+    "translation": "очень сильный",
+    "transcription": "[trеs fort]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très fort ».",
+    "example_translation": "Мы часто говорим: « очень сильный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-fort-1139",
+    "original": "trop fort",
+    "translation": "слишком сильный",
+    "transcription": "[trop fort]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop fort ».",
+    "example_translation": "Мы часто говорим: « слишком сильный ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-c-est-simple-1153",
+    "original": "c'est simple",
+    "translation": "это простой",
+    "transcription": "[c'est simple]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est simple ».",
+    "example_translation": "Мы часто говорим: « это простой ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-tres-simple-1154",
+    "original": "très simple",
+    "translation": "очень простой",
+    "transcription": "[trеs simple]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très simple ».",
+    "example_translation": "Мы часто говорим: « очень простой ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "a2-trop-simple-1155",
+    "original": "trop simple",
+    "translation": "слишком простой",
+    "transcription": "[trop simple]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop simple ».",
+    "example_translation": "Мы часто говорим: « слишком простой ».",
+    "part_of_speech": "expression",
+    "level": "A2",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  }
+]

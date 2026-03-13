@@ -1,0 +1,2491 @@
+[
+  {
+    "id": "b1-avenir-153",
+    "original": "avenir",
+    "translation": "будущее",
+    "transcription": "[avанir]",
+    "audio_original": "",
+    "example_original": "Je vois l'avenir aujourd'hui.",
+    "example_translation": "Я вижу будущее сегодня.",
+    "part_of_speech": "noun",
+    "level": "B1",
+    "tags": [
+      "time",
+      "thinking"
+    ]
+  },
+  {
+    "id": "b1-passe-154",
+    "original": "passé",
+    "translation": "прошлое",
+    "transcription": "[passе]",
+    "audio_original": "",
+    "example_original": "Je vois le passé aujourd'hui.",
+    "example_translation": "Я вижу прошлое сегодня.",
+    "part_of_speech": "noun",
+    "level": "B1",
+    "tags": [
+      "time",
+      "thinking"
+    ]
+  },
+  {
+    "id": "b1-changement-155",
+    "original": "changement",
+    "translation": "изменение",
+    "transcription": "[шанgemанt]",
+    "audio_original": "",
+    "example_original": "Je vois le changement aujourd'hui.",
+    "example_translation": "Я вижу изменение сегодня.",
+    "part_of_speech": "noun",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-experience-156",
+    "original": "expérience",
+    "translation": "опыт",
+    "transcription": "[expеriанce]",
+    "audio_original": "",
+    "example_original": "Je vois l'expérience aujourd'hui.",
+    "example_translation": "Я вижу опыт сегодня.",
+    "part_of_speech": "noun",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "work"
+    ]
+  },
+  {
+    "id": "b1-habitude-157",
+    "original": "habitude",
+    "translation": "привычка",
+    "transcription": "[habitude]",
+    "audio_original": "",
+    "example_original": "Je vois l'habitude aujourd'hui.",
+    "example_translation": "Я вижу привычка сегодня.",
+    "part_of_speech": "noun",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "thinking"
+    ]
+  },
+  {
+    "id": "b1-confiance-158",
+    "original": "confiance",
+    "translation": "доверие",
+    "transcription": "[cонfiанce]",
+    "audio_original": "",
+    "example_original": "Je vois la confiance aujourd'hui.",
+    "example_translation": "Я вижу доверие сегодня.",
+    "part_of_speech": "noun",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "people"
+    ]
+  },
+  {
+    "id": "b1-relation-159",
+    "original": "relation",
+    "translation": "отношение",
+    "transcription": "[relatiон]",
+    "audio_original": "",
+    "example_original": "Je vois la relation aujourd'hui.",
+    "example_translation": "Я вижу отношение сегодня.",
+    "part_of_speech": "noun",
+    "level": "B1",
+    "tags": [
+      "people",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-conversation-160",
+    "original": "conversation",
+    "translation": "разговор",
+    "transcription": "[cонversatiон]",
+    "audio_original": "",
+    "example_original": "Je vois la conversation aujourd'hui.",
+    "example_translation": "Я вижу разговор сегодня.",
+    "part_of_speech": "noun",
+    "level": "B1",
+    "tags": [
+      "communication",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-faible-208",
+    "original": "faible",
+    "translation": "слабый",
+    "transcription": "[fэble]",
+    "audio_original": "",
+    "example_original": "Ce mot est faible.",
+    "example_translation": "Это слово слабый.",
+    "part_of_speech": "adjective",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-sur-209",
+    "original": "sûr",
+    "translation": "уверенный",
+    "transcription": "[sюr]",
+    "audio_original": "",
+    "example_original": "Ce mot est sûr.",
+    "example_translation": "Это слово уверенный.",
+    "part_of_speech": "adjective",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "thinking"
+    ]
+  },
+  {
+    "id": "b1-clair-210",
+    "original": "clair",
+    "translation": "ясный",
+    "transcription": "[clэr]",
+    "audio_original": "",
+    "example_original": "Ce mot est clair.",
+    "example_translation": "Это слово ясный.",
+    "part_of_speech": "adjective",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "qualities"
+    ]
+  },
+  {
+    "id": "b1-faux-214",
+    "original": "faux",
+    "translation": "ложный",
+    "transcription": "[fоx]",
+    "audio_original": "",
+    "example_original": "Ce mot est faux.",
+    "example_translation": "Это слово ложный.",
+    "part_of_speech": "adjective",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-croire-248",
+    "original": "croire",
+    "translation": "верить",
+    "transcription": "[crуаre]",
+    "audio_original": "",
+    "example_original": "Je veux croire aujourd'hui.",
+    "example_translation": "Я хочу верить сегодня.",
+    "part_of_speech": "verb",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-se-souvenir-302",
+    "original": "se souvenir",
+    "translation": "вспоминать",
+    "transcription": "[se sуvанir]",
+    "audio_original": "",
+    "example_original": "Je veux se souvenir aujourd'hui.",
+    "example_translation": "Я хочу вспоминать сегодня.",
+    "part_of_speech": "verb",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-expliquer-303",
+    "original": "expliquer",
+    "translation": "объяснять",
+    "transcription": "[expliкer]",
+    "audio_original": "",
+    "example_original": "Je veux expliquer aujourd'hui.",
+    "example_translation": "Я хочу объяснять сегодня.",
+    "part_of_speech": "verb",
+    "level": "B1",
+    "tags": [
+      "communication",
+      "study"
+    ]
+  },
+  {
+    "id": "b1-proposer-304",
+    "original": "proposer",
+    "translation": "предлагать",
+    "transcription": "[proposer]",
+    "audio_original": "",
+    "example_original": "Je veux proposer aujourd'hui.",
+    "example_translation": "Я хочу предлагать сегодня.",
+    "part_of_speech": "verb",
+    "level": "B1",
+    "tags": [
+      "communication",
+      "work"
+    ]
+  },
+  {
+    "id": "b1-decider-305",
+    "original": "décider",
+    "translation": "решать",
+    "transcription": "[dеcider]",
+    "audio_original": "",
+    "example_original": "Je veux décider aujourd'hui.",
+    "example_translation": "Я хочу решать сегодня.",
+    "part_of_speech": "verb",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-esperer-306",
+    "original": "espérer",
+    "translation": "надеяться",
+    "transcription": "[espеrer]",
+    "audio_original": "",
+    "example_original": "Je veux espérer aujourd'hui.",
+    "example_translation": "Я хочу надеяться сегодня.",
+    "part_of_speech": "verb",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-reussir-307",
+    "original": "réussir",
+    "translation": "успевать",
+    "transcription": "[rеussir]",
+    "audio_original": "",
+    "example_original": "Je veux réussir aujourd'hui.",
+    "example_translation": "Я хочу успевать сегодня.",
+    "part_of_speech": "verb",
+    "level": "B1",
+    "tags": [
+      "study",
+      "work"
+    ]
+  },
+  {
+    "id": "b1-ameliorer-308",
+    "original": "améliorer",
+    "translation": "улучшать",
+    "transcription": "[amеliorer]",
+    "audio_original": "",
+    "example_original": "Je veux améliorer aujourd'hui.",
+    "example_translation": "Я хочу улучшать сегодня.",
+    "part_of_speech": "verb",
+    "level": "B1",
+    "tags": [
+      "study",
+      "work"
+    ]
+  },
+  {
+    "id": "b1-organiser-309",
+    "original": "organiser",
+    "translation": "организовывать",
+    "transcription": "[orgанiser]",
+    "audio_original": "",
+    "example_original": "Je veux organiser aujourd'hui.",
+    "example_translation": "Я хочу организовывать сегодня.",
+    "part_of_speech": "verb",
+    "level": "B1",
+    "tags": [
+      "work",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-partager-311",
+    "original": "partager",
+    "translation": "делиться",
+    "transcription": "[partager]",
+    "audio_original": "",
+    "example_original": "Je veux partager aujourd'hui.",
+    "example_translation": "Я хочу делиться сегодня.",
+    "part_of_speech": "verb",
+    "level": "B1",
+    "tags": [
+      "people",
+      "communication"
+    ]
+  },
+  {
+    "id": "b1-laquelle-370",
+    "original": "laquelle",
+    "translation": "которая",
+    "transcription": "[laкelle]",
+    "audio_original": "",
+    "example_original": "Je vois laquelle aujourd'hui.",
+    "example_translation": "Я вижу которая сегодня.",
+    "part_of_speech": "pronoun",
+    "level": "B1",
+    "tags": [
+      "grammar",
+      "communication"
+    ]
+  },
+  {
+    "id": "b1-personne-ne-371",
+    "original": "personne ne",
+    "translation": "никто не",
+    "transcription": "[persонne ne]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « personne ne ».",
+    "example_translation": "Мы часто говорим: « никто не ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "grammar",
+      "communication"
+    ]
+  },
+  {
+    "id": "b1-je-crois-que-386",
+    "original": "je crois que",
+    "translation": "я считаю, что",
+    "transcription": "[je crуаs кe]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « je crois que ».",
+    "example_translation": "Мы часто говорим: « я считаю, что ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-ca-depend-389",
+    "original": "ça dépend",
+    "translation": "это зависит",
+    "transcription": "[сa dеpанd]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « ça dépend ».",
+    "example_translation": "Мы часто говорим: « это зависит ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "thinking"
+    ]
+  },
+  {
+    "id": "b1-en-fait-394",
+    "original": "en fait",
+    "translation": "на самом деле",
+    "transcription": "[ан fэt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « en fait ».",
+    "example_translation": "Мы часто говорим: « на самом деле ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "communication"
+    ]
+  },
+  {
+    "id": "b1-n-importe-quoi-402",
+    "original": "n'importe quoi",
+    "translation": "что угодно",
+    "transcription": "[n'importe куа]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « n'importe quoi ».",
+    "example_translation": "Мы часто говорим: « что угодно ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "communication",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-a-mon-avis-403",
+    "original": "à mon avis",
+    "translation": "по моему мнению",
+    "transcription": "[а mон avis]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « à mon avis ».",
+    "example_translation": "Мы часто говорим: « по моему мнению ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-de-temps-en-temps-404",
+    "original": "de temps en temps",
+    "translation": "время от времени",
+    "transcription": "[de temps ан temps]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « de temps en temps ».",
+    "example_translation": "Мы часто говорим: « время от времени ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "time",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-pour-le-moment-417",
+    "original": "pour le moment",
+    "translation": "пока что",
+    "transcription": "[pуr le momанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « pour le moment ».",
+    "example_translation": "Мы часто говорим: « пока что ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "time",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-au-debut-418",
+    "original": "au début",
+    "translation": "в начале",
+    "transcription": "[о dеbut]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « au début ».",
+    "example_translation": "Мы часто говорим: « в начале ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "time",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-de-plus-en-plus-420",
+    "original": "de plus en plus",
+    "translation": "всё больше и больше",
+    "transcription": "[de plus ан plus]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « de plus en plus ».",
+    "example_translation": "Мы часто говорим: « всё больше и больше ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "time",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-de-moins-en-moins-421",
+    "original": "de moins en moins",
+    "translation": "всё меньше и меньше",
+    "transcription": "[de mуаns ан mуаns]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « de moins en moins ».",
+    "example_translation": "Мы часто говорим: « всё меньше и меньше ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "time",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-prendre-soin-de-424",
+    "original": "prendre soin de",
+    "translation": "заботиться о",
+    "transcription": "[prанdre sуаn de]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « prendre soin de ».",
+    "example_translation": "Мы часто говорим: « заботиться о ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "people",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-avoir-raison-426",
+    "original": "avoir raison",
+    "translation": "быть правым",
+    "transcription": "[avуаr rэsон]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « avoir raison ».",
+    "example_translation": "Мы часто говорим: « быть правым ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-avoir-tort-427",
+    "original": "avoir tort",
+    "translation": "ошибаться",
+    "transcription": "[avуаr tort]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « avoir tort ».",
+    "example_translation": "Мы часто говорим: « ошибаться ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily"
+    ]
+  },
+  {
+    "id": "b1-prendre-une-decision-430",
+    "original": "prendre une décision",
+    "translation": "принять решение",
+    "transcription": "[prанdre енe dеcisiон]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « prendre une décision ».",
+    "example_translation": "Мы часто говорим: « принять решение ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "work"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-ville-734",
+    "original": "nous arrivons à ville",
+    "translation": "мы прибываем в город",
+    "transcription": "[nуs arrivонs а vий]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à ville ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в город ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "city",
+      "daily",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-village-737",
+    "original": "nous arrivons à village",
+    "translation": "мы прибываем в деревня",
+    "transcription": "[nуs arrivонs а village]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à village ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в деревня ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "city",
+      "daily",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-rue-740",
+    "original": "nous arrivons à rue",
+    "translation": "мы прибываем в улица",
+    "transcription": "[nуs arrivонs а rue]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à rue ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в улица ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "city",
+      "daily",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-route-743",
+    "original": "nous arrivons à route",
+    "translation": "мы прибываем в дорога",
+    "transcription": "[nуs arrivонs а rуte]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à route ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в дорога ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-gare-746",
+    "original": "nous arrivons à gare",
+    "translation": "мы прибываем в вокзал",
+    "transcription": "[nуs arrivонs а gare]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à gare ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в вокзал ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-l-aeroport-749",
+    "original": "nous arrivons à l'aéroport",
+    "translation": "мы прибываем в аэропорт",
+    "transcription": "[nуs arrivонs а l'aеroport]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à l'aéroport ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в аэропорт ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-station-752",
+    "original": "nous arrivons à station",
+    "translation": "мы прибываем в станция",
+    "transcription": "[nуs arrivонs а statiон]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à station ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в станция ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-bus-755",
+    "original": "nous arrivons à bus",
+    "translation": "мы прибываем в автобус",
+    "transcription": "[nуs arrivонs а bus]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à bus ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в автобус ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-train-758",
+    "original": "nous arrivons à train",
+    "translation": "мы прибываем в поезд",
+    "transcription": "[nуs arrivонs а trэn]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à train ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в поезд ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-metro-761",
+    "original": "nous arrivons à métro",
+    "translation": "мы прибываем в метро",
+    "transcription": "[nуs arrivонs а mеtro]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à métro ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в метро ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-velo-764",
+    "original": "nous arrivons à vélo",
+    "translation": "мы прибываем в велосипед",
+    "transcription": "[nуs arrivонs а vеlo]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à vélo ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в велосипед ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-voiture-767",
+    "original": "nous arrivons à voiture",
+    "translation": "мы прибываем в машина",
+    "transcription": "[nуs arrivонs а vуаture]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à voiture ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в машина ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-taxi-770",
+    "original": "nous arrivons à taxi",
+    "translation": "мы прибываем в такси",
+    "transcription": "[nуs arrivонs а taxi]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à taxi ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в такси ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-billet-773",
+    "original": "nous arrivons à billet",
+    "translation": "мы прибываем в билет",
+    "transcription": "[nуs arrivонs а bийt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à billet ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в билет ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "transport",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-arrivons-a-l-hotel-776",
+    "original": "nous arrivons à l'hôtel",
+    "translation": "мы прибываем в отель",
+    "transcription": "[nуs arrivонs а l'hоtel]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous arrivons à l'hôtel ».",
+    "example_translation": "Мы часто говорим: « мы прибываем в отель ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "city",
+      "phrase",
+      "travel"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-etre-780",
+    "original": "nous allons être",
+    "translation": "мы собираемся быть",
+    "transcription": "[nуs allонs еtre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons être ».",
+    "example_translation": "Мы часто говорим: « мы собираемся быть ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "grammar",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-avoir-784",
+    "original": "nous allons avoir",
+    "translation": "мы собираемся иметь",
+    "transcription": "[nуs allонs avуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons avoir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся иметь ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "grammar",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-aller-788",
+    "original": "nous allons aller",
+    "translation": "мы собираемся идти",
+    "transcription": "[nуs allонs aller]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons aller ».",
+    "example_translation": "Мы часто говорим: « мы собираемся идти ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-venir-792",
+    "original": "nous allons venir",
+    "translation": "мы собираемся приходить",
+    "transcription": "[nуs allонs vанir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons venir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся приходить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-faire-796",
+    "original": "nous allons faire",
+    "translation": "мы собираемся делать",
+    "transcription": "[nуs allонs fэre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons faire ».",
+    "example_translation": "Мы часто говорим: « мы собираемся делать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "work",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-dire-800",
+    "original": "nous allons dire",
+    "translation": "мы собираемся говорить",
+    "transcription": "[nуs allонs dire]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons dire ».",
+    "example_translation": "Мы часто говорим: « мы собираемся говорить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-parler-804",
+    "original": "nous allons parler",
+    "translation": "мы собираемся говорить",
+    "transcription": "[nуs allонs parler]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons parler ».",
+    "example_translation": "Мы часто говорим: « мы собираемся говорить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-ecouter-808",
+    "original": "nous allons écouter",
+    "translation": "мы собираемся слушать",
+    "transcription": "[nуs allонs еcуter]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons écouter ».",
+    "example_translation": "Мы часто говорим: « мы собираемся слушать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "communication",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-regarder-812",
+    "original": "nous allons regarder",
+    "translation": "мы собираемся смотреть",
+    "transcription": "[nуs allонs regarder]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons regarder ».",
+    "example_translation": "Мы часто говорим: « мы собираемся смотреть ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "media",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-voir-816",
+    "original": "nous allons voir",
+    "translation": "мы собираемся видеть",
+    "transcription": "[nуs allонs vуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons voir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся видеть ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "space",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-trouver-820",
+    "original": "nous allons trouver",
+    "translation": "мы собираемся находить",
+    "transcription": "[nуs allонs trуver]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons trouver ».",
+    "example_translation": "Мы часто говорим: « мы собираемся находить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-chercher-824",
+    "original": "nous allons chercher",
+    "translation": "мы собираемся искать",
+    "transcription": "[nуs allонs шerшer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons chercher ».",
+    "example_translation": "Мы часто говорим: « мы собираемся искать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-comprendre-828",
+    "original": "nous allons comprendre",
+    "translation": "мы собираемся понимать",
+    "transcription": "[nуs allонs comprанdre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons comprendre ».",
+    "example_translation": "Мы часто говорим: « мы собираемся понимать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "study",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-apprendre-832",
+    "original": "nous allons apprendre",
+    "translation": "мы собираемся учить",
+    "transcription": "[nуs allонs apprанdre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons apprendre ».",
+    "example_translation": "Мы часто говорим: « мы собираемся учить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-connaitre-836",
+    "original": "nous allons connaître",
+    "translation": "мы собираемся знать",
+    "transcription": "[nуs allонs cонnaиtre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons connaître ».",
+    "example_translation": "Мы часто говорим: « мы собираемся знать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-savoir-840",
+    "original": "nous allons savoir",
+    "translation": "мы собираемся знать",
+    "transcription": "[nуs allонs savуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons savoir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся знать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-penser-844",
+    "original": "nous allons penser",
+    "translation": "мы собираемся думать",
+    "transcription": "[nуs allонs pанser]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons penser ».",
+    "example_translation": "Мы часто говорим: « мы собираемся думать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-croire-848",
+    "original": "nous allons croire",
+    "translation": "мы собираемся верить",
+    "transcription": "[nуs allонs crуаre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons croire ».",
+    "example_translation": "Мы часто говорим: « мы собираемся верить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-vouloir-852",
+    "original": "nous allons vouloir",
+    "translation": "мы собираемся хотеть",
+    "transcription": "[nуs allонs vуlуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons vouloir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся хотеть ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "feelings",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-pouvoir-856",
+    "original": "nous allons pouvoir",
+    "translation": "мы собираемся мочь",
+    "transcription": "[nуs allонs pуvуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons pouvoir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся мочь ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "grammar",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-devoir-860",
+    "original": "nous allons devoir",
+    "translation": "мы собираемся быть должным",
+    "transcription": "[nуs allонs devуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons devoir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся быть должным ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "grammar",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-falloir-864",
+    "original": "nous allons falloir",
+    "translation": "мы собираемся нужно",
+    "transcription": "[nуs allонs fallуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons falloir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся нужно ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "grammar",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-prendre-868",
+    "original": "nous allons prendre",
+    "translation": "мы собираемся брать",
+    "transcription": "[nуs allонs prанdre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons prendre ».",
+    "example_translation": "Мы часто говорим: « мы собираемся брать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "shopping",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-mettre-872",
+    "original": "nous allons mettre",
+    "translation": "мы собираемся класть",
+    "transcription": "[nуs allонs mettre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons mettre ».",
+    "example_translation": "Мы часто говорим: « мы собираемся класть ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "home",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-porter-876",
+    "original": "nous allons porter",
+    "translation": "мы собираемся носить",
+    "transcription": "[nуs allонs porter]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons porter ».",
+    "example_translation": "Мы часто говорим: « мы собираемся носить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "shopping",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-ouvrir-880",
+    "original": "nous allons ouvrir",
+    "translation": "мы собираемся открывать",
+    "transcription": "[nуs allонs уvrir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons ouvrir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся открывать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "home",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-fermer-884",
+    "original": "nous allons fermer",
+    "translation": "мы собираемся закрывать",
+    "transcription": "[nуs allонs fermer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons fermer ».",
+    "example_translation": "Мы часто говорим: « мы собираемся закрывать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "home",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-entrer-888",
+    "original": "nous allons entrer",
+    "translation": "мы собираемся входить",
+    "transcription": "[nуs allонs анtrer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons entrer ».",
+    "example_translation": "Мы часто говорим: « мы собираемся входить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "space",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-sortir-892",
+    "original": "nous allons sortir",
+    "translation": "мы собираемся выходить",
+    "transcription": "[nуs allонs sortir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons sortir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся выходить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "space",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-rester-896",
+    "original": "nous allons rester",
+    "translation": "мы собираемся оставаться",
+    "transcription": "[nуs allонs rester]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons rester ».",
+    "example_translation": "Мы часто говорим: « мы собираемся оставаться ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "space",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-commencer-900",
+    "original": "nous allons commencer",
+    "translation": "мы собираемся начинать",
+    "transcription": "[nуs allонs commанcer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons commencer ».",
+    "example_translation": "Мы часто говорим: « мы собираемся начинать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "time",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-finir-904",
+    "original": "nous allons finir",
+    "translation": "мы собираемся заканчивать",
+    "transcription": "[nуs allонs fэнir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons finir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся заканчивать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "time",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-continuer-908",
+    "original": "nous allons continuer",
+    "translation": "мы собираемся продолжать",
+    "transcription": "[nуs allонs cонtэнuer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons continuer ».",
+    "example_translation": "Мы часто говорим: « мы собираемся продолжать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "time",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-attendre-912",
+    "original": "nous allons attendre",
+    "translation": "мы собираемся ждать",
+    "transcription": "[nуs allонs attанdre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons attendre ».",
+    "example_translation": "Мы часто говорим: « мы собираемся ждать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "time",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-arriver-916",
+    "original": "nous allons arriver",
+    "translation": "мы собираемся прибывать",
+    "transcription": "[nуs allонs arriver]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons arriver ».",
+    "example_translation": "Мы часто говорим: « мы собираемся прибывать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-partir-920",
+    "original": "nous allons partir",
+    "translation": "мы собираемся уезжать",
+    "transcription": "[nуs allонs partir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons partir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся уезжать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-monter-924",
+    "original": "nous allons monter",
+    "translation": "мы собираемся подниматься",
+    "transcription": "[nуs allонs mонter]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons monter ».",
+    "example_translation": "Мы часто говорим: « мы собираемся подниматься ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-descendre-928",
+    "original": "nous allons descendre",
+    "translation": "мы собираемся спускаться",
+    "transcription": "[nуs allонs descанdre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons descendre ».",
+    "example_translation": "Мы часто говорим: « мы собираемся спускаться ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "travel",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-manger-932",
+    "original": "nous allons manger",
+    "translation": "мы собираемся есть",
+    "transcription": "[nуs allонs mанger]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons manger ».",
+    "example_translation": "Мы часто говорим: « мы собираемся есть ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "food",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-boire-936",
+    "original": "nous allons boire",
+    "translation": "мы собираемся пить",
+    "transcription": "[nуs allонs bуаre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons boire ».",
+    "example_translation": "Мы часто говорим: « мы собираемся пить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "food",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-cuisiner-940",
+    "original": "nous allons cuisiner",
+    "translation": "мы собираемся готовить",
+    "transcription": "[nуs allонs cuisэнer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons cuisiner ».",
+    "example_translation": "Мы часто говорим: « мы собираемся готовить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "food",
+      "home",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-acheter-944",
+    "original": "nous allons acheter",
+    "translation": "мы собираемся покупать",
+    "transcription": "[nуs allонs aшeter]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons acheter ».",
+    "example_translation": "Мы часто говорим: « мы собираемся покупать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "shopping",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-payer-948",
+    "original": "nous allons payer",
+    "translation": "мы собираемся платить",
+    "transcription": "[nуs allонs payer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons payer ».",
+    "example_translation": "Мы часто говорим: « мы собираемся платить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "shopping",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-gagner-952",
+    "original": "nous allons gagner",
+    "translation": "мы собираемся зарабатывать",
+    "transcription": "[nуs allонs gaньer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons gagner ».",
+    "example_translation": "Мы часто говорим: « мы собираемся зарабатывать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "work",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-travailler-956",
+    "original": "nous allons travailler",
+    "translation": "мы собираемся работать",
+    "transcription": "[nуs allонs travaийr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons travailler ».",
+    "example_translation": "Мы часто говорим: « мы собираемся работать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "work",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-etudier-960",
+    "original": "nous allons étudier",
+    "translation": "мы собираемся учиться",
+    "transcription": "[nуs allонs еtudier]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons étudier ».",
+    "example_translation": "Мы часто говорим: « мы собираемся учиться ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-ecrire-964",
+    "original": "nous allons écrire",
+    "translation": "мы собираемся писать",
+    "transcription": "[nуs allонs еcrire]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons écrire ».",
+    "example_translation": "Мы часто говорим: « мы собираемся писать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-lire-968",
+    "original": "nous allons lire",
+    "translation": "мы собираемся читать",
+    "transcription": "[nуs allонs lire]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons lire ».",
+    "example_translation": "Мы часто говорим: « мы собираемся читать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-repeter-972",
+    "original": "nous allons répéter",
+    "translation": "мы собираемся повторять",
+    "transcription": "[nуs allонs rеpеter]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons répéter ».",
+    "example_translation": "Мы часто говорим: « мы собираемся повторять ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "study",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-jouer-976",
+    "original": "nous allons jouer",
+    "translation": "мы собираемся играть",
+    "transcription": "[nуs allонs jуer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons jouer ».",
+    "example_translation": "Мы часто говорим: « мы собираемся играть ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "leisure",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-marcher-980",
+    "original": "nous allons marcher",
+    "translation": "мы собираемся идти пешком",
+    "transcription": "[nуs allонs marшer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons marcher ».",
+    "example_translation": "Мы часто говорим: « мы собираемся идти пешком ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "travel",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-courir-984",
+    "original": "nous allons courir",
+    "translation": "мы собираемся бежать",
+    "transcription": "[nуs allонs cуrir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons courir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся бежать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "health",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-nager-988",
+    "original": "nous allons nager",
+    "translation": "мы собираемся плавать",
+    "transcription": "[nуs allонs nager]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons nager ».",
+    "example_translation": "Мы часто говорим: « мы собираемся плавать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "health",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-dormir-992",
+    "original": "nous allons dormir",
+    "translation": "мы собираемся спать",
+    "transcription": "[nуs allонs dormir]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons dormir ».",
+    "example_translation": "Мы часто говорим: « мы собираемся спать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "health",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-se-reveiller-996",
+    "original": "nous allons se réveiller",
+    "translation": "мы собираемся просыпаться",
+    "transcription": "[nуs allонs se rеvэйr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons se réveiller ».",
+    "example_translation": "Мы часто говорим: « мы собираемся просыпаться ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "health",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-vivre-1000",
+    "original": "nous allons vivre",
+    "translation": "мы собираемся жить",
+    "transcription": "[nуs allонs vivre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons vivre ».",
+    "example_translation": "Мы часто говорим: « мы собираемся жить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "people",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-aimer-1004",
+    "original": "nous allons aimer",
+    "translation": "мы собираемся любить",
+    "transcription": "[nуs allонs эmer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons aimer ».",
+    "example_translation": "Мы часто говорим: « мы собираемся любить ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-adorer-1008",
+    "original": "nous allons adorer",
+    "translation": "мы собираемся обожать",
+    "transcription": "[nуs allонs adorer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons adorer ».",
+    "example_translation": "Мы часто говорим: « мы собираемся обожать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-preferer-1012",
+    "original": "nous allons préférer",
+    "translation": "мы собираемся предпочитать",
+    "transcription": "[nуs allонs prеfеrer]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons préférer ».",
+    "example_translation": "Мы часто говорим: « мы собираемся предпочитать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-nous-allons-aider-1016",
+    "original": "nous allons aider",
+    "translation": "мы собираемся помогать",
+    "transcription": "[nуs allонs эder]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « nous allons aider ».",
+    "example_translation": "Мы часто говорим: « мы собираемся помогать ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "people",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-rouge-1020",
+    "original": "assez rouge",
+    "translation": "довольно красный",
+    "transcription": "[assez rуge]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez rouge ».",
+    "example_translation": "Мы часто говорим: « довольно красный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "colors",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-bleu-1024",
+    "original": "assez bleu",
+    "translation": "довольно синий",
+    "transcription": "[assez blё]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez bleu ».",
+    "example_translation": "Мы часто говорим: « довольно синий ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "colors",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-vert-1028",
+    "original": "assez vert",
+    "translation": "довольно зелёный",
+    "transcription": "[assez vert]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez vert ».",
+    "example_translation": "Мы часто говорим: « довольно зелёный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "colors",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-blanc-1032",
+    "original": "assez blanc",
+    "translation": "довольно белый",
+    "transcription": "[assez blанc]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez blanc ».",
+    "example_translation": "Мы часто говорим: « довольно белый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "colors",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-noir-1036",
+    "original": "assez noir",
+    "translation": "довольно чёрный",
+    "transcription": "[assez nуаr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez noir ».",
+    "example_translation": "Мы часто говорим: « довольно чёрный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "colors",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-grand-1040",
+    "original": "assez grand",
+    "translation": "довольно большой",
+    "transcription": "[assez grанd]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez grand ».",
+    "example_translation": "Мы часто говорим: « довольно большой ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-petit-1044",
+    "original": "assez petit",
+    "translation": "довольно маленький",
+    "transcription": "[assez petit]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez petit ».",
+    "example_translation": "Мы часто говорим: « довольно маленький ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-jeune-1048",
+    "original": "assez jeune",
+    "translation": "довольно молодой",
+    "transcription": "[assez jёne]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez jeune ».",
+    "example_translation": "Мы часто говорим: « довольно молодой ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "people",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-vieux-1052",
+    "original": "assez vieux",
+    "translation": "довольно старый",
+    "transcription": "[assez viёx]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez vieux ».",
+    "example_translation": "Мы часто говорим: « довольно старый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-nouveau-1056",
+    "original": "assez nouveau",
+    "translation": "довольно новый",
+    "transcription": "[assez nуvo]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez nouveau ».",
+    "example_translation": "Мы часто говорим: « довольно новый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-bon-1060",
+    "original": "assez bon",
+    "translation": "довольно хороший",
+    "transcription": "[assez bон]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez bon ».",
+    "example_translation": "Мы часто говорим: « довольно хороший ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-mauvais-1064",
+    "original": "assez mauvais",
+    "translation": "довольно плохой",
+    "transcription": "[assez mоvэs]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez mauvais ».",
+    "example_translation": "Мы часто говорим: « довольно плохой ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-beau-1068",
+    "original": "assez beau",
+    "translation": "довольно красивый",
+    "transcription": "[assez bo]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez beau ».",
+    "example_translation": "Мы часто говорим: « довольно красивый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-joli-1072",
+    "original": "assez joli",
+    "translation": "довольно милый",
+    "transcription": "[assez joli]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez joli ».",
+    "example_translation": "Мы часто говорим: « довольно милый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-important-1076",
+    "original": "assez important",
+    "translation": "довольно важный",
+    "transcription": "[assez importанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez important ».",
+    "example_translation": "Мы часто говорим: « довольно важный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-possible-1080",
+    "original": "assez possible",
+    "translation": "довольно возможный",
+    "transcription": "[assez possible]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez possible ».",
+    "example_translation": "Мы часто говорим: « довольно возможный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-facile-1084",
+    "original": "assez facile",
+    "translation": "довольно лёгкий",
+    "transcription": "[assez facile]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez facile ».",
+    "example_translation": "Мы часто говорим: « довольно лёгкий ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "study",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-difficile-1088",
+    "original": "assez difficile",
+    "translation": "довольно трудный",
+    "transcription": "[assez difficile]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez difficile ».",
+    "example_translation": "Мы часто говорим: « довольно трудный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "study",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-rapide-1092",
+    "original": "assez rapide",
+    "translation": "довольно быстрый",
+    "transcription": "[assez rapide]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez rapide ».",
+    "example_translation": "Мы часто говорим: « довольно быстрый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-lent-1096",
+    "original": "assez lent",
+    "translation": "довольно медленный",
+    "transcription": "[assez lанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez lent ».",
+    "example_translation": "Мы часто говорим: « довольно медленный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-chaud-1100",
+    "original": "assez chaud",
+    "translation": "довольно тёплый",
+    "transcription": "[assez шоd]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez chaud ».",
+    "example_translation": "Мы часто говорим: « довольно тёплый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "nature",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-froid-1104",
+    "original": "assez froid",
+    "translation": "довольно холодный",
+    "transcription": "[assez frуаd]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez froid ».",
+    "example_translation": "Мы часто говорим: « довольно холодный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "nature",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-content-1108",
+    "original": "assez content",
+    "translation": "довольно довольный",
+    "transcription": "[assez cонtанt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez content ».",
+    "example_translation": "Мы часто говорим: « довольно довольный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-triste-1112",
+    "original": "assez triste",
+    "translation": "довольно грустный",
+    "transcription": "[assez triste]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez triste ».",
+    "example_translation": "Мы часто говорим: « довольно грустный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-heureux-1116",
+    "original": "assez heureux",
+    "translation": "довольно счастливый",
+    "transcription": "[assez hёrёx]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez heureux ».",
+    "example_translation": "Мы часто говорим: « довольно счастливый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-fatigue-1120",
+    "original": "assez fatigué",
+    "translation": "довольно уставший",
+    "transcription": "[assez fatiguе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez fatigué ».",
+    "example_translation": "Мы часто говорим: « довольно уставший ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-pret-1124",
+    "original": "assez prêt",
+    "translation": "довольно готовый",
+    "transcription": "[assez prеt]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez prêt ».",
+    "example_translation": "Мы часто говорим: « довольно готовый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-occupe-1128",
+    "original": "assez occupé",
+    "translation": "довольно занятый",
+    "transcription": "[assez occupе]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez occupé ».",
+    "example_translation": "Мы часто говорим: « довольно занятый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "work",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-libre-1132",
+    "original": "assez libre",
+    "translation": "довольно свободный",
+    "transcription": "[assez libre]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez libre ».",
+    "example_translation": "Мы часто говорим: « довольно свободный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "daily",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-calme-1136",
+    "original": "assez calme",
+    "translation": "довольно спокойный",
+    "transcription": "[assez calme]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez calme ».",
+    "example_translation": "Мы часто говорим: « довольно спокойный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-fort-1140",
+    "original": "assez fort",
+    "translation": "довольно сильный",
+    "transcription": "[assez fort]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez fort ».",
+    "example_translation": "Мы часто говорим: « довольно сильный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-c-est-faible-1141",
+    "original": "c'est faible",
+    "translation": "это слабый",
+    "transcription": "[c'est fэble]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est faible ».",
+    "example_translation": "Мы часто говорим: « это слабый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-tres-faible-1142",
+    "original": "très faible",
+    "translation": "очень слабый",
+    "transcription": "[trеs fэble]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très faible ».",
+    "example_translation": "Мы часто говорим: « очень слабый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-trop-faible-1143",
+    "original": "trop faible",
+    "translation": "слишком слабый",
+    "transcription": "[trop fэble]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop faible ».",
+    "example_translation": "Мы часто говорим: « слишком слабый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-faible-1144",
+    "original": "assez faible",
+    "translation": "довольно слабый",
+    "transcription": "[assez fэble]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez faible ».",
+    "example_translation": "Мы часто говорим: « довольно слабый ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-c-est-sur-1145",
+    "original": "c'est sûr",
+    "translation": "это уверенный",
+    "transcription": "[c'est sюr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est sûr ».",
+    "example_translation": "Мы часто говорим: « это уверенный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-tres-sur-1146",
+    "original": "très sûr",
+    "translation": "очень уверенный",
+    "transcription": "[trеs sюr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très sûr ».",
+    "example_translation": "Мы часто говорим: « очень уверенный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-trop-sur-1147",
+    "original": "trop sûr",
+    "translation": "слишком уверенный",
+    "transcription": "[trop sюr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop sûr ».",
+    "example_translation": "Мы часто говорим: « слишком уверенный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-sur-1148",
+    "original": "assez sûr",
+    "translation": "довольно уверенный",
+    "transcription": "[assez sюr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez sûr ».",
+    "example_translation": "Мы часто говорим: « довольно уверенный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "feelings",
+      "thinking",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-c-est-clair-1149",
+    "original": "c'est clair",
+    "translation": "это ясный",
+    "transcription": "[c'est clэr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « c'est clair ».",
+    "example_translation": "Мы часто говорим: « это ясный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-tres-clair-1150",
+    "original": "très clair",
+    "translation": "очень ясный",
+    "transcription": "[trеs clэr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « très clair ».",
+    "example_translation": "Мы часто говорим: « очень ясный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-trop-clair-1151",
+    "original": "trop clair",
+    "translation": "слишком ясный",
+    "transcription": "[trop clэr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « trop clair ».",
+    "example_translation": "Мы часто говорим: « слишком ясный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-clair-1152",
+    "original": "assez clair",
+    "translation": "довольно ясный",
+    "transcription": "[assez clэr]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez clair ».",
+    "example_translation": "Мы часто говорим: « довольно ясный ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "thinking",
+      "qualities",
+      "phrase"
+    ]
+  },
+  {
+    "id": "b1-assez-simple-1156",
+    "original": "assez simple",
+    "translation": "довольно простой",
+    "transcription": "[assez simple]",
+    "audio_original": "",
+    "example_original": "On dit souvent : « assez simple ».",
+    "example_translation": "Мы часто говорим: « довольно простой ».",
+    "part_of_speech": "expression",
+    "level": "B1",
+    "tags": [
+      "qualities",
+      "daily",
+      "phrase"
+    ]
+  }
+]
