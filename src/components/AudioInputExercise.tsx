@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { Exercise, Word } from '../types';
-import { AppCard } from './AppCard';
+import { LessonCard } from './LessonCard';
 import { WordImage } from './WordImage';
 
 interface AudioInputExerciseProps {
@@ -31,21 +31,21 @@ export function AudioInputExercise({
   }, [isSubmitted, exercise.id]);
 
   return (
-    <AppCard as="section" className="exercise-card">
-      <header className="exercise-header">
-        <span className="eyebrow">Аудио-ввод</span>
-        <h2 className="exercise-title">{exercise.prompt}</h2>
-        <div className="audio-panel">
-          <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
-            Повторить аудио
-          </button>
-          <p className="audio-hint">Введите слово по памяти. Регистр не важен.</p>
-        </div>
-      </header>
-
-      <div className="exercise-input-layout">
-        <WordImage word={word} size="small" />
-
+    <LessonCard
+      header={
+        <header className="exercise-header lesson-focus-header">
+          <span className="eyebrow">Аудио-ввод</span>
+          <h2 className="exercise-title">{exercise.prompt}</h2>
+          <div className="audio-panel lesson-audio-panel">
+            <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
+              Повторить аудио
+            </button>
+            <p className="audio-hint">Введите слово по памяти. Регистр не важен.</p>
+          </div>
+        </header>
+      }
+      visual={<WordImage word={word} size="small" className="lesson-word-image" />}
+      body={
         <div className="exercise-input-panel">
           <label className="input-label" htmlFor="word-answer">
             Ваш ответ
@@ -72,11 +72,12 @@ export function AudioInputExercise({
             <span>{word.part_of_speech}</span>
           </div>
         </div>
-      </div>
-
-      <button type="button" className="primary-button full-width" disabled={isSubmitted || !value.trim()} onClick={onSubmit}>
-        Проверить
-      </button>
-    </AppCard>
+      }
+      actions={
+        <button type="button" className="primary-button full-width" disabled={isSubmitted || !value.trim()} onClick={onSubmit}>
+          Проверить
+        </button>
+      }
+    />
   );
 }

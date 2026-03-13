@@ -1,5 +1,5 @@
 import type { Exercise, Word } from '../types';
-import { AppCard } from './AppCard';
+import { LessonCard } from './LessonCard';
 import { LessonChoiceButton } from './LessonChoiceButton';
 import { WordImage } from './WordImage';
 
@@ -25,66 +25,64 @@ export function MultipleChoiceExercise({
   const shouldShowImage = !isAudioExercise;
 
   return (
-    <AppCard as="section" className="exercise-card">
-      <header className="exercise-header">
-        <span className="eyebrow">Упражнение</span>
-        <h2 className="exercise-title">{exercise.prompt}</h2>
-        {isOriginalExercise ? (
-          <div className="question-block">
-            <p className="question-primary">{word.original}</p>
-            <p className="question-secondary">
-              {word.transcription} · {word.part_of_speech}
-            </p>
-          </div>
-        ) : null}
-        {exercise.type === 'translation_to_original_choice' ? (
-          <div className="question-block">
-            <p className="question-primary">{word.translation}</p>
-            <p className="question-secondary">Выберите французское слово</p>
-          </div>
-        ) : null}
-        {isAudioExercise ? (
-          <div className="audio-panel">
-            <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
-              Повторить аудио
-            </button>
-            <p className="audio-hint">Слушайте внимательно и выберите точный перевод.</p>
-          </div>
-        ) : null}
-      </header>
-
-      {shouldShowImage ? (
-        <div className="exercise-visual">
-          <WordImage word={word} size="small" />
-        </div>
-      ) : null}
-
-      <div className="choice-list">
-        {exercise.options?.map((option) => {
-          const isCorrect = option.label === exercise.correctAnswer;
-          const isSelected = option.label === selectedAnswer;
-          const state = isSubmitted
-            ? isCorrect
-              ? 'correct'
+    <LessonCard
+      header={
+        <header className="exercise-header lesson-focus-header">
+          <span className="eyebrow">Упражнение</span>
+          <h2 className="exercise-title">{exercise.prompt}</h2>
+          {isOriginalExercise ? (
+            <div className="question-block lesson-focus-copy">
+              <p className="question-primary lesson-word-title">{word.original}</p>
+              <p className="question-secondary">
+                {word.transcription} · {word.part_of_speech}
+              </p>
+            </div>
+          ) : null}
+          {exercise.type === 'translation_to_original_choice' ? (
+            <div className="question-block lesson-focus-copy">
+              <p className="question-primary lesson-translation">{word.translation}</p>
+              <p className="question-secondary">Выберите французское слово</p>
+            </div>
+          ) : null}
+          {isAudioExercise ? (
+            <div className="audio-panel lesson-audio-panel">
+              <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
+                Повторить аудио
+              </button>
+              <p className="audio-hint">Слушайте внимательно и выберите точный перевод.</p>
+            </div>
+          ) : null}
+        </header>
+      }
+      visual={shouldShowImage ? <WordImage word={word} size="small" className="lesson-word-image" /> : null}
+      body={
+        <div className="choice-list">
+          {exercise.options?.map((option) => {
+            const isCorrect = option.label === exercise.correctAnswer;
+            const isSelected = option.label === selectedAnswer;
+            const state = isSubmitted
+              ? isCorrect
+                ? 'correct'
+                : isSelected
+                  ? 'incorrect'
+                  : 'muted'
               : isSelected
-                ? 'incorrect'
-                : 'muted'
-            : isSelected
-              ? 'selected'
-              : 'default';
+                ? 'selected'
+                : 'default';
 
-          return (
-            <LessonChoiceButton
-              key={option.id + option.label}
-              state={state}
-              disabled={isSubmitted}
-              onClick={() => onSelect(option.label)}
-            >
-              {option.label}
-            </LessonChoiceButton>
-          );
-        })}
-      </div>
-    </AppCard>
+            return (
+              <LessonChoiceButton
+                key={option.id + option.label}
+                state={state}
+                disabled={isSubmitted}
+                onClick={() => onSelect(option.label)}
+              >
+                {option.label}
+              </LessonChoiceButton>
+            );
+          })}
+        </div>
+      }
+    />
   );
 }
