@@ -99,6 +99,36 @@
   gap: var(--space-4);
 }
 
+.top-nav {
+  overflow: visible;
+}
+
+.top-nav .app-card-shell {
+  gap: var(--space-4);
+}
+
+.top-nav-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.top-nav-copy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.top-nav-meta {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(208, 223, 244, 0.9);
+  background: rgba(255, 255, 255, 0.78);
+}
+
 .topbar-copy,
 .hero-copy,
 .hero-actions,
@@ -1230,6 +1260,7 @@
 
   .word-card-header,
   .topbar-copy,
+  .top-nav-head,
   .result-actions,
   .lesson-footer,
   .pack-card-header {

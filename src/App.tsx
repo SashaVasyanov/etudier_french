@@ -1,5 +1,6 @@
 import { Suspense, lazy, startTransition, useEffect, useMemo, useState } from 'react';
 import { AppNavigation } from './components/AppNavigation';
+import { AppShell } from './components/AppShell';
 import { AudioInputExercise } from './components/AudioInputExercise';
 import { DailyCompletionScreen } from './components/DailyCompletionScreen';
 import { FlashcardView } from './components/FlashcardView';
@@ -9,6 +10,7 @@ import { LessonWordPreview } from './components/LessonWordPreview';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
 import { ProgressBar } from './components/ProgressBar';
 import { ProgressHeader } from './components/ProgressHeader';
+import { TopNav } from './components/TopNav';
 import { getStarterPacks, getWordById, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
 import { createFlashcardSession, createLessonSession } from './lib/exercises';
@@ -501,15 +503,13 @@ function App() {
 
   if (isLoadingWords) {
     return (
-      <main className="app-shell">
-        <div className="app-frame">
+      <AppShell>
           <section className="hero-card">
             <span className="eyebrow">Загрузка</span>
             <h1 className="hero-title">Подготавливаем словарь</h1>
             <p className="hero-text">Загружаем французские слова, активные паки и локальный прогресс.</p>
           </section>
-        </div>
-      </main>
+      </AppShell>
     );
   }
 
@@ -520,20 +520,13 @@ function App() {
       : 'home';
 
   return (
-    <main className="app-shell">
-      <div className="app-frame">
-        <header className="topbar-card">
-          <div className="topbar-copy">
-            <div>
-              <span className="eyebrow">Французский словарь и уроки</span>
-              <strong className="topbar-title">Etudier French</strong>
-            </div>
-            <span className="info-subtle">
-              {storage.profile.displayName} · Активных слов: {availableWords.length} · Серия: {storage.streakDays}
-            </span>
-          </div>
-          <AppNavigation activeScreen={navScreen} lessonAvailable={words.length > 0} onNavigate={handleNavigate} />
-        </header>
+    <AppShell>
+        <TopNav
+          eyebrow="Французский словарь и уроки"
+          title="Etudier French"
+          meta={`${storage.profile.displayName} · Активных слов: ${availableWords.length} · Серия: ${storage.streakDays}`}
+          navigation={<AppNavigation activeScreen={navScreen} lessonAvailable={words.length > 0} onNavigate={handleNavigate} />}
+        />
 
         {screen === 'home' ? (
           <HomeDashboard
@@ -785,8 +778,7 @@ function App() {
             />
           ) : null}
         </Suspense>
-      </div>
-    </main>
+    </AppShell>
   );
 }
 
