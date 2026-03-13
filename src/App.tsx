@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import { AudioInputExercise } from './components/AudioInputExercise';
+import { DailyCompletionScreen } from './components/DailyCompletionScreen';
 import { HomeDashboard } from './components/HomeDashboard';
 import { LessonResult } from './components/LessonResult';
 import { LessonWordPreview } from './components/LessonWordPreview';
@@ -15,15 +16,41 @@ import { ProgressBar } from './components/ProgressBar';
 import { getWordById, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
 import { createLessonSession } from './lib/exercises';
-import { applyOutcomes, loadStorage, saveStorage } from './lib/storage';
-import { normalizeAnswer } from './lib/utils';
-import type { AppStorage, ExerciseOutcome, LessonSession, Word } from './types';
+import {
+  applyOutcomes,
+  completeDailyLesson,
+  getCompletedDailyLesson,
+  loadStorage,
+  markWordAsKnown,
+  saveStorage,
+} from './lib/storage';
+import { getTodayDateKey, normalizeAnswer } from './lib/utils';
+import type { AppStorage, DailyLessonRecord, ExerciseOutcome, LessonSession, Word } from './types';
 import './styles/app.css';
 
 const DictionaryScreen = lazy(() => import('./components/DictionaryScreen'));
 const StatisticsScreen = lazy(() => import('./components/StatisticsScreen'));
 
-type Screen = 'home' | 'lesson' | 'result' | 'dictionary' | 'statistics';
+type Screen = 'home' | 'lesson' | 'result' | 'completion' | 'dictionary' | 'statistics';
+
+function removeWordFromSession(session: LessonSession, wordId: string): LessonSession {
+  const exercises = session.exercises.filter((exercise) => exercise.wordId !== wordId);
+  const steps = session.steps.filter((step) => step.wordId !== wordId);
+  const modules = session.modules.map((module) => ({
+    ...module,
+    wordIds: module.wordIds.filter((id) => id !== wordId),
+    stepIds: module.stepIds.filter((stepId) => !stepId.includes(wordId)),
+  }));
+
+  return {
+    ...session,
+    exercises,
+    steps,
+    modules,
+    exerciseIds: exercises.map((exercise) => exercise.id),
+    sourceWordIds: session.sourceWordIds.filter((id) => id !== wordId),
+  };
+}
 
 function App() {
   const [screen, setScreen] = useState<Screen>('home');
@@ -35,12 +62,29 @@ function App() {
   const [typedAnswer, setTypedAnswer] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [outcomes, setOutcomes] = useState<ExerciseOutcome[]>([]);
+  const [knownWordIds, setKnownWordIds] = useState<string[]>([]);
   const [isLoadingWords, setIsLoadingWords] = useState(true);
 
   const progressList = useMemo(() => Object.values(storage.progressByWordId), [storage]);
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
   const currentWord = currentStep ? getWordById(words, currentStep.wordId) : null;
+  const todayCompletion = useMemo(() => getCompletedDailyLesson(storage), [storage]);
+  const currentModuleIndex = useMemo(
+    () => (session && currentStep ? session.modules.findIndex((module) => module.id === currentStep.moduleId) : -1),
+    [currentStep, session],
+  );
+  const visibleModules = useMemo(
+    () => session?.modules.filter((module) => module.wordIds.length > 0) ?? [],
+    [session],
+  );
+  const remainingModules = useMemo(() => {
+    if (!session || currentModuleIndex < 0) {
+      return 0;
+    }
+
+    return session.modules.slice(currentModuleIndex + 1).filter((module) => module.wordIds.length > 0).length;
+  }, [currentModuleIndex, session]);
 
   useEffect(() => {
     let isMounted = true;
@@ -108,6 +152,11 @@ function App() {
       return;
     }
 
+    if (mode === 'default' && todayCompletion) {
+      setScreen('completion');
+      return;
+    }
+
     const nextSession = createLessonSession({
       mode,
       words,
@@ -115,8 +164,34 @@ function App() {
       wordIds,
     });
 
+    if (!nextSession) {
+      if (mode === 'default') {
+        const emptyRecord: DailyLessonRecord = {
+          date: getTodayDateKey(),
+          completedAt: new Date().toISOString(),
+          sessionId: `default-empty-${Date.now()}`,
+          totalModules: 0,
+          completedModules: 0,
+          totalSteps: 0,
+          completedSteps: 0,
+          correctAnswers: 0,
+          totalAnswers: 0,
+          newWords: 0,
+          reviewWords: 0,
+          reinforcementWords: 0,
+          knownWords: 0,
+          difficultWordIds: [],
+        };
+
+        setStorage((currentStorage) => completeDailyLesson(currentStorage, emptyRecord));
+        setScreen('completion');
+      }
+      return;
+    }
+
     setSession(nextSession);
     setOutcomes([]);
+    setKnownWordIds([]);
     setStepIndex(0);
     resetExerciseState();
     startTransition(() => {
@@ -152,10 +227,53 @@ function App() {
     setIsSubmitted(true);
   }
 
-  function finishLesson() {
-    setStorage((currentStorage) => applyOutcomes(currentStorage, outcomes));
-    setScreen('result');
+  function finishLesson(
+    activeSession: LessonSession,
+    lessonOutcomes = outcomes,
+    manuallyKnownWordIds = knownWordIds,
+  ) {
+    setStorage((currentStorage) => {
+      const nextStorage = applyOutcomes(currentStorage, lessonOutcomes);
+
+      if (activeSession.mode !== 'default') {
+        return nextStorage;
+      }
+
+      const difficultWordIds = Array.from(
+        new Set(
+          activeSession.sourceWordIds.filter((wordId) => nextStorage.progressByWordId[wordId]?.status === 'difficult'),
+        ),
+      );
+      const dailyRecord: DailyLessonRecord = {
+        date: getTodayDateKey(),
+        completedAt: new Date().toISOString(),
+        sessionId: activeSession.id,
+        totalModules: activeSession.modules.filter((module) => module.wordIds.length > 0).length,
+        completedModules: activeSession.modules.filter((module) => module.wordIds.length > 0).length,
+        totalSteps: activeSession.steps.length,
+        completedSteps: activeSession.steps.length,
+        correctAnswers: lessonOutcomes.filter((outcome) => outcome.isCorrect).length,
+        totalAnswers: lessonOutcomes.length,
+        newWords: activeSession.modules.find((module) => module.id === 'module-new-words')?.wordIds.length ?? 0,
+        reviewWords: activeSession.modules.find((module) => module.id === 'module-review-learning')?.wordIds.length ?? 0,
+        reinforcementWords:
+          activeSession.modules.find((module) => module.id === 'module-reinforcement')?.wordIds.length ?? 0,
+        knownWords: Array.from(new Set(manuallyKnownWordIds)).length,
+        difficultWordIds,
+      };
+
+      return completeDailyLesson(nextStorage, dailyRecord);
+    });
+
+    setSession(null);
     stopAudio();
+
+    if (activeSession.mode === 'default') {
+      setScreen('completion');
+      return;
+    }
+
+    setScreen('result');
   }
 
   function goToNextStep() {
@@ -166,7 +284,7 @@ function App() {
     const isLastStep = stepIndex >= session.steps.length - 1;
 
     if (isLastStep) {
-      finishLesson();
+      finishLesson(session);
       return;
     }
 
@@ -178,6 +296,27 @@ function App() {
     currentExercise && isSubmitted
       ? [...outcomes].reverse().find((outcome) => outcome.exerciseId === currentExercise.id) ?? null
       : null;
+
+  function handleMarkKnown() {
+    if (!session || !currentWord || !currentStep?.allowMarkKnown) {
+      return;
+    }
+
+    const nextKnownWordIds = Array.from(new Set([...knownWordIds, currentWord.id]));
+    const nextSession = removeWordFromSession(session, currentWord.id);
+
+    setStorage((currentStorage) => markWordAsKnown(currentStorage, currentWord.id));
+    setKnownWordIds(nextKnownWordIds);
+    resetExerciseState();
+
+    if (nextSession.steps.length === 0) {
+      finishLesson(session, outcomes, nextKnownWordIds);
+      return;
+    }
+
+    setSession(nextSession);
+    setStepIndex((current) => Math.min(current, nextSession.steps.length - 1));
+  }
 
   if (isLoadingWords) {
     return (
@@ -202,6 +341,11 @@ function App() {
             storage={storage}
             progressList={progressList}
             onStartLesson={() => startLesson('default')}
+            onOpenCompletion={() => {
+              startTransition(() => {
+                setScreen('completion');
+              });
+            }}
             onOpenDictionary={() => {
               startTransition(() => {
                 setScreen('dictionary');
@@ -218,11 +362,46 @@ function App() {
         {screen === 'lesson' && currentStep && currentWord && session ? (
           <section className="lesson-shell">
             <div className="module-header">
-              <span className="eyebrow">{currentStep.moduleTitle}</span>
-              <h2 className="section-title">{currentStep.moduleDescription}</h2>
-              <p className="info-subtle">
-                Шаг {currentStep.indexInModule} из {currentStep.totalInModule} в модуле
-              </p>
+              <div className="module-header-top">
+                <span className={`module-chip ${currentStep.moduleTheme}`}>Модуль {currentStep.modulePosition}</span>
+                <span className="eyebrow">Осталось модулей: {remainingModules}</span>
+              </div>
+              <h2 className="section-title">{currentStep.moduleTitle}</h2>
+              <p className="hero-text">{currentStep.moduleDescription}</p>
+              <div className="module-meta-grid">
+                <div className="mini-stat">
+                  <span className="mini-stat-value">
+                    {currentStep.indexInModule}/{currentStep.totalInModule}
+                  </span>
+                  <span className="mini-stat-label">Шаг в модуле</span>
+                </div>
+                <div className="mini-stat">
+                  <span className="mini-stat-value">
+                    {currentStep.modulePosition}/{visibleModules.length}
+                  </span>
+                  <span className="mini-stat-label">Модуль дня</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="module-nav" aria-label="Модули урока">
+              {visibleModules.map((module) => {
+                const moduleIndex = visibleModules.findIndex((item) => item.id === module.id);
+                const state =
+                  module.id === currentStep.moduleId
+                    ? 'current'
+                    : moduleIndex < visibleModules.findIndex((item) => item.id === currentStep.moduleId)
+                      ? 'done'
+                      : 'upcoming';
+
+                return (
+                  <div key={module.id} className={`module-nav-item ${state}`}>
+                    <span className="module-nav-index">М{module.position}</span>
+                    <strong>{module.title}</strong>
+                    <span>{module.wordIds.length} слов</span>
+                  </div>
+                );
+              })}
             </div>
 
             <ProgressBar current={stepIndex + 1} total={session.steps.length} />
@@ -235,6 +414,7 @@ function App() {
                 onReplayAudio={() => {
                   void playWordAudio(currentWord);
                 }}
+                onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
                 onNext={goToNextStep}
               />
             ) : currentExercise?.options ? (
@@ -301,6 +481,11 @@ function App() {
               >
                 Выйти
               </button>
+              {currentStep.allowMarkKnown ? (
+                <button type="button" className="secondary-button" onClick={handleMarkKnown}>
+                  Уже знаю
+                </button>
+              ) : null}
               {currentStep.kind === 'exercise' ? (
                 <button
                   type="button"
@@ -325,6 +510,30 @@ function App() {
               setSession(null);
               setOutcomes([]);
               resetExerciseState();
+            }}
+          />
+        ) : null}
+
+        {screen === 'completion' ? (
+          <DailyCompletionScreen
+            completion={todayCompletion}
+            words={words}
+            onOpenDictionary={() => {
+              startTransition(() => {
+                setScreen('dictionary');
+              });
+            }}
+            onReviewDifficult={() => {
+              if (!todayCompletion || todayCompletion.difficultWordIds.length === 0) {
+                return;
+              }
+
+              startLesson('mistakes', todayCompletion.difficultWordIds);
+            }}
+            onBackHome={() => {
+              startTransition(() => {
+                setScreen('home');
+              });
             }}
           />
         ) : null}

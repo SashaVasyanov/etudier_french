@@ -12,13 +12,22 @@ interface DictionaryScreenProps {
 const TABS: Array<{ id: DictionaryTab; label: string }> = [
   { id: 'all', label: 'Все слова' },
   { id: 'learning', label: 'Изучаемые' },
+  { id: 'known', label: 'Уже известные' },
   { id: 'mastered', label: 'Выученные' },
-  { id: 'hard', label: 'Сложные' },
+  { id: 'difficult', label: 'Сложные' },
 ];
 
 function getBadgeLabel(status: ReturnType<typeof getWordProgress>['status']): string {
+  if (status === 'known') {
+    return 'известно';
+  }
+
   if (status === 'mastered') {
     return 'выучено';
+  }
+
+  if (status === 'difficult') {
+    return 'сложное';
   }
 
   if (status === 'learning' || status === 'review') {
@@ -44,9 +53,11 @@ export default function DictionaryScreen({ words, storage, onBack }: DictionaryS
           ? true
           : tab === 'learning'
             ? progress.status === 'learning' || progress.status === 'review'
+            : tab === 'known'
+              ? progress.status === 'known'
             : tab === 'mastered'
               ? progress.status === 'mastered'
-              : progress.wrong_count >= 3 || progress.ease_factor <= 1.8;
+              : progress.status === 'difficult';
       const matchesLevel = level === 'all' ? true : word.level === level;
       const matchesQuery =
         normalizedQuery.length === 0
@@ -104,6 +115,14 @@ export default function DictionaryScreen({ words, storage, onBack }: DictionaryS
               {item.label}
             </button>
           ))}
+        </div>
+
+        <div className="dictionary-summary">
+          <span>Найдено карточек: {filteredWords.length}</span>
+          <span>
+            Активный фильтр: {TABS.find((item) => item.id === tab)?.label}
+            {level !== 'all' ? ` · ${level}` : ''}
+          </span>
         </div>
       </header>
 

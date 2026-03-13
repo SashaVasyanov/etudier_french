@@ -9,7 +9,7 @@ export function ProgressBar({ current, total }: ProgressBarProps) {
   return (
     <div className="progress-panel">
       <div className="progress-meta">
-        <span className="progress-caption">Прогресс урока</span>
+        <span className="progress-caption">Общий прогресс дня</span>
         <span className="progress-count">
           {current} из {total}
         </span>

@@ -5,6 +5,7 @@ interface LessonWordPreviewProps {
   current: number;
   total: number;
   onReplayAudio: () => void;
+  onMarkKnown?: () => void;
   onNext: () => void;
 }
 
@@ -13,6 +14,7 @@ export function LessonWordPreview({
   current,
   total,
   onReplayAudio,
+  onMarkKnown,
   onNext,
 }: LessonWordPreviewProps) {
   return (
@@ -44,6 +46,11 @@ export function LessonWordPreview({
         <button type="button" className="ghost-button" onClick={onReplayAudio}>
           Прослушать
         </button>
+        {onMarkKnown ? (
+          <button type="button" className="secondary-button" onClick={onMarkKnown}>
+            Уже знаю
+          </button>
+        ) : null}
         <button type="button" className="primary-button" onClick={onNext}>
           Далее
         </button>

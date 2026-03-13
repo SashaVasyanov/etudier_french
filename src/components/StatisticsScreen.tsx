@@ -47,7 +47,9 @@ export default function StatisticsScreen({
         <article className="info-card">
           <span className="info-label">Сейчас изучаются</span>
           <strong className="info-value">
-            {countWordsByStatus(progressList, 'learning') + countWordsByStatus(progressList, 'review')}
+            {countWordsByStatus(progressList, 'learning') +
+              countWordsByStatus(progressList, 'review') +
+              countWordsByStatus(progressList, 'difficult')}
           </strong>
           <p className="info-subtle">Активные слова в процессе повторения</p>
         </article>

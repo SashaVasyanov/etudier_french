@@ -7,6 +7,7 @@ interface HomeDashboardProps {
   storage: AppStorage;
   progressList: WordProgress[];
   onStartLesson: () => void;
+  onOpenCompletion: () => void;
   onOpenDictionary: () => void;
   onOpenStatistics: () => void;
 }
@@ -28,30 +29,42 @@ export function HomeDashboard({
   storage,
   progressList,
   onStartLesson,
+  onOpenCompletion,
   onOpenDictionary,
   onOpenStatistics,
 }: HomeDashboardProps) {
   const today = storage.dailyStats.find((item) => item.date === getTodayDateKey());
+  const todayCompletion = storage.completedDailyLessons.find((item) => item.date === getTodayDateKey());
   const todayAccuracy = today ? percentage(today.correctAnswers, today.totalAnswers) : 0;
   const masteredCount = countWordsByStatus(progressList, 'mastered');
   const reviewCount = getDueReviewCount(progressList);
   const learnedToday = today?.wordsLearned ?? 0;
   const progressPercent = words.length > 0 ? Math.round((masteredCount / words.length) * 100) : 0;
+  const activeWords =
+    countWordsByStatus(progressList, 'learning') +
+    countWordsByStatus(progressList, 'review') +
+    countWordsByStatus(progressList, 'difficult');
 
   return (
     <section className="dashboard-shell">
       <header className="hero-card">
         <div className="hero-copy">
           <span className="eyebrow">Сегодняшний урок</span>
-          <h1 className="hero-title">Anki Plus</h1>
+          <h1 className="hero-title">{todayCompletion ? 'На сегодня заданий нет' : 'Французский на сегодня'}</h1>
           <p className="hero-text">
-            Французский словарь, модульные уроки и повторение по интервальному принципу.
+            {todayCompletion
+              ? 'Ежедневный модульный урок завершен. Откройте словарь, статистику или повторите сложные слова.'
+              : 'Начните ежедневный урок, откройте словарь или посмотрите накопленный прогресс.'}
           </p>
         </div>
 
         <div className="hero-actions">
-          <button type="button" className="primary-button hero-button" onClick={onStartLesson}>
-            Начать урок
+          <button
+            type="button"
+            className="primary-button hero-button"
+            onClick={todayCompletion ? onOpenCompletion : onStartLesson}
+          >
+            {todayCompletion ? 'Открыть итог дня' : 'Начать ежедневный урок'}
           </button>
           <button type="button" className="secondary-button" onClick={onOpenDictionary}>
             Словарь
@@ -66,9 +79,13 @@ export function HomeDashboard({
         <article className="info-card accent-card">
           <span className="info-label">Сегодняшний урок</span>
           <strong className="info-value">
-            {today ? `${today.completedLessons} урок(а)` : '0 уроков'}
+            {todayCompletion ? 'Завершен' : today ? `${today.completedLessons} урок(а)` : 'Не начат'}
           </strong>
-          <p className="info-subtle">Выучено сегодня: {learnedToday}</p>
+          <p className="info-subtle">
+            {todayCompletion
+              ? `Пройдено модулей: ${todayCompletion.completedModules}`
+              : `Выучено сегодня: ${learnedToday}`}
+          </p>
         </article>
 
         <article className="info-card">
@@ -99,23 +116,23 @@ export function HomeDashboard({
           <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
         </div>
         <p className="info-subtle">
-          Учится: {countWordsByStatus(progressList, 'learning') + countWordsByStatus(progressList, 'review')} ·
-          Новых в очереди: {Math.max(words.length - progressList.length, 0)}
+          Учится: {activeWords} · Уже известные: {countWordsByStatus(progressList, 'known')} · Новых в очереди:{' '}
+          {words.filter((word) => !(word.id in storage.progressByWordId)).length}
         </p>
       </section>
 
       <section className="quick-grid" aria-label="Быстрая навигация">
         <article className="quick-card">
           <strong>Модульный урок</strong>
-          <span>Новые слова, тренировка, повторение и закрепление в одном проходе.</span>
+          <span>Новые слова, тренировка, повторение и закрепление с понятным прогрессом.</span>
         </article>
         <article className="quick-card">
           <strong>Личный словарь</strong>
-          <span>Поиск по 1000 французских слов, статусы и быстрый аудио-повтор.</span>
+          <span>Поиск, фильтры по статусам и быстрый аудио-повтор по карточкам.</span>
         </article>
         <article className="quick-card">
           <strong>Умное повторение</strong>
-          <span>Ошибки возвращают слово в изучение, правильные ответы растят интервал.</span>
+          <span>Сложные слова выделяются отдельно, а знакомые можно сразу убрать из новых.</span>
         </article>
         <article className="quick-card">
           <strong>Недельная статистика</strong>
