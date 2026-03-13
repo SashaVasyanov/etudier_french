@@ -1,10 +1,11 @@
-import type { AppStorage, ExerciseOutcome, WordProgress, WordStatus } from '../types';
+import type { AppStorage, DailyLessonRecord, ExerciseOutcome, WordProgress, WordStatus } from '../types';
 import { addDays, clamp, getTodayDateKey, isReviewDue, startOfDay } from './utils';
 
 const STORAGE_KEY = 'anki-plus-storage';
 const DEFAULT_STORAGE: AppStorage = {
   progressByWordId: {},
   dailyStats: [],
+  completedDailyLessons: [],
   streakDays: 0,
   lastLessonDate: null,
 };
@@ -56,6 +57,9 @@ export function loadStorage(): AppStorage {
         wordsLearned: item.wordsLearned ?? 0,
         reviewsCompleted: item.reviewsCompleted ?? 0,
       })),
+      completedDailyLessons: (parsed.completedDailyLessons ?? [])
+        .filter((item): item is DailyLessonRecord => Boolean(item?.date && item?.completedAt && item?.sessionId))
+        .slice(-90),
     };
   } catch {
     return DEFAULT_STORAGE;
@@ -67,8 +71,16 @@ export function saveStorage(storage: AppStorage): void {
 }
 
 function resolveStatus(progress: WordProgress): WordStatus {
+  if (progress.status === 'known') {
+    return 'known';
+  }
+
   if (progress.correct_count >= 8 && progress.repetition_step >= 6) {
     return 'mastered';
+  }
+
+  if (progress.wrong_count >= 3 && progress.repetition_step < 4) {
+    return 'difficult';
   }
 
   if (progress.repetition_step >= 3 || (progress.status === 'mastered' && !isReviewDue(progress.next_review_at))) {
@@ -122,7 +134,7 @@ function buildUpdatedProgress(existing: WordProgress, outcome: ExerciseOutcome):
   };
 
   if (!outcome.isCorrect) {
-    draft.status = 'learning';
+    draft.status = draft.wrong_count >= 3 ? 'difficult' : 'learning';
   } else {
     draft.status = resolveStatus(draft);
 
@@ -211,6 +223,7 @@ export function applyOutcomes(
     ...currentStorage,
     progressByWordId: { ...currentStorage.progressByWordId },
     dailyStats: [...currentStorage.dailyStats],
+    completedDailyLessons: [...currentStorage.completedDailyLessons],
   };
 
   outcomes.forEach((outcome) => {
@@ -224,6 +237,45 @@ export function applyOutcomes(
   updateStreak(storage);
 
   return storage;
+}
+
+export function markWordAsKnown(currentStorage: AppStorage, wordId: string): AppStorage {
+  const now = new Date().toISOString();
+  const existing = currentStorage.progressByWordId[wordId] ?? createInitialProgress(wordId);
+
+  return {
+    ...currentStorage,
+    progressByWordId: {
+      ...currentStorage.progressByWordId,
+      [wordId]: {
+        ...existing,
+        status: 'known',
+        shown_count: Math.max(existing.shown_count, 1),
+        correct_count: Math.max(existing.correct_count, 1),
+        repetition_step: Math.max(existing.repetition_step, 1),
+        last_seen_at: now,
+        next_review_at: null,
+        learned_at: now,
+      },
+    },
+  };
+}
+
+export function getCompletedDailyLesson(storage: AppStorage, date = getTodayDateKey()): DailyLessonRecord | null {
+  return storage.completedDailyLessons.find((item) => item.date === date) ?? null;
+}
+
+export function completeDailyLesson(currentStorage: AppStorage, record: DailyLessonRecord): AppStorage {
+  const completedDailyLessons = currentStorage.completedDailyLessons
+    .filter((item) => item.date !== record.date)
+    .concat(record)
+    .sort((left, right) => left.date.localeCompare(right.date))
+    .slice(-90);
+
+  return {
+    ...currentStorage,
+    completedDailyLessons,
+  };
 }
 
 export function getWordProgress(

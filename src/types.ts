@@ -1,7 +1,8 @@
-export type WordStatus = 'new' | 'learning' | 'review' | 'mastered';
+export type WordStatus = 'new' | 'learning' | 'review' | 'known' | 'mastered' | 'difficult';
 export type WordLevel = 'A1' | 'A2' | 'B1';
 export type LessonMode = 'default' | 'mistakes';
-export type DictionaryTab = 'all' | 'learning' | 'mastered' | 'hard';
+export type DictionaryTab = 'all' | 'learning' | 'known' | 'mastered' | 'difficult';
+export type LessonModuleTheme = 'new' | 'practice' | 'review' | 'reinforcement' | 'mistakes';
 
 export type ExerciseType =
   | 'audio_to_translation_choice'
@@ -82,14 +83,34 @@ export interface DailyStats {
 export interface AppStorage {
   progressByWordId: Record<string, WordProgress>;
   dailyStats: DailyStats[];
+  completedDailyLessons: DailyLessonRecord[];
   streakDays: number;
   lastLessonDate: string | null;
+}
+
+export interface DailyLessonRecord {
+  date: string;
+  completedAt: string;
+  sessionId: string;
+  totalModules: number;
+  completedModules: number;
+  totalSteps: number;
+  completedSteps: number;
+  correctAnswers: number;
+  totalAnswers: number;
+  newWords: number;
+  reviewWords: number;
+  reinforcementWords: number;
+  knownWords: number;
+  difficultWordIds: string[];
 }
 
 export interface LessonModule {
   id: string;
   title: string;
   description: string;
+  theme: LessonModuleTheme;
+  position: number;
   kind: 'preview' | 'exercise';
   wordIds: string[];
   exerciseTypes: ExerciseType[];
@@ -102,6 +123,10 @@ export type LessonStep =
       moduleId: string;
       moduleTitle: string;
       moduleDescription: string;
+      moduleTheme: LessonModuleTheme;
+      modulePosition: number;
+      moduleCount: number;
+      allowMarkKnown: boolean;
       kind: 'preview';
       wordId: string;
       indexInModule: number;
@@ -112,6 +137,10 @@ export type LessonStep =
       moduleId: string;
       moduleTitle: string;
       moduleDescription: string;
+      moduleTheme: LessonModuleTheme;
+      modulePosition: number;
+      moduleCount: number;
+      allowMarkKnown: boolean;
       kind: 'exercise';
       exercise: Exercise;
       wordId: string;
@@ -123,6 +152,8 @@ export interface LessonSummary {
   newWords: number;
   learningWords: number;
   reviewWords: number;
+  knownWords: number;
+  difficultWords: number;
   masteredWords: number;
   totalWords: number;
   accuracy: number;

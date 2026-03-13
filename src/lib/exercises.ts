@@ -7,6 +7,7 @@ import type {
   LessonModule,
   LessonSession,
   LessonStep,
+  LessonSummary,
   Word,
   WordProgress,
 } from '../types';
@@ -124,9 +125,9 @@ function pickNewWords(words: Word[], storage: AppStorage): Word[] {
 }
 
 function pickLearningWords(words: Word[], storage: AppStorage): Word[] {
-  const learning = words.filter((word) => {
+  const activeLearning = words.filter((word) => {
     const progress = getWordProgress(storage, word.id);
-    return progress.status === 'learning';
+    return progress.status === 'learning' || progress.status === 'difficult';
   });
 
   const dueReview = words.filter((word) => {
@@ -134,10 +135,18 @@ function pickLearningWords(words: Word[], storage: AppStorage): Word[] {
     return progress.status === 'review' && isReviewDue(progress.next_review_at);
   });
 
-  return [...learning, ...dueReview]
+  return [...activeLearning, ...dueReview]
     .sort((left, right) => {
       const leftProgress = getWordProgress(storage, left.id);
       const rightProgress = getWordProgress(storage, right.id);
+      if (leftProgress.status === 'difficult' && rightProgress.status !== 'difficult') {
+        return -1;
+      }
+
+      if (leftProgress.status !== 'difficult' && rightProgress.status === 'difficult') {
+        return 1;
+      }
+
       return rightProgress.wrong_count - leftProgress.wrong_count;
     })
     .slice(0, LEARNING_WORDS_PER_LESSON);
@@ -148,11 +157,20 @@ function getPoolFromIds(words: Word[], wordIds: string[]): Word[] {
   return words.filter((word) => idSet.has(word.id));
 }
 
+function renumberModules(modules: LessonModule[]): LessonModule[] {
+  return modules.map((module, index) => ({
+    ...module,
+    position: index + 1,
+  }));
+}
+
 function createPreviewModule(words: Word[]): LessonModule {
   return {
     id: 'module-new-words',
-    title: 'Модуль 1',
-    description: 'Новые слова',
+    title: 'Новые слова',
+    description: 'Знакомство с новой французской лексикой на сегодня.',
+    theme: 'new',
+    position: 1,
     kind: 'preview',
     wordIds: words.map((word) => word.id),
     exerciseTypes: [],
@@ -178,6 +196,22 @@ function createExerciseModule(
       id,
       title,
       description,
+      theme:
+        id === 'module-training-new'
+          ? 'practice'
+          : id === 'module-review-learning'
+            ? 'review'
+            : id === 'module-reinforcement'
+              ? 'reinforcement'
+              : 'mistakes',
+      position:
+        id === 'module-training-new'
+          ? 2
+          : id === 'module-review-learning'
+            ? 3
+            : id === 'module-reinforcement'
+              ? 4
+              : 1,
       kind: 'exercise',
       wordIds: words.map((word) => word.id),
       exerciseTypes,
@@ -198,6 +232,10 @@ function buildSteps(modules: LessonModule[], moduleExercises: Record<string, Exe
           moduleId: module.id,
           moduleTitle: module.title,
           moduleDescription: module.description,
+          moduleTheme: module.theme,
+          modulePosition: module.position,
+          moduleCount: modules.length,
+          allowMarkKnown: module.id === 'module-new-words',
           kind: 'preview',
           wordId,
           indexInModule: index + 1,
@@ -214,6 +252,10 @@ function buildSteps(modules: LessonModule[], moduleExercises: Record<string, Exe
         moduleId: module.id,
         moduleTitle: module.title,
         moduleDescription: module.description,
+        moduleTheme: module.theme,
+        modulePosition: module.position,
+        moduleCount: modules.length,
+        allowMarkKnown: module.id === 'module-training-new',
         kind: 'exercise',
         exercise,
         wordId: exercise.wordId,
@@ -231,17 +273,21 @@ export function createLessonSession({
   words,
   storage,
   wordIds,
-}: CreateLessonSessionInput): LessonSession {
+}: CreateLessonSessionInput): LessonSession | null {
   if (mode === 'mistakes' && wordIds?.length) {
     const mistakeWords = getPoolFromIds(words, wordIds);
+    if (mistakeWords.length === 0) {
+      return null;
+    }
     const reviewModule = createExerciseModule(
       'module-mistakes',
-      'Повтор ошибок',
-      'Закрепление сложных слов',
+      'Сложные слова',
+      'Точечное повторение слов, где были ошибки.',
       mistakeWords,
       ['original_to_translation_choice', 'audio_to_original_input'],
     );
-    const steps = buildSteps([reviewModule.module], {
+    const modules = renumberModules([reviewModule.module]);
+    const steps = buildSteps(modules, {
       [reviewModule.module.id]: reviewModule.exercises,
     });
 
@@ -252,42 +298,50 @@ export function createLessonSession({
       exerciseIds: reviewModule.exercises.map((exercise) => exercise.id),
       exercises: reviewModule.exercises,
       sourceWordIds: mistakeWords.map((word) => word.id),
-      modules: [reviewModule.module],
+      modules,
       steps,
     };
   }
 
   const newWords = pickNewWords(words, storage);
   const learningWords = pickLearningWords(words, storage);
+  const reviewWords = learningWords.filter((word) => {
+    const progress = getWordProgress(storage, word.id);
+    return progress.status === 'review' || progress.status === 'difficult' || progress.status === 'learning';
+  });
   const reinforcementWords = shuffleArray(
     Array.from(new Map([...newWords, ...learningWords].map((word) => [word.id, word])).values()),
   ).slice(0, Math.max(newWords.length, learningWords.length, 6));
 
+  if (newWords.length === 0 && learningWords.length === 0 && reinforcementWords.length === 0) {
+    return null;
+  }
+
   const module1 = createPreviewModule(newWords);
   const module2 = createExerciseModule(
     'module-training-new',
-    'Модуль 2',
     'Тренировка новых слов',
+    'Быстрое закрепление слов, которые вы только что увидели.',
     newWords,
     ['audio_to_translation_choice', 'translation_to_original_choice'],
   );
   const module3 = createExerciseModule(
     'module-review-learning',
-    'Модуль 3',
-    'Повторение изучаемых слов',
-    learningWords.length > 0 ? learningWords : newWords,
+    'Повторение не до конца выученных слов',
+    'Возврат к словам, которые еще требуют внимания.',
+    reviewWords,
     ['original_to_translation_choice', 'audio_to_original_input'],
   );
   const module4 = createExerciseModule(
     'module-reinforcement',
-    'Модуль 4',
     'Закрепление',
+    'Финальный смешанный блок для фиксации результата дня.',
     reinforcementWords,
     ['audio_to_translation_choice', 'original_to_translation_choice'],
   );
 
-  const modules = [module1, module2.module, module3.module, module4.module].filter(
-    (module) => module.wordIds.length > 0,
+  const modules = renumberModules(
+    [module1, module2.module, module3.module, module4.module].filter((module) => module.wordIds.length > 0),
   );
   const exercises = [
     ...module2.exercises,
@@ -314,4 +368,20 @@ export function createLessonSession({
 
 export function countWordsByStatus(progressList: WordProgress[], status: WordProgress['status']): number {
   return progressList.filter((progress) => progress.status === status).length;
+}
+
+export function buildLessonSummary(progressList: WordProgress[]): LessonSummary {
+  return {
+    newWords: countWordsByStatus(progressList, 'new'),
+    learningWords:
+      countWordsByStatus(progressList, 'learning') +
+      countWordsByStatus(progressList, 'review') +
+      countWordsByStatus(progressList, 'difficult'),
+    reviewWords: countWordsByStatus(progressList, 'review'),
+    knownWords: countWordsByStatus(progressList, 'known'),
+    difficultWords: countWordsByStatus(progressList, 'difficult'),
+    masteredWords: countWordsByStatus(progressList, 'mastered'),
+    totalWords: progressList.length,
+    accuracy: 0,
+  };
 }
