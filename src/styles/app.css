@@ -117,7 +117,11 @@
 .pack-card-title-group,
 .lesson-card-inner,
 .lesson-card-header,
-.lesson-card-body {
+.lesson-card-body,
+.flashcard-body,
+.flashcard-controls,
+.flashcard-meta-grid,
+.launch-actions {
   display: grid;
   gap: var(--space-3);
   min-width: 0;
@@ -225,6 +229,21 @@
 .tab-button,
 .level-select {
   font-weight: 700;
+}
+
+.audio-button-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.audio-button-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--blue), var(--green));
+  flex: none;
 }
 
 .hero-button,
@@ -337,6 +356,16 @@
   display: grid;
   gap: var(--space-3);
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.launch-panel .app-card-shell,
+.launch-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.launch-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.92fr);
 }
 
 .stats-grid,
@@ -879,6 +908,10 @@
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
 }
 
+.flashcard-view .lesson-card-actions {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
 .lesson-focus-header,
 .lesson-focus-copy {
   justify-items: center;
@@ -891,6 +924,52 @@
 
 .lesson-audio-panel {
   justify-items: center;
+}
+
+.flashcard-controls {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.flashcard-panel {
+  min-height: 156px;
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid #dce7f6;
+  background: linear-gradient(180deg, rgba(248, 251, 255, 0.98), rgba(240, 246, 255, 0.96));
+}
+
+.flashcard-panel.revealed {
+  background: linear-gradient(180deg, rgba(237, 248, 255, 0.98), rgba(235, 255, 249, 0.96));
+}
+
+.flashcard-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.flashcard-meta-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.flashcard-meta-item {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid #d8e5f6;
+  background: rgba(255, 255, 255, 0.78);
+  text-align: center;
+}
+
+.flashcard-meta-item strong {
+  color: var(--ink-strong);
+  overflow-wrap: anywhere;
 }
 
 .choice-list {
@@ -1104,7 +1183,8 @@
   .progress-header,
   .home-feature-grid,
   .dashboard-feature-grid,
-  .dictionary-toolbar-wide {
+  .dictionary-toolbar-wide,
+  .launch-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1120,7 +1200,8 @@
   .pack-card-meta,
   .pack-card-actions,
   .lesson-card-actions,
-  .mistake-item-card {
+  .mistake-item-card,
+  .flashcard-meta-grid {
     grid-template-columns: 1fr;
   }
 

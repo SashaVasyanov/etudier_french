@@ -2,6 +2,7 @@ import { Suspense, lazy, startTransition, useEffect, useMemo, useState } from 'r
 import { AppNavigation } from './components/AppNavigation';
 import { AudioInputExercise } from './components/AudioInputExercise';
 import { DailyCompletionScreen } from './components/DailyCompletionScreen';
+import { FlashcardView } from './components/FlashcardView';
 import { HomeDashboard } from './components/HomeDashboard';
 import { LessonResult } from './components/LessonResult';
 import { LessonWordPreview } from './components/LessonWordPreview';
@@ -10,7 +11,7 @@ import { ProgressBar } from './components/ProgressBar';
 import { ProgressHeader } from './components/ProgressHeader';
 import { getStarterPacks, getWordById, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
-import { createLessonSession } from './lib/exercises';
+import { createFlashcardSession, createLessonSession } from './lib/exercises';
 import { derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
 import {
   addWordPack,
@@ -299,6 +300,39 @@ function App() {
     });
   }
 
+  function startFlashcards(mode: 'extra' | 'pack', options?: { title?: string; packId?: string }) {
+    if (words.length === 0) {
+      return;
+    }
+
+    const flashcardWords =
+      mode === 'pack' && options?.packId
+        ? words.filter((word) => word.packIds.includes(options.packId!))
+        : availableWords;
+    const nextSession = createFlashcardSession({
+      mode,
+      words: flashcardWords,
+      storage,
+      durationMinutes: storage.lessonDurationMinutes,
+      activePackIds:
+        mode === 'pack' && options?.packId ? Array.from(new Set([...enabledPackIds, options.packId])) : enabledPackIds,
+      title: options?.title,
+    });
+
+    if (!nextSession) {
+      return;
+    }
+
+    setSession(nextSession);
+    setOutcomes([]);
+    setKnownWordIds([]);
+    setStepIndex(0);
+    resetExerciseState();
+    startTransition(() => {
+      setScreen('lesson');
+    });
+  }
+
   function handleSubmit(answer: string) {
     if (!currentExercise || isSubmitted) {
       return;
@@ -514,6 +548,7 @@ function App() {
             }}
             onStartLesson={() => startLesson('default')}
             onStartExtraLesson={() => startLesson('extra', { title: 'Дополнительное обучение' })}
+            onStartFlashcards={() => startFlashcards('extra', { title: 'Карточки слов' })}
             onOpenCompletion={() => setScreen('completion')}
             onOpenDictionary={() => setScreen('dictionary')}
             onOpenProfile={() => setScreen('profile')}
@@ -563,7 +598,19 @@ function App() {
 
             <ProgressBar current={stepIndex + 1} total={session.steps.length} />
 
-            {currentStep.kind === 'preview' ? (
+            {currentStep.kind === 'preview' && session.presentation === 'flashcards' ? (
+              <FlashcardView
+                word={currentWord}
+                current={currentStep.indexInModule}
+                total={currentStep.totalInModule}
+                onReplayAudio={() => {
+                  void playWordAudio(currentWord);
+                }}
+                onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
+                onDefer={goToNextStep}
+                onNext={goToNextStep}
+              />
+            ) : currentStep.kind === 'preview' ? (
               <LessonWordPreview
                 word={currentWord}
                 current={currentStep.indexInModule}
@@ -715,6 +762,15 @@ function App() {
                 }
 
                 startLesson('pack', { packId, title: `Пак: ${pack.title}` });
+              }}
+              onStartPackFlashcards={(packId) => {
+                const pack = packs.find((item) => item.id === packId);
+
+                if (!pack) {
+                  return;
+                }
+
+                startFlashcards('pack', { packId, title: `Карточки: ${pack.title}` });
               }}
             />
           ) : null}

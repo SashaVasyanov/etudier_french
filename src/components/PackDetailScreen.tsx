@@ -17,6 +17,7 @@ interface PackDetailScreenProps {
   onBack: () => void;
   onAddPack: (packId: string) => void;
   onStartPackLesson: (packId: string) => void;
+  onStartPackFlashcards: (packId: string) => void;
 }
 
 type PackStatusFilter = 'all' | 'new' | 'learning' | 'known' | 'mastered' | 'difficult';
@@ -38,6 +39,7 @@ export function PackDetailScreen({
   onBack,
   onAddPack,
   onStartPackLesson,
+  onStartPackFlashcards,
 }: PackDetailScreenProps) {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<PackStatusFilter>('all');
@@ -105,6 +107,9 @@ export function PackDetailScreen({
           </button>
           <button type="button" className="primary-button" onClick={() => onStartPackLesson(pack.id)}>
             Учить этот пак
+          </button>
+          <button type="button" className="secondary-button" onClick={() => onStartPackFlashcards(pack.id)}>
+            Карточки пака
           </button>
         </div>
       </AppCard>

@@ -1,7 +1,5 @@
 import type { Word } from '../types';
-import { CenteredWordBlock } from './CenteredWordBlock';
-import { LessonCard } from './LessonCard';
-import { WordImage } from './WordImage';
+import { FlashcardView } from './FlashcardView';
 
 interface LessonWordPreviewProps {
   word: Word;
@@ -21,51 +19,14 @@ export function LessonWordPreview({
   onNext,
 }: LessonWordPreviewProps) {
   return (
-    <LessonCard
-      className="preview-card"
-      header={
-        <header className="exercise-header lesson-focus-header">
-          <span className="eyebrow">Новые слова</span>
-          <CenteredWordBlock
-            title={word.original}
-            subtitle={word.translation}
-            meta={`${word.transcription} · ${word.part_of_speech} · ${word.level}`}
-            titleClassName="exercise-title lesson-word-title"
-            subtitleClassName="lesson-translation"
-          />
-        </header>
-      }
-      visual={<WordImage word={word} size="large" className="lesson-word-image" />}
-      body={
-        <>
-          <div className="example-card">
-            <p className="example-original">{word.example_original}</p>
-            <p className="example-translation">{word.example_translation}</p>
-          </div>
-
-          <div className="preview-meta">
-            <span>
-              {current} / {total}
-            </span>
-            <span>{word.tags.join(' · ')}</span>
-          </div>
-        </>
-      }
-      actions={
-        <>
-          <button type="button" className="ghost-button" onClick={onReplayAudio}>
-            Прослушать
-          </button>
-          {onMarkKnown ? (
-            <button type="button" className="secondary-button" onClick={onMarkKnown}>
-              Уже знаю
-            </button>
-          ) : null}
-          <button type="button" className="primary-button" onClick={onNext}>
-            Далее
-          </button>
-        </>
-      }
+    <FlashcardView
+      word={word}
+      current={current}
+      total={total}
+      onReplayAudio={onReplayAudio}
+      onMarkKnown={onMarkKnown}
+      onDefer={onNext}
+      onNext={onNext}
     />
   );
 }

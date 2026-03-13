@@ -74,6 +74,7 @@ export interface LessonSession {
   id: string;
   title: string;
   mode: LessonMode;
+  presentation: 'standard' | 'flashcards';
   durationMinutes: LessonDurationMinutes;
   startedAt: string;
   exerciseIds: string[];

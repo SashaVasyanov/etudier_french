@@ -54,6 +54,15 @@ interface CreateLessonSessionInput {
   title?: string;
 }
 
+interface CreateFlashcardSessionInput {
+  mode: 'extra' | 'pack';
+  words: Word[];
+  storage: AppStorage;
+  durationMinutes: LessonDurationMinutes;
+  activePackIds?: string[];
+  title?: string;
+}
+
 function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'original'): ExerciseOption[] {
   const correctLabel = mode === 'translation' ? word.translation : word.original;
   const pool = words.filter((candidate) => candidate.id !== word.id);
@@ -235,6 +244,7 @@ function createMistakesSession(
     id: `mistakes-${Date.now()}`,
     title: 'Повтор ошибок',
     mode: 'mistakes',
+    presentation: 'standard',
     durationMinutes,
     startedAt: new Date().toISOString(),
     exerciseIds: reviewModule.exercises.map((exercise) => exercise.id),
@@ -305,6 +315,7 @@ function createDailySession(
     id: `default-${Date.now()}`,
     title: 'Сегодняшний урок',
     mode: 'default',
+    presentation: 'standard',
     durationMinutes,
     startedAt: new Date().toISOString(),
     exerciseIds: exercises.map((exercise) => exercise.id),
@@ -377,11 +388,67 @@ function createExtraSession(
     id: `${mode}-${Date.now()}`,
     title: title ?? (mode === 'pack' ? 'Практика пака' : 'Дополнительное обучение'),
     mode,
+    presentation: 'standard',
     durationMinutes,
     startedAt: new Date().toISOString(),
     exerciseIds: exercises.map((exercise) => exercise.id),
     exercises,
     sourceWordIds: uniqueWords([...focusWords, ...newWords, ...mixedWords]).map((word) => word.id),
+    modules,
+    steps,
+    activePackIds,
+  };
+}
+
+export function createFlashcardSession({
+  mode,
+  words,
+  storage,
+  durationMinutes,
+  activePackIds = [],
+  title,
+}: CreateFlashcardSessionInput): LessonSession | null {
+  const limits = LESSON_LIMITS[durationMinutes];
+  const focusWords =
+    mode === 'pack'
+      ? words.slice(0, Math.max(limits.newWords + 2, 6))
+      : uniqueWords([...pickExtraFocusWords(words, storage, limits.activeWords), ...pickNewWords(words, storage, limits.newWords)]).slice(
+          0,
+          Math.max(limits.newWords + 2, 6),
+        );
+
+  if (focusWords.length === 0) {
+    return null;
+  }
+
+  const module = {
+    id: mode === 'pack' ? 'module-pack-flashcards' : 'module-extra-flashcards',
+    title: mode === 'pack' ? 'Карточки пака' : 'Карточки для повторения',
+    description:
+      mode === 'pack'
+        ? 'Изучайте слова выбранного пака в формате карточек с картинкой, аудио и примерами.'
+        : 'Карточки для спокойного повторения новых, сложных и активных слов.',
+    theme: 'new' as const,
+    position: 1,
+    kind: 'preview' as const,
+    wordIds: focusWords.map((word) => word.id),
+    exerciseTypes: [],
+    stepIds: focusWords.map((word) => `flashcard-${word.id}`),
+  };
+
+  const modules = renumberModules([module]);
+  const steps = buildSteps(modules, {});
+
+  return {
+    id: `${mode}-flashcards-${Date.now()}`,
+    title: title ?? (mode === 'pack' ? 'Карточки пака' : 'Карточки слов'),
+    mode,
+    presentation: 'flashcards',
+    durationMinutes,
+    startedAt: new Date().toISOString(),
+    exerciseIds: [],
+    exercises: [],
+    sourceWordIds: focusWords.map((word) => word.id),
     modules,
     steps,
     activePackIds,

@@ -15,6 +15,7 @@ interface HomeDashboardProps {
   onLessonDurationChange: (value: LessonDurationMinutes) => void;
   onStartLesson: () => void;
   onStartExtraLesson: () => void;
+  onStartFlashcards: () => void;
   onOpenCompletion: () => void;
   onOpenDictionary: () => void;
   onOpenProfile: () => void;
@@ -55,6 +56,7 @@ export function HomeDashboard({
   onLessonDurationChange,
   onStartLesson,
   onStartExtraLesson,
+  onStartFlashcards,
   onOpenCompletion,
   onOpenDictionary,
   onOpenProfile,
@@ -102,6 +104,9 @@ export function HomeDashboard({
           <button type="button" className="secondary-button" onClick={onStartExtraLesson}>
             Дополнительное обучение
           </button>
+          <button type="button" className="ghost-button" onClick={onStartFlashcards}>
+            Карточки слов
+          </button>
           <div className="cta-grid">
             <button type="button" className="ghost-button" onClick={onOpenDictionary}>
               Словарь
@@ -124,6 +129,30 @@ export function HomeDashboard({
       </section>
 
       <LessonDurationSelector value={lessonDurationMinutes} onChange={onLessonDurationChange} />
+
+      <AppCard as="section" tone="soft" className="launch-panel">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">Старт урока</span>
+            <h2 className="section-title">Размер занятия выбираете вы</h2>
+          </div>
+          <span className="inline-note">Текущий выбор: {lessonDurationMinutes} минут</span>
+        </div>
+        <div className="launch-grid">
+          <div className="feature-list">
+            <span>{lessonDurationMinutes === 10 ? 'Короткий урок: меньше слов и быстрый темп' : lessonDurationMinutes === 20 ? 'Сбалансированный урок: оптимум для ежедневной практики' : 'Расширенный урок: больше слов и закрепления'}</span>
+            <span>Выбор применяется до нажатия «Стартовать урок» и сохраняется локально</span>
+          </div>
+          <div className="launch-actions">
+            <button type="button" className="primary-button full-width" onClick={todayCompletion ? onOpenCompletion : onStartLesson}>
+              {todayCompletion ? 'Открыть итог дня' : `Стартовать урок на ${lessonDurationMinutes} минут`}
+            </button>
+            <button type="button" className="secondary-button full-width" onClick={onStartFlashcards}>
+              Открыть карточки на {lessonDurationMinutes} минут
+            </button>
+          </div>
+        </div>
+      </AppCard>
 
       <section className="home-feature-grid">
         <AppCard as="article" className="route-card route-card-primary">
