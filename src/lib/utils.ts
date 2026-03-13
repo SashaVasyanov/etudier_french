@@ -67,3 +67,37 @@ export function formatShortDateLabel(dateKey: string): string {
     month: 'short',
   }).format(date);
 }
+
+export function formatLongDateLabel(dateKey: string): string {
+  const date = new Date(`${dateKey}T00:00:00`);
+
+  return new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
+}
+
+export function formatDateTimeLabel(dateIso: string): string {
+  return new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(dateIso));
+}
+
+export function formatDurationLabel(totalSeconds: number): string {
+  if (totalSeconds <= 0) {
+    return '0 мин';
+  }
+
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.max(1, Math.round((totalSeconds % 3600) / 60));
+
+  if (hours === 0) {
+    return `${minutes} мин`;
+  }
+
+  return `${hours} ч ${minutes} мин`;
+}

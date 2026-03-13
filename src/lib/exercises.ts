@@ -22,6 +22,7 @@ interface CreateLessonSessionInput {
   words: Word[];
   storage: AppStorage;
   wordIds?: string[];
+  activePackIds?: string[];
 }
 
 function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'original'): ExerciseOption[] {
@@ -273,6 +274,7 @@ export function createLessonSession({
   words,
   storage,
   wordIds,
+  activePackIds = [],
 }: CreateLessonSessionInput): LessonSession | null {
   if (mode === 'mistakes' && wordIds?.length) {
     const mistakeWords = getPoolFromIds(words, wordIds);
@@ -295,11 +297,13 @@ export function createLessonSession({
       id: `${mode}-${Date.now()}`,
       title: 'Повтор ошибок',
       mode,
+      startedAt: new Date().toISOString(),
       exerciseIds: reviewModule.exercises.map((exercise) => exercise.id),
       exercises: reviewModule.exercises,
       sourceWordIds: mistakeWords.map((word) => word.id),
       modules,
       steps,
+      activePackIds,
     };
   }
 
@@ -358,11 +362,13 @@ export function createLessonSession({
     id: `${mode}-${Date.now()}`,
     title: 'Сегодняшний урок',
     mode,
+    startedAt: new Date().toISOString(),
     exerciseIds: exercises.map((exercise) => exercise.id),
     exercises,
     sourceWordIds: Array.from(new Set([...newWords, ...learningWords, ...reinforcementWords].map((word) => word.id))),
     modules,
     steps,
+    activePackIds,
   };
 }
 

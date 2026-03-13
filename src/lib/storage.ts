@@ -1,14 +1,41 @@
-import type { AppStorage, DailyLessonRecord, ExerciseOutcome, WordProgress, WordStatus } from '../types';
+import type {
+  AppStorage,
+  DailyLessonCompletionPayload,
+  DailyLessonRecord,
+  ExerciseOutcome,
+  StudyHistoryEntry,
+  UserPackState,
+  UserProfile,
+  WordProgress,
+  WordStatus,
+} from '../types';
 import { addDays, clamp, getTodayDateKey, isReviewDue, startOfDay } from './utils';
 
 const STORAGE_KEY = 'anki-plus-storage';
-const DEFAULT_STORAGE: AppStorage = {
-  progressByWordId: {},
-  dailyStats: [],
-  completedDailyLessons: [],
-  streakDays: 0,
-  lastLessonDate: null,
-};
+
+function createDefaultProfile(): UserProfile {
+  const now = new Date().toISOString();
+
+  return {
+    displayName: 'Ученик',
+    createdAt: now,
+    updatedAt: now,
+    lastStudiedAt: null,
+  };
+}
+
+function createDefaultStorage(): AppStorage {
+  return {
+    progressByWordId: {},
+    dailyStats: [],
+    completedDailyLessons: [],
+    streakDays: 0,
+    lastLessonDate: null,
+    profile: createDefaultProfile(),
+    studyHistory: [],
+    packStates: {},
+  };
+}
 
 function createInitialProgress(wordId: string): WordProgress {
   return {
@@ -33,18 +60,60 @@ function normalizeProgress(progress: WordProgress): WordProgress {
   };
 }
 
+function normalizeProfile(profile?: Partial<UserProfile>): UserProfile {
+  const fallback = createDefaultProfile();
+
+  return {
+    ...fallback,
+    ...profile,
+    displayName: profile?.displayName?.trim() || fallback.displayName,
+  };
+}
+
+function normalizeHistoryEntry(entry: Partial<StudyHistoryEntry>): StudyHistoryEntry | null {
+  if (!entry.id || !entry.date || !entry.completedAt || !entry.sessionId || !entry.mode) {
+    return null;
+  }
+
+  return {
+    id: entry.id,
+    date: entry.date,
+    completedAt: entry.completedAt,
+    sessionId: entry.sessionId,
+    mode: entry.mode,
+    moduleTitles: entry.moduleTitles ?? [],
+    modulesCompleted: entry.modulesCompleted ?? 0,
+    wordsLearned: entry.wordsLearned ?? 0,
+    mistakesMade: entry.mistakesMade ?? 0,
+    correctAnswers: entry.correctAnswers ?? 0,
+    totalAnswers: entry.totalAnswers ?? 0,
+    timeSpentSeconds: entry.timeSpentSeconds ?? 0,
+    activePackIds: entry.activePackIds ?? [],
+  };
+}
+
+function normalizePackState(packState: Partial<UserPackState> | undefined, packId: string): UserPackState {
+  return {
+    packId,
+    status: packState?.status ?? 'not_added',
+    addedAt: packState?.addedAt ?? null,
+    completedAt: packState?.completedAt ?? null,
+  };
+}
+
 export function loadStorage(): AppStorage {
   const raw = window.localStorage.getItem(STORAGE_KEY);
 
   if (!raw) {
-    return DEFAULT_STORAGE;
+    return createDefaultStorage();
   }
 
   try {
     const parsed = JSON.parse(raw) as Partial<AppStorage>;
+    const defaults = createDefaultStorage();
 
     return {
-      ...DEFAULT_STORAGE,
+      ...defaults,
       ...parsed,
       progressByWordId: Object.fromEntries(
         Object.entries(parsed.progressByWordId ?? {}).map(([wordId, progress]) => [
@@ -59,10 +128,25 @@ export function loadStorage(): AppStorage {
       })),
       completedDailyLessons: (parsed.completedDailyLessons ?? [])
         .filter((item): item is DailyLessonRecord => Boolean(item?.date && item?.completedAt && item?.sessionId))
-        .slice(-90),
+        .map((item) => ({
+          ...item,
+          timeSpentSeconds: item.timeSpentSeconds ?? 0,
+        }))
+        .slice(-180),
+      profile: normalizeProfile(parsed.profile),
+      studyHistory: (parsed.studyHistory ?? [])
+        .map((entry) => normalizeHistoryEntry(entry))
+        .filter((entry): entry is StudyHistoryEntry => entry !== null)
+        .slice(-180),
+      packStates: Object.fromEntries(
+        Object.entries(parsed.packStates ?? {}).map(([packId, packState]) => [
+          packId,
+          normalizePackState(packState, packId),
+        ]),
+      ),
     };
   } catch {
-    return DEFAULT_STORAGE;
+    return createDefaultStorage();
   }
 }
 
@@ -116,6 +200,7 @@ function buildUpdatedProgress(existing: WordProgress, outcome: ExerciseOutcome):
   const easeFactor = outcome.isCorrect
     ? clamp(existing.ease_factor + 0.15, 1.3, 3.4)
     : clamp(existing.ease_factor - 0.2, 1.3, 3.4);
+  const intervalDays = nextIntervalDays(existing, outcome.isCorrect);
   const repetitionStep = outcome.isCorrect
     ? existing.repetition_step + 1
     : Math.max(1, existing.repetition_step - 1);
@@ -126,9 +211,9 @@ function buildUpdatedProgress(existing: WordProgress, outcome: ExerciseOutcome):
     wrong_count: existing.wrong_count + (outcome.isCorrect ? 0 : 1),
     ease_factor: easeFactor,
     repetition_step: repetitionStep,
-    interval_days: nextIntervalDays(existing, outcome.isCorrect),
+    interval_days: intervalDays,
     last_seen_at: now.toISOString(),
-    next_review_at: addDays(startOfDay(now), outcome.isCorrect ? nextIntervalDays(existing, outcome.isCorrect) : 1).toISOString(),
+    next_review_at: addDays(startOfDay(now), outcome.isCorrect ? intervalDays : 1).toISOString(),
     learned_at: existing.learned_at,
     status: existing.status,
   };
@@ -189,7 +274,7 @@ function updateDailyStats(storage: AppStorage, outcomes: ExerciseOutcome[]): voi
 
   storage.dailyStats = storage.dailyStats
     .sort((left, right) => left.date.localeCompare(right.date))
-    .slice(-90);
+    .slice(-180);
 }
 
 function updateStreak(storage: AppStorage): void {
@@ -215,21 +300,19 @@ function updateStreak(storage: AppStorage): void {
   storage.streakDays = differenceInDays === 1 ? storage.streakDays + 1 : 1;
 }
 
-export function applyOutcomes(
-  currentStorage: AppStorage,
-  outcomes: ExerciseOutcome[],
-): AppStorage {
+export function applyOutcomes(currentStorage: AppStorage, outcomes: ExerciseOutcome[]): AppStorage {
   const storage: AppStorage = {
     ...currentStorage,
     progressByWordId: { ...currentStorage.progressByWordId },
     dailyStats: [...currentStorage.dailyStats],
     completedDailyLessons: [...currentStorage.completedDailyLessons],
+    studyHistory: [...currentStorage.studyHistory],
+    packStates: { ...currentStorage.packStates },
+    profile: { ...currentStorage.profile },
   };
 
   outcomes.forEach((outcome) => {
-    const existing =
-      storage.progressByWordId[outcome.wordId] ?? createInitialProgress(outcome.wordId);
-
+    const existing = storage.progressByWordId[outcome.wordId] ?? createInitialProgress(outcome.wordId);
     storage.progressByWordId[outcome.wordId] = buildUpdatedProgress(existing, outcome);
   });
 
@@ -265,22 +348,84 @@ export function getCompletedDailyLesson(storage: AppStorage, date = getTodayDate
   return storage.completedDailyLessons.find((item) => item.date === date) ?? null;
 }
 
-export function completeDailyLesson(currentStorage: AppStorage, record: DailyLessonRecord): AppStorage {
+export function completeDailyLesson(
+  currentStorage: AppStorage,
+  payload: DailyLessonCompletionPayload,
+): AppStorage {
   const completedDailyLessons = currentStorage.completedDailyLessons
-    .filter((item) => item.date !== record.date)
-    .concat(record)
+    .filter((item) => item.date !== payload.record.date)
+    .concat(payload.record)
     .sort((left, right) => left.date.localeCompare(right.date))
-    .slice(-90);
+    .slice(-180);
+  const studyHistory = currentStorage.studyHistory
+    .filter((item) => item.id !== payload.historyEntry.id)
+    .concat(payload.historyEntry)
+    .sort((left, right) => left.completedAt.localeCompare(right.completedAt))
+    .slice(-180);
 
   return {
     ...currentStorage,
     completedDailyLessons,
+    studyHistory,
+    profile: {
+      ...currentStorage.profile,
+      lastStudiedAt: payload.historyEntry.completedAt,
+      updatedAt: payload.historyEntry.completedAt,
+    },
   };
 }
 
-export function getWordProgress(
-  storage: AppStorage,
-  wordId: string,
-): WordProgress {
+export function updateProfileName(currentStorage: AppStorage, displayName: string): AppStorage {
+  const normalizedName = displayName.trim() || 'Ученик';
+
+  return {
+    ...currentStorage,
+    profile: {
+      ...currentStorage.profile,
+      displayName: normalizedName,
+      updatedAt: new Date().toISOString(),
+    },
+  };
+}
+
+export function addWordPack(currentStorage: AppStorage, packId: string): AppStorage {
+  const now = new Date().toISOString();
+
+  return {
+    ...currentStorage,
+    packStates: {
+      ...currentStorage.packStates,
+      [packId]: {
+        packId,
+        status: 'added',
+        addedAt: currentStorage.packStates[packId]?.addedAt ?? now,
+        completedAt: currentStorage.packStates[packId]?.completedAt ?? null,
+      },
+    },
+  };
+}
+
+export function setWordPackStatus(
+  currentStorage: AppStorage,
+  packId: string,
+  status: UserPackState['status'],
+): AppStorage {
+  const existing = normalizePackState(currentStorage.packStates[packId], packId);
+  const completedAt = status === 'completed' ? existing.completedAt ?? new Date().toISOString() : null;
+
+  return {
+    ...currentStorage,
+    packStates: {
+      ...currentStorage.packStates,
+      [packId]: {
+        ...existing,
+        status,
+        completedAt,
+      },
+    },
+  };
+}
+
+export function getWordProgress(storage: AppStorage, wordId: string): WordProgress {
   return storage.progressByWordId[wordId] ?? createInitialProgress(wordId);
 }

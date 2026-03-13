@@ -3,6 +3,8 @@ export type WordLevel = 'A1' | 'A2' | 'B1';
 export type LessonMode = 'default' | 'mistakes';
 export type DictionaryTab = 'all' | 'learning' | 'known' | 'mastered' | 'difficult';
 export type LessonModuleTheme = 'new' | 'practice' | 'review' | 'reinforcement' | 'mistakes';
+export type PackStatus = 'not_added' | 'added' | 'in_progress' | 'completed';
+export type WordSource = 'core' | 'pack';
 
 export type ExerciseType =
   | 'audio_to_translation_choice'
@@ -21,6 +23,8 @@ export interface Word {
   part_of_speech: string;
   level: WordLevel;
   tags: string[];
+  packIds: string[];
+  source: WordSource;
 }
 
 export interface WordProgress {
@@ -64,11 +68,13 @@ export interface LessonSession {
   id: string;
   title: string;
   mode: LessonMode;
+  startedAt: string;
   exerciseIds: string[];
   exercises: Exercise[];
   sourceWordIds: string[];
   modules: LessonModule[];
   steps: LessonStep[];
+  activePackIds: string[];
 }
 
 export interface DailyStats {
@@ -78,14 +84,6 @@ export interface DailyStats {
   totalAnswers: number;
   wordsLearned: number;
   reviewsCompleted: number;
-}
-
-export interface AppStorage {
-  progressByWordId: Record<string, WordProgress>;
-  dailyStats: DailyStats[];
-  completedDailyLessons: DailyLessonRecord[];
-  streakDays: number;
-  lastLessonDate: string | null;
 }
 
 export interface DailyLessonRecord {
@@ -103,6 +101,53 @@ export interface DailyLessonRecord {
   reinforcementWords: number;
   knownWords: number;
   difficultWordIds: string[];
+  timeSpentSeconds: number;
+}
+
+export interface StudyHistoryEntry {
+  id: string;
+  date: string;
+  completedAt: string;
+  sessionId: string;
+  mode: LessonMode;
+  moduleTitles: string[];
+  modulesCompleted: number;
+  wordsLearned: number;
+  mistakesMade: number;
+  correctAnswers: number;
+  totalAnswers: number;
+  timeSpentSeconds: number;
+  activePackIds: string[];
+}
+
+export interface UserProfile {
+  displayName: string;
+  createdAt: string;
+  updatedAt: string;
+  lastStudiedAt: string | null;
+}
+
+export interface UserPackState {
+  packId: string;
+  status: PackStatus;
+  addedAt: string | null;
+  completedAt: string | null;
+}
+
+export interface AppStorage {
+  progressByWordId: Record<string, WordProgress>;
+  dailyStats: DailyStats[];
+  completedDailyLessons: DailyLessonRecord[];
+  streakDays: number;
+  lastLessonDate: string | null;
+  profile: UserProfile;
+  studyHistory: StudyHistoryEntry[];
+  packStates: Record<string, UserPackState>;
+}
+
+export interface DailyLessonCompletionPayload {
+  record: DailyLessonRecord;
+  historyEntry: StudyHistoryEntry;
 }
 
 export interface LessonModule {
@@ -157,4 +202,12 @@ export interface LessonSummary {
   masteredWords: number;
   totalWords: number;
   accuracy: number;
+}
+
+export interface WordPack {
+  id: string;
+  title: string;
+  description: string;
+  accent: string;
+  words: Word[];
 }

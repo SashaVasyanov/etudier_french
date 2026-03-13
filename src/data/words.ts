@@ -1,4 +1,5 @@
-import type { Word, WordLevel } from '../types';
+import { getPackWords, STARTER_PACKS } from './wordPacks';
+import type { Word, WordLevel, WordPack } from '../types';
 
 const DATASET_URLS = ['/data/words_a1.json', '/data/words_a2.json', '/data/words_b1.json'] as const;
 const LEVEL_ORDER: Record<WordLevel, number> = {
@@ -14,6 +15,8 @@ function normalizeWord(word: Word): Word {
     ...word,
     audio_original: word.audio_original ?? '',
     tags: Array.isArray(word.tags) ? word.tags : [],
+    packIds: Array.isArray(word.packIds) ? word.packIds : [],
+    source: word.source ?? 'core',
   };
 }
 
@@ -27,12 +30,10 @@ export async function loadWords(): Promise<Word[]> {
           throw new Error(`Failed to load dataset: ${url}`);
         }
 
-        return (await response.json()) as Word[];
+        return (await response.json()) as Array<Omit<Word, 'packIds' | 'source'>>;
       }),
     ).then((parts) =>
-      parts
-        .flat()
-        .map(normalizeWord)
+      [...parts.flat().map((word) => normalizeWord({ ...word, packIds: [], source: 'core' } as Word)), ...getPackWords()]
         .sort((left, right) => {
           const levelDiff = LEVEL_ORDER[left.level] - LEVEL_ORDER[right.level];
 
@@ -56,4 +57,8 @@ export function getWordById(words: Word[], wordId: string): Word {
   }
 
   return word;
+}
+
+export function getStarterPacks(): WordPack[] {
+  return STARTER_PACKS;
 }
