@@ -26,6 +26,9 @@ export interface Word {
   tags: string[];
   packIds: string[];
   source: WordSource;
+  imageUrl?: string;
+  imageAlt?: string;
+  imagePackCategory?: string;
 }
 
 export interface WordProgress {
@@ -214,4 +217,6 @@ export interface WordPack {
   description: string;
   accent: string;
   words: Word[];
+  coverImageUrl?: string;
+  coverImageAlt?: string;
 }
