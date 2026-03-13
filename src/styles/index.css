@@ -4,9 +4,10 @@
   font-weight: 400;
   color: #152031;
   background:
-    radial-gradient(circle at top left, rgba(186, 230, 253, 0.75), transparent 32%),
-    radial-gradient(circle at top right, rgba(254, 240, 138, 0.72), transparent 22%),
-    linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+    radial-gradient(circle at top left, rgba(197, 225, 255, 0.88), transparent 32%),
+    radial-gradient(circle at top right, rgba(255, 236, 188, 0.8), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(202, 240, 228, 0.75), transparent 28%),
+    linear-gradient(180deg, #f6f9fe 0%, #edf3fc 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -25,9 +26,11 @@ body,
 
 body {
   margin: 0;
+  min-width: 320px;
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }

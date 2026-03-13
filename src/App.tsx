@@ -1,11 +1,5 @@
-import {
-  Suspense,
-  lazy,
-  startTransition,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { Suspense, lazy, startTransition, useEffect, useMemo, useState } from 'react';
+import { AppNavigation } from './components/AppNavigation';
 import { AudioInputExercise } from './components/AudioInputExercise';
 import { DailyCompletionScreen } from './components/DailyCompletionScreen';
 import { HomeDashboard } from './components/HomeDashboard';
@@ -13,25 +7,38 @@ import { LessonResult } from './components/LessonResult';
 import { LessonWordPreview } from './components/LessonWordPreview';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
 import { ProgressBar } from './components/ProgressBar';
-import { getWordById, loadWords } from './data/words';
+import { getStarterPacks, getWordById, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
 import { createLessonSession } from './lib/exercises';
+import { derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
 import {
+  addWordPack,
   applyOutcomes,
   completeDailyLesson,
   getCompletedDailyLesson,
   loadStorage,
   markWordAsKnown,
   saveStorage,
+  setWordPackStatus,
+  updateProfileName,
 } from './lib/storage';
 import { getTodayDateKey, normalizeAnswer } from './lib/utils';
-import type { AppStorage, DailyLessonRecord, ExerciseOutcome, LessonSession, Word } from './types';
+import type {
+  AppStorage,
+  DailyLessonCompletionPayload,
+  DailyLessonRecord,
+  ExerciseOutcome,
+  LessonSession,
+  StudyHistoryEntry,
+  Word,
+} from './types';
 import './styles/app.css';
 
 const DictionaryScreen = lazy(() => import('./components/DictionaryScreen'));
-const StatisticsScreen = lazy(() => import('./components/StatisticsScreen'));
+const PacksScreen = lazy(() => import('./components/PacksScreen'));
+const ProfileScreen = lazy(() => import('./components/ProfileScreen'));
 
-type Screen = 'home' | 'lesson' | 'result' | 'completion' | 'dictionary' | 'statistics';
+type Screen = 'home' | 'lesson' | 'result' | 'completion' | 'dictionary' | 'profile' | 'packs';
 
 function removeWordFromSession(session: LessonSession, wordId: string): LessonSession {
   const exercises = session.exercises.filter((exercise) => exercise.wordId !== wordId);
@@ -52,6 +59,46 @@ function removeWordFromSession(session: LessonSession, wordId: string): LessonSe
   };
 }
 
+function buildEmptyCompletionPayload(): DailyLessonCompletionPayload {
+  const date = getTodayDateKey();
+  const completedAt = new Date().toISOString();
+  const sessionId = `default-empty-${Date.now()}`;
+  const record: DailyLessonRecord = {
+    date,
+    completedAt,
+    sessionId,
+    totalModules: 0,
+    completedModules: 0,
+    totalSteps: 0,
+    completedSteps: 0,
+    correctAnswers: 0,
+    totalAnswers: 0,
+    newWords: 0,
+    reviewWords: 0,
+    reinforcementWords: 0,
+    knownWords: 0,
+    difficultWordIds: [],
+    timeSpentSeconds: 0,
+  };
+  const historyEntry: StudyHistoryEntry = {
+    id: `${sessionId}-history`,
+    date,
+    completedAt,
+    sessionId,
+    mode: 'default',
+    moduleTitles: [],
+    modulesCompleted: 0,
+    wordsLearned: 0,
+    mistakesMade: 0,
+    correctAnswers: 0,
+    totalAnswers: 0,
+    timeSpentSeconds: 0,
+    activePackIds: [],
+  };
+
+  return { record, historyEntry };
+}
+
 function App() {
   const [screen, setScreen] = useState<Screen>('home');
   const [storage, setStorage] = useState<AppStorage>(() => loadStorage());
@@ -65,6 +112,9 @@ function App() {
   const [knownWordIds, setKnownWordIds] = useState<string[]>([]);
   const [isLoadingWords, setIsLoadingWords] = useState(true);
 
+  const packs = useMemo(() => getStarterPacks(), []);
+  const enabledPackIds = useMemo(() => getEnabledPackIds(storage), [storage]);
+  const availableWords = useMemo(() => getActiveWords(words, enabledPackIds), [enabledPackIds, words]);
   const progressList = useMemo(() => Object.values(storage.progressByWordId), [storage]);
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
@@ -74,10 +124,7 @@ function App() {
     () => (session && currentStep ? session.modules.findIndex((module) => module.id === currentStep.moduleId) : -1),
     [currentStep, session],
   );
-  const visibleModules = useMemo(
-    () => session?.modules.filter((module) => module.wordIds.length > 0) ?? [],
-    [session],
-  );
+  const visibleModules = useMemo(() => session?.modules.filter((module) => module.wordIds.length > 0) ?? [], [session]);
   const remainingModules = useMemo(() => {
     if (!session || currentModuleIndex < 0) {
       return 0;
@@ -111,6 +158,29 @@ function App() {
   useEffect(() => {
     saveStorage(storage);
   }, [storage]);
+
+  useEffect(() => {
+    if (words.length === 0) {
+      return;
+    }
+
+    setStorage((currentStorage) => {
+      let changed = false;
+      let nextStorage = currentStorage;
+
+      packs.forEach((pack) => {
+        const derivedStatus = derivePackStatus(pack, currentStorage);
+        const storedStatus = currentStorage.packStates[pack.id]?.status ?? 'not_added';
+
+        if (storedStatus !== derivedStatus) {
+          nextStorage = setWordPackStatus(nextStorage, pack.id, derivedStatus);
+          changed = true;
+        }
+      });
+
+      return changed ? nextStorage : currentStorage;
+    });
+  }, [packs, words.length]);
 
   useEffect(() => {
     if (!currentStep || !currentWord) {
@@ -159,31 +229,15 @@ function App() {
 
     const nextSession = createLessonSession({
       mode,
-      words,
+      words: mode === 'default' ? availableWords : words,
       storage,
       wordIds,
+      activePackIds: enabledPackIds,
     });
 
     if (!nextSession) {
       if (mode === 'default') {
-        const emptyRecord: DailyLessonRecord = {
-          date: getTodayDateKey(),
-          completedAt: new Date().toISOString(),
-          sessionId: `default-empty-${Date.now()}`,
-          totalModules: 0,
-          completedModules: 0,
-          totalSteps: 0,
-          completedSteps: 0,
-          correctAnswers: 0,
-          totalAnswers: 0,
-          newWords: 0,
-          reviewWords: 0,
-          reinforcementWords: 0,
-          knownWords: 0,
-          difficultWordIds: [],
-        };
-
-        setStorage((currentStorage) => completeDailyLesson(currentStorage, emptyRecord));
+        setStorage((currentStorage) => completeDailyLesson(currentStorage, buildEmptyCompletionPayload()));
         setScreen('completion');
       }
       return;
@@ -205,13 +259,9 @@ function App() {
     }
 
     const normalizedUserAnswer =
-      currentExercise.type === 'audio_to_original_input'
-        ? normalizeAnswer(answer)
-        : answer;
+      currentExercise.type === 'audio_to_original_input' ? normalizeAnswer(answer) : answer;
     const normalizedCorrectAnswer =
-      currentExercise.type === 'audio_to_original_input'
-        ? normalizeAnswer(currentExercise.correctAnswer)
-        : currentExercise.correctAnswer;
+      currentExercise.type === 'audio_to_original_input' ? normalizeAnswer(currentExercise.correctAnswer) : currentExercise.correctAnswer;
 
     const outcome: ExerciseOutcome = {
       exerciseId: currentExercise.id,
@@ -244,9 +294,18 @@ function App() {
           activeSession.sourceWordIds.filter((wordId) => nextStorage.progressByWordId[wordId]?.status === 'difficult'),
         ),
       );
-      const dailyRecord: DailyLessonRecord = {
+      const completedAt = new Date().toISOString();
+      const timeSpentSeconds = Math.max(
+        0,
+        Math.round((new Date(completedAt).getTime() - new Date(activeSession.startedAt).getTime()) / 1000),
+      );
+      const wordsLearned = activeSession.sourceWordIds.filter((wordId) => {
+        const status = nextStorage.progressByWordId[wordId]?.status;
+        return status === 'learning' || status === 'review' || status === 'known' || status === 'mastered';
+      }).length;
+      const record: DailyLessonRecord = {
         date: getTodayDateKey(),
-        completedAt: new Date().toISOString(),
+        completedAt,
         sessionId: activeSession.id,
         totalModules: activeSession.modules.filter((module) => module.wordIds.length > 0).length,
         completedModules: activeSession.modules.filter((module) => module.wordIds.length > 0).length,
@@ -256,13 +315,28 @@ function App() {
         totalAnswers: lessonOutcomes.length,
         newWords: activeSession.modules.find((module) => module.id === 'module-new-words')?.wordIds.length ?? 0,
         reviewWords: activeSession.modules.find((module) => module.id === 'module-review-learning')?.wordIds.length ?? 0,
-        reinforcementWords:
-          activeSession.modules.find((module) => module.id === 'module-reinforcement')?.wordIds.length ?? 0,
+        reinforcementWords: activeSession.modules.find((module) => module.id === 'module-reinforcement')?.wordIds.length ?? 0,
         knownWords: Array.from(new Set(manuallyKnownWordIds)).length,
         difficultWordIds,
+        timeSpentSeconds,
+      };
+      const historyEntry: StudyHistoryEntry = {
+        id: `${activeSession.id}-history`,
+        date: record.date,
+        completedAt,
+        sessionId: activeSession.id,
+        mode: activeSession.mode,
+        moduleTitles: activeSession.modules.map((module) => module.title),
+        modulesCompleted: record.completedModules,
+        wordsLearned,
+        mistakesMade: lessonOutcomes.filter((outcome) => !outcome.isCorrect).length,
+        correctAnswers: record.correctAnswers,
+        totalAnswers: record.totalAnswers,
+        timeSpentSeconds,
+        activePackIds: activeSession.activePackIds,
       };
 
-      return completeDailyLesson(nextStorage, dailyRecord);
+      return completeDailyLesson(nextStorage, { record, historyEntry });
     });
 
     setSession(null);
@@ -318,6 +392,27 @@ function App() {
     setStepIndex((current) => Math.min(current, nextSession.steps.length - 1));
   }
 
+  function handleNavigate(target: 'home' | 'lesson' | 'dictionary' | 'profile' | 'packs') {
+    if (target === 'lesson') {
+      if (session) {
+        setScreen('lesson');
+        return;
+      }
+
+      if (todayCompletion) {
+        setScreen('completion');
+        return;
+      }
+
+      startLesson('default');
+      return;
+    }
+
+    startTransition(() => {
+      setScreen(target);
+    });
+  }
+
   if (isLoadingWords) {
     return (
       <main className="app-shell">
@@ -325,43 +420,49 @@ function App() {
           <section className="hero-card">
             <span className="eyebrow">Загрузка</span>
             <h1 className="hero-title">Подготавливаем словарь</h1>
-            <p className="hero-text">Загружаем французские слова, интервальные статусы и экран урока.</p>
+            <p className="hero-text">Загружаем французские слова, активные паки и локальный прогресс.</p>
           </section>
         </div>
       </main>
     );
   }
 
+  const navScreen = screen === 'dictionary' || screen === 'profile' || screen === 'packs' || screen === 'lesson'
+    ? screen
+    : 'home';
+
   return (
     <main className="app-shell">
       <div className="app-frame">
+        <header className="topbar-card">
+          <div className="topbar-copy">
+            <span className="eyebrow">Приложение для изучения слов</span>
+            <strong className="topbar-title">Etudier French</strong>
+            <span className="info-subtle">
+              {storage.profile.displayName} · Активных слов: {availableWords.length} · Серия: {storage.streakDays}
+            </span>
+          </div>
+          <AppNavigation activeScreen={navScreen} lessonAvailable={words.length > 0} onNavigate={handleNavigate} />
+        </header>
+
         {screen === 'home' ? (
           <HomeDashboard
-            words={words}
+            availableWords={availableWords}
+            totalWords={words}
             storage={storage}
             progressList={progressList}
+            addedPacksCount={enabledPackIds.length}
             onStartLesson={() => startLesson('default')}
-            onOpenCompletion={() => {
-              startTransition(() => {
-                setScreen('completion');
-              });
-            }}
-            onOpenDictionary={() => {
-              startTransition(() => {
-                setScreen('dictionary');
-              });
-            }}
-            onOpenStatistics={() => {
-              startTransition(() => {
-                setScreen('statistics');
-              });
-            }}
+            onOpenCompletion={() => setScreen('completion')}
+            onOpenDictionary={() => setScreen('dictionary')}
+            onOpenProfile={() => setScreen('profile')}
+            onOpenPacks={() => setScreen('packs')}
           />
         ) : null}
 
         {screen === 'lesson' && currentStep && currentWord && session ? (
           <section className="lesson-shell">
-            <div className="module-header">
+            <div className="module-header lesson-header-card">
               <div className="module-header-top">
                 <span className={`module-chip ${currentStep.moduleTheme}`}>Модуль {currentStep.modulePosition}</span>
                 <span className="eyebrow">Осталось модулей: {remainingModules}</span>
@@ -381,18 +482,21 @@ function App() {
                   </span>
                   <span className="mini-stat-label">Модуль дня</span>
                 </div>
+                <div className="mini-stat">
+                  <span className="mini-stat-value">
+                    {stepIndex + 1}/{session.steps.length}
+                  </span>
+                  <span className="mini-stat-label">Общий прогресс дня</span>
+                </div>
               </div>
             </div>
 
             <div className="module-nav" aria-label="Модули урока">
               {visibleModules.map((module) => {
                 const moduleIndex = visibleModules.findIndex((item) => item.id === module.id);
+                const activeModuleIndex = visibleModules.findIndex((item) => item.id === currentStep.moduleId);
                 const state =
-                  module.id === currentStep.moduleId
-                    ? 'current'
-                    : moduleIndex < visibleModules.findIndex((item) => item.id === currentStep.moduleId)
-                      ? 'done'
-                      : 'upcoming';
+                  module.id === currentStep.moduleId ? 'current' : moduleIndex < activeModuleIndex ? 'done' : 'upcoming';
 
                 return (
                   <div key={module.id} className={`module-nav-item ${state}`}>
@@ -450,9 +554,7 @@ function App() {
             ) : null}
 
             {latestOutcome ? (
-              <section
-                className={latestOutcome.isCorrect ? 'feedback-card success' : 'feedback-card error'}
-              >
+              <section className={latestOutcome.isCorrect ? 'feedback-card success' : 'feedback-card error'}>
                 <h3>{latestOutcome.isCorrect ? 'Верно' : 'Есть ошибка'}</h3>
                 <p>
                   {latestOutcome.isCorrect
@@ -487,12 +589,7 @@ function App() {
                 </button>
               ) : null}
               {currentStep.kind === 'exercise' ? (
-                <button
-                  type="button"
-                  className="primary-button"
-                  disabled={!isSubmitted}
-                  onClick={goToNextStep}
-                >
+                <button type="button" className="primary-button" disabled={!isSubmitted} onClick={goToNextStep}>
                   Далее
                 </button>
               ) : null}
@@ -517,54 +614,41 @@ function App() {
         {screen === 'completion' ? (
           <DailyCompletionScreen
             completion={todayCompletion}
-            words={words}
-            onOpenDictionary={() => {
-              startTransition(() => {
-                setScreen('dictionary');
-              });
-            }}
+            words={availableWords}
+            onOpenDictionary={() => setScreen('dictionary')}
             onReviewDifficult={() => {
-              if (!todayCompletion || todayCompletion.difficultWordIds.length === 0) {
+              if (!todayCompletion?.difficultWordIds.length) {
                 return;
               }
 
               startLesson('mistakes', todayCompletion.difficultWordIds);
             }}
-            onBackHome={() => {
-              startTransition(() => {
-                setScreen('home');
-              });
-            }}
+            onBackHome={() => setScreen('home')}
           />
         ) : null}
 
-        {screen === 'dictionary' ? (
-          <Suspense fallback={<section className="hero-card">Загружаем словарь…</section>}>
-            <DictionaryScreen
-              words={words}
+        <Suspense fallback={<section className="hero-card">Открываем раздел…</section>}>
+          {screen === 'dictionary' ? <DictionaryScreen words={availableWords} storage={storage} packs={packs} /> : null}
+          {screen === 'packs' ? (
+            <PacksScreen
+              packs={packs}
               storage={storage}
-              onBack={() => {
-                startTransition(() => {
-                  setScreen('home');
-                });
+              onAddPack={(packId) => {
+                setStorage((currentStorage) => addWordPack(currentStorage, packId));
               }}
             />
-          </Suspense>
-        ) : null}
-
-        {screen === 'statistics' ? (
-          <Suspense fallback={<section className="hero-card">Загружаем статистику…</section>}>
-            <StatisticsScreen
+          ) : null}
+          {screen === 'profile' ? (
+            <ProfileScreen
+              profile={storage.profile}
               storage={storage}
               progressList={progressList}
-              onBack={() => {
-                startTransition(() => {
-                  setScreen('home');
-                });
+              onProfileNameChange={(value) => {
+                setStorage((currentStorage) => updateProfileName(currentStorage, value));
               }}
             />
-          </Suspense>
-        ) : null}
+          ) : null}
+        </Suspense>
       </div>
     </main>
   );

@@ -1,4 +1,4 @@
-import { percentage } from '../lib/utils';
+import { formatDurationLabel, percentage } from '../lib/utils';
 import type { DailyLessonRecord, Word } from '../types';
 
 interface DailyCompletionScreenProps {
@@ -49,6 +49,10 @@ export function DailyCompletionScreen({
         <div className="mini-stat">
           <span className="mini-stat-value">{difficultCount}</span>
           <span className="mini-stat-label">Сложных слов</span>
+        </div>
+        <div className="mini-stat">
+          <span className="mini-stat-value">{formatDurationLabel(completion?.timeSpentSeconds ?? 0)}</span>
+          <span className="mini-stat-label">Время</span>
         </div>
       </div>
 

@@ -3,13 +3,16 @@ import { getTodayDateKey, percentage } from '../lib/utils';
 import type { AppStorage, Word, WordProgress } from '../types';
 
 interface HomeDashboardProps {
-  words: Word[];
+  availableWords: Word[];
+  totalWords: Word[];
   storage: AppStorage;
   progressList: WordProgress[];
+  addedPacksCount: number;
   onStartLesson: () => void;
   onOpenCompletion: () => void;
   onOpenDictionary: () => void;
-  onOpenStatistics: () => void;
+  onOpenProfile: () => void;
+  onOpenPacks: () => void;
 }
 
 function getDueReviewCount(progressList: WordProgress[]): number {
@@ -25,13 +28,16 @@ function getDueReviewCount(progressList: WordProgress[]): number {
 }
 
 export function HomeDashboard({
-  words,
+  availableWords,
+  totalWords,
   storage,
   progressList,
+  addedPacksCount,
   onStartLesson,
   onOpenCompletion,
   onOpenDictionary,
-  onOpenStatistics,
+  onOpenProfile,
+  onOpenPacks,
 }: HomeDashboardProps) {
   const today = storage.dailyStats.find((item) => item.date === getTodayDateKey());
   const todayCompletion = storage.completedDailyLessons.find((item) => item.date === getTodayDateKey());
@@ -39,7 +45,7 @@ export function HomeDashboard({
   const masteredCount = countWordsByStatus(progressList, 'mastered');
   const reviewCount = getDueReviewCount(progressList);
   const learnedToday = today?.wordsLearned ?? 0;
-  const progressPercent = words.length > 0 ? Math.round((masteredCount / words.length) * 100) : 0;
+  const progressPercent = availableWords.length > 0 ? Math.round((masteredCount / availableWords.length) * 100) : 0;
   const activeWords =
     countWordsByStatus(progressList, 'learning') +
     countWordsByStatus(progressList, 'review') +
@@ -47,18 +53,18 @@ export function HomeDashboard({
 
   return (
     <section className="dashboard-shell">
-      <header className="hero-card">
+      <header className="hero-card home-hero">
         <div className="hero-copy">
-          <span className="eyebrow">Сегодняшний урок</span>
-          <h1 className="hero-title">{todayCompletion ? 'На сегодня заданий нет' : 'Французский на сегодня'}</h1>
+          <span className="eyebrow">Etudier French</span>
+          <h1 className="hero-title">Французский на сегодня</h1>
           <p className="hero-text">
             {todayCompletion
-              ? 'Ежедневный модульный урок завершен. Откройте словарь, статистику или повторите сложные слова.'
-              : 'Начните ежедневный урок, откройте словарь или посмотрите накопленный прогресс.'}
+              ? 'Дневной урок завершён. Откройте словарь, профиль или добавьте новый пак для следующего прогресса.'
+              : 'Начните модульный урок, продолжите активные слова и управляйте словарём через паки и профиль.'}
           </p>
         </div>
 
-        <div className="hero-actions">
+        <div className="hero-actions home-actions">
           <button
             type="button"
             className="primary-button hero-button"
@@ -67,10 +73,13 @@ export function HomeDashboard({
             {todayCompletion ? 'Открыть итог дня' : 'Начать ежедневный урок'}
           </button>
           <button type="button" className="secondary-button" onClick={onOpenDictionary}>
-            Словарь
+            Открыть словарь
           </button>
-          <button type="button" className="ghost-button" onClick={onOpenStatistics}>
-            Статистика
+          <button type="button" className="ghost-button" onClick={onOpenPacks}>
+            Открыть паки
+          </button>
+          <button type="button" className="ghost-button" onClick={onOpenProfile}>
+            Открыть профиль
           </button>
         </div>
       </header>
@@ -79,7 +88,7 @@ export function HomeDashboard({
         <article className="info-card accent-card">
           <span className="info-label">Сегодняшний урок</span>
           <strong className="info-value">
-            {todayCompletion ? 'Завершен' : today ? `${today.completedLessons} урок(а)` : 'Не начат'}
+            {todayCompletion ? 'Завершён' : today ? `${today.completedLessons} урок(а)` : 'Не начат'}
           </strong>
           <p className="info-subtle">
             {todayCompletion
@@ -89,15 +98,15 @@ export function HomeDashboard({
         </article>
 
         <article className="info-card">
-          <span className="info-label">Повторение</span>
-          <strong className="info-value">{reviewCount}</strong>
-          <p className="info-subtle">Слов готово к повторению прямо сейчас</p>
+          <span className="info-label">Активная база</span>
+          <strong className="info-value">{availableWords.length}</strong>
+          <p className="info-subtle">Слов доступно сейчас из {totalWords.length} в общей базе</p>
         </article>
 
         <article className="info-card">
-          <span className="info-label">Выученные слова</span>
-          <strong className="info-value">{masteredCount}</strong>
-          <p className="info-subtle">Из {words.length} слов в общей базе</p>
+          <span className="info-label">Повторение</span>
+          <strong className="info-value">{reviewCount}</strong>
+          <p className="info-subtle">Слов готово к повторению прямо сейчас</p>
         </article>
 
         <article className="info-card">
@@ -107,36 +116,56 @@ export function HomeDashboard({
         </article>
       </section>
 
-      <section className="progress-panel">
-        <div className="progress-meta">
-          <span className="progress-caption">Общий прогресс</span>
-          <span className="progress-count">{progressPercent}%</span>
-        </div>
-        <div className="progress-track" aria-hidden="true">
-          <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
-        </div>
-        <p className="info-subtle">
-          Учится: {activeWords} · Уже известные: {countWordsByStatus(progressList, 'known')} · Новых в очереди:{' '}
-          {words.filter((word) => !(word.id in storage.progressByWordId)).length}
-        </p>
+      <section className="dashboard-feature-grid">
+        <article className="dashboard-panel">
+          <div className="progress-meta">
+            <span className="progress-caption">Прогресс по активному словарю</span>
+            <span className="progress-count">{progressPercent}%</span>
+          </div>
+          <div className="progress-track" aria-hidden="true">
+            <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
+          </div>
+          <p className="info-subtle">
+            Учится: {activeWords} · Уже известные: {countWordsByStatus(progressList, 'known')} · Выученные:{' '}
+            {masteredCount}
+          </p>
+        </article>
+
+        <article className="dashboard-panel">
+          <div className="chart-header">
+            <h2 className="section-title">Что делать дальше</h2>
+            <span className="info-subtle">Ясные следующие действия</span>
+          </div>
+          <div className="next-actions-list">
+            <button type="button" className="secondary-button full-width" onClick={onStartLesson}>
+              Продолжить урок
+            </button>
+            <button type="button" className="ghost-button full-width" onClick={onOpenDictionary}>
+              Проверить словарь и фильтры
+            </button>
+            <button type="button" className="ghost-button full-width" onClick={onOpenPacks}>
+              Добавить тематический пак
+            </button>
+          </div>
+        </article>
       </section>
 
-      <section className="quick-grid" aria-label="Быстрая навигация">
+      <section className="quick-grid quick-grid-wide" aria-label="Ключевые разделы">
         <article className="quick-card">
           <strong>Модульный урок</strong>
-          <span>Новые слова, тренировка, повторение и закрепление с понятным прогрессом.</span>
+          <span>Новые слова, тренировка, повторение и закрепление с явным прогрессом по дню.</span>
         </article>
         <article className="quick-card">
-          <strong>Личный словарь</strong>
-          <span>Поиск, фильтры по статусам и быстрый аудио-повтор по карточкам.</span>
+          <strong>Словарь</strong>
+          <span>Чистые карточки, поиск, фильтры по статусам и по активным пакам.</span>
         </article>
         <article className="quick-card">
-          <strong>Умное повторение</strong>
-          <span>Сложные слова выделяются отдельно, а знакомые можно сразу убрать из новых.</span>
+          <strong>Паки</strong>
+          <span>Добавлено паков: {addedPacksCount}. Активируйте нужные темы, не перегружая ежедневный поток.</span>
         </article>
         <article className="quick-card">
-          <strong>Недельная статистика</strong>
-          <span>Смотрите точность, активность и накопленный прогресс по дням.</span>
+          <strong>Профиль и история</strong>
+          <span>Серия дней, история по датам, ошибки, модули и накопленный локальный прогресс.</span>
         </article>
       </section>
     </section>
