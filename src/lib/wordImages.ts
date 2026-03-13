@@ -17,6 +17,10 @@ interface IllustrationShape {
   detail?: string;
 }
 
+function hashSeed(value: string): number {
+  return [...value].reduce((total, char) => total + char.charCodeAt(0), 0);
+}
+
 const THEMES: Record<IllustrationCategory, IllustrationTheme> = {
   plants: {
     backgroundStart: '#e9f8ed',
@@ -343,10 +347,20 @@ function getShape(type: string): IllustrationShape {
   return ILLUSTRATION_SHAPES[type] ?? ILLUSTRATION_SHAPES.tree;
 }
 
-function buildIllustrationSvg(category: IllustrationCategory, type: string, accentOverride?: string): string {
+function buildIllustrationSvg(category: IllustrationCategory, type: string, seedLabel: string, accentOverride?: string): string {
   const theme = THEMES[category];
   const shape = getShape(type);
   const accent = accentOverride ?? theme.accent;
+  const seed = hashSeed(seedLabel);
+  const leftBubbleX = 52 + (seed % 28);
+  const leftBubbleY = 38 + (seed % 20);
+  const rightBubbleX = 236 + (seed % 16);
+  const rightBubbleY = 42 + (seed % 18);
+  const panelInset = 20 + (seed % 4);
+  const rotation = (seed % 9) - 4;
+  const scale = 0.94 + (seed % 8) * 0.01;
+  const translateX = (seed % 14) - 7;
+  const translateY = (seed % 10) - 5;
 
   return `
     <svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240" fill="none">
@@ -357,12 +371,14 @@ function buildIllustrationSvg(category: IllustrationCategory, type: string, acce
         </linearGradient>
       </defs>
       <rect width="320" height="240" rx="30" fill="url(#bg)" />
-      <circle cx="70" cy="48" r="28" fill="${theme.secondary}" fill-opacity="0.22" />
-      <circle cx="246" cy="56" r="18" fill="${accent}" fill-opacity="0.16" />
-      <rect x="22" y="22" width="276" height="196" rx="26" fill="#ffffff" fill-opacity="0.32" stroke="#ffffff" stroke-opacity="0.55" />
-      <path d="${shape.primary}" fill="${theme.foreground}" stroke="${theme.line}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-      ${shape.secondary ? `<path d="${shape.secondary}" fill="${theme.secondary}" stroke="${theme.line}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />` : ''}
-      ${shape.detail ? `<path d="${shape.detail}" fill="${accent}" stroke="${theme.line}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />` : ''}
+      <circle cx="${leftBubbleX}" cy="${leftBubbleY}" r="28" fill="${theme.secondary}" fill-opacity="0.22" />
+      <circle cx="${rightBubbleX}" cy="${rightBubbleY}" r="18" fill="${accent}" fill-opacity="0.16" />
+      <rect x="${panelInset}" y="${panelInset}" width="${320 - panelInset * 2}" height="${240 - panelInset * 2}" rx="26" fill="#ffffff" fill-opacity="0.32" stroke="#ffffff" stroke-opacity="0.55" />
+      <g transform="translate(${translateX} ${translateY}) rotate(${rotation} 160 150) scale(${scale})">
+        <path d="${shape.primary}" fill="${theme.foreground}" stroke="${theme.line}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+        ${shape.secondary ? `<path d="${shape.secondary}" fill="${theme.secondary}" stroke="${theme.line}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />` : ''}
+        ${shape.detail ? `<path d="${shape.detail}" fill="${accent}" stroke="${theme.line}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />` : ''}
+      </g>
     </svg>
   `;
 }
@@ -374,7 +390,7 @@ export function createWordImage(
   illustrationType = 'tree',
   accent?: string,
 ): Pick<Word, 'imagePath' | 'imageUrl' | 'imageAlt' | 'imagePackCategory' | 'illustrationType'> {
-  const imagePath = svgToDataUrl(buildIllustrationSvg(category, illustrationType, accent));
+  const imagePath = svgToDataUrl(buildIllustrationSvg(category, illustrationType, `${original}-${translation}`, accent));
 
   return {
     imagePath,
@@ -392,7 +408,7 @@ export function createPackCoverImage(
   accent?: string,
 ): { coverImageUrl: string; coverImageAlt: string } {
   return {
-    coverImageUrl: svgToDataUrl(buildIllustrationSvg(category, illustrationType, accent)),
+    coverImageUrl: svgToDataUrl(buildIllustrationSvg(category, illustrationType, title, accent)),
     coverImageAlt: `Обложка пака ${title}`,
   };
 }
