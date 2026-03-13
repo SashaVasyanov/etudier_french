@@ -6,7 +6,7 @@ interface AppNavigationProps {
 
 const NAV_ITEMS: Array<{ id: AppNavigationProps['activeScreen']; label: string }> = [
   { id: 'home', label: 'Главная' },
-  { id: 'lesson', label: 'Урок' },
+  { id: 'lesson', label: 'Обучение' },
   { id: 'dictionary', label: 'Словарь' },
   { id: 'packs', label: 'Паки' },
   { id: 'profile', label: 'Профиль' },

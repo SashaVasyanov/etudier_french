@@ -78,7 +78,7 @@ export function LessonResult({
           Повторить ошибки
         </button>
         <button type="button" className="secondary-button" onClick={onFinish}>
-          Завершить урок
+          На главную
         </button>
       </div>
     </section>
