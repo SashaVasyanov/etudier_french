@@ -5,6 +5,7 @@ import { getWordProgress } from '../lib/storage';
 import type { AppStorage, DictionaryTab, Word, WordLevel, WordPack } from '../types';
 import { AppCard } from './AppCard';
 import { StatusBadge } from './StatusBadge';
+import { WordCard } from './WordCard';
 import { WordImage } from './WordImage';
 
 interface DictionaryScreenProps {
@@ -120,12 +121,12 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
           const wordPacks = getPackByWord(word, packs);
 
           return (
-            <AppCard key={word.id} as="article" className="word-card">
-              <WordImage word={word} />
-
-              <div className="word-card-body">
-                <div className="word-card-header">
-                  <div>
+            <WordCard
+              key={word.id}
+              media={<WordImage word={word} />}
+              header={
+                <>
+                  <div className="word-card-copy">
                     <h2 className="word-title">{word.original}</h2>
                     <p className="word-subtitle">
                       {word.translation} · {word.transcription || 'транскрипция не указана'}
@@ -140,9 +141,10 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
                   >
                     Аудио
                   </button>
-                </div>
-
-                <div className="badge-row wrap-row">
+                </>
+              }
+              badges={
+                <>
                   <StatusBadge status={progress.status} />
                   <span className="tag-badge">{word.level}</span>
                   <span className="tag-badge">{word.part_of_speech}</span>
@@ -155,14 +157,15 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
                       </span>
                     ))
                   )}
-                </div>
-
+                </>
+              }
+              details={
                 <div className="example-card">
                   <p className="example-original">{word.example_original}</p>
                   <p className="example-translation">{word.example_translation}</p>
                 </div>
-              </div>
-            </AppCard>
+              }
+            />
           );
         })}
       </section>

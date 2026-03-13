@@ -12,7 +12,7 @@ export function AppCard({ as = 'article', tone = 'default', className = '', chil
 
   return (
     <Component className={classes} {...props}>
-      {children}
+      <div className="app-card-shell">{children}</div>
     </Component>
   );
 }

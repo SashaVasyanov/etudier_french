@@ -6,6 +6,7 @@ import type { AppStorage, LessonDurationMinutes, WordPack } from '../types';
 import { AppCard } from './AppCard';
 import { LessonDurationSelector } from './LessonDurationSelector';
 import { StatusBadge } from './StatusBadge';
+import { WordCard } from './WordCard';
 import { WordImage } from './WordImage';
 
 interface PackDetailScreenProps {
@@ -137,11 +138,12 @@ export function PackDetailScreen({
           const progress = getWordProgress(storage, word.id);
 
           return (
-            <AppCard key={word.id} as="article" className="word-card">
-              <WordImage word={word} />
-              <div className="word-card-body">
-                <div className="word-card-header">
-                  <div>
+            <WordCard
+              key={word.id}
+              media={<WordImage word={word} />}
+              header={
+                <>
+                  <div className="word-card-copy">
                     <h2 className="word-title">{word.original}</h2>
                     <p className="word-subtitle">
                       {word.translation} · {word.transcription || 'транскрипция не указана'}
@@ -157,20 +159,22 @@ export function PackDetailScreen({
                   >
                     {word.audio_original ? 'Аудио' : 'Нет аудио'}
                   </button>
-                </div>
-
-                <div className="badge-row wrap-row">
+                </>
+              }
+              badges={
+                <>
                   <StatusBadge status={progress.status} />
                   <span className="tag-badge">{word.part_of_speech}</span>
                   <span className="tag-badge">{word.level}</span>
-                </div>
-
+                </>
+              }
+              details={
                 <div className="example-card">
                   <p className="example-original">{word.example_original}</p>
                   <p className="example-translation">{word.example_translation}</p>
                 </div>
-              </div>
-            </AppCard>
+              }
+            />
           );
         })}
       </section>
