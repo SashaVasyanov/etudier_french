@@ -12,6 +12,22 @@ interface PackWordSeed {
   exampleTranslation: string;
   partOfSpeech: string;
   tags: string[];
+  illustrationType?: string;
+}
+
+function getDefaultIllustrationType(category: PackCategory): string {
+  switch (category) {
+    case 'plants':
+      return 'leaf';
+    case 'animals':
+      return 'cat';
+    case 'food':
+      return 'bread';
+    case 'travel':
+      return 'train';
+    case 'home':
+      return 'house';
+  }
 }
 
 function createPackWordFactory(packId: string, category: PackCategory, accent: string) {
@@ -24,6 +40,7 @@ function createPackWordFactory(packId: string, category: PackCategory, accent: s
     exampleTranslation,
     partOfSpeech,
     tags,
+    illustrationType,
   }: PackWordSeed): Word => ({
     id: `${packId}-${id}`,
     original,
@@ -37,7 +54,7 @@ function createPackWordFactory(packId: string, category: PackCategory, accent: s
     tags,
     packIds: [packId],
     source: 'pack',
-    ...createWordImage(category, original, translation, accent),
+    ...createWordImage(category, original, translation, illustrationType ?? getDefaultIllustrationType(category), accent),
   });
 }
 
@@ -47,9 +64,12 @@ function createPack(
   description: string,
   accent: string,
   category: PackCategory,
-  words: PackWordSeed[],
+  coverIllustrationType: string | PackWordSeed[],
+  maybeWords?: PackWordSeed[],
 ): WordPack {
   const createWord = createPackWordFactory(id, category, accent);
+  const words = Array.isArray(coverIllustrationType) ? coverIllustrationType : maybeWords ?? [];
+  const coverType = Array.isArray(coverIllustrationType) ? getDefaultIllustrationType(category) : coverIllustrationType;
 
   return {
     id,
@@ -57,39 +77,39 @@ function createPack(
     description,
     accent,
     words: words.map(createWord),
-    ...createPackCoverImage(category, title, 'Французская лексика', accent),
+    ...createPackCoverImage(category, title, coverType, accent),
   };
 }
 
 export const STARTER_PACKS: WordPack[] = [
-  createPack('pack-plants', 'Растения', 'Французские слова про деревья, цветы, сад и базовую лексику о природе.', '#6ca66a', 'plants', [
-    { id: 'arbre', original: 'arbre', translation: 'дерево', transcription: '[aʁbʁ]', exampleOriginal: "L'arbre est vieux.", exampleTranslation: 'Это дерево старое.', partOfSpeech: 'noun', tags: ['природа', 'сад'] },
-    { id: 'fleur', original: 'fleur', translation: 'цветок', transcription: '[flœʁ]', exampleOriginal: 'La fleur sent bon.', exampleTranslation: 'Цветок приятно пахнет.', partOfSpeech: 'noun', tags: ['природа', 'сад'] },
-    { id: 'feuille', original: 'feuille', translation: 'лист', transcription: '[fœj]', exampleOriginal: 'La feuille tombe en automne.', exampleTranslation: 'Лист падает осенью.', partOfSpeech: 'noun', tags: ['природа'] },
-    { id: 'racine', original: 'racine', translation: 'корень', transcription: '[ʁasin]', exampleOriginal: 'La racine est sous la terre.', exampleTranslation: 'Корень находится под землей.', partOfSpeech: 'noun', tags: ['ботаника'] },
-    { id: 'graine', original: 'graine', translation: 'семя', transcription: '[ɡʁɛn]', exampleOriginal: 'Je plante une graine.', exampleTranslation: 'Я сажаю семя.', partOfSpeech: 'noun', tags: ['сад'] },
-    { id: 'herbe', original: 'herbe', translation: 'трава', transcription: '[ɛʁb]', exampleOriginal: "L'herbe est verte.", exampleTranslation: 'Трава зеленая.', partOfSpeech: 'noun', tags: ['природа'] },
-    { id: 'rose', original: 'rose', translation: 'роза', transcription: '[ʁoz]', exampleOriginal: 'La rose est rouge.', exampleTranslation: 'Роза красная.', partOfSpeech: 'noun', tags: ['цветы'] },
-    { id: 'tulipe', original: 'tulipe', translation: 'тюльпан', transcription: '[tylip]', exampleOriginal: 'La tulipe fleurit au printemps.', exampleTranslation: 'Тюльпан цветет весной.', partOfSpeech: 'noun', tags: ['цветы'] },
-    { id: 'forêt', original: 'forêt', translation: 'лес', transcription: '[fɔʁɛ]', exampleOriginal: 'Nous marchons dans la forêt.', exampleTranslation: 'Мы гуляем по лесу.', partOfSpeech: 'noun', tags: ['природа'] },
-    { id: 'branche', original: 'branche', translation: 'ветка', transcription: '[bʁɑ̃ʃ]', exampleOriginal: 'Un oiseau est sur la branche.', exampleTranslation: 'Птица сидит на ветке.', partOfSpeech: 'noun', tags: ['природа'] },
-    { id: 'tronc', original: 'tronc', translation: 'ствол', transcription: '[tʁɔ̃]', exampleOriginal: "Le tronc de l'arbre est large.", exampleTranslation: 'Ствол дерева широкий.', partOfSpeech: 'noun', tags: ['ботаника'] },
-    { id: 'jardin', original: 'jardin', translation: 'сад', transcription: '[ʒaʁdɛ̃]', exampleOriginal: 'Le jardin est derrière la maison.', exampleTranslation: 'Сад находится за домом.', partOfSpeech: 'noun', tags: ['сад'] },
-    { id: 'potager', original: 'potager', translation: 'огород', transcription: '[pɔtaʒe]', exampleOriginal: 'Mon grand-père a un potager.', exampleTranslation: 'У моего дедушки есть огород.', partOfSpeech: 'noun', tags: ['сад'] },
-    { id: 'mousse', original: 'mousse', translation: 'мох', transcription: '[mus]', exampleOriginal: 'La pierre est couverte de mousse.', exampleTranslation: 'Камень покрыт мхом.', partOfSpeech: 'noun', tags: ['природа'] },
-    { id: 'champignon', original: 'champignon', translation: 'гриб', transcription: '[ʃɑ̃piɲɔ̃]', exampleOriginal: 'Le champignon pousse après la pluie.', exampleTranslation: 'Гриб растет после дождя.', partOfSpeech: 'noun', tags: ['лес'] },
-    { id: 'plante', original: 'plante', translation: 'растение', transcription: '[plɑ̃t]', exampleOriginal: 'Cette plante a besoin de soleil.', exampleTranslation: 'Этому растению нужно солнце.', partOfSpeech: 'noun', tags: ['ботаника'] },
-    { id: 'rosier', original: 'rosier', translation: 'куст роз', transcription: '[ʁozje]', exampleOriginal: 'Le rosier est devant la fenêtre.', exampleTranslation: 'Розовый куст стоит перед окном.', partOfSpeech: 'noun', tags: ['цветы'] },
-    { id: 'pin', original: 'pin', translation: 'сосна', transcription: '[pɛ̃]', exampleOriginal: 'Le pin reste vert en hiver.', exampleTranslation: 'Сосна остается зеленой зимой.', partOfSpeech: 'noun', tags: ['деревья'] },
-    { id: 'chêne', original: 'chêne', translation: 'дуб', transcription: '[ʃɛn]', exampleOriginal: 'Le chêne est très solide.', exampleTranslation: 'Дуб очень крепкий.', partOfSpeech: 'noun', tags: ['деревья'] },
-    { id: 'bouquet', original: 'bouquet', translation: 'букет', transcription: '[bukɛ]', exampleOriginal: "J'offre un bouquet à ma mère.", exampleTranslation: 'Я дарю букет маме.', partOfSpeech: 'noun', tags: ['цветы'] },
+  createPack('pack-plants', 'Растения', 'Французские слова про деревья, цветы, сад и базовую лексику о природе.', '#6ca66a', 'plants', 'tree', [
+    { id: 'arbre', original: 'arbre', translation: 'дерево', transcription: '[aʁbʁ]', exampleOriginal: "L'arbre est vieux.", exampleTranslation: 'Это дерево старое.', partOfSpeech: 'noun', tags: ['природа', 'сад'], illustrationType: 'tree' },
+    { id: 'fleur', original: 'fleur', translation: 'цветок', transcription: '[flœʁ]', exampleOriginal: 'La fleur sent bon.', exampleTranslation: 'Цветок приятно пахнет.', partOfSpeech: 'noun', tags: ['природа', 'сад'], illustrationType: 'flower' },
+    { id: 'feuille', original: 'feuille', translation: 'лист', transcription: '[fœj]', exampleOriginal: 'La feuille tombe en automne.', exampleTranslation: 'Лист падает осенью.', partOfSpeech: 'noun', tags: ['природа'], illustrationType: 'leaf' },
+    { id: 'racine', original: 'racine', translation: 'корень', transcription: '[ʁasin]', exampleOriginal: 'La racine est sous la terre.', exampleTranslation: 'Корень находится под землей.', partOfSpeech: 'noun', tags: ['ботаника'], illustrationType: 'root' },
+    { id: 'graine', original: 'graine', translation: 'семя', transcription: '[ɡʁɛn]', exampleOriginal: 'Je plante une graine.', exampleTranslation: 'Я сажаю семя.', partOfSpeech: 'noun', tags: ['сад'], illustrationType: 'seed' },
+    { id: 'herbe', original: 'herbe', translation: 'трава', transcription: '[ɛʁb]', exampleOriginal: "L'herbe est verte.", exampleTranslation: 'Трава зеленая.', partOfSpeech: 'noun', tags: ['природа'], illustrationType: 'grass' },
+    { id: 'rose', original: 'rose', translation: 'роза', transcription: '[ʁoz]', exampleOriginal: 'La rose est rouge.', exampleTranslation: 'Роза красная.', partOfSpeech: 'noun', tags: ['цветы'], illustrationType: 'flower' },
+    { id: 'tulipe', original: 'tulipe', translation: 'тюльпан', transcription: '[tylip]', exampleOriginal: 'La tulipe fleurit au printemps.', exampleTranslation: 'Тюльпан цветет весной.', partOfSpeech: 'noun', tags: ['цветы'], illustrationType: 'flower' },
+    { id: 'forêt', original: 'forêt', translation: 'лес', transcription: '[fɔʁɛ]', exampleOriginal: 'Nous marchons dans la forêt.', exampleTranslation: 'Мы гуляем по лесу.', partOfSpeech: 'noun', tags: ['природа'], illustrationType: 'forest' },
+    { id: 'branche', original: 'branche', translation: 'ветка', transcription: '[bʁɑ̃ʃ]', exampleOriginal: 'Un oiseau est sur la branche.', exampleTranslation: 'Птица сидит на ветке.', partOfSpeech: 'noun', tags: ['природа'], illustrationType: 'branch' },
+    { id: 'tronc', original: 'tronc', translation: 'ствол', transcription: '[tʁɔ̃]', exampleOriginal: "Le tronc de l'arbre est large.", exampleTranslation: 'Ствол дерева широкий.', partOfSpeech: 'noun', tags: ['ботаника'], illustrationType: 'tree' },
+    { id: 'jardin', original: 'jardin', translation: 'сад', transcription: '[ʒaʁdɛ̃]', exampleOriginal: 'Le jardin est derrière la maison.', exampleTranslation: 'Сад находится за домом.', partOfSpeech: 'noun', tags: ['сад'], illustrationType: 'flower' },
+    { id: 'potager', original: 'potager', translation: 'огород', transcription: '[pɔtaʒe]', exampleOriginal: 'Mon grand-père a un potager.', exampleTranslation: 'У моего дедушки есть огород.', partOfSpeech: 'noun', tags: ['сад'], illustrationType: 'leaf' },
+    { id: 'mousse', original: 'mousse', translation: 'мох', transcription: '[mus]', exampleOriginal: 'La pierre est couverte de mousse.', exampleTranslation: 'Камень покрыт мхом.', partOfSpeech: 'noun', tags: ['природа'], illustrationType: 'grass' },
+    { id: 'champignon', original: 'champignon', translation: 'гриб', transcription: '[ʃɑ̃piɲɔ̃]', exampleOriginal: 'Le champignon pousse après la pluie.', exampleTranslation: 'Гриб растет после дождя.', partOfSpeech: 'noun', tags: ['лес'], illustrationType: 'flower' },
+    { id: 'plante', original: 'plante', translation: 'растение', transcription: '[plɑ̃t]', exampleOriginal: 'Cette plante a besoin de soleil.', exampleTranslation: 'Этому растению нужно солнце.', partOfSpeech: 'noun', tags: ['ботаника'], illustrationType: 'leaf' },
+    { id: 'rosier', original: 'rosier', translation: 'куст роз', transcription: '[ʁozje]', exampleOriginal: 'Le rosier est devant la fenêtre.', exampleTranslation: 'Розовый куст стоит перед окном.', partOfSpeech: 'noun', tags: ['цветы'], illustrationType: 'bouquet' },
+    { id: 'pin', original: 'pin', translation: 'сосна', transcription: '[pɛ̃]', exampleOriginal: 'Le pin reste vert en hiver.', exampleTranslation: 'Сосна остается зеленой зимой.', partOfSpeech: 'noun', tags: ['деревья'], illustrationType: 'tree' },
+    { id: 'chêne', original: 'chêne', translation: 'дуб', transcription: '[ʃɛn]', exampleOriginal: 'Le chêne est très solide.', exampleTranslation: 'Дуб очень крепкий.', partOfSpeech: 'noun', tags: ['деревья'], illustrationType: 'tree' },
+    { id: 'bouquet', original: 'bouquet', translation: 'букет', transcription: '[bukɛ]', exampleOriginal: "J'offre un bouquet à ma mère.", exampleTranslation: 'Я дарю букет маме.', partOfSpeech: 'noun', tags: ['цветы'], illustrationType: 'bouquet' },
   ]),
-  createPack('pack-animals', 'Животные', 'Базовый набор французских слов про домашних, диких и фермерских животных.', '#d77b5e', 'animals', [
-    { id: 'chien', original: 'chien', translation: 'собака', transcription: '[ʃjɛ̃]', exampleOriginal: 'Le chien dort près de la porte.', exampleTranslation: 'Собака спит у двери.', partOfSpeech: 'noun', tags: ['животные'] },
-    { id: 'chat', original: 'chat', translation: 'кот', transcription: '[ʃa]', exampleOriginal: 'Le chat aime le soleil.', exampleTranslation: 'Кот любит солнце.', partOfSpeech: 'noun', tags: ['животные'] },
-    { id: 'oiseau', original: 'oiseau', translation: 'птица', transcription: '[wazo]', exampleOriginal: "L'oiseau chante le matin.", exampleTranslation: 'Птица поет утром.', partOfSpeech: 'noun', tags: ['природа'] },
-    { id: 'poisson', original: 'poisson', translation: 'рыба', transcription: '[pwasɔ̃]', exampleOriginal: 'Le poisson nage vite.', exampleTranslation: 'Рыба быстро плавает.', partOfSpeech: 'noun', tags: ['животные'] },
-    { id: 'cheval', original: 'cheval', translation: 'лошадь', transcription: '[ʃəval]', exampleOriginal: 'Le cheval court dans le champ.', exampleTranslation: 'Лошадь бежит по полю.', partOfSpeech: 'noun', tags: ['ферма'] },
+  createPack('pack-animals', 'Животные', 'Базовый набор французских слов про домашних, диких и фермерских животных.', '#d77b5e', 'animals', 'cat', [
+    { id: 'chien', original: 'chien', translation: 'собака', transcription: '[ʃjɛ̃]', exampleOriginal: 'Le chien dort près de la porte.', exampleTranslation: 'Собака спит у двери.', partOfSpeech: 'noun', tags: ['животные'], illustrationType: 'dog' },
+    { id: 'chat', original: 'chat', translation: 'кот', transcription: '[ʃa]', exampleOriginal: 'Le chat aime le soleil.', exampleTranslation: 'Кот любит солнце.', partOfSpeech: 'noun', tags: ['животные'], illustrationType: 'cat' },
+    { id: 'oiseau', original: 'oiseau', translation: 'птица', transcription: '[wazo]', exampleOriginal: "L'oiseau chante le matin.", exampleTranslation: 'Птица поет утром.', partOfSpeech: 'noun', tags: ['природа'], illustrationType: 'bird' },
+    { id: 'poisson', original: 'poisson', translation: 'рыба', transcription: '[pwasɔ̃]', exampleOriginal: 'Le poisson nage vite.', exampleTranslation: 'Рыба быстро плавает.', partOfSpeech: 'noun', tags: ['животные'], illustrationType: 'fish' },
+    { id: 'cheval', original: 'cheval', translation: 'лошадь', transcription: '[ʃəval]', exampleOriginal: 'Le cheval court dans le champ.', exampleTranslation: 'Лошадь бежит по полю.', partOfSpeech: 'noun', tags: ['ферма'], illustrationType: 'horse' },
     { id: 'vache', original: 'vache', translation: 'корова', transcription: '[vaʃ]', exampleOriginal: "La vache mange de l'herbe.", exampleTranslation: 'Корова ест траву.', partOfSpeech: 'noun', tags: ['ферма'] },
     { id: 'mouton', original: 'mouton', translation: 'овца', transcription: '[mutɔ̃]', exampleOriginal: 'Le mouton a une laine douce.', exampleTranslation: 'У овцы мягкая шерсть.', partOfSpeech: 'noun', tags: ['ферма'] },
     { id: 'lapin', original: 'lapin', translation: 'кролик', transcription: '[lapɛ̃]', exampleOriginal: 'Le lapin aime les carottes.', exampleTranslation: 'Кролик любит морковь.', partOfSpeech: 'noun', tags: ['животные'] },

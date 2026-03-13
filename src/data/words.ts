@@ -17,9 +17,11 @@ function normalizeWord(word: Word): Word {
     tags: Array.isArray(word.tags) ? word.tags : [],
     packIds: Array.isArray(word.packIds) ? word.packIds : [],
     source: word.source ?? 'core',
+    imagePath: word.imagePath ?? word.imageUrl ?? undefined,
     imageUrl: word.imageUrl ?? undefined,
     imageAlt: word.imageAlt ?? undefined,
     imagePackCategory: word.imagePackCategory ?? undefined,
+    illustrationType: word.illustrationType ?? undefined,
   };
 }
 

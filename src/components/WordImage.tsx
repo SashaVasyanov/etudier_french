@@ -9,7 +9,7 @@ interface WordImageProps {
 
 export function WordImage({ word, size = 'medium', className = '' }: WordImageProps) {
   const fallback = createFallbackWordImage(word);
-  const src = word.imageUrl || fallback.src;
+  const src = word.imagePath || word.imageUrl || fallback.src;
   const alt = word.imageAlt || fallback.alt;
 
   return (

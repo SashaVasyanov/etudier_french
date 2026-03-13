@@ -26,9 +26,11 @@ export interface Word {
   tags: string[];
   packIds: string[];
   source: WordSource;
+  imagePath?: string;
   imageUrl?: string;
   imageAlt?: string;
   imagePackCategory?: string;
+  illustrationType?: string;
 }
 
 export interface WordProgress {
