@@ -3,7 +3,10 @@ import { playWordAudio } from '../lib/audio';
 import { derivePackStatus, getPackCompletionRatio } from '../lib/packs';
 import { getWordProgress } from '../lib/storage';
 import type { AppStorage, LessonDurationMinutes, WordPack } from '../types';
+import { AppCard } from './AppCard';
 import { LessonDurationSelector } from './LessonDurationSelector';
+import { StatusBadge } from './StatusBadge';
+import { WordImage } from './WordImage';
 
 interface PackDetailScreenProps {
   pack: WordPack;
@@ -25,42 +28,6 @@ const FILTERS: Array<{ id: PackStatusFilter; label: string }> = [
   { id: 'mastered', label: 'Выученные' },
   { id: 'difficult', label: 'Сложные' },
 ];
-
-function getPackStatusLabel(status: ReturnType<typeof derivePackStatus>): string {
-  if (status === 'added') {
-    return 'добавлен';
-  }
-
-  if (status === 'in_progress') {
-    return 'в процессе';
-  }
-
-  if (status === 'completed') {
-    return 'завершён';
-  }
-
-  return 'не добавлен';
-}
-
-function getWordStatusLabel(status: ReturnType<typeof getWordProgress>['status']): string {
-  if (status === 'known') {
-    return 'уже известно';
-  }
-
-  if (status === 'mastered') {
-    return 'выучено';
-  }
-
-  if (status === 'difficult') {
-    return 'сложное';
-  }
-
-  if (status === 'learning' || status === 'review') {
-    return 'изучается';
-  }
-
-  return 'новое';
-}
 
 export function PackDetailScreen({
   pack,
@@ -99,33 +66,29 @@ export function PackDetailScreen({
 
   return (
     <section className="dashboard-shell">
-      <header className="hero-card">
+      <AppCard as="header" tone="hero" className="pack-detail-hero">
         <div className="pack-detail-head">
           <div className="hero-copy">
             <span className="eyebrow">Пак слов</span>
             <h1 className="hero-title compact-title">{pack.title}</h1>
             <p className="hero-text">{pack.description}</p>
           </div>
-          <span
-            className={`status-badge ${status === 'completed' ? 'mastered' : status === 'in_progress' ? 'review' : status === 'added' ? 'learning' : 'new'}`}
-          >
-            {getPackStatusLabel(status)}
-          </span>
+          <StatusBadge status={status} />
         </div>
 
-        <div className="pack-meta-grid">
-          <article className="mini-stat">
+        <div className="pack-detail-meta">
+          <div className="mini-stat">
             <span className="mini-stat-value">{pack.words.length}</span>
             <span className="mini-stat-label">Слов в паке</span>
-          </article>
-          <article className="mini-stat">
+          </div>
+          <div className="mini-stat">
             <span className="mini-stat-value">{completion}%</span>
             <span className="mini-stat-label">Освоено</span>
-          </article>
-          <article className="mini-stat">
+          </div>
+          <div className="mini-stat">
             <span className="mini-stat-value">{filteredWords.length}</span>
-            <span className="mini-stat-label">Сейчас на экране</span>
-          </article>
+            <span className="mini-stat-label">После фильтра</span>
+          </div>
         </div>
 
         <div className="progress-track" aria-hidden="true">
@@ -136,35 +99,25 @@ export function PackDetailScreen({
           <button type="button" className="ghost-button" onClick={onBack}>
             Назад к пакам
           </button>
-          <button
-            type="button"
-            className="secondary-button"
-            disabled={status !== 'not_added'}
-            onClick={() => onAddPack(pack.id)}
-          >
+          <button type="button" className="secondary-button" disabled={status !== 'not_added'} onClick={() => onAddPack(pack.id)}>
             {status === 'not_added' ? 'Добавить пак' : 'Пак добавлен'}
           </button>
           <button type="button" className="primary-button" onClick={() => onStartPackLesson(pack.id)}>
-            Учить слова из пака
+            Учить этот пак
           </button>
         </div>
-      </header>
+      </AppCard>
 
       <LessonDurationSelector
         value={lessonDurationMinutes}
         onChange={onLessonDurationChange}
-        title="Размер практики по паку"
-        description="Эта длительность используется при запуске дополнительного занятия по выбранному паку."
+        title="Длительность практики по паку"
+        description="Используется при запуске отдельного занятия по этой теме."
       />
 
-      <section className="hero-card compact-card">
+      <AppCard as="section" className="filter-card">
         <div className="dictionary-toolbar dictionary-toolbar-wide">
-          <input
-            className="text-input"
-            value={query}
-            placeholder="Поиск внутри пака"
-            onChange={(event) => setQuery(event.target.value)}
-          />
+          <input className="text-input" value={query} placeholder="Поиск внутри пака" onChange={(event) => setQuery(event.target.value)} />
           <select className="level-select" value={filter} onChange={(event) => setFilter(event.target.value as PackStatusFilter)}>
             {FILTERS.map((option) => (
               <option key={option.id} value={option.id}>
@@ -173,46 +126,51 @@ export function PackDetailScreen({
             ))}
           </select>
           <div className="pack-detail-summary">
-            <span>Статус пака: {getPackStatusLabel(status)}</span>
+            <span>Статус: {status}</span>
             <span>Фильтр: {FILTERS.find((item) => item.id === filter)?.label}</span>
           </div>
         </div>
-      </section>
+      </AppCard>
 
       <section className="dictionary-grid">
         {filteredWords.map((word) => {
           const progress = getWordProgress(storage, word.id);
 
           return (
-            <article key={word.id} className="word-card">
-              <div className="word-card-header">
-                <div>
-                  <h2 className="word-title">{word.original}</h2>
-                  <p className="word-subtitle">
-                    {word.translation} · {word.transcription || 'транскрипция не указана'}
-                  </p>
+            <AppCard key={word.id} as="article" className="word-card">
+              <WordImage word={word} />
+              <div className="word-card-body">
+                <div className="word-card-header">
+                  <div>
+                    <h2 className="word-title">{word.original}</h2>
+                    <p className="word-subtitle">
+                      {word.translation} · {word.transcription || 'транскрипция не указана'}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="audio-button"
+                    disabled={!word.audio_original}
+                    onClick={() => {
+                      void playWordAudio(word);
+                    }}
+                  >
+                    {word.audio_original ? 'Аудио' : 'Нет аудио'}
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  className="audio-button"
-                  disabled={!word.audio_original}
-                  onClick={() => {
-                    void playWordAudio(word);
-                  }}
-                >
-                  {word.audio_original ? 'Аудио' : 'Нет аудио'}
-                </button>
-              </div>
 
-              <div className="badge-row wrap-row">
-                <span className={`status-badge ${progress.status}`}>{getWordStatusLabel(progress.status)}</span>
-                <span className="tag-badge">{word.part_of_speech}</span>
-                <span className="tag-badge">{word.level}</span>
-              </div>
+                <div className="badge-row wrap-row">
+                  <StatusBadge status={progress.status} />
+                  <span className="tag-badge">{word.part_of_speech}</span>
+                  <span className="tag-badge">{word.level}</span>
+                </div>
 
-              <p className="example-original">{word.example_original}</p>
-              <p className="example-translation">{word.example_translation}</p>
-            </article>
+                <div className="example-card">
+                  <p className="example-original">{word.example_original}</p>
+                  <p className="example-translation">{word.example_translation}</p>
+                </div>
+              </div>
+            </AppCard>
           );
         })}
       </section>

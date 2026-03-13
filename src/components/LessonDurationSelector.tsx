@@ -1,4 +1,5 @@
 import type { LessonDurationMinutes } from '../types';
+import { AppCard } from './AppCard';
 
 interface LessonDurationSelectorProps {
   value: LessonDurationMinutes;
@@ -8,25 +9,25 @@ interface LessonDurationSelectorProps {
 }
 
 const OPTIONS: Array<{ value: LessonDurationMinutes; label: string; hint: string }> = [
-  { value: 10, label: '10 минут', hint: 'Короткий урок с меньшим числом слов и упражнений.' },
-  { value: 20, label: '20 минут', hint: 'Сбалансированный темп для ежедневной практики.' },
-  { value: 30, label: '30 минут', hint: 'Расширенный урок с большим объёмом повторения.' },
+  { value: 10, label: '10 минут', hint: 'Быстрый заход на один короткий цикл.' },
+  { value: 20, label: '20 минут', hint: 'Оптимальный темп для ежедневного урока.' },
+  { value: 30, label: '30 минут', hint: 'Расширенный формат с большим объёмом закрепления.' },
 ];
 
 export function LessonDurationSelector({
   value,
   onChange,
   title = 'Размер занятия',
-  description = 'Выберите длительность перед запуском урока. Выбор сохраняется локально.',
+  description = 'Выберите длительность до старта. Выбор сохраняется локально и влияет на объём урока.',
 }: LessonDurationSelectorProps) {
   return (
-    <section className="duration-card">
-      <div className="chart-header">
+    <AppCard as="section" tone="soft" className="duration-card">
+      <div className="section-heading">
         <div>
           <span className="eyebrow">Длительность</span>
           <h2 className="section-title">{title}</h2>
         </div>
-        <span className="info-subtle">{description}</span>
+        <p className="hero-text">{description}</p>
       </div>
 
       <div className="duration-grid" role="radiogroup" aria-label="Выбор длительности урока">
@@ -47,6 +48,6 @@ export function LessonDurationSelector({
           );
         })}
       </div>
-    </section>
+    </AppCard>
   );
 }

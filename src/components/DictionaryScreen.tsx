@@ -3,6 +3,9 @@ import { playWordAudio } from '../lib/audio';
 import { getPackByWord } from '../lib/packs';
 import { getWordProgress } from '../lib/storage';
 import type { AppStorage, DictionaryTab, Word, WordLevel, WordPack } from '../types';
+import { AppCard } from './AppCard';
+import { StatusBadge } from './StatusBadge';
+import { WordImage } from './WordImage';
 
 interface DictionaryScreenProps {
   words: Word[];
@@ -17,26 +20,6 @@ const TABS: Array<{ id: DictionaryTab; label: string }> = [
   { id: 'mastered', label: 'Выученные' },
   { id: 'difficult', label: 'Сложные' },
 ];
-
-function getBadgeLabel(status: ReturnType<typeof getWordProgress>['status']): string {
-  if (status === 'known') {
-    return 'уже известно';
-  }
-
-  if (status === 'mastered') {
-    return 'выучено';
-  }
-
-  if (status === 'difficult') {
-    return 'сложное';
-  }
-
-  if (status === 'learning' || status === 'review') {
-    return 'изучается';
-  }
-
-  return 'новое';
-}
 
 export default function DictionaryScreen({ words, storage, packs }: DictionaryScreenProps) {
   const [tab, setTab] = useState<DictionaryTab>('all');
@@ -71,10 +54,7 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
       const matchesQuery =
         normalizedQuery.length === 0
           ? true
-          : [word.original, word.translation, word.example_original, ...word.tags]
-              .join(' ')
-              .toLocaleLowerCase()
-              .includes(normalizedQuery);
+          : [word.original, word.translation, word.example_original, ...word.tags].join(' ').toLocaleLowerCase().includes(normalizedQuery);
 
       return matchesTab && matchesLevel && matchesPack && matchesQuery;
     });
@@ -82,37 +62,29 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
 
   return (
     <section className="dashboard-shell">
-      <header className="hero-card compact-card">
-        <div className="screen-header">
+      <AppCard as="header" tone="hero" className="dictionary-hero">
+        <div className="section-heading">
           <div>
             <span className="eyebrow">Словарь</span>
-            <h1 className="section-title">Активный словарь</h1>
-            <p className="hero-text">Поиск, фильтры по статусам и пакам, быстрый аудио-повтор и чистые карточки слов.</p>
+            <h1 className="hero-title compact-title">Карточки слов с изображениями</h1>
           </div>
+          <p className="hero-text">Фильтруйте по статусу, ищите по французскому и переводу, слушайте произношение и быстро просматривайте активные паки.</p>
         </div>
 
         <div className="dictionary-toolbar dictionary-toolbar-wide">
           <input
             className="text-input"
             value={query}
-            placeholder="Поиск по французскому, переводу или тегам"
+            placeholder="Поиск по слову, переводу или тегам"
             onChange={(event) => setQuery(event.target.value)}
           />
-          <select
-            className="level-select"
-            value={level}
-            onChange={(event) => setLevel(event.target.value as 'all' | WordLevel)}
-          >
+          <select className="level-select" value={level} onChange={(event) => setLevel(event.target.value as 'all' | WordLevel)}>
             <option value="all">Все уровни</option>
             <option value="A1">A1</option>
             <option value="A2">A2</option>
             <option value="B1">B1</option>
           </select>
-          <select
-            className="level-select"
-            value={packFilter}
-            onChange={(event) => setPackFilter(event.target.value)}
-          >
+          <select className="level-select" value={packFilter} onChange={(event) => setPackFilter(event.target.value)}>
             <option value="all">Все активные паки</option>
             <option value="core">Базовый курс</option>
             {activePackOptions.map((pack) => (
@@ -138,60 +110,59 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
 
         <div className="dictionary-summary">
           <span>Найдено карточек: {filteredWords.length}</span>
-          <span>
-            {TABS.find((item) => item.id === tab)?.label}
-            {level !== 'all' ? ` · ${level}` : ''}
-            {packFilter !== 'all'
-              ? ` · ${packFilter === 'core' ? 'Базовый курс' : packs.find((pack) => pack.id === packFilter)?.title ?? ''}`
-              : ''}
-          </span>
+          <span>{level !== 'all' ? `Уровень ${level}` : 'Все уровни'} · {packFilter === 'all' ? 'Все активные источники' : packFilter === 'core' ? 'Базовый курс' : packs.find((pack) => pack.id === packFilter)?.title ?? ''}</span>
         </div>
-      </header>
+      </AppCard>
 
       <section className="dictionary-grid">
         {filteredWords.map((word) => {
           const progress = getWordProgress(storage, word.id);
-          const badgeLabel = getBadgeLabel(progress.status);
           const wordPacks = getPackByWord(word, packs);
 
           return (
-            <article key={word.id} className="word-card">
-              <div className="word-card-header">
-                <div>
-                  <h2 className="word-title">{word.original}</h2>
-                  <p className="word-subtitle">
-                    {word.translation} · {word.transcription}
-                  </p>
+            <AppCard key={word.id} as="article" className="word-card">
+              <WordImage word={word} />
+
+              <div className="word-card-body">
+                <div className="word-card-header">
+                  <div>
+                    <h2 className="word-title">{word.original}</h2>
+                    <p className="word-subtitle">
+                      {word.translation} · {word.transcription || 'транскрипция не указана'}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="audio-button"
+                    onClick={() => {
+                      void playWordAudio(word);
+                    }}
+                  >
+                    Аудио
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  className="audio-button"
-                  onClick={() => {
-                    void playWordAudio(word);
-                  }}
-                >
-                  Аудио
-                </button>
-              </div>
 
-              <div className="badge-row wrap-row">
-                <span className={`status-badge ${progress.status}`}>{badgeLabel}</span>
-                <span className="tag-badge">{word.level}</span>
-                <span className="tag-badge">{word.part_of_speech}</span>
-                {word.source === 'core' ? (
-                  <span className="tag-badge">Базовый курс</span>
-                ) : (
-                  wordPacks.map((pack) => (
-                    <span key={pack.id} className="tag-badge">
-                      {pack.title}
-                    </span>
-                  ))
-                )}
-              </div>
+                <div className="badge-row wrap-row">
+                  <StatusBadge status={progress.status} />
+                  <span className="tag-badge">{word.level}</span>
+                  <span className="tag-badge">{word.part_of_speech}</span>
+                  {word.source === 'core' ? (
+                    <span className="tag-badge">Базовый курс</span>
+                  ) : (
+                    wordPacks.map((pack) => (
+                      <span key={pack.id} className="tag-badge">
+                        {pack.title}
+                      </span>
+                    ))
+                  )}
+                </div>
 
-              <p className="example-original">{word.example_original}</p>
-              <p className="example-translation">{word.example_translation}</p>
-            </article>
+                <div className="example-card">
+                  <p className="example-original">{word.example_original}</p>
+                  <p className="example-translation">{word.example_translation}</p>
+                </div>
+              </div>
+            </AppCard>
           );
         })}
       </section>

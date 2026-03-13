@@ -1,4 +1,7 @@
 import type { Exercise, Word } from '../types';
+import { AppCard } from './AppCard';
+import { LessonChoiceButton } from './LessonChoiceButton';
+import { WordImage } from './WordImage';
 
 interface MultipleChoiceExerciseProps {
   exercise: Exercise;
@@ -19,9 +22,10 @@ export function MultipleChoiceExercise({
 }: MultipleChoiceExerciseProps) {
   const isAudioExercise = exercise.type === 'audio_to_translation_choice';
   const isOriginalExercise = exercise.type === 'original_to_translation_choice';
+  const shouldShowImage = !isAudioExercise;
 
   return (
-    <section className="exercise-card">
+    <AppCard as="section" className="exercise-card">
       <header className="exercise-header">
         <span className="eyebrow">Упражнение</span>
         <h2 className="exercise-title">{exercise.prompt}</h2>
@@ -36,44 +40,51 @@ export function MultipleChoiceExercise({
         {exercise.type === 'translation_to_original_choice' ? (
           <div className="question-block">
             <p className="question-primary">{word.translation}</p>
-            <p className="question-secondary">Выберите слово на французском</p>
+            <p className="question-secondary">Выберите французское слово</p>
           </div>
         ) : null}
         {isAudioExercise ? (
           <div className="audio-panel">
-            <button className="audio-button" type="button" onClick={onReplayAudio}>
+            <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
               Повторить аудио
             </button>
-            <p className="audio-hint">Слушайте внимательно и выберите точный перевод</p>
+            <p className="audio-hint">Слушайте внимательно и выберите точный перевод.</p>
           </div>
         ) : null}
       </header>
+
+      {shouldShowImage ? (
+        <div className="exercise-visual">
+          <WordImage word={word} size="small" />
+        </div>
+      ) : null}
 
       <div className="choice-list">
         {exercise.options?.map((option) => {
           const isCorrect = option.label === exercise.correctAnswer;
           const isSelected = option.label === selectedAnswer;
-          const stateClass = isSubmitted
+          const state = isSubmitted
             ? isCorrect
-              ? 'choice-button correct'
+              ? 'correct'
               : isSelected
-                ? 'choice-button incorrect'
-                : 'choice-button muted'
-            : 'choice-button';
+                ? 'incorrect'
+                : 'muted'
+            : isSelected
+              ? 'selected'
+              : 'default';
 
           return (
-            <button
+            <LessonChoiceButton
               key={option.id + option.label}
-              type="button"
-              className={stateClass}
+              state={state}
               disabled={isSubmitted}
               onClick={() => onSelect(option.label)}
             >
               {option.label}
-            </button>
+            </LessonChoiceButton>
           );
         })}
       </div>
-    </section>
+    </AppCard>
   );
 }

@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { formatDateTimeLabel, formatDurationLabel, formatLongDateLabel, percentage } from '../lib/utils';
 import type { AppStorage, StudyHistoryEntry, UserProfile, WordProgress } from '../types';
+import { AppCard } from './AppCard';
+import { StatCard } from './StatCard';
 
 interface ProfileScreenProps {
   profile: UserProfile;
@@ -22,25 +24,36 @@ function summarizeHistory(history: StudyHistoryEntry[]) {
   const weekly = history.slice(-7);
   const monthly = history.slice(-30);
 
-  const totalWeeklyWords = weekly.reduce((sum, item) => sum + item.wordsLearned, 0);
-  const totalMonthlyWords = monthly.reduce((sum, item) => sum + item.wordsLearned, 0);
-  const weeklyAccuracy = percentage(
-    weekly.reduce((sum, item) => sum + item.correctAnswers, 0),
-    weekly.reduce((sum, item) => sum + item.totalAnswers, 0),
-  );
-  const monthlyAccuracy = percentage(
-    monthly.reduce((sum, item) => sum + item.correctAnswers, 0),
-    monthly.reduce((sum, item) => sum + item.totalAnswers, 0),
-  );
-
   return {
     weeklyLessons: weekly.length,
     monthlyLessons: monthly.length,
-    totalWeeklyWords,
-    totalMonthlyWords,
-    weeklyAccuracy,
-    monthlyAccuracy,
+    totalWeeklyWords: weekly.reduce((sum, item) => sum + item.wordsLearned, 0),
+    totalMonthlyWords: monthly.reduce((sum, item) => sum + item.wordsLearned, 0),
+    weeklyAccuracy: percentage(
+      weekly.reduce((sum, item) => sum + item.correctAnswers, 0),
+      weekly.reduce((sum, item) => sum + item.totalAnswers, 0),
+    ),
+    monthlyAccuracy: percentage(
+      monthly.reduce((sum, item) => sum + item.correctAnswers, 0),
+      monthly.reduce((sum, item) => sum + item.totalAnswers, 0),
+    ),
   };
+}
+
+function getModeLabel(mode: StudyHistoryEntry['mode']): string {
+  if (mode === 'default') {
+    return 'ежедневный урок';
+  }
+
+  if (mode === 'extra') {
+    return 'дополнительное обучение';
+  }
+
+  if (mode === 'pack') {
+    return 'практика пака';
+  }
+
+  return 'повтор ошибок';
 }
 
 export default function ProfileScreen({
@@ -53,31 +66,13 @@ export default function ProfileScreen({
   const history = useMemo(() => [...storage.studyHistory].reverse(), [storage.studyHistory]);
   const summary = useMemo(() => summarizeHistory(storage.studyHistory), [storage.studyHistory]);
 
-  function getModeLabel(mode: StudyHistoryEntry['mode']): string {
-    if (mode === 'default') {
-      return 'ежедневный урок';
-    }
-
-    if (mode === 'extra') {
-      return 'дополнительное обучение';
-    }
-
-    if (mode === 'pack') {
-      return 'практика пака';
-    }
-
-    return 'повтор ошибок';
-  }
-
   return (
     <section className="dashboard-shell">
-      <header className="hero-card profile-hero">
+      <AppCard as="header" tone="hero" className="profile-hero">
         <div className="profile-copy">
           <span className="eyebrow">Профиль</span>
-          <h1 className="hero-title compact-title">Личный прогресс</h1>
-          <p className="hero-text">
-            История уроков, серия дней и сводка по словарю хранятся локально и сохраняются между перезапусками.
-          </p>
+          <h1 className="hero-title compact-title">Личный кабинет обучения</h1>
+          <p className="hero-text">Здесь сохраняются имя, серия дней, статистика по словам и лента завершённых занятий.</p>
         </div>
 
         <div className="profile-name-card">
@@ -92,69 +87,32 @@ export default function ProfileScreen({
             placeholder="Введите имя"
           />
           <p className="info-subtle">
-            Последнее занятие:{' '}
-            {profile.lastStudiedAt ? formatDateTimeLabel(profile.lastStudiedAt) : 'пока нет завершённых уроков'}
+            Последнее занятие: {profile.lastStudiedAt ? formatDateTimeLabel(profile.lastStudiedAt) : 'пока нет завершённых уроков'}
           </p>
         </div>
-      </header>
+      </AppCard>
 
       <section className="stats-grid profile-stats-grid">
-        <article className="info-card accent-card">
-          <span className="info-label">Всего изучено</span>
-          <strong className="info-value">{stats.learned}</strong>
-          <p className="info-subtle">Слова, которые уже попадали в обучение</p>
-        </article>
-        <article className="info-card">
-          <span className="info-label">Уже известные</span>
-          <strong className="info-value">{stats.known}</strong>
-          <p className="info-subtle">Отмечены действием «Уже знаю»</p>
-        </article>
-        <article className="info-card">
-          <span className="info-label">Выученные</span>
-          <strong className="info-value">{stats.mastered}</strong>
-          <p className="info-subtle">Уверенно закреплены</p>
-        </article>
-        <article className="info-card">
-          <span className="info-label">Сложные слова</span>
-          <strong className="info-value">{stats.difficult}</strong>
-          <p className="info-subtle">Требуют внимания в повторении</p>
-        </article>
-        <article className="info-card">
-          <span className="info-label">Серия дней</span>
-          <strong className="info-value">{storage.streakDays}</strong>
-          <p className="info-subtle">Текущий streak</p>
-        </article>
-        <article className="info-card">
-          <span className="info-label">Завершено уроков</span>
-          <strong className="info-value">{storage.studyHistory.length}</strong>
-          <p className="info-subtle">Всего записей в истории</p>
-        </article>
+        <StatCard label="Всего изучено" value={stats.learned} hint="Слова уже попадали в обучение" tone="accent" />
+        <StatCard label="Уже известные" value={stats.known} hint="Отмечены как знакомые" />
+        <StatCard label="Выученные" value={stats.mastered} hint="Уверенно закреплены" />
+        <StatCard label="Сложные слова" value={stats.difficult} hint="Требуют дополнительного повтора" />
+        <StatCard label="Серия дней" value={storage.streakDays} hint="Текущий streak" />
+        <StatCard label="Завершено уроков" value={storage.studyHistory.length} hint="Всего записей в истории" />
       </section>
 
       <section className="stats-grid profile-summary-grid">
-        <article className="info-card">
-          <span className="info-label">За 7 дней</span>
-          <strong className="info-value">{summary.weeklyLessons}</strong>
-          <p className="info-subtle">
-            Уроков: слов выучено {summary.totalWeeklyWords}, точность {summary.weeklyAccuracy}%
-          </p>
-        </article>
-        <article className="info-card">
-          <span className="info-label">За 30 дней</span>
-          <strong className="info-value">{summary.monthlyLessons}</strong>
-          <p className="info-subtle">
-            Уроков: слов выучено {summary.totalMonthlyWords}, точность {summary.monthlyAccuracy}%
-          </p>
-        </article>
+        <StatCard label="За 7 дней" value={summary.weeklyLessons} hint={`Слов: ${summary.totalWeeklyWords} · Точность ${summary.weeklyAccuracy}%`} tone="soft" />
+        <StatCard label="За 30 дней" value={summary.monthlyLessons} hint={`Слов: ${summary.totalMonthlyWords} · Точность ${summary.monthlyAccuracy}%`} tone="soft" />
       </section>
 
-      <section className="timeline-card">
-        <div className="chart-header">
+      <AppCard as="section" className="timeline-card">
+        <div className="section-heading">
           <div>
             <span className="eyebrow">История</span>
-            <h2 className="section-title">Лента занятий по дням</h2>
+            <h2 className="section-title">Лента занятий</h2>
           </div>
-          <span className="info-subtle">Сохраняется локально после каждого завершённого урока</span>
+          <p className="hero-text">Каждая завершённая сессия сохраняется локально вместе с модулями, ошибками и длительностью.</p>
         </div>
 
         {history.length === 0 ? (
@@ -168,7 +126,7 @@ export default function ProfileScreen({
                     <strong>{formatLongDateLabel(entry.date)}</strong>
                     <p className="info-subtle">{formatDateTimeLabel(entry.completedAt)}</p>
                   </div>
-                  <span className="status-badge review">{getModeLabel(entry.mode)}</span>
+                  <span className="tag-badge">{getModeLabel(entry.mode)}</span>
                 </div>
 
                 <div className="timeline-stats">
@@ -190,7 +148,7 @@ export default function ProfileScreen({
             ))}
           </div>
         )}
-      </section>
+      </AppCard>
     </section>
   );
 }

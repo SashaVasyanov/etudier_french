@@ -7,6 +7,7 @@ import { LessonResult } from './components/LessonResult';
 import { LessonWordPreview } from './components/LessonWordPreview';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
 import { ProgressBar } from './components/ProgressBar';
+import { ProgressHeader } from './components/ProgressHeader';
 import { getStarterPacks, getWordById, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
 import { createLessonSession } from './lib/exercises';
@@ -489,8 +490,10 @@ function App() {
       <div className="app-frame">
         <header className="topbar-card">
           <div className="topbar-copy">
-            <span className="eyebrow">Приложение для изучения слов</span>
-            <strong className="topbar-title">Etudier French</strong>
+            <div>
+              <span className="eyebrow">Французский словарь и уроки</span>
+              <strong className="topbar-title">Etudier French</strong>
+            </div>
             <span className="info-subtle">
               {storage.profile.displayName} · Активных слов: {availableWords.length} · Серия: {storage.streakDays}
             </span>
@@ -523,38 +526,23 @@ function App() {
 
         {screen === 'lesson' && currentStep && currentWord && session ? (
           <section className="lesson-shell">
-            <div className="module-header lesson-header-card">
-              <div className="module-header-top">
-                <span className={`module-chip ${currentStep.moduleTheme}`}>Модуль {currentStep.modulePosition}</span>
-                <span className="eyebrow">Осталось модулей: {remainingModules}</span>
-              </div>
-              <h2 className="section-title">{session.title}</h2>
-              <p className="hero-text">{currentStep.moduleTitle}: {currentStep.moduleDescription}</p>
-              <div className="badge-row wrap-row">
-                <span className="tag-badge">Режим: {session.mode === 'default' ? 'ежедневный урок' : session.mode === 'extra' ? 'дополнительное обучение' : session.mode === 'pack' ? 'практика пака' : 'повтор ошибок'}</span>
-                <span className="tag-badge">Длительность: {session.durationMinutes} мин</span>
-              </div>
-              <div className="module-meta-grid">
-                <div className="mini-stat">
-                  <span className="mini-stat-value">
-                    {currentStep.indexInModule}/{currentStep.totalInModule}
-                  </span>
-                  <span className="mini-stat-label">Шаг в модуле</span>
-                </div>
-                <div className="mini-stat">
-                  <span className="mini-stat-value">
-                    {currentStep.modulePosition}/{visibleModules.length}
-                  </span>
-                  <span className="mini-stat-label">Модуль урока</span>
-                </div>
-                <div className="mini-stat">
-                  <span className="mini-stat-value">
-                    {stepIndex + 1}/{session.steps.length}
-                  </span>
-                  <span className="mini-stat-label">Общий прогресс</span>
-                </div>
-              </div>
-            </div>
+            <ProgressHeader
+              eyebrow={
+                session.mode === 'default'
+                  ? 'Ежедневный урок'
+                  : session.mode === 'extra'
+                    ? 'Дополнительное обучение'
+                    : session.mode === 'pack'
+                      ? 'Практика пака'
+                      : 'Повтор ошибок'
+              }
+              title={currentStep.moduleTitle}
+              description={currentStep.moduleDescription}
+              moduleLabel={`${currentStep.modulePosition}/${visibleModules.length}`}
+              stepLabel={`${currentStep.indexInModule}/${currentStep.totalInModule}`}
+              overallLabel={`${stepIndex + 1}/${session.steps.length}`}
+              badges={[session.title, `${session.durationMinutes} мин`, `Осталось модулей: ${remainingModules}`]}
+            />
 
             <div className="module-nav" aria-label="Модули урока">
               {visibleModules.map((module) => {

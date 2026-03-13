@@ -1,5 +1,7 @@
 import { percentage } from '../lib/utils';
 import type { ExerciseOutcome, Word } from '../types';
+import { AppCard } from './AppCard';
+import { WordImage } from './WordImage';
 
 interface LessonResultProps {
   outcomes: ExerciseOutcome[];
@@ -10,14 +12,14 @@ interface LessonResultProps {
 
 function getMessage(successRate: number): string {
   if (successRate >= 90) {
-    return 'Очень сильный проход. Можно смело усложнять следующий урок.';
+    return 'Очень сильный проход. Можно смело переходить к следующему уровню сложности.';
   }
 
   if (successRate >= 70) {
-    return 'Хороший темп. Еще один короткий подход закрепит сложные слова.';
+    return 'Хороший темп. Ещё один короткий подход отлично закрепит материал.';
   }
 
-  return 'Нормальный рабочий результат. Повтор ошибок сейчас даст лучший эффект.';
+  return 'Нормальный рабочий результат. Точечный повтор ошибок сейчас даст лучший эффект.';
 }
 
 export function LessonResult({
@@ -31,50 +33,48 @@ export function LessonResult({
 
   return (
     <section className="result-card">
-      <div className="result-hero">
-        <span className="eyebrow">Результат урока</span>
-        <h2 className="result-title">{correctAnswers} правильных ответов</h2>
-        <p className="result-score">{successRate}% успеха</p>
-        <p className="result-message">{getMessage(successRate)}</p>
-      </div>
+      <AppCard as="section" tone="hero">
+        <div className="result-hero">
+          <span className="eyebrow">Результат урока</span>
+          <h2 className="result-title">{correctAnswers} правильных ответов</h2>
+          <p className="result-score">{successRate}% успеха</p>
+          <p className="result-message">{getMessage(successRate)}</p>
+        </div>
+      </AppCard>
 
-      <div className="result-stats">
-        <div className="mini-stat">
+      <section className="stats-grid compact-stats">
+        <AppCard as="article" className="mini-panel">
           <span className="mini-stat-value">{outcomes.length}</span>
           <span className="mini-stat-label">Всего заданий</span>
-        </div>
-        <div className="mini-stat">
+        </AppCard>
+        <AppCard as="article" className="mini-panel">
           <span className="mini-stat-value">{mistakeWords.length}</span>
-          <span className="mini-stat-label">Слова с ошибками</span>
-        </div>
-      </div>
+          <span className="mini-stat-label">Слов с ошибками</span>
+        </AppCard>
+      </section>
 
-      <div className="mistake-card">
-        <h3 className="mistake-title">Слова, которые стоит повторить</h3>
+      <AppCard as="section" className="mistake-card">
+        <h3 className="mistake-title">Что повторить перед следующим уроком</h3>
         {mistakeWords.length === 0 ? (
-          <p className="mistake-empty">Ошибок нет. Можно завершать урок или пройти новый набор.</p>
+          <p className="mistake-empty">Ошибок нет. Можно завершать урок или открыть следующий набор.</p>
         ) : (
-          <ul className="mistake-list">
+          <div className="mistake-grid">
             {mistakeWords.map((word) => (
-              <li key={word.id} className="mistake-item">
+              <article key={word.id} className="mistake-item-card">
+                <WordImage word={word} size="small" />
                 <div>
                   <strong>{word.original}</strong>
-                  <span>{word.translation}</span>
+                  <p className="info-subtle">{word.translation}</p>
+                  <small>{word.transcription}</small>
                 </div>
-                <small>{word.transcription}</small>
-              </li>
+              </article>
             ))}
-          </ul>
+          </div>
         )}
-      </div>
+      </AppCard>
 
       <div className="result-actions">
-        <button
-          type="button"
-          className="primary-button"
-          disabled={mistakeWords.length === 0}
-          onClick={onRepeatMistakes}
-        >
+        <button type="button" className="primary-button" disabled={mistakeWords.length === 0} onClick={onRepeatMistakes}>
           Повторить ошибки
         </button>
         <button type="button" className="secondary-button" onClick={onFinish}>

@@ -1,7 +1,9 @@
 import { countWordsByStatus } from '../lib/exercises';
 import { getTodayDateKey, percentage } from '../lib/utils';
 import type { AppStorage, DailyLessonRecord, LessonDurationMinutes, Word, WordProgress } from '../types';
+import { AppCard } from './AppCard';
 import { LessonDurationSelector } from './LessonDurationSelector';
+import { StatCard } from './StatCard';
 
 interface HomeDashboardProps {
   availableWords: Word[];
@@ -33,14 +35,14 @@ function getDueReviewCount(progressList: WordProgress[]): number {
 
 function formatDailyStatus(todayCompletion: DailyLessonRecord | null, completedLessons: number | undefined): string {
   if (todayCompletion) {
-    return 'Завершён';
+    return 'Урок завершён';
   }
 
   if (completedLessons) {
-    return `${completedLessons} урок(а)`;
+    return `${completedLessons} занятие сегодня`;
   }
 
-  return 'Не начат';
+  return 'Готов к старту';
 }
 
 export function HomeDashboard({
@@ -73,15 +75,20 @@ export function HomeDashboard({
 
   return (
     <section className="dashboard-shell">
-      <header className="hero-card home-hero">
+      <AppCard as="header" tone="hero" className="home-hero">
         <div className="hero-copy">
-          <span className="eyebrow">Главная</span>
-          <h1 className="hero-title">Французский на сегодня</h1>
+          <span className="eyebrow">Сегодня</span>
+          <h1 className="hero-title">Ваш французский маршрут на день</h1>
           <p className="hero-text">
             {todayCompletion
-              ? 'Ежедневный урок уже закрыт, но обучение не заканчивается: продолжайте в свободном режиме, откройте сложные слова или изучайте паки.'
-              : 'Сначала пройдите ежедневный урок, затем продолжайте обучение в дополнительном режиме без сброса дневного прогресса.'}
+              ? 'Ежедневный поток уже закрыт. Можно перейти в свободную практику, разобрать сложные слова или пройти тематический пак.'
+              : 'Начните с ежедневного урока из 5 модулей, затем продолжайте в дополнительном режиме без потери дневного прогресса.'}
           </p>
+          <div className="badge-row wrap-row">
+            <span className="tag-badge">{formatDailyStatus(todayCompletion ?? null, today?.completedLessons)}</span>
+            <span className="tag-badge">Длительность: {lessonDurationMinutes} мин</span>
+            <span className="tag-badge">Паков подключено: {addedPacksCount}</span>
+          </div>
         </div>
 
         <div className="hero-actions home-actions">
@@ -90,149 +97,118 @@ export function HomeDashboard({
             className="primary-button hero-button"
             onClick={todayCompletion ? onOpenCompletion : onStartLesson}
           >
-            {todayCompletion ? 'Открыть итог дня' : 'Начать ежедневный урок'}
+            {todayCompletion ? 'Открыть итог дня' : 'Продолжить ежедневный урок'}
           </button>
           <button type="button" className="secondary-button" onClick={onStartExtraLesson}>
-            Продолжить обучение
+            Дополнительное обучение
           </button>
-          <button type="button" className="ghost-button" onClick={onOpenDictionary}>
-            Открыть словарь
-          </button>
-          <button type="button" className="ghost-button" onClick={onOpenPacks}>
-            Открыть паки
-          </button>
-          <button type="button" className="ghost-button" onClick={onOpenProfile}>
-            Открыть профиль
-          </button>
+          <div className="cta-grid">
+            <button type="button" className="ghost-button" onClick={onOpenDictionary}>
+              Словарь
+            </button>
+            <button type="button" className="ghost-button" onClick={onOpenPacks}>
+              Паки
+            </button>
+            <button type="button" className="ghost-button" onClick={onOpenProfile}>
+              Профиль
+            </button>
+          </div>
         </div>
-      </header>
+      </AppCard>
+
+      <section className="stats-grid">
+        <StatCard label="Ежедневный урок" value={todayCompletion ? '5/5' : 'В процессе'} hint={todayCompletion ? 'Дневной поток завершён' : 'Пройдите все 5 модулей'} tone="accent" />
+        <StatCard label="Доступных слов" value={availableWords.length} hint={`Всего в базе ${totalWords.length}`} />
+        <StatCard label="На повторении" value={reviewCount} hint="Готовы к повтору прямо сейчас" />
+        <StatCard label="Серия дней" value={storage.streakDays} hint={`Точность сегодня ${todayAccuracy}%`} />
+      </section>
 
       <LessonDurationSelector value={lessonDurationMinutes} onChange={onLessonDurationChange} />
 
-      <section className="stats-grid">
-        <article className="info-card accent-card">
-          <span className="info-label">Ежедневный урок</span>
-          <strong className="info-value">{formatDailyStatus(todayCompletion ?? null, today?.completedLessons)}</strong>
-          <p className="info-subtle">
-            {todayCompletion ? `Пройдено модулей: ${todayCompletion.completedModules}` : `Выучено сегодня: ${learnedToday}`}
-          </p>
-        </article>
-
-        <article className="info-card">
-          <span className="info-label">Активная база</span>
-          <strong className="info-value">{availableWords.length}</strong>
-          <p className="info-subtle">Слов доступно сейчас из {totalWords.length} в общей базе</p>
-        </article>
-
-        <article className="info-card">
-          <span className="info-label">Повторение</span>
-          <strong className="info-value">{reviewCount}</strong>
-          <p className="info-subtle">Слов готово к повторению прямо сейчас</p>
-        </article>
-
-        <article className="info-card">
-          <span className="info-label">Серия дней</span>
-          <strong className="info-value">{storage.streakDays}</strong>
-          <p className="info-subtle">Точность за сегодня: {todayAccuracy}%</p>
-        </article>
-      </section>
-
-      <section className="home-path-grid">
-        <article className="dashboard-panel">
-          <div className="chart-header">
+      <section className="home-feature-grid">
+        <AppCard as="article" className="route-card route-card-primary">
+          <div className="section-heading">
             <div>
-              <span className="eyebrow">Маршрут 1</span>
+              <span className="eyebrow">Основной путь</span>
               <h2 className="section-title">Ежедневный урок</h2>
             </div>
-            <span className="info-subtle">Обязательный дневной поток с модулями и прогрессом</span>
+            <span className="inline-note">{todayCompletion ? 'На сегодня закрыт' : 'Следующий лучший шаг'}</span>
           </div>
           <p className="hero-text">
-            Новые слова, тренировка, повторение и закрепление идут отдельными блоками. Прогресс сохраняется как итог дня.
+            Чёткий поток из 5 модулей: новые слова, первая практика, повторение, смешанное закрепление и финальная мини-проверка.
           </p>
-          <div className="badge-row wrap-row">
-            <span className="tag-badge">Текущая длительность: {lessonDurationMinutes} мин</span>
-            <span className="tag-badge">{todayCompletion ? 'На сегодня закрыт' : 'Готов к запуску'}</span>
+          <div className="feature-list">
+            <span>Новых слов сегодня: {learnedToday}</span>
+            <span>Прогресс дня сохраняется отдельно</span>
+            <span>После завершения открывается экран «На сегодня заданий нет»</span>
           </div>
           <button
             type="button"
             className="primary-button full-width"
             onClick={todayCompletion ? onOpenCompletion : onStartLesson}
           >
-            {todayCompletion ? 'Посмотреть экран завершения' : 'Запустить ежедневный урок'}
+            {todayCompletion ? 'Посмотреть завершение' : 'Стартовать урок'}
           </button>
-        </article>
+        </AppCard>
 
-        <article className="dashboard-panel">
-          <div className="chart-header">
+        <AppCard as="article" tone="soft" className="route-card">
+          <div className="section-heading">
             <div>
-              <span className="eyebrow">Маршрут 2</span>
+              <span className="eyebrow">После урока</span>
               <h2 className="section-title">Дополнительное обучение</h2>
             </div>
-            <span className="info-subtle">Свободный режим после дневного лимита</span>
+            <span className="inline-note">Без влияния на дневной прогресс</span>
           </div>
           <p className="hero-text">
-            Берёт сложные, изучаемые и оставшиеся новые слова. Этот режим не меняет статус ежедневного урока и доступен всегда.
+            Продолжайте тренироваться после закрытия дня: сложные слова, текущие слова в изучении, тематические паки и смешанное закрепление.
           </p>
-          <div className="badge-row wrap-row">
-            <span className="tag-badge">Сложных слов: {difficultCount}</span>
-            <span className="tag-badge">Активно изучаются: {activeWords}</span>
+          <div className="feature-list">
+            <span>Сложных слов: {difficultCount}</span>
+            <span>В активном изучении: {activeWords}</span>
+            <span>Можно запускать в любое время</span>
           </div>
           <button type="button" className="secondary-button full-width" onClick={onStartExtraLesson}>
-            Продолжить обучение
+            Открыть свободный режим
           </button>
-        </article>
+        </AppCard>
       </section>
 
       <section className="dashboard-feature-grid">
-        <article className="dashboard-panel">
+        <AppCard as="article" className="progress-highlight">
           <div className="progress-meta">
-            <span className="progress-caption">Прогресс по активному словарю</span>
-            <span className="progress-count">{progressPercent}%</span>
+            <div>
+              <span className="progress-caption">Прогресс по активному словарю</span>
+              <strong className="progress-count">{progressPercent}%</strong>
+            </div>
+            <span className="inline-note">Выучено {masteredCount} слов</span>
           </div>
           <div className="progress-track" aria-hidden="true">
             <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
           </div>
           <p className="info-subtle">
-            Учится: {activeWords} · Уже известные: {countWordsByStatus(progressList, 'known')} · Выученные: {masteredCount}
+            Изучается: {activeWords} · Уже известно: {countWordsByStatus(progressList, 'known')} · Выучено: {masteredCount}
           </p>
-        </article>
+        </AppCard>
 
-        <article className="dashboard-panel">
-          <div className="chart-header">
-            <h2 className="section-title">Что делать дальше</h2>
-            <span className="info-subtle">Все основные разделы доступны без тупиков</span>
+        <AppCard as="article" tone="soft" className="quick-actions-card">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">Быстрые разделы</span>
+              <h2 className="section-title">Что открыть дальше</h2>
+            </div>
           </div>
-          <div className="next-actions-list">
-            <button type="button" className="secondary-button full-width" onClick={onStartExtraLesson}>
-              Дополнительная практика
-            </button>
+          <div className="quick-action-list">
             <button type="button" className="ghost-button full-width" onClick={onOpenDictionary}>
-              Проверить словарь и фильтры
+              Смотреть словарь с карточками
             </button>
             <button type="button" className="ghost-button full-width" onClick={onOpenPacks}>
-              Открыть паки и посмотреть слова
+              Открыть тематические паки
+            </button>
+            <button type="button" className="ghost-button full-width" onClick={onOpenProfile}>
+              Перейти в профиль и историю
             </button>
           </div>
-        </article>
-      </section>
-
-      <section className="quick-grid quick-grid-wide" aria-label="Ключевые разделы">
-        <article className="quick-card">
-          <strong>Ежедневный урок</strong>
-          <span>Модульный путь с явным прогрессом дня и отдельным экраном завершения.</span>
-        </article>
-        <article className="quick-card">
-          <strong>Свободный режим</strong>
-          <span>Продолжает обучение после закрытия дневного урока на той же базе слов.</span>
-        </article>
-        <article className="quick-card">
-          <strong>Паки</strong>
-          <span>Добавлено паков: {addedPacksCount}. Теперь каждый пак можно открыть и просмотреть целиком.</span>
-        </article>
-        <article className="quick-card">
-          <strong>Профиль и история</strong>
-          <span>Серия дней, история уроков, ошибки и локально сохранённый прогресс.</span>
-        </article>
+        </AppCard>
       </section>
     </section>
   );

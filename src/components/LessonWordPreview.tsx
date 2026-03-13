@@ -1,4 +1,6 @@
 import type { Word } from '../types';
+import { AppCard } from './AppCard';
+import { WordImage } from './WordImage';
 
 interface LessonWordPreviewProps {
   word: Word;
@@ -18,43 +20,49 @@ export function LessonWordPreview({
   onNext,
 }: LessonWordPreviewProps) {
   return (
-    <section className="exercise-card preview-card">
-      <header className="exercise-header">
-        <span className="eyebrow">Новые слова</span>
-        <h2 className="exercise-title">{word.original}</h2>
-        <div className="question-block">
-          <p className="question-primary">{word.translation}</p>
-          <p className="question-secondary">
-            {word.transcription} · {word.part_of_speech} · {word.level}
-          </p>
+    <AppCard as="section" className="exercise-card preview-card">
+      <div className="lesson-preview-layout">
+        <WordImage word={word} size="large" />
+
+        <div className="lesson-preview-content">
+          <header className="exercise-header">
+            <span className="eyebrow">Новые слова</span>
+            <h2 className="exercise-title">{word.original}</h2>
+            <div className="question-block">
+              <p className="question-primary">{word.translation}</p>
+              <p className="question-secondary">
+                {word.transcription} · {word.part_of_speech} · {word.level}
+              </p>
+            </div>
+          </header>
+
+          <div className="example-card">
+            <p className="example-original">{word.example_original}</p>
+            <p className="example-translation">{word.example_translation}</p>
+          </div>
+
+          <div className="preview-meta">
+            <span>
+              {current} / {total}
+            </span>
+            <span>{word.tags.join(' · ')}</span>
+          </div>
+
+          <div className="result-actions">
+            <button type="button" className="ghost-button" onClick={onReplayAudio}>
+              Прослушать
+            </button>
+            {onMarkKnown ? (
+              <button type="button" className="secondary-button" onClick={onMarkKnown}>
+                Уже знаю
+              </button>
+            ) : null}
+            <button type="button" className="primary-button" onClick={onNext}>
+              Далее
+            </button>
+          </div>
         </div>
-      </header>
-
-      <div className="example-card">
-        <p className="example-original">{word.example_original}</p>
-        <p className="example-translation">{word.example_translation}</p>
       </div>
-
-      <div className="preview-meta">
-        <span>
-          {current} / {total}
-        </span>
-        <span>{word.tags.join(' · ')}</span>
-      </div>
-
-      <div className="result-actions">
-        <button type="button" className="ghost-button" onClick={onReplayAudio}>
-          Прослушать
-        </button>
-        {onMarkKnown ? (
-          <button type="button" className="secondary-button" onClick={onMarkKnown}>
-            Уже знаю
-          </button>
-        ) : null}
-        <button type="button" className="primary-button" onClick={onNext}>
-          Далее
-        </button>
-      </div>
-    </section>
+    </AppCard>
   );
 }
