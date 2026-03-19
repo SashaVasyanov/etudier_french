@@ -11,7 +11,6 @@ interface MultipleChoiceExerciseProps {
   isSubmitted: boolean;
   onSelect: (answer: string) => void;
   onReplayAudio?: () => void;
-  onNext: () => void;
 }
 
 export function MultipleChoiceExercise({
@@ -21,7 +20,6 @@ export function MultipleChoiceExercise({
   isSubmitted,
   onSelect,
   onReplayAudio,
-  onNext,
 }: MultipleChoiceExerciseProps) {
   const isAudioExercise = exercise.type === 'audio_to_translation_choice';
   const isOriginalExercise = exercise.type === 'original_to_translation_choice';
@@ -62,39 +60,40 @@ export function MultipleChoiceExercise({
       }
       visual={shouldShowImage ? <WordImage word={word} size="small" className="lesson-word-image" /> : null}
       body={
-        <div className="choice-list">
-          {exercise.options?.map((option) => {
-            const isCorrect = option.label === exercise.correctAnswer;
-            const isSelected = option.label === selectedAnswer;
-            const state = isSubmitted
-              ? isCorrect
-                ? 'correct'
+        <>
+          <div className="choice-list">
+            {exercise.options?.map((option) => {
+              const isCorrect = option.label === exercise.correctAnswer;
+              const isSelected = option.label === selectedAnswer;
+              const state = isSubmitted
+                ? isCorrect
+                  ? 'correct'
+                  : isSelected
+                    ? 'incorrect'
+                    : 'muted'
                 : isSelected
-                  ? 'incorrect'
-                  : 'muted'
-              : isSelected
-                ? 'selected'
-                : 'default';
+                  ? 'selected'
+                  : 'default';
 
-            return (
-              <LessonChoiceButton
-                key={option.id + option.label}
-                state={state}
-                disabled={isSubmitted}
-                onClick={() => onSelect(option.label)}
-              >
-                {option.label}
-              </LessonChoiceButton>
-            );
-          })}
-        </div>
-      }
-      actions={
-        isSubmitted ? (
-          <button type="button" className="primary-button full-width" onClick={onNext}>
-            Далее
-          </button>
-        ) : null
+              return (
+                <LessonChoiceButton
+                  key={option.id + option.label}
+                  state={state}
+                  disabled={isSubmitted}
+                  onClick={() => onSelect(option.label)}
+                >
+                  {option.label}
+                </LessonChoiceButton>
+              );
+            })}
+          </div>
+          {isSubmitted ? (
+            <div className={selectedAnswer === exercise.correctAnswer ? 'answer-feedback success' : 'answer-feedback error'}>
+              <strong>{selectedAnswer === exercise.correctAnswer ? 'Верно' : 'Неправильно'}</strong>
+              <span>Правильный ответ: {exercise.correctAnswer}</span>
+            </div>
+          ) : null}
+        </>
       }
     />
   );

@@ -458,6 +458,10 @@
   gap: var(--space-5);
 }
 
+.home-main-grid {
+  align-items: start;
+}
+
 .dashboard-feature-grid-wide {
   align-items: start;
 }
@@ -1142,6 +1146,11 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.compact-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 @media (max-width: 1180px) {
   .home-overview-grid,
   .dashboard-feature-grid,
@@ -1219,7 +1228,9 @@
   .flashcard-primary-actions,
   .flashcard-view .lesson-card-actions,
   .study-word-actions,
-  .lesson-exercise-card .choice-list {
+  .lesson-exercise-card .choice-list,
+  .compact-actions,
+  .result-actions {
     grid-template-columns: 1fr;
   }
 

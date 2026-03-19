@@ -441,6 +441,20 @@ function App() {
       ? [...outcomes].reverse().find((outcome) => outcome.exerciseId === currentExercise.id) ?? null
       : null;
 
+  useEffect(() => {
+    if (!currentStep || currentStep.kind !== 'exercise' || !currentExercise?.options || !isSubmitted) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      goToNextStep();
+    }, 950);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [currentExercise?.id, currentExercise?.options, currentStep, isSubmitted]);
+
   function handleMarkKnown() {
     if (!session || !currentWord || !currentStep?.allowMarkKnown) {
       return;
@@ -559,7 +573,6 @@ function App() {
                           }
                         : undefined
                     }
-                    onNext={goToNextStep}
                   />
                 ) : currentExercise ? (
                   <AudioInputExercise

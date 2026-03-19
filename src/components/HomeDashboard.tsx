@@ -147,7 +147,7 @@ export function HomeDashboard({
         <StatCard label="Серия дней" value={storage.streakDays} hint={`Точность сегодня ${todayAccuracy}%`} />
       </section>
 
-      <section className="dashboard-feature-grid dashboard-feature-grid-wide">
+      <section className="dashboard-feature-grid dashboard-feature-grid-wide home-main-grid">
         <LessonDurationSelector value={lessonDurationMinutes} onChange={onLessonDurationChange} />
 
         <AppCard as="article" className="route-card route-card-primary">
@@ -200,43 +200,34 @@ export function HomeDashboard({
             </button>
           </div>
         </AppCard>
-      </section>
-
-      <section className="dashboard-feature-grid">
-        <AppCard as="article" className="progress-highlight">
-          <div className="progress-meta">
-            <div>
-              <span className="progress-caption">Прогресс по активному словарю</span>
-              <strong className="progress-count">{progressPercent}%</strong>
-            </div>
-            <span className="inline-note">Выучено {masteredCount} слов</span>
-          </div>
-          <div className="progress-track" aria-hidden="true">
-            <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
-          </div>
-          <p className="info-subtle">
-            Изучается: {activeWords} · Уже известно: {countWordsByStatus(progressList, 'known')} · Выучено: {masteredCount}
-          </p>
-        </AppCard>
 
         <AppCard as="article" className="launch-panel">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">Практический режим</span>
-              <h2 className="section-title">Размер занятия под ваш ритм</h2>
+              <span className="eyebrow">Прогресс и запуск</span>
+              <h2 className="section-title">Минимум лишнего, только нужные действия</h2>
             </div>
-            <span className="inline-note">Сохраняется локально</span>
+            <span className="inline-note">{progressPercent}% слов освоено</span>
           </div>
           <div className="feature-list">
             <span>{lessonDurationMinutes === 10 ? 'Короткая сессия: быстрый заход и лёгкий ритм.' : lessonDurationMinutes === 20 ? 'Сбалансированная сессия: основной режим на каждый день.' : 'Длинная сессия: больше слов, больше закрепления.'}</span>
-            <span>Выбранная длительность применяется к ежедневному и дополнительному обучению.</span>
+            <span>Изучается: {activeWords} · Уже известно: {countWordsByStatus(progressList, 'known')} · Выучено: {masteredCount}</span>
           </div>
-          <div className="quick-action-list">
+          <div className="progress-track" aria-hidden="true">
+            <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
+          </div>
+          <div className="quick-action-list compact-actions">
+            <button type="button" className="primary-button full-width" onClick={todayCompletion ? onOpenCompletion : onStartLesson}>
+              {todayCompletion ? 'Открыть итог дня' : 'Продолжить урок'}
+            </button>
             <button type="button" className="ghost-button full-width" onClick={onOpenCompletion}>
               Итог дня
             </button>
             <button type="button" className="ghost-button full-width" onClick={onOpenPacks}>
               Тематические паки
+            </button>
+            <button type="button" className="ghost-button full-width" onClick={onOpenDictionary}>
+              Словарь
             </button>
           </div>
         </AppCard>
