@@ -551,7 +551,7 @@
 }
 
 .lesson-focus-screen {
-  width: min(980px, 100%);
+  width: min(1120px, 100%);
   margin: 0 auto;
 }
 
@@ -780,7 +780,7 @@
 }
 
 .lesson-study-view .lesson-card-inner {
-  max-width: 940px;
+  max-width: 1040px;
   margin: 0 auto;
   justify-items: center;
   text-align: center;
@@ -834,7 +834,7 @@
 }
 
 .lesson-exercise-card .lesson-card-inner {
-  max-width: 760px;
+  max-width: 920px;
   margin: 0 auto;
   justify-items: center;
   text-align: center;
@@ -884,6 +884,28 @@
 
 .audio-button-prominent {
   min-width: min(260px, 100%);
+}
+
+.answer-feedback {
+  width: 100%;
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  text-align: left;
+}
+
+.answer-feedback.success {
+  background: var(--success-soft);
+  border-color: rgba(31, 107, 93, 0.2);
+  color: var(--accent-strong);
+}
+
+.answer-feedback.error {
+  background: var(--danger-soft);
+  border-color: rgba(180, 74, 53, 0.2);
+  color: #7f3f31;
 }
 
 .example-original {

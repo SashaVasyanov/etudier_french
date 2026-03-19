@@ -92,7 +92,7 @@ function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'or
   ]);
 }
 
-function createExercise(word: Word, words: Word[], type: ExerciseType, index: number): Exercise {
+function createExercise(word: Word, optionPool: Word[], type: ExerciseType, index: number): Exercise {
   switch (type) {
     case 'audio_to_translation_choice':
       return {
@@ -101,7 +101,7 @@ function createExercise(word: Word, words: Word[], type: ExerciseType, index: nu
         wordId: word.id,
         prompt: 'Прослушайте слово и выберите перевод',
         correctAnswer: word.translation,
-        options: buildChoiceOptions(word, words, 'translation'),
+        options: buildChoiceOptions(word, optionPool, 'translation'),
       };
     case 'translation_to_original_choice':
       return {
@@ -110,7 +110,7 @@ function createExercise(word: Word, words: Word[], type: ExerciseType, index: nu
         wordId: word.id,
         prompt: word.translation,
         correctAnswer: word.original,
-        options: buildChoiceOptions(word, words, 'original'),
+        options: buildChoiceOptions(word, optionPool, 'original'),
       };
     case 'original_to_translation_choice':
       return {
@@ -119,7 +119,7 @@ function createExercise(word: Word, words: Word[], type: ExerciseType, index: nu
         wordId: word.id,
         prompt: word.original,
         correctAnswer: word.translation,
-        options: buildChoiceOptions(word, words, 'translation'),
+        options: buildChoiceOptions(word, optionPool, 'translation'),
       };
     case 'audio_to_original_input':
       return {
@@ -234,6 +234,7 @@ function createMistakesSession(
     'Точечное повторение слов, где были ошибки.',
     mistakeWords,
     ['original_to_translation_choice', 'audio_to_original_input'],
+    words,
   );
   const modules = renumberModules([reviewModule.module]);
   const steps = buildSteps(modules, {
@@ -285,6 +286,7 @@ function createDailySession(
     'Быстрое закрепление слов, которые вы только что увидели.',
     newWords,
     ['audio_to_translation_choice', 'translation_to_original_choice'],
+    uniqueWords([...newWords, ...learningWords, ...reinforcementWords]),
   );
   const module3 = createExerciseModule(
     'module-review-learning',
@@ -292,6 +294,7 @@ function createDailySession(
     'Возврат к словам, которые еще требуют внимания.',
     reviewWords,
     ['original_to_translation_choice', 'audio_to_original_input'],
+    uniqueWords([...reviewWords, ...reinforcementWords, ...newWords]),
   );
   const module4 = createExerciseModule(
     'module-reinforcement',
@@ -299,6 +302,7 @@ function createDailySession(
     'Финальный смешанный блок для фиксации результата дня.',
     reinforcementWords,
     ['audio_to_translation_choice', 'original_to_translation_choice'],
+    uniqueWords([...reinforcementWords, ...newWords, ...learningWords]),
   );
 
   const modules = renumberModules(
@@ -356,6 +360,7 @@ function createExtraSession(
       : 'Продолжайте обучение после завершения ежедневного урока.',
     focusWords,
     ['audio_to_translation_choice', 'original_to_translation_choice'],
+    uniqueWords([...focusWords, ...newWords, ...mixedWords]),
   );
   const module3 = createExerciseModule(
     mode === 'pack' ? 'module-pack-new' : 'module-extra-new',
@@ -365,6 +370,7 @@ function createExtraSession(
       : 'Здесь появляются слова, которые еще не попали в дневной урок.',
     newWords,
     ['audio_to_translation_choice', 'translation_to_original_choice'],
+    uniqueWords([...newWords, ...focusWords, ...mixedWords]),
   );
   const module4 = createExerciseModule(
     mode === 'pack' ? 'module-pack-mixed' : 'module-extra-mixed',
@@ -372,6 +378,7 @@ function createExtraSession(
     'Финальный блок на закрепление активных и новых слов.',
     mixedWords,
     ['audio_to_translation_choice', 'audio_to_original_input'],
+    uniqueWords([...mixedWords, ...focusWords, ...newWords]),
   );
 
   const modules = renumberModules(
@@ -482,10 +489,11 @@ function createExerciseModule(
   description: string,
   words: Word[],
   exerciseTypes: ExerciseType[],
+  optionPool: Word[] = words,
 ): { module: LessonModule; exercises: Exercise[] } {
   const exercises = words.flatMap((word, wordIndex) =>
     exerciseTypes.map((type, typeIndex) =>
-      createExercise(word, words, type, wordIndex * exerciseTypes.length + typeIndex),
+      createExercise(word, optionPool, type, wordIndex * exerciseTypes.length + typeIndex),
     ),
   );
 

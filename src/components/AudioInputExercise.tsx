@@ -9,6 +9,7 @@ interface AudioInputExerciseProps {
   word: Word;
   value: string;
   isSubmitted: boolean;
+  isCorrect?: boolean;
   onChange: (value: string) => void;
   onSubmit: () => void;
   onReplayAudio: () => void;
@@ -20,6 +21,7 @@ export function AudioInputExercise({
   word,
   value,
   isSubmitted,
+  isCorrect,
   onChange,
   onSubmit,
   onReplayAudio,
@@ -75,6 +77,13 @@ export function AudioInputExercise({
           <div className="input-meta">
             <span>Введите слово на французском</span>
           </div>
+
+          {isSubmitted ? (
+            <div className={isCorrect ? 'answer-feedback success' : 'answer-feedback error'}>
+              <strong>{isCorrect ? 'Верно' : 'Неправильно'}</strong>
+              <span>{isCorrect ? `Ответ: ${exercise.correctAnswer}` : `Правильный ответ: ${exercise.correctAnswer}`}</span>
+            </div>
+          ) : null}
         </div>
       }
       actions={

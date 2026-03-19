@@ -436,6 +436,11 @@ function App() {
     resetExerciseState();
   }
 
+  const latestOutcome =
+    currentExercise && isSubmitted
+      ? [...outcomes].reverse().find((outcome) => outcome.exerciseId === currentExercise.id) ?? null
+      : null;
+
   function handleMarkKnown() {
     if (!session || !currentWord || !currentStep?.allowMarkKnown) {
       return;
@@ -562,6 +567,7 @@ function App() {
                     word={currentWord}
                     value={typedAnswer}
                     isSubmitted={isSubmitted}
+                    isCorrect={latestOutcome?.isCorrect}
                     onChange={setTypedAnswer}
                     onSubmit={() => handleSubmit(typedAnswer)}
                     onReplayAudio={() => {
