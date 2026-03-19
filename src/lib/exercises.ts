@@ -234,7 +234,7 @@ function createMistakesSession(
     'Точечное повторение слов, где были ошибки.',
     mistakeWords,
     ['original_to_translation_choice', 'audio_to_original_input'],
-    words,
+    uniqueWords(words),
   );
   const modules = renumberModules([reviewModule.module]);
   const steps = buildSteps(modules, {
@@ -286,7 +286,7 @@ function createDailySession(
     'Быстрое закрепление слов, которые вы только что увидели.',
     newWords,
     ['audio_to_translation_choice', 'translation_to_original_choice'],
-    uniqueWords([...newWords, ...learningWords, ...reinforcementWords]),
+    uniqueWords(words),
   );
   const module3 = createExerciseModule(
     'module-review-learning',
@@ -294,7 +294,7 @@ function createDailySession(
     'Возврат к словам, которые еще требуют внимания.',
     reviewWords,
     ['original_to_translation_choice', 'audio_to_original_input'],
-    uniqueWords([...reviewWords, ...reinforcementWords, ...newWords]),
+    uniqueWords(words),
   );
   const module4 = createExerciseModule(
     'module-reinforcement',
@@ -302,7 +302,7 @@ function createDailySession(
     'Финальный смешанный блок для фиксации результата дня.',
     reinforcementWords,
     ['audio_to_translation_choice', 'original_to_translation_choice'],
-    uniqueWords([...reinforcementWords, ...newWords, ...learningWords]),
+    uniqueWords(words),
   );
 
   const modules = renumberModules(
@@ -360,7 +360,7 @@ function createExtraSession(
       : 'Продолжайте обучение после завершения ежедневного урока.',
     focusWords,
     ['audio_to_translation_choice', 'original_to_translation_choice'],
-    uniqueWords([...focusWords, ...newWords, ...mixedWords]),
+    uniqueWords(words),
   );
   const module3 = createExerciseModule(
     mode === 'pack' ? 'module-pack-new' : 'module-extra-new',
@@ -370,7 +370,7 @@ function createExtraSession(
       : 'Здесь появляются слова, которые еще не попали в дневной урок.',
     newWords,
     ['audio_to_translation_choice', 'translation_to_original_choice'],
-    uniqueWords([...newWords, ...focusWords, ...mixedWords]),
+    uniqueWords(words),
   );
   const module4 = createExerciseModule(
     mode === 'pack' ? 'module-pack-mixed' : 'module-extra-mixed',
@@ -378,7 +378,7 @@ function createExtraSession(
     'Финальный блок на закрепление активных и новых слов.',
     mixedWords,
     ['audio_to_translation_choice', 'audio_to_original_input'],
-    uniqueWords([...mixedWords, ...focusWords, ...newWords]),
+    uniqueWords(words),
   );
 
   const modules = renumberModules(
