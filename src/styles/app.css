@@ -824,33 +824,54 @@
 }
 
 .lesson-exercise-card .lesson-card-inner {
-  grid-template-columns: minmax(140px, 180px) minmax(0, 1fr);
-  grid-template-areas:
-    "header header"
-    "visual body"
-    "actions actions";
-  align-items: start;
+  max-width: 760px;
+  margin: 0 auto;
+  justify-items: center;
+  text-align: center;
 }
 
 .lesson-exercise-card .lesson-card-header {
-  grid-area: header;
+  width: 100%;
+  max-width: 560px;
 }
 
 .lesson-exercise-card .lesson-card-visual {
-  grid-area: visual;
+  width: 100%;
+  max-width: 200px;
 }
 
 .lesson-exercise-card .lesson-card-body {
-  grid-area: body;
+  width: 100%;
+  max-width: 560px;
 }
 
 .lesson-exercise-card .lesson-card-actions {
-  grid-area: actions;
+  width: 100%;
+  max-width: 560px;
 }
 
 .lesson-exercise-card .choice-list,
 .lesson-input-card .exercise-input-panel {
   align-content: start;
+}
+
+.lesson-exercise-card .choice-list {
+  display: grid;
+  width: 100%;
+}
+
+.lesson-exercise-card .choice-button {
+  min-height: 72px;
+}
+
+.lesson-audio-panel {
+  width: 100%;
+  justify-items: center;
+  gap: var(--space-3);
+}
+
+.audio-button-prominent {
+  min-width: min(260px, 100%);
 }
 
 .example-original {
@@ -1041,6 +1062,9 @@
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--line);
   color: var(--ink-soft);
+  white-space: normal;
+  max-width: 100%;
+  text-align: left;
 }
 
 .pack-detail-meta,

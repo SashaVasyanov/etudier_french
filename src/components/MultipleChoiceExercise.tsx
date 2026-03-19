@@ -25,7 +25,9 @@ export function MultipleChoiceExercise({
 }: MultipleChoiceExerciseProps) {
   const isAudioExercise = exercise.type === 'audio_to_translation_choice';
   const isOriginalExercise = exercise.type === 'original_to_translation_choice';
+  const isTranslationExercise = exercise.type === 'translation_to_original_choice';
   const shouldShowImage = !isAudioExercise;
+  const shouldShowPromptTitle = isAudioExercise;
 
   return (
     <LessonCard
@@ -33,18 +35,18 @@ export function MultipleChoiceExercise({
       header={
         <header className="exercise-header lesson-focus-header">
           <span className="eyebrow">Упражнение</span>
-          <h2 className="exercise-title">{exercise.prompt}</h2>
+          {shouldShowPromptTitle ? <h2 className="exercise-title">{exercise.prompt}</h2> : null}
           {isOriginalExercise ? (
             <CenteredWordBlock
               title={word.original}
-              meta={word.part_of_speech}
+              subtitle="Выберите правильный перевод"
               titleClassName="lesson-word-title"
             />
           ) : null}
-          {exercise.type === 'translation_to_original_choice' ? (
+          {isTranslationExercise ? (
             <CenteredWordBlock
               title={word.translation}
-              meta="Выберите французское слово"
+              subtitle="Выберите французское слово"
               titleClassName="lesson-translation"
             />
           ) : null}

@@ -40,7 +40,7 @@ export function AudioInputExercise({
         <header className="exercise-header lesson-focus-header">
           <span className="eyebrow">Аудио-ввод</span>
           <h2 className="exercise-title">{exercise.prompt}</h2>
-          <CenteredWordBlock title={word.translation} meta={word.part_of_speech} titleClassName="lesson-translation" />
+          <CenteredWordBlock title={word.translation} titleClassName="lesson-translation" />
           <div className="audio-panel lesson-audio-panel">
             <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
               Повторить аудио
@@ -73,7 +73,7 @@ export function AudioInputExercise({
           />
 
           <div className="input-meta">
-            <span>{word.part_of_speech}</span>
+            <span>Введите слово на французском</span>
           </div>
         </div>
       }
