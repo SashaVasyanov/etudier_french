@@ -40,26 +40,28 @@ export function LessonWordPreview({
       }
       body={
         <div className="study-word-body">
-          <WordImage word={word} size="large" className="lesson-word-image study-word-image" />
+          <div className="study-word-grid">
+            <WordImage word={word} size="large" className="lesson-word-image study-word-image" />
+
+            <div className="study-word-panel">
+              <div className="study-word-meta">
+                <div className="flashcard-meta-item">
+                  <span className="eyebrow">Пример</span>
+                  <strong>{word.example_original}</strong>
+                </div>
+                <div className="flashcard-meta-item">
+                  <span className="eyebrow">Перевод примера</span>
+                  <strong>{word.example_translation}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div className="study-word-actions">
             <AudioButton label="Прослушать слово" onClick={onReplayAudio} />
             <button type="button" className="primary-button full-width" onClick={onNext}>
               Понял, дальше
             </button>
-          </div>
-
-          <div className="study-word-panel">
-            <div className="study-word-meta">
-              <div className="flashcard-meta-item">
-                <span className="eyebrow">Пример</span>
-                <strong>{word.example_original}</strong>
-              </div>
-              <div className="flashcard-meta-item">
-                <span className="eyebrow">Перевод примера</span>
-                <strong>{word.example_translation}</strong>
-              </div>
-            </div>
           </div>
         </div>
       }
