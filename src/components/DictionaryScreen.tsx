@@ -12,6 +12,7 @@ interface DictionaryScreenProps {
   words: Word[];
   storage: AppStorage;
   packs: WordPack[];
+  onAddWord: (word: Omit<Word, 'id' | 'audio_original' | 'packIds' | 'source'>) => void;
 }
 
 const TABS: Array<{ id: DictionaryTab; label: string }> = [
@@ -22,11 +23,22 @@ const TABS: Array<{ id: DictionaryTab; label: string }> = [
   { id: 'difficult', label: 'Сложные' },
 ];
 
-export default function DictionaryScreen({ words, storage, packs }: DictionaryScreenProps) {
+export default function DictionaryScreen({ words, storage, packs, onAddWord }: DictionaryScreenProps) {
   const [tab, setTab] = useState<DictionaryTab>('all');
   const [query, setQuery] = useState('');
   const [level, setLevel] = useState<'all' | WordLevel>('all');
   const [packFilter, setPackFilter] = useState<'all' | 'core' | string>('all');
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newWord, setNewWord] = useState({
+    original: '',
+    translation: '',
+    transcription: '',
+    example_original: '',
+    example_translation: '',
+    part_of_speech: 'word',
+    level: 'A1' as WordLevel,
+    tags: '',
+  });
   const deferredQuery = useDeferredValue(query);
 
   const activePackOptions = useMemo(
@@ -61,6 +73,19 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
     });
   }, [deferredQuery, level, packFilter, storage, tab, words]);
 
+  function resetNewWordForm() {
+    setNewWord({
+      original: '',
+      translation: '',
+      transcription: '',
+      example_original: '',
+      example_translation: '',
+      part_of_speech: 'word',
+      level: 'A1',
+      tags: '',
+    });
+  }
+
   return (
     <section className="dashboard-shell">
       <AppCard as="header" tone="hero" className="dictionary-hero">
@@ -69,8 +94,111 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
             <span className="eyebrow">Словарь</span>
             <h1 className="hero-title compact-title">Карточки слов с изображениями</h1>
           </div>
-          <p className="hero-text">Фильтруйте по статусу, ищите по французскому и переводу, слушайте произношение и быстро просматривайте активные паки.</p>
+          <div className="dictionary-hero-actions">
+            <button type="button" className="primary-button" onClick={() => setShowAddForm((current) => !current)}>
+              {showAddForm ? 'Скрыть форму' : 'Добавить слово'}
+            </button>
+            <p className="hero-text">Фильтруйте по статусу, ищите по французскому и переводу, слушайте произношение и быстро просматривайте активные паки.</p>
+          </div>
         </div>
+
+        {showAddForm ? (
+          <form
+            className="custom-word-form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              onAddWord({
+                original: newWord.original,
+                translation: newWord.translation,
+                transcription: newWord.transcription,
+                example_original: newWord.example_original || newWord.original,
+                example_translation: newWord.example_translation || newWord.translation,
+                part_of_speech: newWord.part_of_speech,
+                level: newWord.level,
+                tags: newWord.tags
+                  .split(',')
+                  .map((tag) => tag.trim())
+                  .filter(Boolean),
+                imageAlt: '',
+                imagePackCategory: undefined,
+                imagePath: undefined,
+                imageUrl: undefined,
+                illustrationType: undefined,
+              });
+              resetNewWordForm();
+              setShowAddForm(false);
+            }}
+          >
+            <input
+              className="text-input"
+              value={newWord.original}
+              placeholder="Французское слово"
+              required
+              onChange={(event) => setNewWord((current) => ({ ...current, original: event.target.value }))}
+            />
+            <input
+              className="text-input"
+              value={newWord.translation}
+              placeholder="Перевод"
+              required
+              onChange={(event) => setNewWord((current) => ({ ...current, translation: event.target.value }))}
+            />
+            <input
+              className="text-input"
+              value={newWord.transcription}
+              placeholder="Транскрипция"
+              onChange={(event) => setNewWord((current) => ({ ...current, transcription: event.target.value }))}
+            />
+            <input
+              className="text-input"
+              value={newWord.example_original}
+              placeholder="Пример на французском"
+              onChange={(event) => setNewWord((current) => ({ ...current, example_original: event.target.value }))}
+            />
+            <input
+              className="text-input"
+              value={newWord.example_translation}
+              placeholder="Перевод примера"
+              onChange={(event) => setNewWord((current) => ({ ...current, example_translation: event.target.value }))}
+            />
+            <input
+              className="text-input"
+              value={newWord.part_of_speech}
+              placeholder="Часть речи"
+              onChange={(event) => setNewWord((current) => ({ ...current, part_of_speech: event.target.value }))}
+            />
+            <select
+              className="level-select"
+              value={newWord.level}
+              onChange={(event) => setNewWord((current) => ({ ...current, level: event.target.value as WordLevel }))}
+            >
+              <option value="A1">A1</option>
+              <option value="A2">A2</option>
+              <option value="B1">B1</option>
+            </select>
+            <input
+              className="text-input"
+              value={newWord.tags}
+              placeholder="Теги через запятую"
+              onChange={(event) => setNewWord((current) => ({ ...current, tags: event.target.value }))}
+            />
+            <div className="custom-word-actions">
+              <button type="submit" className="primary-button">
+                Сохранить слово
+              </button>
+              <button
+                type="button"
+                className="ghost-button"
+                onClick={() => {
+                  resetNewWordForm();
+                  setShowAddForm(false);
+                }}
+              >
+                Отмена
+              </button>
+            </div>
+          </form>
+        ) : null}
 
         <div className="dictionary-toolbar dictionary-toolbar-wide">
           <input
@@ -144,6 +272,8 @@ export default function DictionaryScreen({ words, storage, packs }: DictionarySc
                     <span className="tag-badge">{word.part_of_speech}</span>
                     {word.source === 'core' ? (
                       <span className="tag-badge">Базовый курс</span>
+                    ) : word.source === 'custom' ? (
+                      <span className="tag-badge">Моё слово</span>
                     ) : (
                       wordPacks.map((pack) => (
                         <span key={pack.id} className="tag-badge">

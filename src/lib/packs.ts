@@ -8,7 +8,7 @@ export function getEnabledPackIds(storage: AppStorage): string[] {
 }
 
 export function isWordAvailable(word: Word, enabledPackIds: string[]): boolean {
-  if (word.source === 'core') {
+  if (word.source === 'core' || word.source === 'custom') {
     return true;
   }
 

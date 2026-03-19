@@ -15,6 +15,7 @@ import { createFlashcardSession, createLessonSession } from './lib/exercises';
 import { derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
 import {
   addWordPack,
+  addCustomWord,
   applyOutcomes,
   completeDailyLesson,
   getCompletedDailyLesson,
@@ -118,7 +119,7 @@ function buildEmptyCompletionPayload(sessionId: string, durationMinutes: AppStor
 function App() {
   const [screen, setScreen] = useState<Screen>('home');
   const [storage, setStorage] = useState<AppStorage>(() => loadStorage());
-  const [words, setWords] = useState<Word[]>([]);
+  const [baseWords, setBaseWords] = useState<Word[]>([]);
   const [session, setSession] = useState<LessonSession | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -135,6 +136,7 @@ function App() {
     [packs, selectedPackId],
   );
   const enabledPackIds = useMemo(() => getEnabledPackIds(storage), [storage]);
+  const words = useMemo(() => [...baseWords, ...storage.customWords], [baseWords, storage.customWords]);
   const availableWords = useMemo(() => getActiveWords(words, enabledPackIds), [enabledPackIds, words]);
   const progressList = useMemo(() => Object.values(storage.progressByWordId), [storage]);
   const currentStep = session?.steps[stepIndex] ?? null;
@@ -151,7 +153,7 @@ function App() {
           return;
         }
 
-        setWords(nextWords);
+        setBaseWords(nextWords);
       })
       .finally(() => {
         if (isMounted) {
@@ -441,20 +443,6 @@ function App() {
       ? [...outcomes].reverse().find((outcome) => outcome.exerciseId === currentExercise.id) ?? null
       : null;
 
-  useEffect(() => {
-    if (!currentStep || currentStep.kind !== 'exercise' || !currentExercise?.options || !isSubmitted) {
-      return undefined;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      goToNextStep();
-    }, 950);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [currentExercise?.id, currentExercise?.options, currentStep, isSubmitted]);
-
   function handleMarkKnown() {
     if (!session || !currentWord || !currentStep?.allowMarkKnown) {
       return;
@@ -573,6 +561,7 @@ function App() {
                           }
                         : undefined
                     }
+                    onNext={goToNextStep}
                   />
                 ) : currentExercise ? (
                   <AudioInputExercise
@@ -650,7 +639,24 @@ function App() {
         ) : null}
 
         <Suspense fallback={<section className="hero-card">Открываем раздел…</section>}>
-          {screen === 'dictionary' ? <DictionaryScreen words={availableWords} storage={storage} packs={packs} /> : null}
+          {screen === 'dictionary' ? (
+            <DictionaryScreen
+              words={availableWords}
+              storage={storage}
+              packs={packs}
+              onAddWord={(word) => {
+                const customWord: Word = {
+                  ...word,
+                  id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                  audio_original: '',
+                  packIds: [],
+                  source: 'custom',
+                };
+
+                setStorage((currentStorage) => addCustomWord(currentStorage, customWord));
+              }}
+            />
+          ) : null}
           {screen === 'packs' ? (
             <PacksScreen
               packs={packs}

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import type { Exercise, Word } from '../types';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
@@ -10,6 +11,7 @@ interface MultipleChoiceExerciseProps {
   selectedAnswer: string | null;
   isSubmitted: boolean;
   onSelect: (answer: string) => void;
+  onNext: () => void;
   onReplayAudio?: () => void;
 }
 
@@ -19,13 +21,48 @@ export function MultipleChoiceExercise({
   selectedAnswer,
   isSubmitted,
   onSelect,
+  onNext,
   onReplayAudio,
 }: MultipleChoiceExerciseProps) {
+  const nextButtonRef = useRef<HTMLButtonElement | null>(null);
   const isAudioExercise = exercise.type === 'audio_to_translation_choice';
   const isOriginalExercise = exercise.type === 'original_to_translation_choice';
   const isTranslationExercise = exercise.type === 'translation_to_original_choice';
   const shouldShowImage = !isAudioExercise;
   const shouldShowPromptTitle = isAudioExercise;
+
+  useEffect(() => {
+    if (!isSubmitted) {
+      return undefined;
+    }
+
+    nextButtonRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key !== 'Enter') {
+        return;
+      }
+
+      const target = event.target;
+
+      if (
+        target instanceof HTMLButtonElement ||
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      onNext();
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isSubmitted, onNext]);
 
   return (
     <LessonCard
@@ -94,6 +131,13 @@ export function MultipleChoiceExercise({
             </div>
           ) : null}
         </>
+      }
+      actions={
+        isSubmitted ? (
+          <button ref={nextButtonRef} type="button" className="primary-button full-width" onClick={onNext}>
+            Дальше
+          </button>
+        ) : null
       }
     />
   );

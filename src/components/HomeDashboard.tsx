@@ -204,22 +204,20 @@ export function HomeDashboard({
         <AppCard as="article" className="launch-panel">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">Прогресс и запуск</span>
-              <h2 className="section-title">Минимум лишнего, только нужные действия</h2>
+              <span className="eyebrow">Прогресс</span>
+              <h2 className="section-title">Курс без лишних блоков</h2>
             </div>
             <span className="inline-note">{progressPercent}% слов освоено</span>
           </div>
           <div className="feature-list">
-            <span>{lessonDurationMinutes === 10 ? 'Короткая сессия: быстрый заход и лёгкий ритм.' : lessonDurationMinutes === 20 ? 'Сбалансированная сессия: основной режим на каждый день.' : 'Длинная сессия: больше слов, больше закрепления.'}</span>
-            <span>Изучается: {activeWords} · Уже известно: {countWordsByStatus(progressList, 'known')} · Выучено: {masteredCount}</span>
+            <span>Изучается: {activeWords}</span>
+            <span>Уже известно: {countWordsByStatus(progressList, 'known')}</span>
+            <span>Выучено: {masteredCount}</span>
           </div>
           <div className="progress-track" aria-hidden="true">
             <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
           </div>
-          <div className="quick-action-list compact-actions">
-            <button type="button" className="primary-button full-width" onClick={todayCompletion ? onOpenCompletion : onStartLesson}>
-              {todayCompletion ? 'Открыть итог дня' : 'Продолжить урок'}
-            </button>
+          <div className="quick-action-list compact-actions compact-actions-three">
             <button type="button" className="ghost-button full-width" onClick={onOpenCompletion}>
               Итог дня
             </button>
@@ -227,7 +225,7 @@ export function HomeDashboard({
               Тематические паки
             </button>
             <button type="button" className="ghost-button full-width" onClick={onOpenDictionary}>
-              Словарь
+              Добавить слова
             </button>
           </div>
         </AppCard>

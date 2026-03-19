@@ -7,6 +7,7 @@ import type {
   StudyHistoryEntry,
   UserPackState,
   UserProfile,
+  Word,
   WordProgress,
   WordStatus,
 } from '../types';
@@ -36,6 +37,28 @@ function createDefaultStorage(): AppStorage {
     profile: createDefaultProfile(),
     studyHistory: [],
     packStates: {},
+    customWords: [],
+  };
+}
+
+function normalizeWord(word: Word): Word {
+  return {
+    ...word,
+    original: word.original.trim(),
+    translation: word.translation.trim(),
+    transcription: (word.transcription ?? '').trim(),
+    audio_original: word.audio_original ?? '',
+    example_original: word.example_original.trim(),
+    example_translation: word.example_translation.trim(),
+    part_of_speech: word.part_of_speech.trim() || 'word',
+    tags: Array.isArray(word.tags) ? word.tags.map((tag) => tag.trim()).filter(Boolean) : [],
+    packIds: Array.isArray(word.packIds) ? word.packIds : [],
+    source: word.source ?? 'custom',
+    imagePath: word.imagePath ?? undefined,
+    imageUrl: word.imageUrl ?? undefined,
+    imageAlt: word.imageAlt ?? undefined,
+    imagePackCategory: word.imagePackCategory ?? undefined,
+    illustrationType: word.illustrationType ?? undefined,
   };
 }
 
@@ -149,6 +172,9 @@ export function loadStorage(): AppStorage {
           normalizePackState(packState, packId),
         ]),
       ),
+      customWords: (parsed.customWords ?? [])
+        .filter((word): word is Word => Boolean(word?.id && word?.original && word?.translation))
+        .map((word) => normalizeWord(word)),
     };
   } catch {
     return createDefaultStorage();
@@ -461,4 +487,17 @@ export function setWordPackStatus(
 
 export function getWordProgress(storage: AppStorage, wordId: string): WordProgress {
   return storage.progressByWordId[wordId] ?? createInitialProgress(wordId);
+}
+
+export function addCustomWord(currentStorage: AppStorage, word: Word): AppStorage {
+  const normalizedWord = normalizeWord(word);
+  const customWords = currentStorage.customWords
+    .filter((item) => item.id !== normalizedWord.id)
+    .concat(normalizedWord)
+    .sort((left, right) => left.original.localeCompare(right.original, 'fr'));
+
+  return {
+    ...currentStorage,
+    customWords,
+  };
 }

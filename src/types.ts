@@ -5,7 +5,7 @@ export type LessonDurationMinutes = 10 | 20 | 30;
 export type DictionaryTab = 'all' | 'learning' | 'known' | 'mastered' | 'difficult';
 export type LessonModuleTheme = 'new' | 'practice' | 'review' | 'reinforcement' | 'mistakes';
 export type PackStatus = 'not_added' | 'added' | 'in_progress' | 'completed';
-export type WordSource = 'core' | 'pack';
+export type WordSource = 'core' | 'pack' | 'custom';
 
 export type ExerciseType =
   | 'audio_to_translation_choice'
@@ -153,6 +153,7 @@ export interface AppStorage {
   profile: UserProfile;
   studyHistory: StudyHistoryEntry[];
   packStates: Record<string, UserPackState>;
+  customWords: Word[];
 }
 
 export interface DailyLessonCompletionPayload {

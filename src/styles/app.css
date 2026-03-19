@@ -1151,6 +1151,37 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.compact-actions-three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dictionary-hero-actions {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: end;
+}
+
+.dictionary-hero-actions .hero-text {
+  max-width: 440px;
+  text-align: right;
+}
+
+.custom-word-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  padding: 20px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.custom-word-actions {
+  display: flex;
+  gap: var(--space-3);
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 1180px) {
   .home-overview-grid,
   .dashboard-feature-grid,
@@ -1229,9 +1260,19 @@
   .flashcard-view .lesson-card-actions,
   .study-word-actions,
   .lesson-exercise-card .choice-list,
+  .custom-word-form,
   .compact-actions,
   .result-actions {
     grid-template-columns: 1fr;
+  }
+
+  .dictionary-hero-actions {
+    justify-items: stretch;
+  }
+
+  .dictionary-hero-actions .hero-text {
+    max-width: none;
+    text-align: left;
   }
 
   .study-word-grid {
