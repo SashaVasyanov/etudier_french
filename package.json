@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "images:generate": "node scripts/generate-word-images.mjs",
     "preview": "vite preview",
     "preview:host": "vite preview --host 127.0.0.1 --port 4173",
     "tauri": "tauri",

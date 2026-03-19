@@ -10,6 +10,14 @@ const LEVEL_ORDER: Record<WordLevel, number> = {
 
 let wordsPromise: Promise<Word[]> | null = null;
 
+type WordImageManifest = Record<
+  string,
+  Pick<
+    Word,
+    'imagePath' | 'imageUrl' | 'imageAlt' | 'imagePackCategory' | 'illustrationType' | 'imagePrompt' | 'imageSource'
+  >
+>;
+
 function normalizeWord(word: Word): Word {
   return {
     ...word,
@@ -22,23 +30,38 @@ function normalizeWord(word: Word): Word {
     imageAlt: word.imageAlt ?? undefined,
     imagePackCategory: word.imagePackCategory ?? undefined,
     illustrationType: word.illustrationType ?? undefined,
+    imagePrompt: word.imagePrompt ?? undefined,
+    imageSource: word.imageSource ?? undefined,
   };
+}
+
+async function loadWordImageManifest(): Promise<WordImageManifest> {
+  const response = await fetch('/data/word_images.json');
+
+  if (!response.ok) {
+    return {};
+  }
+
+  return (await response.json()) as WordImageManifest;
 }
 
 export async function loadWords(): Promise<Word[]> {
   if (!wordsPromise) {
-    wordsPromise = Promise.all(
-      DATASET_URLS.map(async (url) => {
-        const response = await fetch(url);
+    wordsPromise = Promise.all([
+      Promise.all(
+        DATASET_URLS.map(async (url) => {
+          const response = await fetch(url);
 
-        if (!response.ok) {
-          throw new Error(`Failed to load dataset: ${url}`);
-        }
+          if (!response.ok) {
+            throw new Error(`Failed to load dataset: ${url}`);
+          }
 
-        return (await response.json()) as Array<Omit<Word, 'packIds' | 'source'>>;
-      }),
-    ).then((parts) =>
-      [...parts.flat().map((word) => normalizeWord({ ...word, packIds: [], source: 'core' } as Word)), ...getPackWords()]
+          return (await response.json()) as Array<Omit<Word, 'packIds' | 'source'>>;
+        }),
+      ),
+      loadWordImageManifest(),
+    ]).then(([parts, wordImageManifest]) =>
+      [...parts.flat().map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id], packIds: [], source: 'core' } as Word)), ...getPackWords().map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] }))]
         .sort((left, right) => {
           const levelDiff = LEVEL_ORDER[left.level] - LEVEL_ORDER[right.level];
 

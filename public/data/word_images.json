@@ -1,0 +1,23 @@
+{
+  "a1-maison-9": {
+    "imagePath": "/generated-word-images/a1-maison-9.jpg",
+    "imageUrl": "/generated-word-images/a1-maison-9.jpg",
+    "imageAlt": "дом: maison",
+    "imagePrompt": "Create a single clear educational image for the French vocabulary word \"maison\". Meaning in Russian: \"дом\". Context sentence: \"Je vois la maison aujourd'hui.\". Show the most direct visual association for memorization. One main subject, centered composition, no text, no labels, no watermark, light clean background. The image should help a student remember the meaning immediately.",
+    "imageSource": "https://fr.wikipedia.org/wiki/Maison"
+  },
+  "a1-appartement-10": {
+    "imagePath": "/generated-word-images/a1-appartement-10.jpg",
+    "imageUrl": "/generated-word-images/a1-appartement-10.jpg",
+    "imageAlt": "квартира: appartement",
+    "imagePrompt": "Create a single clear educational image for the French vocabulary word \"appartement\". Meaning in Russian: \"квартира\". Context sentence: \"Je vois l'appartement aujourd'hui.\". Show the most direct visual association for memorization. One main subject, centered composition, no text, no labels, no watermark, light clean background. The image should help a student remember the meaning immediately.",
+    "imageSource": "https://fr.wikipedia.org/wiki/Appartement"
+  },
+  "a1-porte-12": {
+    "imagePath": "/generated-word-images/a1-porte-12.jpg",
+    "imageUrl": "/generated-word-images/a1-porte-12.jpg",
+    "imageAlt": "дверь: porte",
+    "imagePrompt": "Create a single clear educational image for the French vocabulary word \"porte\". Meaning in Russian: \"дверь\". Context sentence: \"Je vois la porte aujourd'hui.\". Show the most direct visual association for memorization. One main subject, centered composition, no text, no labels, no watermark, light clean background. The image should help a student remember the meaning immediately.",
+    "imageSource": "https://fr.wikipedia.org/wiki/Porte"
+  }
+}

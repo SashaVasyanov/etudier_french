@@ -59,6 +59,8 @@ function normalizeWord(word: Word): Word {
     imageAlt: word.imageAlt ?? undefined,
     imagePackCategory: word.imagePackCategory ?? undefined,
     illustrationType: word.illustrationType ?? undefined,
+    imagePrompt: word.imagePrompt ?? undefined,
+    imageSource: word.imageSource ?? undefined,
   };
 }
 

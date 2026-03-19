@@ -31,6 +31,8 @@ export interface Word {
   imageAlt?: string;
   imagePackCategory?: string;
   illustrationType?: string;
+  imagePrompt?: string;
+  imageSource?: string;
 }
 
 export interface WordProgress {
