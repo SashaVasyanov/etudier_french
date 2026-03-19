@@ -74,109 +74,104 @@ export function HomeDashboard({
     countWordsByStatus(progressList, 'review') +
     countWordsByStatus(progressList, 'difficult');
   const difficultCount = countWordsByStatus(progressList, 'difficult');
+  const currentPlan = todayCompletion ? 'Ежедневный урок закрыт' : 'Следующий шаг: пройти 5 модулей';
 
   return (
     <section className="dashboard-shell">
-      <AppCard as="header" tone="hero" className="home-hero">
-        <div className="hero-copy">
-          <span className="eyebrow">Сегодня</span>
-          <h1 className="hero-title">Ваш французский маршрут на день</h1>
-          <p className="hero-text">
-            {todayCompletion
-              ? 'Ежедневный поток уже закрыт. Можно перейти в свободную практику, разобрать сложные слова или пройти тематический пак.'
-              : 'Начните с ежедневного урока из 5 модулей, затем продолжайте в дополнительном режиме без потери дневного прогресса.'}
-          </p>
-          <div className="badge-row wrap-row">
-            <span className="tag-badge">{formatDailyStatus(todayCompletion ?? null, today?.completedLessons)}</span>
-            <span className="tag-badge">Длительность: {lessonDurationMinutes} мин</span>
-            <span className="tag-badge">Паков подключено: {addedPacksCount}</span>
+      <section className="home-overview-grid">
+        <AppCard as="header" tone="hero" className="home-hero">
+          <div className="hero-copy">
+            <span className="eyebrow">Сегодня</span>
+            <h1 className="hero-title">Ежедневный маршрут по французскому</h1>
+            <p className="hero-text">
+              {todayCompletion
+                ? 'Дневной поток уже завершён. Продолжайте в дополнительном режиме, повторяйте сложные слова и открывайте тематические паки.'
+                : 'Один понятный поток на день: 5 модулей, видимый прогресс по шагам и быстрый переход в свободную практику после завершения.'}
+            </p>
+            <div className="badge-row wrap-row">
+              <span className="tag-badge">{formatDailyStatus(todayCompletion ?? null, today?.completedLessons)}</span>
+              <span className="tag-badge">{currentPlan}</span>
+              <span className="tag-badge">Длительность: {lessonDurationMinutes} мин</span>
+            </div>
           </div>
-        </div>
 
-        <div className="hero-actions home-actions">
-          <button
-            type="button"
-            className="primary-button hero-button"
-            onClick={todayCompletion ? onOpenCompletion : onStartLesson}
-          >
-            {todayCompletion ? 'Открыть итог дня' : 'Продолжить ежедневный урок'}
-          </button>
-          <button type="button" className="secondary-button" onClick={onStartExtraLesson}>
-            Дополнительное обучение
-          </button>
-          <button type="button" className="ghost-button" onClick={onStartFlashcards}>
-            Карточки слов
-          </button>
-          <div className="cta-grid">
-            <button type="button" className="ghost-button" onClick={onOpenDictionary}>
-              Словарь
+          <div className="hero-actions home-actions">
+            <button
+              type="button"
+              className="primary-button hero-button"
+              onClick={todayCompletion ? onOpenCompletion : onStartLesson}
+            >
+              {todayCompletion ? 'Открыть итог дня' : 'Стартовать ежедневный урок'}
             </button>
-            <button type="button" className="ghost-button" onClick={onOpenPacks}>
-              Паки
+            <button type="button" className="secondary-button" onClick={onStartExtraLesson}>
+              Дополнительное обучение
             </button>
-            <button type="button" className="ghost-button" onClick={onOpenProfile}>
-              Профиль
+            <button type="button" className="ghost-button" onClick={onStartFlashcards}>
+              Карточки слов
             </button>
           </div>
-        </div>
-      </AppCard>
+        </AppCard>
+
+        <AppCard as="section" className="daily-state-card">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">Панель дня</span>
+              <h2 className="section-title">Что важно сейчас</h2>
+            </div>
+            <span className="inline-note">{todayCompletion ? 'День закрыт' : 'Урок доступен'}</span>
+          </div>
+          <div className="feature-list">
+            <span>Ежедневный урок: {todayCompletion ? '5 из 5 модулей завершены' : 'ещё не завершён'}</span>
+            <span>Активных слов в работе: {activeWords}</span>
+            <span>Сложных слов для повтора: {difficultCount}</span>
+            <span>Подключено паков: {addedPacksCount}</span>
+          </div>
+          <div className="quick-action-list">
+            <button type="button" className="ghost-button full-width" onClick={onOpenDictionary}>
+              Открыть словарь
+            </button>
+            <button type="button" className="ghost-button full-width" onClick={onOpenPacks}>
+              Смотреть паки
+            </button>
+            <button type="button" className="ghost-button full-width" onClick={onOpenProfile}>
+              Перейти в профиль
+            </button>
+          </div>
+        </AppCard>
+      </section>
 
       <section className="stats-grid">
-        <StatCard label="Ежедневный урок" value={todayCompletion ? '5/5' : 'В процессе'} hint={todayCompletion ? 'Дневной поток завершён' : 'Пройдите все 5 модулей'} tone="accent" />
+        <StatCard label="Ежедневный урок" value={todayCompletion ? '5/5' : '0/5'} hint={todayCompletion ? 'Дневной поток завершён' : 'Нужно пройти все 5 модулей'} tone="accent" />
         <StatCard label="Доступных слов" value={availableWords.length} hint={`Всего в базе ${totalWords.length}`} />
         <StatCard label="На повторении" value={reviewCount} hint="Готовы к повтору прямо сейчас" />
         <StatCard label="Серия дней" value={storage.streakDays} hint={`Точность сегодня ${todayAccuracy}%`} />
       </section>
 
-      <LessonDurationSelector value={lessonDurationMinutes} onChange={onLessonDurationChange} />
+      <section className="dashboard-feature-grid dashboard-feature-grid-wide">
+        <LessonDurationSelector value={lessonDurationMinutes} onChange={onLessonDurationChange} />
 
-      <AppCard as="section" tone="soft" className="launch-panel">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">Старт урока</span>
-            <h2 className="section-title">Размер занятия выбираете вы</h2>
-          </div>
-          <span className="inline-note">Текущий выбор: {lessonDurationMinutes} минут</span>
-        </div>
-        <div className="launch-grid">
-          <div className="feature-list">
-            <span>{lessonDurationMinutes === 10 ? 'Короткий урок: меньше слов и быстрый темп' : lessonDurationMinutes === 20 ? 'Сбалансированный урок: оптимум для ежедневной практики' : 'Расширенный урок: больше слов и закрепления'}</span>
-            <span>Выбор применяется до нажатия «Стартовать урок» и сохраняется локально</span>
-          </div>
-          <div className="launch-actions">
-            <button type="button" className="primary-button full-width" onClick={todayCompletion ? onOpenCompletion : onStartLesson}>
-              {todayCompletion ? 'Открыть итог дня' : `Стартовать урок на ${lessonDurationMinutes} минут`}
-            </button>
-            <button type="button" className="secondary-button full-width" onClick={onStartFlashcards}>
-              Открыть карточки на {lessonDurationMinutes} минут
-            </button>
-          </div>
-        </div>
-      </AppCard>
-
-      <section className="home-feature-grid">
         <AppCard as="article" className="route-card route-card-primary">
           <div className="section-heading">
             <div>
               <span className="eyebrow">Основной путь</span>
               <h2 className="section-title">Ежедневный урок</h2>
             </div>
-            <span className="inline-note">{todayCompletion ? 'На сегодня закрыт' : 'Следующий лучший шаг'}</span>
+            <span className="inline-note">{todayCompletion ? 'Сегодня уже закрыт' : 'Главный фокус дня'}</span>
           </div>
           <p className="hero-text">
-            Чёткий поток из 5 модулей: новые слова, первая практика, повторение, смешанное закрепление и финальная мини-проверка.
+            Структура всегда одна и та же: новые слова, первая практика, повторение, смешанное закрепление и финальная мини-проверка.
           </p>
           <div className="feature-list">
             <span>Новых слов сегодня: {learnedToday}</span>
-            <span>Прогресс дня сохраняется отдельно</span>
-            <span>После завершения открывается экран «На сегодня заданий нет»</span>
+            <span>Отдельный дневной прогресс по модулям и шагам</span>
+            <span>После завершения появляется экран «На сегодня заданий нет»</span>
           </div>
           <button
             type="button"
             className="primary-button full-width"
             onClick={todayCompletion ? onOpenCompletion : onStartLesson}
           >
-            {todayCompletion ? 'Посмотреть завершение' : 'Стартовать урок'}
+            {todayCompletion ? 'Открыть итог дня' : `Учиться ${lessonDurationMinutes} минут`}
           </button>
         </AppCard>
 
@@ -184,21 +179,26 @@ export function HomeDashboard({
           <div className="section-heading">
             <div>
               <span className="eyebrow">После урока</span>
-              <h2 className="section-title">Дополнительное обучение</h2>
+              <h2 className="section-title">Свободная практика</h2>
             </div>
-            <span className="inline-note">Без влияния на дневной прогресс</span>
+            <span className="inline-note">Не ломает дневной прогресс</span>
           </div>
           <p className="hero-text">
-            Продолжайте тренироваться после закрытия дня: сложные слова, текущие слова в изучении, тематические паки и смешанное закрепление.
+            Используйте дополнительный режим для сложных слов, текущих слов в изучении, паков и быстрой тренировки без ограничений по дню.
           </p>
           <div className="feature-list">
             <span>Сложных слов: {difficultCount}</span>
             <span>В активном изучении: {activeWords}</span>
-            <span>Можно запускать в любое время</span>
+            <span>Карточки запускаются отдельно для лёгкого повтора</span>
           </div>
-          <button type="button" className="secondary-button full-width" onClick={onStartExtraLesson}>
-            Открыть свободный режим
-          </button>
+          <div className="launch-actions">
+            <button type="button" className="secondary-button full-width" onClick={onStartExtraLesson}>
+              Открыть свободный режим
+            </button>
+            <button type="button" className="ghost-button full-width" onClick={onStartFlashcards}>
+              Запустить карточки
+            </button>
+          </div>
         </AppCard>
       </section>
 
@@ -219,22 +219,24 @@ export function HomeDashboard({
           </p>
         </AppCard>
 
-        <AppCard as="article" tone="soft" className="quick-actions-card">
+        <AppCard as="article" className="launch-panel">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">Быстрые разделы</span>
-              <h2 className="section-title">Что открыть дальше</h2>
+              <span className="eyebrow">Практический режим</span>
+              <h2 className="section-title">Размер занятия под ваш ритм</h2>
             </div>
+            <span className="inline-note">Сохраняется локально</span>
+          </div>
+          <div className="feature-list">
+            <span>{lessonDurationMinutes === 10 ? 'Короткая сессия: быстрый заход и лёгкий ритм.' : lessonDurationMinutes === 20 ? 'Сбалансированная сессия: основной режим на каждый день.' : 'Длинная сессия: больше слов, больше закрепления.'}</span>
+            <span>Выбранная длительность применяется к ежедневному и дополнительному обучению.</span>
           </div>
           <div className="quick-action-list">
-            <button type="button" className="ghost-button full-width" onClick={onOpenDictionary}>
-              Смотреть словарь с карточками
+            <button type="button" className="ghost-button full-width" onClick={onOpenCompletion}>
+              Итог дня
             </button>
             <button type="button" className="ghost-button full-width" onClick={onOpenPacks}>
-              Открыть тематические паки
-            </button>
-            <button type="button" className="ghost-button full-width" onClick={onOpenProfile}>
-              Перейти в профиль и историю
+              Тематические паки
             </button>
           </div>
         </AppCard>

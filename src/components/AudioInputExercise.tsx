@@ -12,6 +12,7 @@ interface AudioInputExerciseProps {
   onChange: (value: string) => void;
   onSubmit: () => void;
   onReplayAudio: () => void;
+  onNext: () => void;
 }
 
 export function AudioInputExercise({
@@ -22,6 +23,7 @@ export function AudioInputExercise({
   onChange,
   onSubmit,
   onReplayAudio,
+  onNext,
 }: AudioInputExerciseProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -33,11 +35,12 @@ export function AudioInputExercise({
 
   return (
     <LessonCard
+      className="lesson-exercise-card lesson-input-card"
       header={
         <header className="exercise-header lesson-focus-header">
           <span className="eyebrow">Аудио-ввод</span>
           <h2 className="exercise-title">{exercise.prompt}</h2>
-          <CenteredWordBlock title={word.translation} meta={`${word.transcription} · ${word.part_of_speech}`} titleClassName="lesson-translation" />
+          <CenteredWordBlock title={word.translation} meta={word.part_of_speech} titleClassName="lesson-translation" />
           <div className="audio-panel lesson-audio-panel">
             <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
               Повторить аудио
@@ -70,14 +73,18 @@ export function AudioInputExercise({
           />
 
           <div className="input-meta">
-            <span>{word.transcription}</span>
             <span>{word.part_of_speech}</span>
           </div>
         </div>
       }
       actions={
-        <button type="button" className="primary-button full-width" disabled={isSubmitted || !value.trim()} onClick={onSubmit}>
-          Проверить
+        <button
+          type="button"
+          className="primary-button full-width"
+          disabled={!isSubmitted && !value.trim()}
+          onClick={isSubmitted ? onNext : onSubmit}
+        >
+          {isSubmitted ? 'Далее' : 'Проверить'}
         </button>
       }
     />

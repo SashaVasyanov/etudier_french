@@ -11,6 +11,7 @@ interface MultipleChoiceExerciseProps {
   isSubmitted: boolean;
   onSelect: (answer: string) => void;
   onReplayAudio?: () => void;
+  onNext: () => void;
 }
 
 export function MultipleChoiceExercise({
@@ -20,6 +21,7 @@ export function MultipleChoiceExercise({
   isSubmitted,
   onSelect,
   onReplayAudio,
+  onNext,
 }: MultipleChoiceExerciseProps) {
   const isAudioExercise = exercise.type === 'audio_to_translation_choice';
   const isOriginalExercise = exercise.type === 'original_to_translation_choice';
@@ -27,6 +29,7 @@ export function MultipleChoiceExercise({
 
   return (
     <LessonCard
+      className="lesson-exercise-card"
       header={
         <header className="exercise-header lesson-focus-header">
           <span className="eyebrow">Упражнение</span>
@@ -34,7 +37,7 @@ export function MultipleChoiceExercise({
           {isOriginalExercise ? (
             <CenteredWordBlock
               title={word.original}
-              meta={`${word.transcription} · ${word.part_of_speech}`}
+              meta={word.part_of_speech}
               titleClassName="lesson-word-title"
             />
           ) : null}
@@ -83,6 +86,13 @@ export function MultipleChoiceExercise({
             );
           })}
         </div>
+      }
+      actions={
+        isSubmitted ? (
+          <button type="button" className="primary-button full-width" onClick={onNext}>
+            Далее
+          </button>
+        ) : null
       }
     />
   );

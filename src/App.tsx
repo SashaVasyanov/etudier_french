@@ -8,8 +8,6 @@ import { HomeDashboard } from './components/HomeDashboard';
 import { LessonResult } from './components/LessonResult';
 import { LessonWordPreview } from './components/LessonWordPreview';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
-import { ProgressBar } from './components/ProgressBar';
-import { ProgressHeader } from './components/ProgressHeader';
 import { TopNav } from './components/TopNav';
 import { getStarterPacks, getWordById, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
@@ -143,18 +141,6 @@ function App() {
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
   const currentWord = currentStep ? getWordById(words, currentStep.wordId) : null;
   const todayCompletion = useMemo(() => getCompletedDailyLesson(storage), [storage]);
-  const currentModuleIndex = useMemo(
-    () => (session && currentStep ? session.modules.findIndex((module) => module.id === currentStep.moduleId) : -1),
-    [currentStep, session],
-  );
-  const visibleModules = useMemo(() => session?.modules.filter((module) => module.wordIds.length > 0) ?? [], [session]);
-  const remainingModules = useMemo(() => {
-    if (!session || currentModuleIndex < 0) {
-      return 0;
-    }
-
-    return session.modules.slice(currentModuleIndex + 1).filter((module) => module.wordIds.length > 0).length;
-  }, [currentModuleIndex, session]);
 
   useEffect(() => {
     let isMounted = true;
@@ -450,11 +436,6 @@ function App() {
     resetExerciseState();
   }
 
-  const latestOutcome =
-    currentExercise && isSubmitted
-      ? [...outcomes].reverse().find((outcome) => outcome.exerciseId === currentExercise.id) ?? null
-      : null;
-
   function handleMarkKnown() {
     if (!session || !currentWord || !currentStep?.allowMarkKnown) {
       return;
@@ -554,134 +535,65 @@ function App() {
 
         {screen === 'lesson' && currentStep && currentWord && session ? (
           <section className="lesson-shell">
-            <ProgressHeader
-              eyebrow={
-                session.mode === 'default'
-                  ? 'Ежедневный урок'
-                  : session.mode === 'extra'
-                    ? 'Дополнительное обучение'
-                    : session.mode === 'pack'
-                      ? 'Практика пака'
-                      : 'Повтор ошибок'
-              }
-              title={currentStep.moduleTitle}
-              description={currentStep.moduleDescription}
-              moduleLabel={`${currentStep.modulePosition}/${visibleModules.length}`}
-              stepLabel={`${currentStep.indexInModule}/${currentStep.totalInModule}`}
-              overallLabel={`${stepIndex + 1}/${session.steps.length}`}
-              badges={[session.title, `${session.durationMinutes} мин`, `Осталось модулей: ${remainingModules}`]}
-            />
-
-            <div className="module-nav" aria-label="Модули урока">
-              {visibleModules.map((module) => {
-                const moduleIndex = visibleModules.findIndex((item) => item.id === module.id);
-                const activeModuleIndex = visibleModules.findIndex((item) => item.id === currentStep.moduleId);
-                const state =
-                  module.id === currentStep.moduleId ? 'current' : moduleIndex < activeModuleIndex ? 'done' : 'upcoming';
-
-                return (
-                  <div key={module.id} className={`module-nav-item ${state}`}>
-                    <span className="module-nav-index">М{module.position}</span>
-                    <strong>{module.title}</strong>
-                    <span>{module.wordIds.length} слов</span>
-                  </div>
-                );
-              })}
-            </div>
-
-            <ProgressBar current={stepIndex + 1} total={session.steps.length} />
-
-            {currentStep.kind === 'preview' && session.presentation === 'flashcards' ? (
-              <FlashcardView
-                word={currentWord}
-                current={currentStep.indexInModule}
-                total={currentStep.totalInModule}
-                onReplayAudio={() => {
-                  void playWordAudio(currentWord);
-                }}
-                onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
-                onDefer={goToNextStep}
-                onNext={goToNextStep}
-              />
-            ) : currentStep.kind === 'preview' ? (
-              <LessonWordPreview
-                word={currentWord}
-                current={currentStep.indexInModule}
-                total={currentStep.totalInModule}
-                onReplayAudio={() => {
-                  void playWordAudio(currentWord);
-                }}
-                onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
-                onNext={goToNextStep}
-              />
-            ) : currentExercise?.options ? (
-              <MultipleChoiceExercise
-                exercise={currentExercise}
-                word={currentWord}
-                selectedAnswer={selectedAnswer}
-                isSubmitted={isSubmitted}
-                onSelect={(answer) => {
-                  setSelectedAnswer(answer);
-                  handleSubmit(answer);
-                }}
-                onReplayAudio={
-                  currentExercise.type === 'audio_to_translation_choice'
-                    ? () => {
-                        void playWordAudio(currentWord);
-                      }
-                    : undefined
-                }
-              />
-            ) : currentExercise ? (
-              <AudioInputExercise
-                exercise={currentExercise}
-                word={currentWord}
-                value={typedAnswer}
-                isSubmitted={isSubmitted}
-                onChange={setTypedAnswer}
-                onSubmit={() => handleSubmit(typedAnswer)}
-                onReplayAudio={() => {
-                  void playWordAudio(currentWord);
-                }}
-              />
-            ) : null}
-
-            {latestOutcome ? (
-              <section className={latestOutcome.isCorrect ? 'feedback-card success' : 'feedback-card error'}>
-                <h3>{latestOutcome.isCorrect ? 'Верно' : 'Есть ошибка'}</h3>
-                <p>
-                  {latestOutcome.isCorrect
-                    ? `Отлично: ${currentWord.original} — ${currentWord.translation}`
-                    : `Правильный ответ: ${latestOutcome.correctAnswer}`}
-                </p>
-                <p className="feedback-example">
-                  {currentWord.example_original}
-                  <br />
-                  {currentWord.example_translation}
-                </p>
-              </section>
-            ) : null}
-
-            <div className="lesson-footer">
-              <button
-                type="button"
-                className="ghost-button"
-                onClick={() => {
-                  clearSessionState('home');
-                }}
-              >
-                Выйти
-              </button>
-              {currentStep.allowMarkKnown ? (
-                <button type="button" className="secondary-button" onClick={handleMarkKnown}>
-                  Уже знаю
-                </button>
-              ) : null}
+            <div className="lesson-focus-screen">
               {currentStep.kind === 'exercise' ? (
-                <button type="button" className="primary-button" disabled={!isSubmitted} onClick={goToNextStep}>
-                  Далее
-                </button>
-              ) : null}
+                currentExercise?.options ? (
+                  <MultipleChoiceExercise
+                    exercise={currentExercise}
+                    word={currentWord}
+                    selectedAnswer={selectedAnswer}
+                    isSubmitted={isSubmitted}
+                    onSelect={(answer) => {
+                      setSelectedAnswer(answer);
+                      handleSubmit(answer);
+                    }}
+                    onReplayAudio={
+                      currentExercise.type === 'audio_to_translation_choice'
+                        ? () => {
+                            void playWordAudio(currentWord);
+                          }
+                        : undefined
+                    }
+                    onNext={goToNextStep}
+                  />
+                ) : currentExercise ? (
+                  <AudioInputExercise
+                    exercise={currentExercise}
+                    word={currentWord}
+                    value={typedAnswer}
+                    isSubmitted={isSubmitted}
+                    onChange={setTypedAnswer}
+                    onSubmit={() => handleSubmit(typedAnswer)}
+                    onReplayAudio={() => {
+                      void playWordAudio(currentWord);
+                    }}
+                    onNext={goToNextStep}
+                  />
+                ) : null
+              ) : session.presentation === 'flashcards' ? (
+                <FlashcardView
+                  word={currentWord}
+                  current={currentStep.indexInModule}
+                  total={currentStep.totalInModule}
+                  onReplayAudio={() => {
+                    void playWordAudio(currentWord);
+                  }}
+                  onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
+                  onDefer={goToNextStep}
+                  onNext={goToNextStep}
+                />
+              ) : (
+                <LessonWordPreview
+                  word={currentWord}
+                  current={currentStep.indexInModule}
+                  total={currentStep.totalInModule}
+                  onReplayAudio={() => {
+                    void playWordAudio(currentWord);
+                  }}
+                  onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
+                  onNext={goToNextStep}
+                />
+              )}
             </div>
           </section>
         ) : null}

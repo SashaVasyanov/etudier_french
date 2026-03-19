@@ -1,13 +1,12 @@
 :root {
-  font-family: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+  font-family: "Avenir Next", "Segoe UI Variable", "Trebuchet MS", sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #152031;
+  color: #201c17;
   background:
-    radial-gradient(circle at top left, rgba(197, 225, 255, 0.88), transparent 30%),
-    radial-gradient(circle at top right, rgba(255, 234, 188, 0.82), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(202, 240, 228, 0.72), transparent 30%),
-    linear-gradient(180deg, #f7fbff 0%, #edf3fc 100%);
+    radial-gradient(circle at top left, rgba(31, 107, 93, 0.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(197, 111, 52, 0.08), transparent 26%),
+    linear-gradient(180deg, #f6f2ea 0%, #efe9de 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -35,4 +34,10 @@ button,
 input,
 select {
   font: inherit;
+}
+
+button,
+input,
+select {
+  color: inherit;
 }

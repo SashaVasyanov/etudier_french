@@ -35,22 +35,29 @@ export function FlashcardView({
       className="flashcard-view"
       header={
         <header className="exercise-header lesson-focus-header">
-          <span className="eyebrow">Карточка слова</span>
+          <span className="eyebrow">
+            Карточка слова · {current} / {total}
+          </span>
           <CenteredWordBlock
             title={word.original}
             subtitle={isRevealed ? word.translation : 'Попробуйте вспомнить перевод'}
-            meta={`${word.transcription} · ${word.part_of_speech} · ${current} / ${total}`}
+            meta={word.part_of_speech}
             titleClassName="exercise-title lesson-word-title"
             subtitleClassName="lesson-translation"
           />
         </header>
       }
-      visual={<WordImage word={word} size="large" className="lesson-word-image flashcard-image" />}
       body={
         <div className="flashcard-body">
-          <div className="flashcard-controls">
+          <WordImage word={word} size="large" className="lesson-word-image flashcard-image" />
+
+          <div className="flashcard-primary-actions">
             <AudioButton label="Прослушать" onClick={onReplayAudio} />
-            <button type="button" className="ghost-button" onClick={() => setIsRevealed((value) => !value)}>
+            <button
+              type="button"
+              className={isRevealed ? 'ghost-button full-width' : 'primary-button full-width'}
+              onClick={() => setIsRevealed((value) => !value)}
+            >
               {isRevealed ? 'Скрыть детали' : 'Показать перевод'}
             </button>
           </div>
@@ -80,19 +87,25 @@ export function FlashcardView({
         </div>
       }
       actions={
-        <>
-          {onMarkKnown ? (
-            <button type="button" className="secondary-button" onClick={onMarkKnown}>
-              Уже знаю
+        isRevealed ? (
+          <>
+            {onMarkKnown ? (
+              <button type="button" className="secondary-button full-width" onClick={onMarkKnown}>
+                Уже знаю
+              </button>
+            ) : null}
+            <button type="button" className="ghost-button full-width" onClick={onDefer}>
+              Повторить позже
             </button>
-          ) : null}
-          <button type="button" className="ghost-button" onClick={onDefer}>
-            Повторить позже
+            <button type="button" className="primary-button full-width" onClick={onNext}>
+              Дальше
+            </button>
+          </>
+        ) : (
+          <button type="button" className="ghost-button full-width" onClick={onDefer}>
+            Вернуться позже
           </button>
-          <button type="button" className="primary-button" onClick={onNext}>
-            Дальше
-          </button>
-        </>
+        )
       }
     />
   );
