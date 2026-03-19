@@ -35,18 +35,12 @@ async function main() {
     const startLessonButton = await findByText(driver, 'button', 'Стартовать ежедневный урок');
     await startLessonButton.click();
 
-    console.log('Waiting for flashcard...');
-    await driver.wait(until.elementLocated(By.xpath('//*[contains(., "Карточка слова")]')), timeoutMs);
-    await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Показать перевод")]')), timeoutMs);
-
-    console.log('Revealing translation...');
-    const revealButton = await findByText(driver, 'button', 'Показать перевод');
-    await revealButton.click();
-
-    await driver.wait(until.elementLocated(By.xpath('//*[contains(., "Перевод")]')), timeoutMs);
+    console.log('Waiting for study view...');
+    await driver.wait(until.elementLocated(By.xpath('//*[contains(., "Изучение слова")]')), timeoutMs);
+    await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Понял, дальше")]')), timeoutMs);
 
     console.log('Moving to next step...');
-    const nextButton = await findByText(driver, 'button', 'Дальше');
+    const nextButton = await findByText(driver, 'button', 'Понял, дальше');
     await nextButton.sendKeys(Key.ENTER);
 
     console.log(`Safari smoke test passed at ${baseUrl}`);
