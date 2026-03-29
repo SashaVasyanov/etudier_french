@@ -33,6 +33,7 @@
 .app-shell {
   min-height: 100vh;
   padding: 28px 24px 40px;
+  overflow-x: clip;
 }
 
 .app-frame {
@@ -178,6 +179,9 @@
   margin: 0;
   color: var(--ink);
   letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .topbar-title {
@@ -209,6 +213,7 @@
   margin: 0;
   color: var(--ink-soft);
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .inline-note,
@@ -225,7 +230,8 @@
   background: rgba(255, 255, 255, 0.75);
   color: var(--ink-soft);
   font-size: 0.88rem;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .badge-row,
@@ -293,6 +299,8 @@
     box-shadow 140ms ease,
     background-color 140ms ease,
     opacity 140ms ease;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .nav-button:hover,
@@ -518,47 +526,34 @@
   margin: 0 auto;
 }
 
-.lesson-layout {
-  display: grid;
-  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
-  gap: var(--space-5);
-  align-items: start;
-}
-
-.lesson-sidebar {
+.lesson-progress-stack {
   display: grid;
   gap: var(--space-4);
-  position: sticky;
-  top: 24px;
+  width: min(1120px, 100%);
+  margin: 0 auto;
 }
 
-.lesson-sidebar .progress-header .app-card-shell,
-.lesson-sidebar .progress-panel .app-card-shell,
+.lesson-progress-stack .progress-header .app-card-shell,
+.lesson-progress-stack .progress-panel .app-card-shell,
 .lesson-sidebar-actions .app-card-shell {
   padding: 18px;
 }
 
-.lesson-sidebar .progress-header-copy,
-.lesson-sidebar .progress-header-meta {
+.lesson-progress-stack .progress-header-copy,
+.lesson-progress-stack .progress-header-meta {
   gap: 12px;
 }
 
-.lesson-sidebar .section-title {
+.lesson-progress-stack .section-title {
   font-size: 1.18rem;
 }
 
-.lesson-sidebar .hero-text {
+.lesson-progress-stack .hero-text {
   font-size: 0.95rem;
 }
 
-.lesson-sidebar .badge-row {
+.lesson-progress-stack .badge-row {
   gap: 8px;
-}
-
-.lesson-main {
-  display: grid;
-  gap: var(--space-4);
-  min-width: 0;
 }
 
 .lesson-exercise-screen {
@@ -567,6 +562,8 @@
 }
 
 .lesson-focus-screen {
+  display: grid;
+  gap: var(--space-4);
   width: min(1120px, 100%);
   margin: 0 auto;
 }
@@ -581,6 +578,17 @@
   gap: var(--space-4);
   flex-wrap: wrap;
   background: rgba(255, 255, 255, 0.74);
+}
+
+.section-heading > *,
+.pack-word-row-head > *,
+.result-actions > *,
+.top-nav-head > *,
+.lesson-stage-banner > *,
+.lesson-card-header > *,
+.lesson-card-body > *,
+.lesson-card-actions > * {
+  min-width: 0;
 }
 
 .lesson-stage-banner-preview {
@@ -774,6 +782,12 @@
   gap: var(--space-5);
 }
 
+.word-details-grid {
+  width: 100%;
+  display: grid;
+  gap: var(--space-3);
+}
+
 .flashcard-primary-actions,
 .flashcard-controls {
   width: 100%;
@@ -847,6 +861,13 @@
 .study-word-meta {
   display: grid;
   gap: var(--space-3);
+}
+
+.detail-copy {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .lesson-exercise-card .lesson-card-inner {
@@ -928,11 +949,13 @@
   margin: 0;
   font-weight: 700;
   color: var(--ink);
+  overflow-wrap: anywhere;
 }
 
 .example-translation {
   margin: 0;
   color: var(--ink-soft);
+  overflow-wrap: anywhere;
 }
 
 .text-input,
@@ -1000,7 +1023,7 @@
 
 .pack-word-row {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
+  grid-template-columns: minmax(96px, 112px) minmax(0, 1fr);
   gap: var(--space-4);
   align-items: start;
 }
@@ -1012,9 +1035,15 @@
   gap: var(--space-3);
 }
 
+.pack-word-row-details .word-details-grid {
+  grid-template-columns: 1fr;
+}
+
 .word-title {
   margin: 0;
   font-size: 1.18rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .word-subtitle {
@@ -1190,14 +1219,6 @@
     grid-template-columns: 1fr;
   }
 
-  .lesson-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .lesson-sidebar {
-    position: static;
-  }
-
   .app-nav {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1207,6 +1228,17 @@
   }
 
   .dictionary-toolbar-wide {
+    grid-template-columns: 1fr;
+  }
+
+  .pack-word-row-details .word-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1360px) {
+  .home-overview-grid,
+  .dashboard-feature-grid {
     grid-template-columns: 1fr;
   }
 }

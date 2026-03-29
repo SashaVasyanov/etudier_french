@@ -21,6 +21,7 @@ const LESSON_LIMITS: Record<
     newWords: number;
     activeWords: number;
     reinforcementWords: number;
+    recapWords: number;
     mistakesWords: number;
   }
 > = {
@@ -28,18 +29,21 @@ const LESSON_LIMITS: Record<
     newWords: 3,
     activeWords: 4,
     reinforcementWords: 4,
+    recapWords: 3,
     mistakesWords: 4,
   },
   20: {
     newWords: 6,
     activeWords: 6,
     reinforcementWords: 6,
+    recapWords: 4,
     mistakesWords: 6,
   },
   30: {
     newWords: 8,
     activeWords: 8,
     reinforcementWords: 10,
+    recapWords: 5,
     mistakesWords: 8,
   },
 };
@@ -164,17 +168,35 @@ function pickNewWords(words: Word[], storage: AppStorage, limit: number): Word[]
 }
 
 function pickLearningWords(words: Word[], storage: AppStorage, limit: number): Word[] {
-  const activeLearning = words.filter((word) => {
-    const progress = getWordProgress(storage, word.id);
-    return progress.status === 'learning' || progress.status === 'difficult';
-  });
-
+  const difficultWords = words.filter((word) => getWordProgress(storage, word.id).status === 'difficult');
   const dueReview = words.filter((word) => {
     const progress = getWordProgress(storage, word.id);
     return progress.status === 'review' && isReviewDue(progress.next_review_at);
   });
+  const activeLearning = words.filter((word) => {
+    const progress = getWordProgress(storage, word.id);
+    return progress.status === 'learning';
+  });
 
-  return [...activeLearning, ...dueReview]
+  return uniqueWords([
+    ...difficultWords.sort(
+      (left, right) => getWordProgress(storage, right.id).wrong_count - getWordProgress(storage, left.id).wrong_count,
+    ),
+    ...dueReview.sort((left, right) => {
+      const leftProgress = getWordProgress(storage, left.id);
+      const rightProgress = getWordProgress(storage, right.id);
+      return new Date(leftProgress.next_review_at ?? 0).getTime() - new Date(rightProgress.next_review_at ?? 0).getTime();
+    }),
+    ...activeLearning.sort((left, right) => {
+      const leftProgress = getWordProgress(storage, left.id);
+      const rightProgress = getWordProgress(storage, right.id);
+      if (leftProgress.shown_count !== rightProgress.shown_count) {
+        return leftProgress.shown_count - rightProgress.shown_count;
+      }
+
+      return rightProgress.wrong_count - leftProgress.wrong_count;
+    }),
+  ])
     .sort((left, right) => {
       const leftProgress = getWordProgress(storage, left.id);
       const rightProgress = getWordProgress(storage, right.id);
@@ -189,6 +211,40 @@ function pickLearningWords(words: Word[], storage: AppStorage, limit: number): W
       return rightProgress.wrong_count - leftProgress.wrong_count;
     })
     .slice(0, limit);
+}
+
+function interleaveWordGroups(...groups: Word[][]): Word[] {
+  const queues = groups.map((group) => [...group]);
+  const result: Word[] = [];
+  const seen = new Set<string>();
+
+  while (queues.some((queue) => queue.length > 0)) {
+    queues.forEach((queue) => {
+      const next = queue.shift();
+
+      if (!next || seen.has(next.id)) {
+        return;
+      }
+
+      seen.add(next.id);
+      result.push(next);
+    });
+  }
+
+  return result;
+}
+
+function pickReinforcementWords(newWords: Word[], reviewWords: Word[], limit: number): Word[] {
+  return interleaveWordGroups(newWords, reviewWords, newWords.slice(1), reviewWords.slice(1)).slice(0, limit);
+}
+
+function pickRecapWords(newWords: Word[], reviewWords: Word[], reinforcementWords: Word[], limit: number): Word[] {
+  return interleaveWordGroups(
+    reviewWords,
+    newWords,
+    reinforcementWords,
+    reviewWords.filter((word) => !reinforcementWords.some((item) => item.id === word.id)),
+  ).slice(0, limit);
 }
 
 function getPoolFromIds(words: Word[], wordIds: string[]): Word[] {
@@ -270,12 +326,10 @@ function createDailySession(
     const progress = getWordProgress(storage, word.id);
     return progress.status === 'review' || progress.status === 'difficult' || progress.status === 'learning';
   });
-  const reinforcementWords = shuffleArray(uniqueWords([...newWords, ...learningWords])).slice(
-    0,
-    limits.reinforcementWords,
-  );
+  const reinforcementWords = pickReinforcementWords(newWords, reviewWords, limits.reinforcementWords);
+  const recapWords = pickRecapWords(newWords, reviewWords, reinforcementWords, limits.recapWords);
 
-  if (newWords.length === 0 && learningWords.length === 0 && reinforcementWords.length === 0) {
+  if (newWords.length === 0 && learningWords.length === 0 && reinforcementWords.length === 0 && recapWords.length === 0) {
     return null;
   }
 
@@ -298,21 +352,30 @@ function createDailySession(
   );
   const module4 = createExerciseModule(
     'module-reinforcement',
-    'Закрепление',
-    'Финальный смешанный блок для фиксации результата дня.',
+    'Смешанное закрепление',
+    'Слова возвращаются в новом порядке, чтобы проверить узнавание без заучивания по шаблону.',
     reinforcementWords,
     ['audio_to_translation_choice', 'original_to_translation_choice'],
     uniqueWords(words),
   );
+  const module5 = createExerciseModule(
+    'module-final-recap',
+    'Финальная мини-проверка',
+    'Короткий итоговый блок: только ключевые слова дня и один решающий ответ на каждое слово.',
+    recapWords,
+    ['translation_to_original_choice'],
+    uniqueWords(words),
+  );
 
   const modules = renumberModules(
-    [module1, module2.module, module3.module, module4.module].filter((module) => module.wordIds.length > 0),
+    [module1, module2.module, module3.module, module4.module, module5.module].filter((module) => module.wordIds.length > 0),
   );
-  const exercises = [...module2.exercises, ...module3.exercises, ...module4.exercises];
+  const exercises = [...module2.exercises, ...module3.exercises, ...module4.exercises, ...module5.exercises];
   const steps = buildSteps(modules, {
     [module2.module.id]: module2.exercises,
     [module3.module.id]: module3.exercises,
     [module4.module.id]: module4.exercises,
+    [module5.module.id]: module5.exercises,
   });
 
   return {
@@ -324,7 +387,7 @@ function createDailySession(
     startedAt: new Date().toISOString(),
     exerciseIds: exercises.map((exercise) => exercise.id),
     exercises,
-    sourceWordIds: uniqueWords([...newWords, ...learningWords, ...reinforcementWords]).map((word) => word.id),
+    sourceWordIds: uniqueWords([...newWords, ...learningWords, ...reinforcementWords, ...recapWords]).map((word) => word.id),
     modules,
     steps,
     activePackIds,
@@ -491,10 +554,8 @@ function createExerciseModule(
   exerciseTypes: ExerciseType[],
   optionPool: Word[] = words,
 ): { module: LessonModule; exercises: Exercise[] } {
-  const exercises = words.flatMap((word, wordIndex) =>
-    exerciseTypes.map((type, typeIndex) =>
-      createExercise(word, optionPool, type, wordIndex * exerciseTypes.length + typeIndex),
-    ),
+  const exercises = exerciseTypes.flatMap((type, typeIndex) =>
+    words.map((word, wordIndex) => createExercise(word, optionPool, type, typeIndex * words.length + wordIndex)),
   );
 
   return {
@@ -509,6 +570,8 @@ function createExerciseModule(
             ? 'review'
             : id === 'module-reinforcement'
               ? 'reinforcement'
+              : id === 'module-final-recap'
+                ? 'recap'
               : 'mistakes',
       position:
         id === 'module-training-new'

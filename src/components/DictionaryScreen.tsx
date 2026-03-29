@@ -1,11 +1,13 @@
 import { useDeferredValue, useMemo, useState } from 'react';
 import { playWordAudio } from '../lib/audio';
 import { getPackByWord } from '../lib/packs';
+import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordProgress } from '../lib/storage';
 import type { AppStorage, DictionaryTab, Word, WordLevel, WordPack } from '../types';
 import { AppCard } from './AppCard';
 import { PackWordRow } from './PackWordRow';
 import { StatusBadge } from './StatusBadge';
+import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
 
 interface DictionaryScreenProps {
@@ -92,13 +94,13 @@ export default function DictionaryScreen({ words, storage, packs, onAddWord }: D
         <div className="section-heading">
           <div>
             <span className="eyebrow">Словарь</span>
-            <h1 className="hero-title compact-title">Карточки слов с изображениями</h1>
+            <h1 className="hero-title compact-title">Слова, контекст и подсказки по употреблению</h1>
           </div>
           <div className="dictionary-hero-actions">
             <button type="button" className="primary-button" onClick={() => setShowAddForm((current) => !current)}>
               {showAddForm ? 'Скрыть форму' : 'Добавить слово'}
             </button>
-            <p className="hero-text">Фильтруйте по статусу, ищите по французскому и переводу, слушайте произношение и быстро просматривайте активные паки.</p>
+            <p className="hero-text">Ищите по слову и переводу, слушайте произношение, смотрите контекст и быстро разбирайте, как слово используется в речи.</p>
           </div>
         </div>
 
@@ -252,8 +254,8 @@ export default function DictionaryScreen({ words, storage, packs, onAddWord }: D
             <AppCard key={word.id} as="article" className="word-card">
               <PackWordRow
                 media={<WordImage word={word} />}
-                title={word.original}
-                subtitle={`${word.translation} · ${word.transcription || 'транскрипция не указана'}`}
+                title={getDisplayWord(word)}
+                subtitle={`${word.translation} · ${word.transcription || 'транскрипция не указана'} · ${getPartOfSpeechLabel(word.part_of_speech)}`}
                 action={
                   <button
                     type="button"
@@ -284,10 +286,7 @@ export default function DictionaryScreen({ words, storage, packs, onAddWord }: D
                   </>
                 }
                 details={
-                  <div className="example-card">
-                    <p className="example-original">{word.example_original}</p>
-                    <p className="example-translation">{word.example_translation}</p>
-                  </div>
+                  <WordDetailsPanel word={word} />
                 }
               />
             </AppCard>

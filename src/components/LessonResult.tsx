@@ -1,3 +1,4 @@
+import { getDisplayWord } from '../lib/wordPresentation';
 import { percentage } from '../lib/utils';
 import type { ExerciseOutcome, Word } from '../types';
 import { AppCard } from './AppCard';
@@ -63,7 +64,7 @@ export function LessonResult({
               <article key={word.id} className="mistake-item-card">
                 <WordImage word={word} size="small" />
                 <div>
-                  <strong>{word.original}</strong>
+                  <strong>{getDisplayWord(word)}</strong>
                   <p className="info-subtle">{word.translation}</p>
                   <small>{word.transcription}</small>
                 </div>

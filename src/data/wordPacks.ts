@@ -1,7 +1,7 @@
 import type { Word, WordPack } from '../types';
 import { createPackCoverImage, createWordImage } from '../lib/wordImages';
 
-type PackCategory = 'plants' | 'animals' | 'food' | 'travel' | 'home';
+type PackCategory = 'plants' | 'animals' | 'food' | 'travel' | 'home' | 'core';
 
 interface PackWordSeed {
   id: string;
@@ -27,6 +27,8 @@ function getDefaultIllustrationType(category: PackCategory): string {
       return 'train';
     case 'home':
       return 'house';
+    case 'core':
+      return 'guide';
   }
 }
 
@@ -191,6 +193,72 @@ export const STARTER_PACKS: WordPack[] = [
     { id: 'vaisselle', original: 'vaisselle', translation: 'посуда', transcription: '[vɛsɛl]', exampleOriginal: 'La vaisselle est propre.', exampleTranslation: 'Посуда чистая.', partOfSpeech: 'noun', tags: ['быт'] },
     { id: 'serviette', original: 'serviette', translation: 'полотенце', transcription: '[sɛʁvjɛt]', exampleOriginal: 'La serviette est sèche.', exampleTranslation: 'Полотенце сухое.', partOfSpeech: 'noun', tags: ['быт'] },
     { id: 'étagère', original: 'étagère', translation: 'полка', transcription: '[etaʒɛʁ]', exampleOriginal: "L'étagère porte beaucoup de livres.", exampleTranslation: 'Полка держит много книг.', partOfSpeech: 'noun', tags: ['мебель'] },
+  ]),
+  createPack('pack-clothes', 'Одежда', 'Одежда, обувь и аксессуары для повседневных ситуаций и покупок.', '#b76b6b', 'core', 'guide', [
+    { id: 'veste', original: 'veste', translation: 'куртка', transcription: '[vɛst]', exampleOriginal: 'Je mets ma veste avant de sortir.', exampleTranslation: 'Я надеваю куртку перед выходом.', partOfSpeech: 'noun', tags: ['одежда'] },
+    { id: 'manteau', original: 'manteau', translation: 'пальто', transcription: '[mɑ̃to]', exampleOriginal: 'Le manteau est chaud.', exampleTranslation: 'Пальто тёплое.', partOfSpeech: 'noun', tags: ['одежда'] },
+    { id: 'pull', original: 'pull', translation: 'свитер', transcription: '[pyl]', exampleOriginal: 'Ce pull est confortable.', exampleTranslation: 'Этот свитер удобный.', partOfSpeech: 'noun', tags: ['одежда'] },
+    { id: 't-shirt', original: 't-shirt', translation: 'футболка', transcription: '[ti ʃœʁt]', exampleOriginal: 'Le t-shirt est bleu.', exampleTranslation: 'Футболка синяя.', partOfSpeech: 'noun', tags: ['одежда'] },
+    { id: 'robe', original: 'robe', translation: 'платье', transcription: '[ʁɔb]', exampleOriginal: 'La robe est élégante.', exampleTranslation: 'Платье элегантное.', partOfSpeech: 'noun', tags: ['одежда'] },
+    { id: 'jupe', original: 'jupe', translation: 'юбка', transcription: '[ʒyp]', exampleOriginal: 'La jupe est noire.', exampleTranslation: 'Юбка чёрная.', partOfSpeech: 'noun', tags: ['одежда'] },
+    { id: 'chemise', original: 'chemise', translation: 'рубашка', transcription: '[ʃəmiz]', exampleOriginal: 'La chemise est bien repassée.', exampleTranslation: 'Рубашка хорошо выглажена.', partOfSpeech: 'noun', tags: ['одежда'] },
+    { id: 'pantalon', original: 'pantalon', translation: 'брюки', transcription: '[pɑ̃talɔ̃]', exampleOriginal: 'Le pantalon est trop long.', exampleTranslation: 'Брюки слишком длинные.', partOfSpeech: 'noun', tags: ['одежда'] },
+    { id: 'short', original: 'short', translation: 'шорты', transcription: '[ʃɔʁt]', exampleOriginal: 'Je porte un short en été.', exampleTranslation: 'Летом я ношу шорты.', partOfSpeech: 'noun', tags: ['одежда'] },
+    { id: 'chaussette', original: 'chaussette', translation: 'носок', transcription: '[ʃosɛt]', exampleOriginal: 'Il manque une chaussette.', exampleTranslation: 'Не хватает одного носка.', partOfSpeech: 'noun', tags: ['одежда'] },
+    { id: 'chaussure', original: 'chaussure', translation: 'обувь', transcription: '[ʃosyʁ]', exampleOriginal: 'La chaussure est sous la chaise.', exampleTranslation: 'Ботинок под стулом.', partOfSpeech: 'noun', tags: ['обувь'] },
+    { id: 'baskets', original: 'baskets', translation: 'кроссовки', transcription: '[basket]', exampleOriginal: 'Mes baskets sont blanches.', exampleTranslation: 'Мои кроссовки белые.', partOfSpeech: 'noun', tags: ['обувь'] },
+    { id: 'botte', original: 'botte', translation: 'сапог', transcription: '[bɔt]', exampleOriginal: 'La botte protège de la pluie.', exampleTranslation: 'Сапог защищает от дождя.', partOfSpeech: 'noun', tags: ['обувь'] },
+    { id: 'écharpe', original: 'écharpe', translation: 'шарф', transcription: '[eʃaʁp]', exampleOriginal: "L'écharpe est douce.", exampleTranslation: 'Шарф мягкий.', partOfSpeech: 'noun', tags: ['аксессуары'] },
+    { id: 'bonnet', original: 'bonnet', translation: 'шапка', transcription: '[bɔnɛ]', exampleOriginal: 'Le bonnet couvre les oreilles.', exampleTranslation: 'Шапка закрывает уши.', partOfSpeech: 'noun', tags: ['аксессуары'] },
+    { id: 'gant', original: 'gant', translation: 'перчатка', transcription: '[ɡɑ̃]', exampleOriginal: 'Je cherche mon gant.', exampleTranslation: 'Я ищу свою перчатку.', partOfSpeech: 'noun', tags: ['аксессуары'] },
+    { id: 'ceinture', original: 'ceinture', translation: 'ремень', transcription: '[sɛ̃tyʁ]', exampleOriginal: 'La ceinture est en cuir.', exampleTranslation: 'Ремень кожаный.', partOfSpeech: 'noun', tags: ['аксессуары'] },
+    { id: 'sac-à-main', original: 'sac à main', translation: 'сумка', transcription: '[sak a mɛ̃]', exampleOriginal: 'Le sac à main est sur le canapé.', exampleTranslation: 'Сумка лежит на диване.', partOfSpeech: 'noun', tags: ['аксессуары'] },
+    { id: 'taille', original: 'taille', translation: 'размер', transcription: '[taj]', exampleOriginal: 'Cette taille me va bien.', exampleTranslation: 'Этот размер мне подходит.', partOfSpeech: 'noun', tags: ['магазин'] },
+    { id: 'cabine', original: 'cabine d’essayage', translation: 'примерочная', transcription: '[kabin dɛsɛjaʒ]', exampleOriginal: "La cabine d’essayage est libre.", exampleTranslation: 'Примерочная свободна.', partOfSpeech: 'noun', tags: ['магазин'] },
+  ]),
+  createPack('pack-work-study', 'Учёба и работа', 'Ключевая лексика для офиса, уроков, задач и общения на работе.', '#5d8b7e', 'core', 'guide', [
+    { id: 'réunion', original: 'réunion', translation: 'встреча', transcription: '[ʁeynjɔ̃]', exampleOriginal: 'La réunion commence à neuf heures.', exampleTranslation: 'Встреча начинается в девять.', partOfSpeech: 'noun', tags: ['работа'] },
+    { id: 'projet', original: 'projet', translation: 'проект', transcription: '[pʁɔʒɛ]', exampleOriginal: 'Le projet avance bien.', exampleTranslation: 'Проект идёт хорошо.', partOfSpeech: 'noun', tags: ['работа'] },
+    { id: 'tâche', original: 'tâche', translation: 'задача', transcription: '[taʃ]', exampleOriginal: 'Je termine cette tâche aujourd’hui.', exampleTranslation: 'Я заканчиваю эту задачу сегодня.', partOfSpeech: 'noun', tags: ['работа'] },
+    { id: 'dossier', original: 'dossier', translation: 'досье / папка', transcription: '[dɔsje]', exampleOriginal: 'Le dossier est sur le bureau.', exampleTranslation: 'Папка лежит на столе.', partOfSpeech: 'noun', tags: ['офис'] },
+    { id: 'document', original: 'document', translation: 'документ', transcription: '[dɔkymɑ̃]', exampleOriginal: 'Le document est prêt.', exampleTranslation: 'Документ готов.', partOfSpeech: 'noun', tags: ['офис'] },
+    { id: 'courriel', original: 'courriel', translation: 'электронное письмо', transcription: '[kuʁjɛl]', exampleOriginal: "J'envoie un courriel au professeur.", exampleTranslation: 'Я отправляю письмо преподавателю.', partOfSpeech: 'noun', tags: ['офис'] },
+    { id: 'clavier', original: 'clavier', translation: 'клавиатура', transcription: '[klavje]', exampleOriginal: 'Le clavier est neuf.', exampleTranslation: 'Клавиатура новая.', partOfSpeech: 'noun', tags: ['техника'] },
+    { id: 'écran', original: 'écran', translation: 'экран', transcription: '[ekʁɑ̃]', exampleOriginal: "L'écran est trop lumineux.", exampleTranslation: 'Экран слишком яркий.', partOfSpeech: 'noun', tags: ['техника'] },
+    { id: 'imprimante', original: 'imprimante', translation: 'принтер', transcription: '[ɛ̃pʁimɑ̃t]', exampleOriginal: "L'imprimante n'a plus de papier.", exampleTranslation: 'В принтере закончилась бумага.', partOfSpeech: 'noun', tags: ['техника'] },
+    { id: 'stylo', original: 'stylo', translation: 'ручка', transcription: '[stilo]', exampleOriginal: 'Mon stylo est dans le sac.', exampleTranslation: 'Моя ручка в сумке.', partOfSpeech: 'noun', tags: ['учёба'] },
+    { id: 'cahier', original: 'cahier', translation: 'тетрадь', transcription: '[kaje]', exampleOriginal: 'J’écris dans mon cahier.', exampleTranslation: 'Я пишу в своей тетради.', partOfSpeech: 'noun', tags: ['учёба'] },
+    { id: 'devoir', original: 'devoir', translation: 'домашнее задание', transcription: '[dəvwaʁ]', exampleOriginal: 'Le devoir est difficile.', exampleTranslation: 'Домашнее задание трудное.', partOfSpeech: 'noun', tags: ['учёба'] },
+    { id: 'examen', original: 'examen', translation: 'экзамен', transcription: '[ɛɡzamɛ̃]', exampleOriginal: "L'examen est demain.", exampleTranslation: 'Экзамен завтра.', partOfSpeech: 'noun', tags: ['учёба'] },
+    { id: 'question', original: 'question', translation: 'вопрос', transcription: '[kɛstjɔ̃]', exampleOriginal: "J'ai une question.", exampleTranslation: 'У меня есть вопрос.', partOfSpeech: 'noun', tags: ['учёба'] },
+    { id: 'réponse', original: 'réponse', translation: 'ответ', transcription: '[ʁepɔ̃s]', exampleOriginal: 'La réponse est correcte.', exampleTranslation: 'Ответ правильный.', partOfSpeech: 'noun', tags: ['учёба'] },
+    { id: 'collègue', original: 'collègue', translation: 'коллега', transcription: '[kɔlɛɡ]', exampleOriginal: 'Mon collègue travaille à distance.', exampleTranslation: 'Мой коллега работает удалённо.', partOfSpeech: 'noun', tags: ['работа'] },
+    { id: 'patron', original: 'patron', translation: 'начальник', transcription: '[patʁɔ̃]', exampleOriginal: 'Le patron arrive tôt.', exampleTranslation: 'Начальник приходит рано.', partOfSpeech: 'noun', tags: ['работа'] },
+    { id: 'client', original: 'client', translation: 'клиент', transcription: '[klijɑ̃]', exampleOriginal: 'Le client attend une réponse.', exampleTranslation: 'Клиент ждёт ответа.', partOfSpeech: 'noun', tags: ['работа'] },
+    { id: 'pause', original: 'pause', translation: 'перерыв', transcription: '[poz]', exampleOriginal: 'Nous faisons une pause à midi.', exampleTranslation: 'Мы делаем перерыв в полдень.', partOfSpeech: 'noun', tags: ['работа'] },
+    { id: 'agenda', original: 'agenda', translation: 'ежедневник', transcription: '[aʒɑ̃da]', exampleOriginal: "Mon agenda est plein cette semaine.", exampleTranslation: 'Мой ежедневник заполнен на этой неделе.', partOfSpeech: 'noun', tags: ['работа'] },
+  ]),
+  createPack('pack-city', 'Город и сервисы', 'Городская среда, услуги, здания и повседневные точки назначения.', '#4f7aa1', 'core', 'map', [
+    { id: 'banque', original: 'banque', translation: 'банк', transcription: '[bɑ̃k]', exampleOriginal: 'La banque ferme à dix-sept heures.', exampleTranslation: 'Банк закрывается в пять.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'pharmacie', original: 'pharmacie', translation: 'аптека', transcription: '[faʁmasi]', exampleOriginal: 'La pharmacie est au coin de la rue.', exampleTranslation: 'Аптека на углу улицы.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'boulangerie', original: 'boulangerie', translation: 'булочная', transcription: '[bulɑ̃ʒʁi]', exampleOriginal: 'La boulangerie ouvre tôt.', exampleTranslation: 'Булочная открывается рано.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'supermarché', original: 'supermarché', translation: 'супермаркет', transcription: '[sypɛʁmaʁʃe]', exampleOriginal: 'Le supermarché est grand.', exampleTranslation: 'Супермаркет большой.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'poste', original: 'poste', translation: 'почта', transcription: '[pɔst]', exampleOriginal: 'La poste est près de la mairie.', exampleTranslation: 'Почта рядом с мэрией.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'mairie', original: 'mairie', translation: 'мэрия', transcription: '[mɛʁi]', exampleOriginal: 'La mairie est au centre.', exampleTranslation: 'Мэрия в центре.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'bibliothèque', original: 'bibliothèque', translation: 'библиотека', transcription: '[biblijɔtɛk]', exampleOriginal: 'La bibliothèque est silencieuse.', exampleTranslation: 'В библиотеке тихо.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'parc', original: 'parc', translation: 'парк', transcription: '[paʁk]', exampleOriginal: 'Les enfants jouent dans le parc.', exampleTranslation: 'Дети играют в парке.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'pont', original: 'pont', translation: 'мост', transcription: '[pɔ̃]', exampleOriginal: 'Le pont traverse la rivière.', exampleTranslation: 'Мост пересекает реку.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'place', original: 'place', translation: 'площадь', transcription: '[plas]', exampleOriginal: 'La place est pleine de monde.', exampleTranslation: 'Площадь полна людей.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'feu', original: 'feu', translation: 'светофор', transcription: '[fø]', exampleOriginal: 'Le feu passe au vert.', exampleTranslation: 'Светофор переключается на зелёный.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'trottoir', original: 'trottoir', translation: 'тротуар', transcription: '[tʁɔtwaʁ]', exampleOriginal: 'Le trottoir est étroit ici.', exampleTranslation: 'Здесь тротуар узкий.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'croisement', original: 'croisement', translation: 'перекрёсток', transcription: '[kʁwazmɑ̃]', exampleOriginal: 'Tourne au croisement.', exampleTranslation: 'Поверни на перекрёстке.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'arrêt', original: 'arrêt', translation: 'остановка', transcription: '[aʁɛ]', exampleOriginal: "L'arrêt de bus est là-bas.", exampleTranslation: 'Автобусная остановка там.', partOfSpeech: 'noun', tags: ['транспорт'] },
+    { id: 'métro', original: 'métro', translation: 'метро', transcription: '[metʁo]', exampleOriginal: 'Le métro est rapide.', exampleTranslation: 'Метро быстрое.', partOfSpeech: 'noun', tags: ['транспорт'] },
+    { id: 'ticket', original: 'ticket', translation: 'талон / билет', transcription: '[tikɛ]', exampleOriginal: 'Je valide le ticket.', exampleTranslation: 'Я компостирую билет.', partOfSpeech: 'noun', tags: ['транспорт'] },
+    { id: 'terrasse', original: 'terrasse', translation: 'терраса кафе', transcription: '[tɛʁas]', exampleOriginal: 'Nous nous asseyons en terrasse.', exampleTranslation: 'Мы садимся на террасе.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'cinéma', original: 'cinéma', translation: 'кинотеатр', transcription: '[sinema]', exampleOriginal: 'Le cinéma est moderne.', exampleTranslation: 'Кинотеатр современный.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'hôpital', original: 'hôpital', translation: 'больница', transcription: '[opital]', exampleOriginal: "L'hôpital est loin d'ici.", exampleTranslation: 'Больница далеко отсюда.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'commissariat', original: 'commissariat', translation: 'полицейский участок', transcription: '[kɔmisaʁja]', exampleOriginal: 'Le commissariat est derrière la banque.', exampleTranslation: 'Участок за банком.', partOfSpeech: 'noun', tags: ['город'] },
   ]),
 ];
 

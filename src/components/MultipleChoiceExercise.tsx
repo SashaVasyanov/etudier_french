@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { Exercise, Word } from '../types';
+import { getDisplayWord, getExerciseCopy } from '../lib/wordPresentation';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
 import { LessonChoiceButton } from './LessonChoiceButton';
@@ -28,8 +29,9 @@ export function MultipleChoiceExercise({
   const isAudioExercise = exercise.type === 'audio_to_translation_choice';
   const isOriginalExercise = exercise.type === 'original_to_translation_choice';
   const isTranslationExercise = exercise.type === 'translation_to_original_choice';
-  const shouldShowImage = !isAudioExercise;
-  const shouldShowPromptTitle = isAudioExercise;
+  const copy = getExerciseCopy(exercise.type);
+  const feedbackLabel =
+    exercise.type === 'translation_to_original_choice' ? word.translation : getDisplayWord(word);
 
   useEffect(() => {
     if (!isSubmitted) {
@@ -69,12 +71,13 @@ export function MultipleChoiceExercise({
       className="lesson-exercise-card"
       header={
         <header className="exercise-header lesson-focus-header">
-          <span className="eyebrow">Упражнение</span>
-          {shouldShowPromptTitle ? <h2 className="exercise-title">{exercise.prompt}</h2> : null}
+          <span className="eyebrow">{copy.eyebrow}</span>
+          <h2 className="exercise-title">{copy.title}</h2>
+          <p className="audio-hint">{copy.hint}</p>
           {isOriginalExercise ? (
             <CenteredWordBlock
-              title={word.original}
-              subtitle="Выберите правильный перевод"
+              title={getDisplayWord(word)}
+              subtitle={word.transcription || 'Выберите правильный перевод'}
               titleClassName="lesson-word-title"
             />
           ) : null}
@@ -90,12 +93,11 @@ export function MultipleChoiceExercise({
               <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
                 Повторить аудио
               </button>
-              <p className="audio-hint">Слушайте внимательно и выберите точный перевод.</p>
             </div>
           ) : null}
         </header>
       }
-      visual={shouldShowImage ? <WordImage word={word} size="small" className="lesson-word-image" /> : null}
+      visual={isAudioExercise ? null : <WordImage word={word} size="small" className="lesson-word-image" />}
       body={
         <>
           <div className="choice-list">
@@ -127,7 +129,7 @@ export function MultipleChoiceExercise({
           {isSubmitted ? (
             <div className={selectedAnswer === exercise.correctAnswer ? 'answer-feedback success' : 'answer-feedback error'}>
               <strong>{selectedAnswer === exercise.correctAnswer ? 'Верно' : 'Неправильно'}</strong>
-              <span>Правильный ответ: {exercise.correctAnswer}</span>
+              <span>{feedbackLabel}</span>
             </div>
           ) : null}
         </>

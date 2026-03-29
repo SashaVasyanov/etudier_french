@@ -1,12 +1,14 @@
 import { useDeferredValue, useMemo, useState } from 'react';
 import { playWordAudio } from '../lib/audio';
 import { derivePackStatus, getPackCompletionRatio } from '../lib/packs';
+import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordProgress } from '../lib/storage';
 import type { AppStorage, LessonDurationMinutes, WordPack } from '../types';
 import { AppCard } from './AppCard';
 import { LessonDurationSelector } from './LessonDurationSelector';
 import { PackWordRow } from './PackWordRow';
 import { StatusBadge } from './StatusBadge';
+import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
 
 interface PackDetailScreenProps {
@@ -146,8 +148,8 @@ export function PackDetailScreen({
             <AppCard key={word.id} as="article" className="word-card">
               <PackWordRow
                 media={<WordImage word={word} />}
-                title={word.original}
-                subtitle={`${word.translation} · ${word.transcription || 'транскрипция не указана'}`}
+                title={getDisplayWord(word)}
+                subtitle={`${word.translation} · ${word.transcription || 'транскрипция не указана'} · ${getPartOfSpeechLabel(word.part_of_speech)}`}
                 action={
                   <button
                     type="button"
@@ -168,10 +170,7 @@ export function PackDetailScreen({
                   </>
                 }
                 details={
-                  <div className="example-card">
-                    <p className="example-original">{word.example_original}</p>
-                    <p className="example-translation">{word.example_translation}</p>
-                  </div>
+                  <WordDetailsPanel word={word} />
                 }
               />
             </AppCard>

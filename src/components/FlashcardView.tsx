@@ -3,7 +3,9 @@ import type { Word } from '../types';
 import { AudioButton } from './AudioButton';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
+import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
+import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
 
 interface FlashcardViewProps {
   word: Word;
@@ -39,9 +41,9 @@ export function FlashcardView({
             Карточка слова · {current} / {total}
           </span>
           <CenteredWordBlock
-            title={word.original}
+            title={getDisplayWord(word)}
             subtitle={isRevealed ? word.translation : 'Попробуйте вспомнить перевод'}
-            meta={word.part_of_speech}
+            meta={`${getPartOfSpeechLabel(word.part_of_speech)} · ${word.level}`}
             titleClassName="exercise-title lesson-word-title"
             subtitleClassName="lesson-translation"
           />
@@ -75,10 +77,7 @@ export function FlashcardView({
                     <strong>{word.transcription || '—'}</strong>
                   </div>
                 </div>
-                <div className="example-card">
-                  <p className="example-original">{word.example_original}</p>
-                  <p className="example-translation">{word.example_translation}</p>
-                </div>
+                <WordDetailsPanel word={word} />
               </>
             ) : (
               <p className="flashcard-hint">Сначала попробуйте вспомнить перевод и произношение, затем откройте детали карточки.</p>

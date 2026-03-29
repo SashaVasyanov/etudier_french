@@ -163,6 +163,7 @@ export function HomeDashboard({
           </p>
           <div className="feature-list">
             <span>Новых слов сегодня: {learnedToday}</span>
+            <span>Новые слова возвращаются в следующих модулях с интервалом, а не подряд</span>
             <span>Отдельный дневной прогресс по модулям и шагам</span>
             <span>После завершения появляется экран «На сегодня заданий нет»</span>
           </div>
@@ -189,6 +190,7 @@ export function HomeDashboard({
           <div className="feature-list">
             <span>Сложных слов: {difficultCount}</span>
             <span>В активном изучении: {activeWords}</span>
+            <span>Слова с ошибками поднимаются выше в очереди повторения</span>
             <span>Карточки запускаются отдельно для лёгкого повтора</span>
           </div>
           <div className="launch-actions">

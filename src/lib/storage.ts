@@ -11,7 +11,7 @@ import type {
   WordProgress,
   WordStatus,
 } from '../types';
-import { addDays, clamp, getTodayDateKey, isReviewDue, startOfDay } from './utils';
+import { addDays, clamp, deriveFrenchLatinTranscription, getTodayDateKey, normalizeTranscription, isReviewDue, startOfDay } from './utils';
 
 const STORAGE_KEY = 'anki-plus-storage';
 
@@ -46,7 +46,10 @@ function normalizeWord(word: Word): Word {
     ...word,
     original: word.original.trim(),
     translation: word.translation.trim(),
-    transcription: (word.transcription ?? '').trim(),
+    transcription:
+      word.source === 'custom'
+        ? normalizeTranscription((word.transcription ?? '').trim()) || deriveFrenchLatinTranscription(word.original, '')
+        : deriveFrenchLatinTranscription(word.original, (word.transcription ?? '').trim()),
     audio_original: word.audio_original ?? '',
     example_original: word.example_original.trim(),
     example_translation: word.example_translation.trim(),

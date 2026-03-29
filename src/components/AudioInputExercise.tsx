@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { Exercise, Word } from '../types';
-import { CenteredWordBlock } from './CenteredWordBlock';
+import { getDisplayWord, getExerciseCopy } from '../lib/wordPresentation';
 import { LessonCard } from './LessonCard';
-import { WordImage } from './WordImage';
 
 interface AudioInputExerciseProps {
   exercise: Exercise;
@@ -28,6 +27,7 @@ export function AudioInputExercise({
   onNext,
 }: AudioInputExerciseProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const copy = getExerciseCopy(exercise.type);
 
   useEffect(() => {
     if (!isSubmitted) {
@@ -40,18 +40,17 @@ export function AudioInputExercise({
       className="lesson-exercise-card lesson-input-card"
       header={
         <header className="exercise-header lesson-focus-header">
-          <span className="eyebrow">Аудио-ввод</span>
-          <h2 className="exercise-title">{exercise.prompt}</h2>
-          <CenteredWordBlock title={word.translation} titleClassName="lesson-translation" />
+          <span className="eyebrow">{copy.eyebrow}</span>
+          <h2 className="exercise-title">{copy.title}</h2>
+          <p className="audio-hint">{copy.hint}</p>
           <div className="audio-panel lesson-audio-panel">
             <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
               Повторить аудио
             </button>
-            <p className="audio-hint">Введите слово по памяти. Регистр не важен.</p>
+            <p className="audio-hint">Введите слово по памяти. Артикль не нужен, регистр не важен.</p>
           </div>
         </header>
       }
-      visual={<WordImage word={word} size="small" className="lesson-word-image" />}
       body={
         <div className="exercise-input-panel">
           <label className="input-label" htmlFor="word-answer">
@@ -75,13 +74,13 @@ export function AudioInputExercise({
           />
 
           <div className="input-meta">
-            <span>Введите слово на французском</span>
+            <span>Ответ должен быть на французском</span>
           </div>
 
           {isSubmitted ? (
             <div className={isCorrect ? 'answer-feedback success' : 'answer-feedback error'}>
               <strong>{isCorrect ? 'Верно' : 'Неправильно'}</strong>
-              <span>{isCorrect ? `Ответ: ${exercise.correctAnswer}` : `Правильный ответ: ${exercise.correctAnswer}`}</span>
+              <span>{getDisplayWord(word)}</span>
             </div>
           ) : null}
         </div>

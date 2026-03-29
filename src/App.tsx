@@ -1,4 +1,5 @@
 import { Suspense, lazy, startTransition, useEffect, useMemo, useState } from 'react';
+import { AppCard } from './components/AppCard';
 import { AppNavigation } from './components/AppNavigation';
 import { AppShell } from './components/AppShell';
 import { AudioInputExercise } from './components/AudioInputExercise';
@@ -8,8 +9,10 @@ import { HomeDashboard } from './components/HomeDashboard';
 import { LessonResult } from './components/LessonResult';
 import { LessonWordPreview } from './components/LessonWordPreview';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
+import { ProgressBar } from './components/ProgressBar';
+import { ProgressHeader } from './components/ProgressHeader';
 import { TopNav } from './components/TopNav';
-import { getStarterPacks, getWordById, loadWords } from './data/words';
+import { getLessonPoolWords, getStarterPacks, getWordById, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
 import { createFlashcardSession, createLessonSession } from './lib/exercises';
 import { derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
@@ -138,11 +141,16 @@ function App() {
   const enabledPackIds = useMemo(() => getEnabledPackIds(storage), [storage]);
   const words = useMemo(() => [...baseWords, ...storage.customWords], [baseWords, storage.customWords]);
   const availableWords = useMemo(() => getActiveWords(words, enabledPackIds), [enabledPackIds, words]);
+  const lessonPoolWords = useMemo(() => getLessonPoolWords(availableWords), [availableWords]);
   const progressList = useMemo(() => Object.values(storage.progressByWordId), [storage]);
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
   const currentWord = currentStep ? getWordById(words, currentStep.wordId) : null;
   const todayCompletion = useMemo(() => getCompletedDailyLesson(storage), [storage]);
+  const lessonModules = useMemo(
+    () => session?.modules.filter((module) => module.wordIds.length > 0) ?? [],
+    [session],
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -241,7 +249,11 @@ function App() {
   }
 
   function startLesson(mode: LessonMode, options?: { wordIds?: string[]; title?: string; packId?: string }) {
-    if (words.length === 0) {
+    if (mode !== 'pack' && lessonPoolWords.length === 0) {
+      return;
+    }
+
+    if (mode === 'pack' && words.length === 0) {
       return;
     }
 
@@ -254,10 +266,10 @@ function App() {
       options?.wordIds && options.wordIds.length > 0
         ? words
         : mode === 'default'
-          ? availableWords
+          ? lessonPoolWords
           : mode === 'pack' && options?.packId
             ? words.filter((word) => word.packIds.includes(options.packId!))
-            : availableWords;
+            : lessonPoolWords;
     const nextSession = createLessonSession({
       mode,
       words: lessonWords,
@@ -291,14 +303,18 @@ function App() {
   }
 
   function startFlashcards(mode: 'extra' | 'pack', options?: { title?: string; packId?: string }) {
-    if (words.length === 0) {
+    if (mode !== 'pack' && lessonPoolWords.length === 0) {
+      return;
+    }
+
+    if (mode === 'pack' && words.length === 0) {
       return;
     }
 
     const flashcardWords =
       mode === 'pack' && options?.packId
         ? words.filter((word) => word.packIds.includes(options.packId!))
-        : availableWords;
+        : lessonPoolWords;
     const nextSession = createFlashcardSession({
       mode,
       words: flashcardWords,
@@ -512,13 +528,13 @@ function App() {
         <TopNav
           eyebrow="Французский словарь и уроки"
           title="Etudier French"
-          meta={`${storage.profile.displayName} · Активных слов: ${availableWords.length} · Серия: ${storage.streakDays}`}
-          navigation={<AppNavigation activeScreen={navScreen} lessonAvailable={words.length > 0} onNavigate={handleNavigate} />}
+          meta={`${storage.profile.displayName} · Учебных слов: ${lessonPoolWords.length} · Серия: ${storage.streakDays}`}
+          navigation={<AppNavigation activeScreen={navScreen} lessonAvailable={lessonPoolWords.length > 0} onNavigate={handleNavigate} />}
         />
 
         {screen === 'home' ? (
           <HomeDashboard
-            availableWords={availableWords}
+            availableWords={lessonPoolWords}
             totalWords={words}
             storage={storage}
             progressList={progressList}
@@ -543,6 +559,42 @@ function App() {
         {screen === 'lesson' && currentStep && currentWord && session ? (
           <section className="lesson-shell">
             <div className="lesson-focus-screen">
+              <div className="lesson-progress-stack">
+                <ProgressHeader
+                  eyebrow={session.mode === 'default' ? 'Ежедневный урок' : session.title}
+                  title={currentStep.moduleTitle}
+                  description={currentStep.moduleDescription}
+                  moduleLabel={`${currentStep.modulePosition} из ${lessonModules.length}`}
+                  stepLabel={`${currentStep.indexInModule} из ${currentStep.totalInModule}`}
+                  overallLabel={`${stepIndex + 1} из ${session.steps.length}`}
+                  badges={[
+                    `${session.durationMinutes} мин`,
+                    currentStep.kind === 'preview' ? 'знакомство' : 'практика',
+                    session.mode === 'default' ? '5 модулей в день' : 'вне дневного лимита',
+                  ]}
+                />
+                <ProgressBar current={stepIndex + 1} total={session.steps.length} />
+                <AppCard as="section" className="lesson-sidebar-actions">
+                  <div className="module-nav lesson-module-nav">
+                    {lessonModules.map((module) => {
+                      const state =
+                        module.position < currentStep.modulePosition
+                          ? 'done'
+                          : module.position === currentStep.modulePosition
+                            ? 'current'
+                            : 'upcoming';
+
+                      return (
+                        <div key={module.id} className={`module-nav-item ${state}`}>
+                          <strong>{module.position}. {module.title}</strong>
+                          <span>{module.wordIds.length} слов и заданий</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </AppCard>
+              </div>
+
               {currentStep.kind === 'exercise' ? (
                 currentExercise?.options ? (
                   <MultipleChoiceExercise
@@ -620,7 +672,7 @@ function App() {
         {screen === 'completion' ? (
           <DailyCompletionScreen
             completion={todayCompletion}
-            words={availableWords}
+            words={lessonPoolWords}
             lessonDurationMinutes={storage.lessonDurationMinutes}
             onLessonDurationChange={(value) => {
               setStorage((currentStorage) => setLessonDurationPreference(currentStorage, value));

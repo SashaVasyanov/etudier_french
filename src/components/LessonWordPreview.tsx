@@ -2,7 +2,9 @@ import type { Word } from '../types';
 import { AudioButton } from './AudioButton';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
+import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
+import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
 
 interface LessonWordPreviewProps {
   word: Word;
@@ -30,9 +32,9 @@ export function LessonWordPreview({
             Изучение слова · {current} / {total}
           </span>
           <CenteredWordBlock
-            title={word.original}
+            title={getDisplayWord(word)}
             subtitle={word.translation}
-            meta={word.part_of_speech}
+            meta={`${getPartOfSpeechLabel(word.part_of_speech)} · ${word.level}`}
             titleClassName="exercise-title lesson-word-title"
             subtitleClassName="lesson-translation"
           />
@@ -44,16 +46,7 @@ export function LessonWordPreview({
             <WordImage word={word} size="large" className="lesson-word-image study-word-image" />
 
             <div className="study-word-panel">
-              <div className="study-word-meta">
-                <div className="flashcard-meta-item">
-                  <span className="eyebrow">Пример</span>
-                  <strong>{word.example_original}</strong>
-                </div>
-                <div className="flashcard-meta-item">
-                  <span className="eyebrow">Перевод примера</span>
-                  <strong>{word.example_translation}</strong>
-                </div>
-              </div>
+              <WordDetailsPanel word={word} />
             </div>
           </div>
 
