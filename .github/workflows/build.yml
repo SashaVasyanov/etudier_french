@@ -1,0 +1,91 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  web-build:
+    name: Web build check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+  windows-package:
+    name: Windows installer and exe
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Windows desktop app
+        run: npm run tauri:build
+
+      - name: Create portable exe archive
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $exe = Get-ChildItem -Path "src-tauri/target/release" -Filter "*.exe" -File | Select-Object -First 1
+          if (-not $exe) {
+            throw "Windows exe was not found in src-tauri/target/release"
+          }
+          New-Item -ItemType Directory -Force -Path "artifacts/windows" | Out-Null
+          Copy-Item $exe.FullName "artifacts/windows/Etudier-French.exe"
+          Compress-Archive -Path "artifacts/windows/Etudier-French.exe" -DestinationPath "artifacts/Etudier-French-Windows-portable.zip" -Force
+
+      - name: Collect Windows installers
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          New-Item -ItemType Directory -Force -Path "artifacts/windows-installers" | Out-Null
+          $installers = Get-ChildItem -Path "src-tauri/target/release/bundle" -Recurse -Include "*.exe","*.msi" -File
+          if (-not $installers) {
+            throw "Windows installer was not found in src-tauri/target/release/bundle"
+          }
+          foreach ($installer in $installers) {
+            Copy-Item $installer.FullName "artifacts/windows-installers/$($installer.Name)"
+          }
+
+      - name: Upload Windows portable exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: etudier-french-windows-portable
+          path: artifacts/Etudier-French-Windows-portable.zip
+          if-no-files-found: error
+
+      - name: Upload Windows installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: etudier-french-windows-installers
+          path: artifacts/windows-installers/*
+          if-no-files-found: error
