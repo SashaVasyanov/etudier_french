@@ -1,13 +1,14 @@
 interface AppNavigationProps {
-  activeScreen: 'home' | 'lesson' | 'dictionary' | 'profile' | 'packs';
+  activeScreen: 'home' | 'lesson' | 'dictionary' | 'statistics' | 'profile' | 'packs';
   lessonAvailable: boolean;
-  onNavigate: (screen: 'home' | 'lesson' | 'dictionary' | 'profile' | 'packs') => void;
+  onNavigate: (screen: 'home' | 'lesson' | 'dictionary' | 'statistics' | 'profile' | 'packs') => void;
 }
 
 const NAV_ITEMS: Array<{ id: AppNavigationProps['activeScreen']; label: string; hint: string }> = [
   { id: 'home', label: 'Главная', hint: 'План на день' },
   { id: 'lesson', label: 'Урок', hint: 'Текущий поток' },
   { id: 'dictionary', label: 'Словарь', hint: 'Карточки слов' },
+  { id: 'statistics', label: 'Статистика', hint: 'Прогресс' },
   { id: 'packs', label: 'Паки', hint: 'Тематические темы' },
   { id: 'profile', label: 'Профиль', hint: 'История и streak' },
 ];

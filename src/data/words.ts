@@ -1215,7 +1215,7 @@ function buildFunctionWordExample(word: Word): { example_original: string; examp
 
   return {
     example_original: `Exemple avec « ${original} ».`,
-    example_translation: `Слово «${original}» используется в зависимости от контекста фразы.`,
+    example_translation: `Значение слова «${original}» зависит от контекста предложения.`,
   };
 }
 
@@ -1298,12 +1298,12 @@ function buildExpressionExample(word: Word): { example_original: string; example
       example_translation: `Это выражение используют как готовую фразу в типичной бытовой ситуации.`,
     },
     {
-      example_original: `Au quotidien, j'utilise l'expression « ${original} » au bon moment.`,
-      example_translation: `Такую фразу используют в повседневной речи как готовое выражение.`,
+      example_original: `Dans une conversation naturelle, on peut dire : « ${original} ».`,
+      example_translation: `Такую фразу используют в живой речи как готовое выражение.`,
     },
     {
-      example_original: `Pendant la conversation, elle répond : « ${original} ».`,
-      example_translation: `Это устойчивое выражение вставляют целиком в подходящий контекст разговора.`,
+      example_original: `Cette expression s'utilise telle quelle dans un échange courant : « ${original} ».`,
+      example_translation: `Это устойчивое выражение вставляют целиком в подходящий разговорный контекст.`,
     },
   ]);
 }
@@ -1416,7 +1416,13 @@ export async function loadWords(): Promise<Word[]> {
       ),
       loadWordImageManifest(),
     ]).then(([parts, wordImageManifest]) =>
-      [...parts.flat().map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id], packIds: [], source: 'core' } as Word)), ...getPackWords().map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] }))]
+      [
+        ...parts
+          .flat()
+          .map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id], packIds: [], source: 'core' } as Word))
+          .filter((word) => isSupportedCoreWord(word)),
+        ...getPackWords().map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
+      ]
         .sort((left, right) => {
           const levelDiff = LEVEL_ORDER[left.level] - LEVEL_ORDER[right.level];
 
@@ -1457,21 +1463,27 @@ function normalizePhrase(value: string): string {
 }
 
 export function isWordInCoreLessonPool(word: Word): boolean {
-  if (word.source !== 'core') {
+  if (!isSupportedCoreWord(word)) {
+    return false;
+  }
+
+  if (word.source !== 'core' || word.part_of_speech !== 'expression') {
     return true;
   }
 
-  const normalizedOriginal = normalizePhrase(word.original);
+  return !SYNTHETIC_EXPRESSION_PREFIXES.some((prefix) => normalizePhrase(word.original).startsWith(prefix));
+}
+
+function isSupportedCoreWord(word: Word): boolean {
+  if (word.source !== 'core') {
+    return true;
+  }
 
   if (word.part_of_speech !== 'expression') {
     return true;
   }
 
-  if (CORE_STABLE_EXPRESSIONS.has(normalizedOriginal)) {
-    return true;
-  }
-
-  return !SYNTHETIC_EXPRESSION_PREFIXES.some((prefix) => normalizedOriginal.startsWith(prefix));
+  return CORE_STABLE_EXPRESSIONS.has(normalizePhrase(word.original));
 }
 
 export function getLessonPoolWords(words: Word[]): Word[] {

@@ -1,9 +1,6 @@
-import { countWordsByStatus } from '../lib/exercises';
+import { useState, type KeyboardEvent } from 'react';
 import { getTodayDateKey, percentage } from '../lib/utils';
-import type { AppStorage, DailyLessonRecord, LessonDurationMinutes, Word, WordProgress } from '../types';
-import { AppCard } from './AppCard';
-import { LessonDurationSelector } from './LessonDurationSelector';
-import { StatCard } from './StatCard';
+import type { AppStorage, LessonDurationMinutes, Word, WordProgress } from '../types';
 
 interface HomeDashboardProps {
   availableWords: Word[];
@@ -14,36 +11,21 @@ interface HomeDashboardProps {
   lessonDurationMinutes: LessonDurationMinutes;
   onLessonDurationChange: (value: LessonDurationMinutes) => void;
   onStartLesson: () => void;
-  onStartExtraLesson: () => void;
-  onStartFlashcards: () => void;
-  onOpenCompletion: () => void;
   onOpenDictionary: () => void;
+  onOpenStatistics: () => void;
   onOpenProfile: () => void;
   onOpenPacks: () => void;
 }
 
-function getDueReviewCount(progressList: WordProgress[]): number {
-  const now = new Date().getTime();
+const DURATION_OPTIONS: LessonDurationMinutes[] = [10, 20, 30];
 
-  return progressList.filter((progress) => {
-    if (!progress.next_review_at) {
-      return false;
-    }
-
-    return new Date(progress.next_review_at).getTime() <= now;
-  }).length;
-}
-
-function formatDailyStatus(todayCompletion: DailyLessonRecord | null, completedLessons: number | undefined): string {
-  if (todayCompletion) {
-    return 'Урок завершён';
+function activateWithKeyboard(event: KeyboardEvent<HTMLElement>, action: () => void) {
+  if (event.key !== 'Enter' && event.key !== ' ') {
+    return;
   }
 
-  if (completedLessons) {
-    return `${completedLessons} занятие сегодня`;
-  }
-
-  return 'Готов к старту';
+  event.preventDefault();
+  action();
 }
 
 export function HomeDashboard({
@@ -55,183 +37,113 @@ export function HomeDashboard({
   lessonDurationMinutes,
   onLessonDurationChange,
   onStartLesson,
-  onStartExtraLesson,
-  onStartFlashcards,
-  onOpenCompletion,
   onOpenDictionary,
+  onOpenStatistics,
   onOpenProfile,
   onOpenPacks,
 }: HomeDashboardProps) {
+  const [isDurationMenuOpen, setIsDurationMenuOpen] = useState(false);
   const today = storage.dailyStats.find((item) => item.date === getTodayDateKey());
-  const todayCompletion = storage.completedDailyLessons.find((item) => item.date === getTodayDateKey());
   const todayAccuracy = today ? percentage(today.correctAnswers, today.totalAnswers) : 0;
-  const masteredCount = countWordsByStatus(progressList, 'mastered');
-  const reviewCount = getDueReviewCount(progressList);
-  const learnedToday = today?.wordsLearned ?? 0;
-  const progressPercent = availableWords.length > 0 ? Math.round((masteredCount / availableWords.length) * 100) : 0;
-  const activeWords =
-    countWordsByStatus(progressList, 'learning') +
-    countWordsByStatus(progressList, 'review') +
-    countWordsByStatus(progressList, 'difficult');
-  const difficultCount = countWordsByStatus(progressList, 'difficult');
-  const currentPlan = todayCompletion ? 'Ежедневный урок закрыт' : 'Следующий шаг: пройти 5 модулей';
+  const fallbackStat = `${availableWords.length}/${totalWords.length}`;
+  const learnedWordIds = new Set(
+    progressList
+      .filter((progress) => progress.status === 'known' || progress.status === 'mastered')
+      .map((progress) => progress.word_id),
+  );
+  const wordsInProcess = Math.max(0, availableWords.length - learnedWordIds.size);
+  const statisticSummary = `Точность сегодня ${todayAccuracy}%. Активная база ${fallbackStat}. Слов в работе ${wordsInProcess}.`;
 
   return (
-    <section className="dashboard-shell">
-      <section className="home-overview-grid">
-        <AppCard as="header" tone="hero" className="home-hero">
-          <div className="hero-copy">
-            <span className="eyebrow">Сегодня</span>
-            <h1 className="hero-title">Ежедневный маршрут по французскому</h1>
-            <p className="hero-text">
-              {todayCompletion
-                ? 'Дневной поток уже завершён. Продолжайте в дополнительном режиме, повторяйте сложные слова и открывайте тематические паки.'
-                : 'Один понятный поток на день: 5 модулей, видимый прогресс по шагам и быстрый переход в свободную практику после завершения.'}
-            </p>
-            <div className="badge-row wrap-row">
-              <span className="tag-badge">{formatDailyStatus(todayCompletion ?? null, today?.completedLessons)}</span>
-              <span className="tag-badge">{currentPlan}</span>
-              <span className="tag-badge">Длительность: {lessonDurationMinutes} мин</span>
-            </div>
-          </div>
+    <section className="dashboard-shell home-figma-shell">
+      <div className="home-figma-board">
+        <section
+          className="home-figma-block home-figma-block-lesson"
+          role="button"
+          tabIndex={0}
+          aria-label="Начать урок"
+          onClick={onStartLesson}
+          onKeyDown={(event) => activateWithKeyboard(event, onStartLesson)}
+        >
+          <h2 className="home-figma-block-title">Lesson</h2>
+        </section>
 
-          <div className="hero-actions home-actions">
+        <button type="button" className="home-figma-block" onClick={onOpenDictionary}>
+          <span className="home-figma-block-title">Dictionary</span>
+        </button>
+
+        <section className="home-figma-sidepanel" aria-label="Язык и длительность урока">
+          <div className="home-figma-chip home-figma-chip-static">French</div>
+
+          <div className={isDurationMenuOpen ? 'home-figma-duration-picker open' : 'home-figma-duration-picker'}>
             <button
               type="button"
-              className="primary-button hero-button"
-              onClick={todayCompletion ? onOpenCompletion : onStartLesson}
+              className="home-figma-chip home-figma-chip-button"
+              aria-haspopup="menu"
+              aria-expanded={isDurationMenuOpen}
+              onClick={() => {
+                setIsDurationMenuOpen((current) => !current);
+              }}
             >
-              {todayCompletion ? 'Открыть итог дня' : 'Стартовать ежедневный урок'}
+              {lessonDurationMinutes} min
             </button>
-            <button type="button" className="secondary-button" onClick={onStartExtraLesson}>
-              Дополнительное обучение
-            </button>
-            <button type="button" className="ghost-button" onClick={onStartFlashcards}>
-              Карточки слов
-            </button>
-          </div>
-        </AppCard>
 
-        <AppCard as="section" className="daily-state-card">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">Панель дня</span>
-              <h2 className="section-title">Что важно сейчас</h2>
-            </div>
-            <span className="inline-note">{todayCompletion ? 'День закрыт' : 'Урок доступен'}</span>
-          </div>
-          <div className="feature-list">
-            <span>Ежедневный урок: {todayCompletion ? '5 из 5 модулей завершены' : 'ещё не завершён'}</span>
-            <span>Активных слов в работе: {activeWords}</span>
-            <span>Сложных слов для повтора: {difficultCount}</span>
-            <span>Подключено паков: {addedPacksCount}</span>
-          </div>
-          <div className="quick-action-list">
-            <button type="button" className="ghost-button full-width" onClick={onOpenDictionary}>
-              Открыть словарь
-            </button>
-            <button type="button" className="ghost-button full-width" onClick={onOpenPacks}>
-              Смотреть паки
-            </button>
-            <button type="button" className="ghost-button full-width" onClick={onOpenProfile}>
-              Перейти в профиль
-            </button>
-          </div>
-        </AppCard>
-      </section>
+            {isDurationMenuOpen ? (
+              <div className="home-figma-duration-popover" role="menu" aria-label="Выбор длительности урока">
+                {DURATION_OPTIONS.map((option) => {
+                  const isActive = option === lessonDurationMinutes;
 
-      <section className="stats-grid">
-        <StatCard label="Ежедневный урок" value={todayCompletion ? '5/5' : '0/5'} hint={todayCompletion ? 'Дневной поток завершён' : 'Нужно пройти все 5 модулей'} tone="accent" />
-        <StatCard label="Доступных слов" value={availableWords.length} hint={`Всего в базе ${totalWords.length}`} />
-        <StatCard label="На повторении" value={reviewCount} hint="Готовы к повтору прямо сейчас" />
-        <StatCard label="Серия дней" value={storage.streakDays} hint={`Точность сегодня ${todayAccuracy}%`} />
-      </section>
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={isActive}
+                      className={isActive ? 'home-figma-duration-option active' : 'home-figma-duration-option'}
+                      onClick={() => {
+                        onLessonDurationChange(option);
+                        setIsDurationMenuOpen(false);
+                      }}
+                    >
+                      {option} min
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+        </section>
 
-      <section className="dashboard-feature-grid dashboard-feature-grid-wide home-main-grid">
-        <LessonDurationSelector value={lessonDurationMinutes} onChange={onLessonDurationChange} />
+        <button
+          type="button"
+          className="home-figma-block"
+          title={`Подключено паков: ${addedPacksCount}`}
+          onClick={onOpenPacks}
+        >
+          <span className="home-figma-block-title">Packs</span>
+        </button>
 
-        <AppCard as="article" className="route-card route-card-primary">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">Основной путь</span>
-              <h2 className="section-title">Ежедневный урок</h2>
-            </div>
-            <span className="inline-note">{todayCompletion ? 'Сегодня уже закрыт' : 'Главный фокус дня'}</span>
-          </div>
-          <p className="hero-text">
-            Структура всегда одна и та же: новые слова, первая практика, повторение, смешанное закрепление и финальная мини-проверка.
-          </p>
-          <div className="feature-list">
-            <span>Новых слов сегодня: {learnedToday}</span>
-            <span>Новые слова возвращаются в следующих модулях с интервалом, а не подряд</span>
-            <span>Отдельный дневной прогресс по модулям и шагам</span>
-            <span>После завершения появляется экран «На сегодня заданий нет»</span>
-          </div>
-          <button
-            type="button"
-            className="primary-button full-width"
-            onClick={todayCompletion ? onOpenCompletion : onStartLesson}
-          >
-            {todayCompletion ? 'Открыть итог дня' : `Учиться ${lessonDurationMinutes} минут`}
-          </button>
-        </AppCard>
+        <section
+          className="home-figma-block home-figma-block-stat"
+          role="button"
+          tabIndex={0}
+          aria-label={`Открыть статистику. ${statisticSummary}`}
+          title={statisticSummary}
+          onClick={onOpenStatistics}
+          onKeyDown={(event) => activateWithKeyboard(event, onOpenStatistics)}
+        >
+          <h2 className="home-figma-block-title">Statistic</h2>
+        </section>
 
-        <AppCard as="article" tone="soft" className="route-card">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">После урока</span>
-              <h2 className="section-title">Свободная практика</h2>
-            </div>
-            <span className="inline-note">Не ломает дневной прогресс</span>
-          </div>
-          <p className="hero-text">
-            Используйте дополнительный режим для сложных слов, текущих слов в изучении, паков и быстрой тренировки без ограничений по дню.
-          </p>
-          <div className="feature-list">
-            <span>Сложных слов: {difficultCount}</span>
-            <span>В активном изучении: {activeWords}</span>
-            <span>Слова с ошибками поднимаются выше в очереди повторения</span>
-            <span>Карточки запускаются отдельно для лёгкого повтора</span>
-          </div>
-          <div className="launch-actions">
-            <button type="button" className="secondary-button full-width" onClick={onStartExtraLesson}>
-              Открыть свободный режим
-            </button>
-            <button type="button" className="ghost-button full-width" onClick={onStartFlashcards}>
-              Запустить карточки
-            </button>
-          </div>
-        </AppCard>
-
-        <AppCard as="article" className="launch-panel">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">Прогресс</span>
-              <h2 className="section-title">Курс без лишних блоков</h2>
-            </div>
-            <span className="inline-note">{progressPercent}% слов освоено</span>
-          </div>
-          <div className="feature-list">
-            <span>Изучается: {activeWords}</span>
-            <span>Уже известно: {countWordsByStatus(progressList, 'known')}</span>
-            <span>Выучено: {masteredCount}</span>
-          </div>
-          <div className="progress-track" aria-hidden="true">
-            <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
-          </div>
-          <div className="quick-action-list compact-actions compact-actions-three">
-            <button type="button" className="ghost-button full-width" onClick={onOpenCompletion}>
-              Итог дня
-            </button>
-            <button type="button" className="ghost-button full-width" onClick={onOpenPacks}>
-              Тематические паки
-            </button>
-            <button type="button" className="ghost-button full-width" onClick={onOpenDictionary}>
-              Добавить слова
-            </button>
-          </div>
-        </AppCard>
-      </section>
+        <button
+          type="button"
+          className="home-figma-block"
+          title="Открыть профиль и настройки приложения"
+          onClick={onOpenProfile}
+        >
+          <span className="home-figma-block-title">Settings</span>
+        </button>
+      </div>
     </section>
   );
 }

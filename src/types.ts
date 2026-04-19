@@ -11,7 +11,8 @@ export type ExerciseType =
   | 'audio_to_translation_choice'
   | 'translation_to_original_choice'
   | 'original_to_translation_choice'
-  | 'audio_to_original_input';
+  | 'audio_to_original_input'
+  | 'memory_check';
 
 export interface Word {
   id: string;
@@ -60,6 +61,7 @@ export interface Exercise {
   wordId: string;
   prompt: string;
   correctAnswer: string;
+  context?: string;
   options?: ExerciseOption[];
 }
 

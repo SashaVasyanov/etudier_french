@@ -13,6 +13,51 @@ export function normalizeAnswer(value: string): string {
   return value.trim().toLocaleLowerCase();
 }
 
+function normalizeFrenchAnswerToken(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[’`]/g, "'")
+    .replace(/[^a-z\s'-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function stripFrenchLeadingArticle(value: string): string {
+  return value
+    .replace(/^(l'|le |la |les |un |une |des |du |de la |de l')/i, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function getFrenchAnswerVariants(value: string): Set<string> {
+  const normalized = normalizeFrenchAnswerToken(value);
+  const withoutArticle = stripFrenchLeadingArticle(normalized);
+
+  return new Set([normalized, withoutArticle].filter(Boolean));
+}
+
+export function isFrenchAnswerMatch(userAnswer: string, correctAnswer: string): boolean {
+  const userVariants = getFrenchAnswerVariants(userAnswer);
+  const correctVariants = getFrenchAnswerVariants(correctAnswer);
+
+  return [...userVariants].some((variant) => correctVariants.has(variant));
+}
+
+function normalizeComparableText(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/œ/g, 'oe')
+    .replace(/æ/g, 'ae')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[’']/g, "'")
+    .replace(/[^a-z\s'-]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 const TRANSCRIPTION_CHAR_MAP: Record<string, string> = {
   а: 'a',
   е: 'e',
@@ -108,29 +153,106 @@ export function normalizeTranscription(value: string): string {
     .trim();
 }
 
+function stripTranscriptionBrackets(value: string): string {
+  return value.trim().replace(/^\[/, '').replace(/\]$/, '').trim();
+}
+
+function hasUsefulFallbackTranscription(original: string, fallback: string): boolean {
+  const normalizedFallback = normalizeComparableText(stripTranscriptionBrackets(fallback));
+  const normalizedOriginal = normalizeComparableText(original);
+
+  if (!normalizedFallback) {
+    return false;
+  }
+
+  if (normalizedFallback === normalizedOriginal) {
+    return false;
+  }
+
+  return true;
+}
+
+const FRENCH_TRANSCRIPTION_EXCEPTIONS: Record<string, string> = {
+  'bonjour': 'bonzhur',
+  'salut': 'saly',
+  'merci': 'mersi',
+  'oui': 'wi',
+  'non': 'non',
+  'beaucoup': 'boku',
+  'eau': 'o',
+  'oeil': 'oey',
+  'yeux': 'yeu',
+  'pain': 'pen',
+  'femme': 'fam',
+  'ville': 'vil',
+  'travail': 'travay',
+  'restaurant': 'restoran',
+  'soeur': 'ser',
+  'sœur': 'ser',
+  'heure': 'er',
+  'heures': 'er',
+  'monsieur': 'mesye',
+  'question': 'kestyon',
+  'chercher': 'shershe',
+  'fils': 'fis',
+  'fille': 'fiy',
+  'famille': 'famiy',
+  'comment': 'koman',
+  'ca': 'sa',
+  'ça': 'sa',
+  'plait': 'ple',
+  'plaît': 'ple',
+  'revoir': 'revwar',
+  "au revoir": 'orvwar',
+  "s'il vous plaît": 'sil vu ple',
+  'ça va': 'sa va',
+  'comment ça va': 'koman sa va',
+  'je ne sais pas': 'zh ne se pa',
+  'daccord': 'dakor',
+  "d'accord": 'dakor',
+  'il y a': 'il i a',
+  'bus': 'bus',
+};
+
+const NORMALIZED_FRENCH_TRANSCRIPTION_EXCEPTIONS = Object.fromEntries(
+  Object.entries(FRENCH_TRANSCRIPTION_EXCEPTIONS).map(([key, value]) => [normalizeComparableText(key), value]),
+);
+
+function getFrenchTranscriptionException(value: string): string | undefined {
+  return NORMALIZED_FRENCH_TRANSCRIPTION_EXCEPTIONS[normalizeComparableText(value)];
+}
+
 function transliterateFrenchToken(token: string): string {
+  const exact = getFrenchTranscriptionException(token);
+
+  if (exact) {
+    return exact;
+  }
+
   let value = token
     .toLowerCase()
     .replace(/[’]/g, "'")
     .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '');
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/œ/g, 'oe')
+    .replace(/æ/g, 'ae');
 
   value = value
-    .replace(/œ/g, 'oe')
-    .replace(/æ/g, 'ae')
+    .replace(/\bh/g, '')
     .replace(/eux\b/g, 'eu')
     .replace(/eur\b/g, 'er')
     .replace(/eaux/g, 'o')
     .replace(/eau/g, 'o')
     .replace(/aux/g, 'o')
     .replace(/au/g, 'o')
-    .replace(/oy/g, 'uay')
+    .replace(/oy/g, 'way')
     .replace(/oi/g, 'wa')
     .replace(/ou/g, 'u')
+    .replace(/oeu/g, 'eu')
     .replace(/ph/g, 'f')
     .replace(/th/g, 't')
     .replace(/ch/g, 'sh')
-    .replace(/gn/g, 'gn')
+    .replace(/gn/g, 'ny')
     .replace(/qu/g, 'k')
     .replace(/que\b/g, 'k')
     .replace(/gu(?=[ei])/g, 'g')
@@ -138,34 +260,41 @@ function transliterateFrenchToken(token: string): string {
     .replace(/g(?=[eiy])/g, 'j')
     .replace(/ç/g, 's')
     .replace(/c(?=[eiy])/g, 's')
-    .replace(/tion/g, 'tyon')
+    .replace(/c/g, 'k')
+    .replace(/stion/g, 'styon')
+    .replace(/tion/g, 'syon')
     .replace(/sion/g, 'zyon')
     .replace(/([aeou])ill/g, '$1y')
-    .replace(/ille\b/g, 'iy')
     .replace(/ill/g, 'il')
     .replace(/eill/g, 'ey')
     .replace(/ail\b/g, 'ay')
     .replace(/eil\b/g, 'ey')
     .replace(/euil\b/g, 'euy')
-    .replace(/ein|aim|ain/g, 'en')
-    .replace(/in|im|yn|ym/g, 'en')
-    .replace(/on|om/g, 'on')
-    .replace(/an|am/g, 'an')
-    .replace(/un|um/g, 'un')
+    .replace(/(ein|aim|ain|eim)(?=[b-df-hj-np-tv-z]|$)/g, 'en')
+    .replace(/(in|im|yn|ym)(?=[b-df-hj-np-tv-z]|$)/g, 'en')
+    .replace(/(on|om)(?=[b-df-hj-np-tv-z]|$)/g, 'on')
+    .replace(/(an|am|en|em)(?=[b-df-hj-np-tv-z]|$)/g, 'an')
+    .replace(/(un|um)(?=[b-df-hj-np-tv-z]|$)/g, 'en')
     .replace(/eu/g, 'eu')
     .replace(/ai/g, 'e')
     .replace(/ei/g, 'e')
+    .replace(/ien/g, 'yen')
+    .replace(/ein/g, 'en')
+    .replace(/oin/g, 'wan')
+    .replace(/ui/g, 'ui')
     .replace(/er\b/g, 'e')
     .replace(/ez\b/g, 'e')
     .replace(/et\b/g, 'e')
+    .replace(/ment\b/g, 'man')
     .replace(/ure\b/g, 'yur')
     .replace(/j/g, 'zh')
-    .replace(/\bh/g, '');
+    .replace(/y(?=[aeiou])/g, 'i');
 
   value = value
+    .replace(/e\b/g, '')
     .replace(/es\b/g, '')
-    .replace(/ent\b/g, 'an')
-    .replace(/[dgpstxz]\b/g, '')
+    .replace(/[dptxz]\b/g, '')
+    .replace(/t\b/g, '')
     .replace(/ss/g, 's')
     .replace(/mm/g, 'm')
     .replace(/nn/g, 'n')
@@ -188,17 +317,28 @@ export function deriveFrenchLatinTranscription(original: string, fallback = ''):
     return cleanedFallback;
   }
 
+  const exact = getFrenchTranscriptionException(source);
+
+  if (exact) {
+    return `[${exact}]`;
+  }
+
+  if (hasUsefulFallbackTranscription(source, cleanedFallback)) {
+    return `[${stripTranscriptionBrackets(cleanedFallback)}]`;
+  }
+
   const parts = source
     .replace(/[’]/g, "'")
-    .split(/(\s+|-)/)
+    .split(/(\s+|-|')/)
     .map((part) => {
-      if (!part || /^\s+$/.test(part) || part === '-') {
+      if (!part || /^\s+$/.test(part) || part === '-' || part === "'") {
         return part;
       }
 
       return transliterateFrenchToken(part);
     })
     .join('')
+    .replace(/'/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 

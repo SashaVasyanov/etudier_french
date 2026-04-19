@@ -191,19 +191,37 @@ export function saveStorage(storage: AppStorage): void {
 }
 
 function resolveStatus(progress: WordProgress): WordStatus {
+  const accuracy = progress.shown_count > 0 ? progress.correct_count / progress.shown_count : 0;
+  const errorRate = progress.shown_count > 0 ? progress.wrong_count / progress.shown_count : 0;
+
   if (progress.status === 'known') {
     return 'known';
   }
 
-  if (progress.correct_count >= 8 && progress.repetition_step >= 6) {
+  if (
+    progress.shown_count >= 8 &&
+    progress.correct_count >= 6 &&
+    progress.repetition_step >= 6 &&
+    progress.interval_days >= 10 &&
+    accuracy >= 0.82
+  ) {
     return 'mastered';
   }
 
-  if (progress.wrong_count >= 3 && progress.repetition_step < 4) {
+  if (
+    progress.shown_count >= 3 &&
+    progress.wrong_count >= 3 &&
+    (accuracy < 0.68 || errorRate >= 0.35) &&
+    progress.repetition_step < 5
+  ) {
     return 'difficult';
   }
 
-  if (progress.repetition_step >= 3 || (progress.status === 'mastered' && !isReviewDue(progress.next_review_at))) {
+  if (
+    progress.repetition_step >= 4 ||
+    (progress.shown_count >= 4 && accuracy >= 0.8) ||
+    (progress.status === 'mastered' && !isReviewDue(progress.next_review_at))
+  ) {
     return 'review';
   }
 
@@ -214,29 +232,147 @@ function resolveStatus(progress: WordProgress): WordStatus {
   return 'new';
 }
 
-function nextIntervalDays(progress: WordProgress, isCorrect: boolean): number {
-  if (!isCorrect) {
+function getAnswerAccuracy(correctCount: number, shownCount: number): number {
+  return shownCount > 0 ? correctCount / shownCount : 0;
+}
+
+function getErrorPressure(correctCount: number, wrongCount: number): number {
+  const attempts = correctCount + wrongCount;
+
+  if (attempts === 0) {
+    return 0;
+  }
+
+  const errorRate = wrongCount / attempts;
+  const wrongToCorrectRatio = wrongCount / Math.max(1, correctCount);
+
+  return clamp(errorRate * 0.75 + wrongToCorrectRatio * 0.18, 0, 1);
+}
+
+function getProjectedAnswerStats(
+  progress: WordProgress,
+  outcome: ExerciseOutcome,
+): { correctCount: number; wrongCount: number; shownCount: number; accuracy: number; errorPressure: number } {
+  const correctCount = progress.correct_count + (outcome.isCorrect ? 1 : 0);
+  const wrongCount = progress.wrong_count + (outcome.isCorrect ? 0 : 1);
+  const shownCount = progress.shown_count + 1;
+
+  return {
+    correctCount,
+    wrongCount,
+    shownCount,
+    accuracy: getAnswerAccuracy(correctCount, shownCount),
+    errorPressure: getErrorPressure(correctCount, wrongCount),
+  };
+}
+
+function getBaseExerciseEaseDelta(outcome: ExerciseOutcome): number {
+  if (!outcome.isCorrect) {
+    switch (outcome.type) {
+      case 'memory_check':
+        return -0.28;
+      case 'audio_to_original_input':
+        return -0.18;
+      case 'translation_to_original_choice':
+        return -0.16;
+      case 'audio_to_translation_choice':
+      case 'original_to_translation_choice':
+      default:
+        return -0.12;
+    }
+  }
+
+  switch (outcome.type) {
+    case 'audio_to_original_input':
+      return 0.18;
+    case 'translation_to_original_choice':
+      return 0.12;
+    case 'memory_check':
+      return 0.08;
+    case 'audio_to_translation_choice':
+    case 'original_to_translation_choice':
+    default:
+      return 0.06;
+  }
+}
+
+function getExerciseEaseDelta(progress: WordProgress, outcome: ExerciseOutcome): number {
+  const baseDelta = getBaseExerciseEaseDelta(outcome);
+  const stats = getProjectedAnswerStats(progress, outcome);
+
+  if (!outcome.isCorrect) {
+    return baseDelta - stats.errorPressure * 0.22;
+  }
+
+  const accuracyBonus = stats.shownCount >= 4 && stats.accuracy >= 0.86 ? 0.06 : 0;
+  const errorPenalty = stats.errorPressure * 0.14;
+
+  return baseDelta + accuracyBonus - errorPenalty;
+}
+
+function getBaseExerciseIntervalMultiplier(type: ExerciseOutcome['type']): number {
+  switch (type) {
+    case 'audio_to_original_input':
+      return 1.18;
+    case 'translation_to_original_choice':
+      return 1.08;
+    case 'memory_check':
+      return 1.05;
+    case 'audio_to_translation_choice':
+    case 'original_to_translation_choice':
+    default:
+      return 0.88;
+  }
+}
+
+function getExerciseIntervalMultiplier(progress: WordProgress, outcome: ExerciseOutcome): number {
+  const stats = getProjectedAnswerStats(progress, outcome);
+  const accuracyAdjustment = clamp((stats.accuracy - 0.72) * 0.85, -0.28, 0.24);
+  const errorPenalty = stats.errorPressure * 0.45;
+
+  return clamp(getBaseExerciseIntervalMultiplier(outcome.type) + accuracyAdjustment - errorPenalty, 0.45, 1.35);
+}
+
+function getLateReviewBoost(progress: WordProgress): number {
+  if (!progress.next_review_at || !isReviewDue(progress.next_review_at)) {
+    return 0;
+  }
+
+  const overdueDays = Math.floor((Date.now() - new Date(progress.next_review_at).getTime()) / (24 * 60 * 60 * 1000));
+
+  return clamp(Math.floor(overdueDays * 0.35), 0, 14);
+}
+
+function nextIntervalDays(progress: WordProgress, outcome: ExerciseOutcome): number {
+  if (!outcome.isCorrect) {
     return 1;
   }
 
+  const multiplier = getExerciseIntervalMultiplier(progress, outcome);
+  const lateBoost = getLateReviewBoost(progress);
+
   if (progress.status === 'new') {
-    return 1;
+    return clamp(Math.round(multiplier), 1, 2);
   }
 
   if (progress.status === 'learning') {
-    return progress.repetition_step >= 2 ? 3 : 1;
+    const base = progress.repetition_step >= 3 ? 4 : progress.repetition_step >= 1 ? 2 : 1;
+    return clamp(Math.round(base * multiplier), 1, 7);
+  }
+
+  if (progress.status === 'difficult') {
+    const base = progress.repetition_step >= 3 ? 3 : 1;
+    return clamp(Math.round(base * multiplier), 1, 5);
   }
 
   const base = progress.interval_days > 0 ? progress.interval_days : 3;
-  return clamp(Math.round(base * progress.ease_factor), 2, 45);
+  return clamp(Math.round((base + lateBoost) * progress.ease_factor * multiplier), 2, 60);
 }
 
 function buildUpdatedProgress(existing: WordProgress, outcome: ExerciseOutcome): WordProgress {
   const now = new Date();
-  const easeFactor = outcome.isCorrect
-    ? clamp(existing.ease_factor + 0.15, 1.3, 3.4)
-    : clamp(existing.ease_factor - 0.2, 1.3, 3.4);
-  const intervalDays = nextIntervalDays(existing, outcome.isCorrect);
+  const easeFactor = clamp(existing.ease_factor + getExerciseEaseDelta(existing, outcome), 1.3, 3.4);
+  const intervalDays = nextIntervalDays(existing, outcome);
   const repetitionStep = outcome.isCorrect
     ? existing.repetition_step + 1
     : Math.max(1, existing.repetition_step - 1);

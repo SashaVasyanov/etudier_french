@@ -30,8 +30,15 @@ export function MultipleChoiceExercise({
   const isOriginalExercise = exercise.type === 'original_to_translation_choice';
   const isTranslationExercise = exercise.type === 'translation_to_original_choice';
   const copy = getExerciseCopy(exercise.type);
-  const feedbackLabel =
-    exercise.type === 'translation_to_original_choice' ? word.translation : getDisplayWord(word);
+  const feedbackLabel = getDisplayWord(word);
+  const cardClassName = [
+    'lesson-exercise-card',
+    isTranslationExercise ? 'lesson-image-choice-card' : '',
+    isOriginalExercise ? 'lesson-translation-choice-card' : '',
+    isAudioExercise ? 'lesson-audio-choice-card' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   useEffect(() => {
     if (!isSubmitted) {
@@ -68,24 +75,23 @@ export function MultipleChoiceExercise({
 
   return (
     <LessonCard
-      className="lesson-exercise-card"
+      className={cardClassName}
       header={
-        <header className="exercise-header lesson-focus-header">
+        <header className="exercise-header lesson-prototype-header">
           <span className="eyebrow">{copy.eyebrow}</span>
-          <h2 className="exercise-title">{copy.title}</h2>
-          <p className="audio-hint">{copy.hint}</p>
           {isOriginalExercise ? (
             <CenteredWordBlock
               title={getDisplayWord(word)}
-              subtitle={word.transcription || 'Выберите правильный перевод'}
-              titleClassName="lesson-word-title"
+              subtitle={word.transcription || copy.hint}
+              titleClassName="lesson-prompt-title lesson-word-title"
             />
           ) : null}
           {isTranslationExercise ? (
             <CenteredWordBlock
               title={word.translation}
-              subtitle="Выберите французское слово"
-              titleClassName="lesson-translation"
+              subtitle={copy.hint}
+              titleClassName="lesson-prompt-title lesson-translation"
+              subtitleClassName="lesson-prompt-copy"
             />
           ) : null}
           {isAudioExercise ? (
@@ -93,14 +99,26 @@ export function MultipleChoiceExercise({
               <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
                 Повторить аудио
               </button>
+              <p className="lesson-prompt-copy">{copy.hint}</p>
             </div>
           ) : null}
         </header>
       }
-      visual={isAudioExercise ? null : <WordImage word={word} size="small" className="lesson-word-image" />}
+      visual={
+        (isOriginalExercise || isTranslationExercise) && isSubmitted ? (
+          <WordImage word={word} size="large" className="lesson-word-image lesson-choice-image" />
+        ) : null
+      }
       body={
         <>
-          <div className="choice-list">
+          <div
+            className={[
+              'choice-list',
+              isTranslationExercise ? 'lesson-choice-grid' : 'lesson-choice-stack',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
             {exercise.options?.map((option) => {
               const isCorrect = option.label === exercise.correctAnswer;
               const isSelected = option.label === selectedAnswer;

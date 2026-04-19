@@ -62,8 +62,8 @@ export function LessonResult({
           <div className="mistake-grid">
             {mistakeWords.map((word) => (
               <article key={word.id} className="mistake-item-card">
-                <WordImage word={word} size="small" />
-                <div>
+                <WordImage word={word} size="small" className="mistake-item-image" />
+                <div className="mistake-item-copy">
                   <strong>{getDisplayWord(word)}</strong>
                   <p className="info-subtle">{word.translation}</p>
                   <small>{word.transcription}</small>

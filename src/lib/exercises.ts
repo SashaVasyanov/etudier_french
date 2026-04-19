@@ -23,6 +23,7 @@ const LESSON_LIMITS: Record<
     reinforcementWords: number;
     recapWords: number;
     mistakesWords: number;
+    memoryCheckWords: number;
   }
 > = {
   10: {
@@ -31,6 +32,7 @@ const LESSON_LIMITS: Record<
     reinforcementWords: 4,
     recapWords: 3,
     mistakesWords: 4,
+    memoryCheckWords: 1,
   },
   20: {
     newWords: 6,
@@ -38,6 +40,7 @@ const LESSON_LIMITS: Record<
     reinforcementWords: 6,
     recapWords: 4,
     mistakesWords: 6,
+    memoryCheckWords: 1,
   },
   30: {
     newWords: 8,
@@ -45,8 +48,12 @@ const LESSON_LIMITS: Record<
     reinforcementWords: 10,
     recapWords: 5,
     mistakesWords: 8,
+    memoryCheckWords: 2,
   },
 };
+
+const LONG_TERM_MEMORY_MIN_DAYS = 3;
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
 interface CreateLessonSessionInput {
   mode: LessonMode;
@@ -133,6 +140,15 @@ function createExercise(word: Word, optionPool: Word[], type: ExerciseType, inde
         prompt: 'Напишите слово, которое слышите',
         correctAnswer: word.original,
       };
+    case 'memory_check':
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: word.original,
+        context: word.example_original,
+        correctAnswer: 'Помню',
+      };
     default:
       throw new Error('Unsupported exercise type');
   }
@@ -158,6 +174,214 @@ function sortByCurriculum(left: Word, right: Word): number {
   }
 
   return left.id.localeCompare(right.id);
+}
+
+function getProgressAccuracy(progress: WordProgress): number {
+  return progress.shown_count > 0 ? progress.correct_count / progress.shown_count : 0;
+}
+
+function getElapsedDaysSinceLastSeen(progress: WordProgress): number {
+  if (!progress.last_seen_at) {
+    return 0;
+  }
+
+  return Math.max(0, (Date.now() - new Date(progress.last_seen_at).getTime()) / DAY_IN_MS);
+}
+
+function getRetrievabilityScore(progress: WordProgress): number {
+  if (!progress.last_seen_at || progress.interval_days <= 0) {
+    return progress.status === 'new' ? 0.45 : 0.7;
+  }
+
+  const stabilityDays = Math.max(1, progress.interval_days * progress.ease_factor);
+  const elapsedDays = getElapsedDaysSinceLastSeen(progress);
+
+  return Math.exp(-elapsedDays / stabilityDays);
+}
+
+function getStudyUrgency(progress: WordProgress): number {
+  const accuracy = getProgressAccuracy(progress);
+  const retrievability = getRetrievabilityScore(progress);
+  const difficultBonus = progress.status === 'difficult' ? 44 : 0;
+  const reviewBonus = progress.status === 'review' ? 24 : 0;
+  const learningBonus = progress.status === 'learning' ? 16 : 0;
+  const newBonus = progress.status === 'new' ? 10 : 0;
+  const dueBonus = progress.next_review_at && isReviewDue(progress.next_review_at) ? 30 : 0;
+  const retrievalBonus = Math.round((1 - retrievability) * 38);
+
+  return (
+    difficultBonus +
+    reviewBonus +
+    learningBonus +
+    newBonus +
+    dueBonus +
+    retrievalBonus +
+    progress.wrong_count * 10 +
+    Math.max(0, 4 - progress.repetition_step) * 5 +
+    Math.round((1 - accuracy) * 24)
+  );
+}
+
+function getProgressAgeInDays(progress: WordProgress): number {
+  const timestamp = progress.learned_at ?? progress.last_seen_at;
+
+  if (!timestamp) {
+    return 0;
+  }
+
+  return Math.max(0, Math.floor((Date.now() - new Date(timestamp).getTime()) / DAY_IN_MS));
+}
+
+function isLongTermMemoryCandidate(progress: WordProgress): boolean {
+  const ageInDays = getProgressAgeInDays(progress);
+
+  if (progress.status === 'known' || progress.status === 'mastered') {
+    return ageInDays >= LONG_TERM_MEMORY_MIN_DAYS;
+  }
+
+  return (
+    progress.status === 'review' &&
+    progress.repetition_step >= 4 &&
+    (ageInDays >= LONG_TERM_MEMORY_MIN_DAYS || Boolean(progress.next_review_at && isReviewDue(progress.next_review_at)))
+  );
+}
+
+function rankWordsForStudy(words: Word[], storage: AppStorage): Word[] {
+  return [...words].sort((left, right) => {
+    const leftProgress = getWordProgress(storage, left.id);
+    const rightProgress = getWordProgress(storage, right.id);
+    const urgencyDiff = getStudyUrgency(rightProgress) - getStudyUrgency(leftProgress);
+
+    if (urgencyDiff !== 0) {
+      return urgencyDiff;
+    }
+
+    return sortByCurriculum(left, right);
+  });
+}
+
+function weaveWordOrder(words: Word[]): Word[] {
+  const result: Word[] = [];
+  let left = 0;
+  let right = words.length - 1;
+
+  while (left <= right) {
+    const first = words[left];
+
+    if (first) {
+      result.push(first);
+    }
+
+    if (left !== right) {
+      const last = words[right];
+
+      if (last) {
+        result.push(last);
+      }
+    }
+
+    left += 1;
+    right -= 1;
+  }
+
+  return result;
+}
+
+function getMemoryBand(progress: WordProgress): 'fragile' | 'growing' | 'stable' {
+  const accuracy = getProgressAccuracy(progress);
+  const retrievability = getRetrievabilityScore(progress);
+
+  if (progress.status === 'difficult' || progress.wrong_count >= 3 || accuracy < 0.62 || retrievability < 0.58) {
+    return 'fragile';
+  }
+
+  if (progress.repetition_step >= 4 && accuracy >= 0.8 && retrievability >= 0.76) {
+    return 'stable';
+  }
+
+  return 'growing';
+}
+
+function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTypes: ExerciseType[]): ExerciseType[] {
+  const progress = getWordProgress(storage, word.id);
+  const band = getMemoryBand(progress);
+
+  const priorities: Record<'fragile' | 'growing' | 'stable', Record<ExerciseType, number>> = {
+    fragile: {
+      original_to_translation_choice: 0,
+      translation_to_original_choice: 1,
+      audio_to_translation_choice: 2,
+      audio_to_original_input: 3,
+      memory_check: 4,
+    },
+    growing: {
+      original_to_translation_choice: 1,
+      translation_to_original_choice: 0,
+      audio_to_translation_choice: 2,
+      audio_to_original_input: 2,
+      memory_check: 3,
+    },
+    stable: {
+      original_to_translation_choice: 2,
+      translation_to_original_choice: 0,
+      audio_to_translation_choice: 3,
+      audio_to_original_input: 1,
+      memory_check: 0,
+    },
+  };
+
+  const buckets = new Map<number, ExerciseType[]>();
+
+  exerciseTypes.forEach((type) => {
+    const priority = priorities[band][type];
+    const bucket = buckets.get(priority) ?? [];
+    bucket.push(type);
+    buckets.set(priority, bucket);
+  });
+
+  return [...buckets.entries()]
+    .sort((left, right) => left[0] - right[0])
+    .flatMap(([, types]) => shuffleArray(types));
+}
+
+function buildExerciseSequence(
+  words: Word[],
+  exerciseTypes: ExerciseType[],
+  storage?: AppStorage,
+): Array<{ word: Word; type: ExerciseType }> {
+  const orderedWords = storage ? rankWordsForStudy(words, storage) : shuffleArray(words);
+  const queues = orderedWords.map((word) => ({
+    word,
+    queue: storage ? reorderExerciseTypesForWord(word, storage, exerciseTypes) : shuffleArray(exerciseTypes),
+  }));
+  const sequence: Array<{ word: Word; type: ExerciseType }> = [];
+  let previousWordId: string | null = null;
+  let previousType: ExerciseType | null = null;
+
+  while (queues.some((item) => item.queue.length > 0)) {
+    const available = queues.filter((item) => item.queue.length > 0);
+    const preferredWords = available.filter((item) => item.word.id !== previousWordId);
+    const wordPool = preferredWords.length > 0 ? preferredWords : available;
+    const shuffledWordPool = shuffleArray(wordPool);
+
+    let selected = shuffledWordPool.find((item) => item.queue[0] !== previousType) ?? shuffledWordPool[0];
+
+    if (!selected) {
+      break;
+    }
+
+    const type = selected.queue.shift();
+
+    if (!type) {
+      continue;
+    }
+
+    sequence.push({ word: selected.word, type });
+    previousWordId = selected.word.id;
+    previousType = type;
+  }
+
+  return sequence;
 }
 
 function pickNewWords(words: Word[], storage: AppStorage, limit: number): Word[] {
@@ -197,19 +421,7 @@ function pickLearningWords(words: Word[], storage: AppStorage, limit: number): W
       return rightProgress.wrong_count - leftProgress.wrong_count;
     }),
   ])
-    .sort((left, right) => {
-      const leftProgress = getWordProgress(storage, left.id);
-      const rightProgress = getWordProgress(storage, right.id);
-      if (leftProgress.status === 'difficult' && rightProgress.status !== 'difficult') {
-        return -1;
-      }
-
-      if (leftProgress.status !== 'difficult' && rightProgress.status === 'difficult') {
-        return 1;
-      }
-
-      return rightProgress.wrong_count - leftProgress.wrong_count;
-    })
+    .sort((left, right) => getStudyUrgency(getWordProgress(storage, right.id)) - getStudyUrgency(getWordProgress(storage, left.id)))
     .slice(0, limit);
 }
 
@@ -270,7 +482,81 @@ function pickExtraFocusWords(words: Word[], storage: AppStorage, limit: number):
     ...reviewWords,
     ...learningWords,
     ...untouchedWords.sort(sortByCurriculum),
-  ]).slice(0, limit);
+  ])
+    .sort((left, right) => getStudyUrgency(getWordProgress(storage, right.id)) - getStudyUrgency(getWordProgress(storage, left.id)))
+    .slice(0, limit);
+}
+
+function pickLongTermMemoryWords(
+  words: Word[],
+  storage: AppStorage,
+  limit: number,
+  excludedWordIds = new Set<string>(),
+): Word[] {
+  if (limit <= 0) {
+    return [];
+  }
+
+  return words
+    .filter((word) => {
+      if (excludedWordIds.has(word.id)) {
+        return false;
+      }
+
+      return isLongTermMemoryCandidate(getWordProgress(storage, word.id));
+    })
+    .sort((left, right) => {
+      const leftProgress = getWordProgress(storage, left.id);
+      const rightProgress = getWordProgress(storage, right.id);
+      const statusPriority = (progress: WordProgress) =>
+        progress.status === 'mastered' ? 0 : progress.status === 'known' ? 1 : 2;
+      const priorityDiff = statusPriority(leftProgress) - statusPriority(rightProgress);
+
+      if (priorityDiff !== 0) {
+        return priorityDiff;
+      }
+
+      const retrievabilityDiff = getRetrievabilityScore(leftProgress) - getRetrievabilityScore(rightProgress);
+
+      if (retrievabilityDiff !== 0) {
+        return retrievabilityDiff;
+      }
+
+      const ageDiff = getProgressAgeInDays(rightProgress) - getProgressAgeInDays(leftProgress);
+
+      if (ageDiff !== 0) {
+        return ageDiff;
+      }
+
+      return sortByCurriculum(left, right);
+    })
+    .slice(0, limit);
+}
+
+function addMemoryCheckExercises(
+  moduleResult: { module: LessonModule; exercises: Exercise[] },
+  memoryWords: Word[],
+  optionPool: Word[],
+): { module: LessonModule; exercises: Exercise[] } {
+  if (memoryWords.length === 0) {
+    return moduleResult;
+  }
+
+  const memoryExercises = memoryWords.map((word, index) =>
+    createExercise(word, optionPool, 'memory_check', moduleResult.exercises.length + index),
+  );
+  const exercises = shuffleArray([...moduleResult.exercises, ...memoryExercises]);
+  const wordIds = Array.from(new Set([...moduleResult.module.wordIds, ...memoryWords.map((word) => word.id)]));
+
+  return {
+    module: {
+      ...moduleResult.module,
+      wordIds,
+      exerciseTypes: Array.from(new Set([...moduleResult.module.exerciseTypes, 'memory_check'])),
+      stepIds: exercises.map((exercise) => exercise.id),
+    },
+    exercises,
+  };
 }
 
 function createMistakesSession(
@@ -291,6 +577,7 @@ function createMistakesSession(
     mistakeWords,
     ['original_to_translation_choice', 'audio_to_original_input'],
     uniqueWords(words),
+    undefined,
   );
   const modules = renumberModules([reviewModule.module]);
   const steps = buildSteps(modules, {
@@ -328,8 +615,20 @@ function createDailySession(
   });
   const reinforcementWords = pickReinforcementWords(newWords, reviewWords, limits.reinforcementWords);
   const recapWords = pickRecapWords(newWords, reviewWords, reinforcementWords, limits.recapWords);
+  const memoryCheckWords = pickLongTermMemoryWords(
+    words,
+    storage,
+    limits.memoryCheckWords,
+    new Set(uniqueWords([...newWords, ...reviewWords, ...reinforcementWords, ...recapWords]).map((word) => word.id)),
+  );
 
-  if (newWords.length === 0 && learningWords.length === 0 && reinforcementWords.length === 0 && recapWords.length === 0) {
+  if (
+    newWords.length === 0 &&
+    learningWords.length === 0 &&
+    reinforcementWords.length === 0 &&
+    recapWords.length === 0 &&
+    memoryCheckWords.length === 0
+  ) {
     return null;
   }
 
@@ -339,8 +638,9 @@ function createDailySession(
     'Тренировка новых слов',
     'Быстрое закрепление слов, которые вы только что увидели.',
     newWords,
-    ['audio_to_translation_choice', 'translation_to_original_choice'],
+    ['original_to_translation_choice', 'translation_to_original_choice'],
     uniqueWords(words),
+    storage,
   );
   const module3 = createExerciseModule(
     'module-review-learning',
@@ -349,21 +649,28 @@ function createDailySession(
     reviewWords,
     ['original_to_translation_choice', 'audio_to_original_input'],
     uniqueWords(words),
+    storage,
   );
   const module4 = createExerciseModule(
     'module-reinforcement',
     'Смешанное закрепление',
     'Слова возвращаются в новом порядке, чтобы проверить узнавание без заучивания по шаблону.',
     reinforcementWords,
-    ['audio_to_translation_choice', 'original_to_translation_choice'],
+    ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_original_input'],
     uniqueWords(words),
+    storage,
   );
-  const module5 = createExerciseModule(
-    'module-final-recap',
-    'Финальная мини-проверка',
-    'Короткий итоговый блок: только ключевые слова дня и один решающий ответ на каждое слово.',
-    recapWords,
-    ['translation_to_original_choice'],
+  const module5 = addMemoryCheckExercises(
+    createExerciseModule(
+      'module-final-recap',
+      'Финальная мини-проверка',
+      'Короткий итоговый блок: ключевые слова дня и редкая проверка давно выученного.',
+      recapWords,
+      ['translation_to_original_choice', 'audio_to_original_input'],
+      uniqueWords(words),
+      storage,
+    ),
+    memoryCheckWords,
     uniqueWords(words),
   );
 
@@ -387,7 +694,7 @@ function createDailySession(
     startedAt: new Date().toISOString(),
     exerciseIds: exercises.map((exercise) => exercise.id),
     exercises,
-    sourceWordIds: uniqueWords([...newWords, ...learningWords, ...reinforcementWords, ...recapWords]).map((word) => word.id),
+    sourceWordIds: uniqueWords([...newWords, ...learningWords, ...reinforcementWords, ...recapWords, ...memoryCheckWords]).map((word) => word.id),
     modules,
     steps,
     activePackIds,
@@ -409,8 +716,14 @@ function createExtraSession(
     .sort(sortByCurriculum)
     .slice(0, limits.newWords);
   const mixedWords = shuffleArray(uniqueWords([...focusWords, ...newWords])).slice(0, limits.reinforcementWords);
+  const memoryCheckWords = pickLongTermMemoryWords(
+    words,
+    storage,
+    limits.memoryCheckWords,
+    new Set(uniqueWords([...focusWords, ...newWords, ...mixedWords]).map((word) => word.id)),
+  );
 
-  if (focusWords.length === 0 && newWords.length === 0 && mixedWords.length === 0) {
+  if (focusWords.length === 0 && newWords.length === 0 && mixedWords.length === 0 && memoryCheckWords.length === 0) {
     return null;
   }
 
@@ -422,8 +735,9 @@ function createExtraSession(
       ? 'Тренируйте слова выбранного пака вне ежедневного лимита.'
       : 'Продолжайте обучение после завершения ежедневного урока.',
     focusWords,
-    ['audio_to_translation_choice', 'original_to_translation_choice'],
+    ['original_to_translation_choice', 'translation_to_original_choice'],
     uniqueWords(words),
+    storage,
   );
   const module3 = createExerciseModule(
     mode === 'pack' ? 'module-pack-new' : 'module-extra-new',
@@ -432,15 +746,21 @@ function createExtraSession(
       ? 'Просмотрите и закрепите новые слова, которые лежат внутри выбранного пака.'
       : 'Здесь появляются слова, которые еще не попали в дневной урок.',
     newWords,
-    ['audio_to_translation_choice', 'translation_to_original_choice'],
+    ['original_to_translation_choice', 'translation_to_original_choice'],
     uniqueWords(words),
+    storage,
   );
-  const module4 = createExerciseModule(
-    mode === 'pack' ? 'module-pack-mixed' : 'module-extra-mixed',
-    'Смешанное закрепление',
-    'Финальный блок на закрепление активных и новых слов.',
-    mixedWords,
-    ['audio_to_translation_choice', 'audio_to_original_input'],
+  const module4 = addMemoryCheckExercises(
+    createExerciseModule(
+      mode === 'pack' ? 'module-pack-mixed' : 'module-extra-mixed',
+      'Смешанное закрепление',
+      'Финальный блок на закрепление активных, новых и давно выученных слов.',
+      mixedWords,
+      ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_original_input'],
+      uniqueWords(words),
+      storage,
+    ),
+    memoryCheckWords,
     uniqueWords(words),
   );
 
@@ -463,7 +783,7 @@ function createExtraSession(
     startedAt: new Date().toISOString(),
     exerciseIds: exercises.map((exercise) => exercise.id),
     exercises,
-    sourceWordIds: uniqueWords([...focusWords, ...newWords, ...mixedWords]).map((word) => word.id),
+    sourceWordIds: uniqueWords([...focusWords, ...newWords, ...mixedWords, ...memoryCheckWords]).map((word) => word.id),
     modules,
     steps,
     activePackIds,
@@ -553,10 +873,11 @@ function createExerciseModule(
   words: Word[],
   exerciseTypes: ExerciseType[],
   optionPool: Word[] = words,
+  storage?: AppStorage,
 ): { module: LessonModule; exercises: Exercise[] } {
-  const exercises = exerciseTypes.flatMap((type, typeIndex) =>
-    words.map((word, wordIndex) => createExercise(word, optionPool, type, typeIndex * words.length + wordIndex)),
-  );
+  const orderedWords = storage ? weaveWordOrder(rankWordsForStudy(words, storage)) : shuffleArray(words);
+  const sequence = buildExerciseSequence(orderedWords, exerciseTypes, storage);
+  const exercises = sequence.map((item, index) => createExercise(item.word, optionPool, item.type, index));
 
   return {
     module: {
@@ -582,7 +903,7 @@ function createExerciseModule(
               ? 4
               : 1,
       kind: 'exercise',
-      wordIds: words.map((word) => word.id),
+      wordIds: orderedWords.map((word) => word.id),
       exerciseTypes,
       stepIds: exercises.map((exercise) => exercise.id),
     },

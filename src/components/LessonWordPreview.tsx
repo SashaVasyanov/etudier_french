@@ -1,10 +1,8 @@
 import type { Word } from '../types';
 import { AudioButton } from './AudioButton';
-import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
-import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
-import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
+import { getDisplayWord, getLessonWordBadge, getLessonWordNotes, getPartOfSpeechLabel } from '../lib/wordPresentation';
 
 interface LessonWordPreviewProps {
   word: Word;
@@ -17,53 +15,58 @@ interface LessonWordPreviewProps {
 
 export function LessonWordPreview({
   word,
-  current,
-  total,
   onReplayAudio,
   onMarkKnown,
   onNext,
 }: LessonWordPreviewProps) {
+  const lessonNotes = getLessonWordNotes(word);
+
   return (
     <LessonCard
       className="lesson-study-view"
-      header={
-        <header className="exercise-header lesson-focus-header">
-          <span className="eyebrow">
-            Изучение слова · {current} / {total}
-          </span>
-          <CenteredWordBlock
-            title={getDisplayWord(word)}
-            subtitle={word.translation}
-            meta={`${getPartOfSpeechLabel(word.part_of_speech)} · ${word.level}`}
-            titleClassName="exercise-title lesson-word-title"
-            subtitleClassName="lesson-translation"
-          />
-        </header>
-      }
+      header={<></>}
       body={
-        <div className="study-word-body">
-          <div className="study-word-grid">
-            <WordImage word={word} size="large" className="lesson-word-image study-word-image" />
-
-            <div className="study-word-panel">
-              <WordDetailsPanel word={word} />
+        <div className="lesson-preview-shell">
+          <div className="lesson-preview-card">
+            <WordImage word={word} size="large" className="lesson-word-image lesson-preview-image" />
+            <div className="lesson-preview-details">
+              <div className="lesson-preview-topline">
+                <div className="lesson-preview-copy">
+                  <h2 className="lesson-preview-title">{getDisplayWord(word)}</h2>
+                  <p className="lesson-preview-translation">{word.translation}</p>
+                </div>
+                <AudioButton label="Прослушать" onClick={onReplayAudio} />
+              </div>
+              <p className="lesson-preview-description">{word.transcription || 'Транскрипция уточняется'}</p>
+              <span className="lesson-preview-meta">{getPartOfSpeechLabel(word.part_of_speech)} · {word.level}</span>
             </div>
           </div>
 
-          <div className="study-word-actions">
-            <AudioButton label="Прослушать слово" onClick={onReplayAudio} />
+          <div className="lesson-preview-content">
+            <div className="lesson-preview-badge-row">
+              <span className="lesson-preview-badge">{getLessonWordBadge(word)}</span>
+            </div>
+            <ul className="lesson-preview-note-list">
+              {lessonNotes.map((note) => (
+                <li key={note} className="lesson-preview-note-item">
+                  {note}
+                </li>
+              ))}
+            </ul>
+            <p className="lesson-preview-example">{word.example_original}</p>
+          </div>
+
+          <div className="lesson-preview-toolbar">
             <button type="button" className="primary-button full-width" onClick={onNext}>
               Понял, дальше
             </button>
+            {onMarkKnown ? (
+              <button type="button" className="secondary-button full-width" onClick={onMarkKnown}>
+                Уже знаю это слово
+              </button>
+            ) : null}
           </div>
         </div>
-      }
-      actions={
-        onMarkKnown ? (
-          <button type="button" className="secondary-button full-width" onClick={onMarkKnown}>
-            Уже знаю
-          </button>
-        ) : null
       }
     />
   );

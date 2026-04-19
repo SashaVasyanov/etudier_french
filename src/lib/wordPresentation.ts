@@ -123,6 +123,20 @@ export function getWordExampleLabel(word: Word): string {
   return isUsageFocusedWord(word) ? 'Фраза с контекстом' : 'Контекст';
 }
 
+export function getLessonWordBadge(word: Word): string {
+  return word.part_of_speech === 'expression' ? 'Распространённое выражение' : 'Распространённое слово';
+}
+
+export function getLessonWordNotes(word: Word): string[] {
+  const notes = [
+    word.transcription ? `${word.transcription} · ${getPartOfSpeechLabel(word.part_of_speech)}` : getPartOfSpeechLabel(word.part_of_speech),
+    getWordDescription(word),
+    word.example_translation,
+  ].filter(Boolean);
+
+  return Array.from(new Set(notes)).slice(0, 3);
+}
+
 export function getExerciseCopy(type: ExerciseType): { eyebrow: string; title: string; hint: string } {
   switch (type) {
     case 'audio_to_translation_choice':
@@ -148,6 +162,12 @@ export function getExerciseCopy(type: ExerciseType): { eyebrow: string; title: s
         eyebrow: 'Аудио-ввод',
         title: 'Напишите слово',
         hint: 'Слушайте внимательно и введите слово по-французски.',
+      };
+    case 'memory_check':
+      return {
+        eyebrow: 'Вспоминание',
+        title: 'Вспомните слово',
+        hint: 'Оцените честно: вспоминается ли слово по контексту прямо сейчас.',
       };
     default:
       return {

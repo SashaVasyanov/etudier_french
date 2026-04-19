@@ -32,8 +32,24 @@ export function AudioInputExercise({
   useEffect(() => {
     if (!isSubmitted) {
       inputRef.current?.focus();
+      return undefined;
     }
-  }, [isSubmitted, exercise.id]);
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key !== 'Enter') {
+        return;
+      }
+
+      event.preventDefault();
+      onNext();
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isSubmitted, exercise.id, onNext]);
 
   return (
     <LessonCard
@@ -67,7 +83,18 @@ export function AudioInputExercise({
             placeholder="Напишите слово на французском"
             onChange={(event) => onChange(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key === 'Enter' && !isSubmitted && value.trim()) {
+              if (event.key !== 'Enter') {
+                return;
+              }
+
+              event.preventDefault();
+
+              if (isSubmitted) {
+                onNext();
+                return;
+              }
+
+              if (value.trim()) {
                 onSubmit();
               }
             }}
