@@ -424,12 +424,107 @@ export function getWordImageCategory(word: Word): IllustrationCategory {
     return word.imagePackCategory;
   }
 
+  if (word.tags.some((tag) => ['plants', 'nature'].includes(tag))) {
+    return 'plants';
+  }
+
+  if (word.tags.some((tag) => ['animals'].includes(tag))) {
+    return 'animals';
+  }
+
+  if (word.tags.some((tag) => ['food'].includes(tag))) {
+    return 'food';
+  }
+
+  if (word.tags.some((tag) => ['travel', 'transport', 'city', 'places'].includes(tag))) {
+    return 'travel';
+  }
+
+  if (word.tags.some((tag) => ['home', 'objects'].includes(tag))) {
+    return 'home';
+  }
+
   return 'core';
+}
+
+function inferIllustrationType(word: Word): string {
+  const key = `${word.original} ${word.translation} ${word.tags.join(' ')}`.toLowerCase();
+  const matches = (values: string[]) => values.some((value) => key.includes(value));
+
+  if (matches(['chien', 'собак'])) return 'dog';
+  if (matches(['chat', 'кот', 'кошка'])) return 'cat';
+  if (matches(['oiseau', 'птиц', 'pigeon', 'canard', 'утк', 'coq', 'poule'])) return 'bird';
+  if (matches(['poisson', 'рыб', 'saumon', 'thon', 'requin', 'dauphin', 'baleine'])) return 'fish';
+  if (matches(['cheval', 'лошад'])) return 'horse';
+  if (matches(['ours', 'медвед'])) return 'bear';
+  if (matches(['lapin', 'крол'])) return 'rabbit';
+  if (matches(['canard', 'утк'])) return 'duck';
+  if (matches(['lion', 'лев'])) return 'lion';
+  if (matches(['cochon', 'свин'])) return 'pig';
+  if (matches(['arbre', 'tree', 'дерев', 'sapin', 'pin', 'chêne', 'bouleau'])) return 'tree';
+  if (matches(['fleur', 'rose', 'tulipe', 'цвет', 'букет'])) return 'flower';
+  if (matches(['feuille', 'лист', 'plante', 'растен'])) return 'leaf';
+  if (matches(['graine', 'сем'])) return 'seed';
+  if (matches(['herbe', 'grass', 'трава'])) return 'grass';
+  if (matches(['forêt', 'лес'])) return 'forest';
+  if (matches(['branche', 'ветк'])) return 'branch';
+  if (matches(['racine', 'корень'])) return 'root';
+  if (matches(['pain', 'baguette', 'croissant', 'хлеб'])) return 'bread';
+  if (matches(['fromage', 'сыр'])) return 'cheese';
+  if (matches(['soupe', 'суп'])) return 'soup';
+  if (matches(['pomme', 'яблок'])) return 'apple';
+  if (matches(['poire', 'груш'])) return 'pear';
+  if (matches(['raisin', 'виноград'])) return 'grapes';
+  if (matches(['carotte', 'морков'])) return 'carrot';
+  if (matches(['tomate', 'помидор'])) return 'tomato';
+  if (matches(['pomme de terre', 'картоф'])) return 'potato';
+  if (matches(['riz', 'рис'])) return 'rice';
+  if (matches(['pâtes', 'макарон'])) return 'pasta';
+  if (matches(['eau', 'вода', 'boisson', 'напит'])) return 'water';
+  if (matches(['café', 'thé', 'tasse', 'кофе', 'чай', 'чаш'])) return 'cup';
+  if (matches(['dessert', 'gâteau', 'tarte', 'glace', 'десерт', 'торт', 'пирог'])) return 'dessert';
+  if (matches(['valise', 'bagage', 'чемодан', 'багаж'])) return 'suitcase';
+  if (matches(['passeport', 'visa', 'паспорт', 'виза'])) return 'passport';
+  if (matches(['billet', 'ticket', 'билет'])) return 'ticket';
+  if (matches(['gare', 'station', 'вокзал', 'станци'])) return 'station';
+  if (matches(['train', 'métro', 'tramway', 'поезд', 'метро', 'трамвай'])) return 'train';
+  if (matches(['avion', 'aéroport', 'hélicoptère', 'самол', 'аэропорт'])) return 'plane';
+  if (matches(['hôtel', 'отель'])) return 'hotel';
+  if (matches(['chambre', 'room', 'комната', 'номер'])) return 'room';
+  if (matches(['carte', 'plan', 'map', 'карта', 'план'])) return 'map';
+  if (matches(['route', 'rue', 'chemin', 'дорог', 'улиц'])) return 'route';
+  if (matches(['musée', 'exposition', 'музей', 'выстав'])) return 'museum';
+  if (matches(['plage', 'beach', 'пляж'])) return 'beach';
+  if (matches(['montagne', 'гора', 'colline', 'vallée'])) return 'mountain';
+  if (matches(['guide', 'гид'])) return 'guide';
+  if (matches(['touriste', 'tourist', 'турист'])) return 'tourist';
+  if (matches(['maison', 'appartement', 'immeuble', 'дом', 'квартир', 'здание'])) return 'house';
+  if (matches(['cuisine', 'кухн'])) return 'kitchen';
+  if (matches(['canapé', 'fauteuil', 'диван', 'кресло'])) return 'sofa';
+  if (matches(['lit', 'matelas', 'bed', 'кровать'])) return 'bed';
+  if (matches(['lampe', 'lumière', 'свет', 'ламп'])) return 'lamp';
+  if (matches(['porte', 'entrée', 'sortie', 'двер', 'вход', 'выход'])) return 'door';
+  if (matches(['fenêtre', 'окно'])) return 'window';
+  if (matches(['balai', 'метла'])) return 'broom';
+  if (matches(['aspirateur', 'пылесос'])) return 'vacuum';
+  if (matches(['serviette', 'полотенце'])) return 'towel';
+  if (matches(['étagère', 'полка'])) return 'shelf';
+  if (matches(['assiette', 'plate', 'тарел'])) return 'plate';
+
+  const category = getWordImageCategory(word);
+
+  if (category === 'plants') return 'leaf';
+  if (category === 'animals') return 'dog';
+  if (category === 'food') return 'plate';
+  if (category === 'travel') return 'map';
+  if (category === 'home') return 'house';
+
+  return 'tree';
 }
 
 export function createFallbackWordImage(word: Word): { src: string; alt: string } {
   const category = getWordImageCategory(word);
-  const created = createWordImage(category, word.original, word.translation, word.illustrationType ?? 'tree');
+  const created = createWordImage(category, word.original, word.translation, word.illustrationType ?? inferIllustrationType(word));
 
   return {
     src: created.imagePath ?? created.imageUrl ?? '',

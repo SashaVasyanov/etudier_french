@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 const outputDir = path.resolve(process.cwd(), 'public/data');
+const extraLexiconPath = path.resolve(process.cwd(), 'scripts/common_words_extra.tsv');
 
 function parseList(raw, defaults = {}) {
   return raw
@@ -21,6 +22,49 @@ function parseList(raw, defaults = {}) {
         phraseForm,
       };
     });
+}
+
+function parseSectionedList(raw) {
+  const entries = [];
+  let defaults = {
+    partOfSpeech: 'noun',
+    level: 'A1',
+    tags: ['daily'],
+  };
+
+  raw
+    .split('\n')
+    .map((line) => line.trim())
+    .forEach((line) => {
+      if (!line || line.startsWith('#')) {
+        return;
+      }
+
+      const section = line.match(/^\[(.+)]$/);
+
+      if (section) {
+        const [partOfSpeech = 'noun', level = 'A1', tags = 'daily'] = section[1].split('|');
+        defaults = {
+          partOfSpeech,
+          level,
+          tags: tags.split(',').filter(Boolean),
+        };
+        return;
+      }
+
+      const [original, translation, partOfSpeech = defaults.partOfSpeech, level = defaults.level, tags = defaults.tags.join(',')] = line.split('|');
+
+      entries.push({
+        original,
+        translation,
+        part_of_speech: partOfSpeech,
+        level,
+        tags: tags.split(',').filter(Boolean),
+        phraseForm: original,
+      });
+    });
+
+  return entries;
 }
 
 function slugify(value) {
@@ -721,9 +765,73 @@ function createGeneratedEntries() {
   return generated;
 }
 
-const allEntries = [...nouns, ...verbs, ...grammarWords, ...manualExpressions, ...createGeneratedEntries()];
+const stableExpressions = new Set(
+  [
+    'au revoir',
+    "s'il vous plaît",
+    'ça va',
+    'comment ça va',
+    'à bientôt',
+    'bonne journée',
+    'bonne soirée',
+    'bonne nuit',
+    "d'accord",
+    'à droite',
+    'à gauche',
+    'une fois',
+    'deux fois',
+    'à demain',
+    'bon appétit',
+    'à la maison',
+    'au travail',
+    'à pied',
+    'en voiture',
+    'en train',
+    'il y a',
+    'pas du tout',
+    'bien sûr',
+    'pas mal',
+    'par exemple',
+    'à côté de',
+    'en face de',
+    'au centre',
+    'tout le monde',
+    'en vacances',
+    'en retard',
+    "à l'heure",
+    'à la fin',
+    'avoir besoin de',
+    'avoir envie de',
+    'faire attention',
+    'se sentir bien',
+    'se sentir mal',
+    'faire une pause',
+    'de temps en temps',
+    'pour le moment',
+    'au début',
+    'de plus en plus',
+    'de moins en moins',
+    'prendre soin de',
+    'avoir raison',
+    'avoir tort',
+    'prendre une décision',
+    'ça dépend',
+    'en fait',
+    "n'importe quoi",
+    'à mon avis',
+  ].map((value) => slugify(value)),
+);
+
+const extraLexicon = parseSectionedList(await fs.readFile(extraLexiconPath, 'utf8'));
+const allEntries = [
+  ...nouns,
+  ...verbs,
+  ...grammarWords.filter((entry) => entry.part_of_speech !== 'expression'),
+  ...manualExpressions.filter((entry) => stableExpressions.has(slugify(entry.original))),
+  ...extraLexicon,
+];
 const uniqueEntries = Array.from(
-  new Map(allEntries.map((entry) => [`${entry.level}:${entry.original}`, entry])).values(),
+  new Map(allEntries.map((entry) => [slugify(entry.original), entry])).values(),
 );
 
 const words = uniqueEntries.map((entry, index) => createWord(entry, index + 1));
