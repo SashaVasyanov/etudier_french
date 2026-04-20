@@ -28,8 +28,104 @@ function normalizeKey(value: string): string {
     .trim();
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function startsWithVowelSound(value: string): boolean {
   return /^[aeiouyhàâæéèêëîïôœùûü]/i.test(value.trim());
+}
+
+const ARTICLE_EXCEPTIONS: Record<string, string> = {
+  cafe: 'le',
+  the: 'le',
+  musee: 'le',
+  lycee: 'le',
+  eleve: "l'",
+  livre: 'le',
+  dictionnaire: 'le',
+  message: 'le',
+  fromage: 'le',
+  voyage: 'le',
+  village: 'le',
+  garage: 'le',
+  visage: 'le',
+  nuage: 'le',
+  journal: 'le',
+  bus: 'le',
+  cours: 'le',
+  pays: 'le',
+  temps: 'le',
+  prix: 'le',
+  bras: 'le',
+  nez: 'le',
+  choix: 'le',
+  voix: 'la',
+  fenetre: 'la',
+  classe: 'la',
+  maison: 'la',
+  voiture: 'la',
+  gare: 'la',
+  plage: 'la',
+  carte: 'la',
+  chambre: 'la',
+  table: 'la',
+  porte: 'la',
+  chaise: 'la',
+  cuisine: 'la',
+  ecole: "l'",
+  eau: "l'",
+  heure: "l'",
+  adresse: "l'",
+  histoire: "l'",
+  idee: "l'",
+};
+
+function normalizeArticle(article: string): string | null {
+  switch (article.toLowerCase().replace(/[’]/g, "'")) {
+    case 'le':
+    case 'un':
+    case 'du':
+      return 'le';
+    case 'la':
+    case 'une':
+      return 'la';
+    case 'les':
+    case 'des':
+      return 'les';
+    case "l'":
+    case "de l'":
+      return "l'";
+    default:
+      return null;
+  }
+}
+
+function getArticleFromExample(word: Word): string | null {
+  const original = word.original.trim();
+
+  if (!original || !word.example_original) {
+    return null;
+  }
+
+  const example = normalizeKey(word.example_original);
+  const normalizedOriginal = normalizeKey(original);
+  const escapedOriginal = escapeRegExp(normalizedOriginal);
+  const spacedArticleMatch = example.match(
+    new RegExp(`\\b(le|la|les|un|une|des|du)\\s+${escapedOriginal}(?=\\b|\\s|[.,;:!?])`, 'i'),
+  );
+
+  if (spacedArticleMatch?.[1]) {
+    return normalizeArticle(spacedArticleMatch[1]);
+  }
+
+  const elidedArticleMatch = example.match(new RegExp(`\\b(l'|de l')${escapedOriginal}(?=\\b|\\s|[.,;:!?])`, 'i'));
+
+  if (elidedArticleMatch?.[1]) {
+    return normalizeArticle(elidedArticleMatch[1]);
+  }
+
+  return null;
 }
 
 function isLikelyPluralNoun(value: string): boolean {
@@ -64,6 +160,13 @@ export function getFrenchArticleForWord(word: Word): string | null {
     return null;
   }
 
+  const normalizedOriginal = normalizeKey(original);
+  const explicitArticle = ARTICLE_EXCEPTIONS[normalizedOriginal] ?? getArticleFromExample(word);
+
+  if (explicitArticle) {
+    return explicitArticle;
+  }
+
   if (isLikelyPluralNoun(original)) {
     return 'les';
   }
@@ -83,6 +186,14 @@ export function getDisplayWord(word: Word): string {
   }
 
   return article.endsWith("'") ? `${article}${word.original}` : `${article} ${word.original}`;
+}
+
+export function getSpokenWordText(word: Word): string {
+  if (word.part_of_speech === 'noun') {
+    return getDisplayWord(word);
+  }
+
+  return word.original;
 }
 
 export function isUsageFocusedWord(word: Word): boolean {
