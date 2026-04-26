@@ -1,5 +1,6 @@
 import { getPackWords, STARTER_PACKS } from './wordPacks';
-import type { Word, WordLevel, WordPack } from '../types';
+import { JAPANESE_CORE_WORDS } from './japaneseWords';
+import type { LearningLanguage, Word, WordLevel, WordPack } from '../types';
 import { createFallbackWordImage } from '../lib/wordImages';
 import { deriveFrenchLatinTranscription } from '../lib/utils';
 
@@ -10,7 +11,7 @@ const LEVEL_ORDER: Record<WordLevel, number> = {
   B1: 2,
 };
 
-let wordsPromise: Promise<Word[]> | null = null;
+const wordsPromiseByLanguage = new Map<LearningLanguage, Promise<Word[]>>();
 
 const CORE_STABLE_EXPRESSIONS = new Set([
   'au revoir',
@@ -1369,7 +1370,17 @@ function normalizeWord(word: Word): Word {
     word.imagePath || word.imageUrl
       ? null
       : createFallbackWordImage(word);
-  const improvedExamples = improveWordExamples(word);
+  const improvedExamples =
+    word.language === 'french'
+      ? improveWordExamples(word)
+      : {
+          example_original: word.example_original.trim(),
+          example_translation: word.example_translation.trim(),
+        };
+  const transcription =
+    word.language === 'french'
+      ? deriveFrenchLatinTranscription(word.original, word.transcription ?? '')
+      : word.transcription?.trim() || word.original.trim();
 
   return {
     ...word,
@@ -1377,7 +1388,8 @@ function normalizeWord(word: Word): Word {
     tags: Array.isArray(word.tags) ? word.tags : [],
     packIds: Array.isArray(word.packIds) ? word.packIds : [],
     source: word.source ?? 'core',
-    transcription: deriveFrenchLatinTranscription(word.original, word.transcription ?? ''),
+    language: word.language ?? 'french',
+    transcription,
     example_original: improvedExamples.example_original,
     example_translation: improvedExamples.example_translation,
     imagePath: word.imagePath ?? word.imageUrl ?? fallbackImage?.src ?? undefined,
@@ -1400,41 +1412,62 @@ async function loadWordImageManifest(): Promise<WordImageManifest> {
   return (await response.json()) as WordImageManifest;
 }
 
-export async function loadWords(): Promise<Word[]> {
-  if (!wordsPromise) {
-    wordsPromise = Promise.all([
-      Promise.all(
-        DATASET_URLS.map(async (url) => {
-          const response = await fetch(url);
+function sortWordsByCurriculum(words: Word[], language: LearningLanguage): Word[] {
+  return [...words].sort((left, right) => {
+    const levelDiff = LEVEL_ORDER[left.level] - LEVEL_ORDER[right.level];
 
-          if (!response.ok) {
-            throw new Error(`Failed to load dataset: ${url}`);
-          }
+    if (levelDiff !== 0) {
+      return levelDiff;
+    }
 
-          return (await response.json()) as Array<Omit<Word, 'packIds' | 'source'>>;
-        }),
-      ),
-      loadWordImageManifest(),
-    ]).then(([parts, wordImageManifest]) =>
-      [
-        ...parts
-          .flat()
-          .map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id], packIds: [], source: 'core' } as Word))
-          .filter((word) => isSupportedCoreWord(word)),
-        ...getPackWords().map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
-      ]
-        .sort((left, right) => {
-          const levelDiff = LEVEL_ORDER[left.level] - LEVEL_ORDER[right.level];
+    return left.original.localeCompare(right.original, language === 'japanese' ? 'ja' : 'fr');
+  });
+}
 
-          if (levelDiff !== 0) {
-            return levelDiff;
-          }
+export async function loadWords(language: LearningLanguage): Promise<Word[]> {
+  const cached = wordsPromiseByLanguage.get(language);
 
-          return left.original.localeCompare(right.original, 'fr');
-        }),
-    );
+  if (cached) {
+    return cached;
   }
 
+  const wordsPromise =
+    language === 'japanese'
+      ? loadWordImageManifest().then((wordImageManifest) =>
+          sortWordsByCurriculum(
+            JAPANESE_CORE_WORDS.map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
+            language,
+          ),
+        )
+      : Promise.all([
+          Promise.all(
+            DATASET_URLS.map(async (url) => {
+              const response = await fetch(url);
+
+              if (!response.ok) {
+                throw new Error(`Failed to load dataset: ${url}`);
+              }
+
+              return (await response.json()) as Array<Omit<Word, 'packIds' | 'source' | 'language'>>;
+            }),
+          ),
+          loadWordImageManifest(),
+        ]).then(([parts, wordImageManifest]) =>
+          sortWordsByCurriculum(
+            [
+              ...parts
+                .flat()
+                .map((word) =>
+                  normalizeWord({ ...word, language: 'french', ...wordImageManifest[word.id], packIds: [], source: 'core' } as Word),
+                )
+                .filter((word) => isSupportedCoreWord(word)),
+              ...getPackWords().map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
+            ],
+            language,
+          ),
+        );
+
+  wordsPromiseByLanguage.set(language, wordsPromise);
   return wordsPromise;
 }
 
@@ -1448,8 +1481,8 @@ export function getWordById(words: Word[], wordId: string): Word {
   return word;
 }
 
-export function getStarterPacks(): WordPack[] {
-  return STARTER_PACKS;
+export function getStarterPacks(language: LearningLanguage): WordPack[] {
+  return STARTER_PACKS.filter((pack) => pack.language === language);
 }
 
 function normalizePhrase(value: string): string {

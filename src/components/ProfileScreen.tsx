@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { formatDateTimeLabel, formatDurationLabel, formatLongDateLabel, percentage } from '../lib/utils';
-import type { AppStorage, StudyHistoryEntry, UserProfile, WordProgress } from '../types';
+import type { AppStorage, LearningLanguage, StudyHistoryEntry, UserProfile, WordProgress } from '../types';
 import { AppCard } from './AppCard';
 import { StatCard } from './StatCard';
 
 interface ProfileScreenProps {
+  learningLanguage: LearningLanguage;
   profile: UserProfile;
   storage: AppStorage;
   progressList: WordProgress[];
@@ -57,14 +58,19 @@ function getModeLabel(mode: StudyHistoryEntry['mode']): string {
 }
 
 export default function ProfileScreen({
+  learningLanguage,
   profile,
   storage,
   progressList,
   onProfileNameChange,
 }: ProfileScreenProps) {
   const stats = useMemo(() => countStatuses(progressList), [progressList]);
-  const history = useMemo(() => [...storage.studyHistory].reverse(), [storage.studyHistory]);
-  const summary = useMemo(() => summarizeHistory(storage.studyHistory), [storage.studyHistory]);
+  const languageHistory = useMemo(
+    () => storage.studyHistory.filter((entry) => entry.language === learningLanguage),
+    [learningLanguage, storage.studyHistory],
+  );
+  const history = useMemo(() => [...languageHistory].reverse(), [languageHistory]);
+  const summary = useMemo(() => summarizeHistory(languageHistory), [languageHistory]);
 
   return (
     <section className="dashboard-shell">
@@ -98,7 +104,7 @@ export default function ProfileScreen({
         <StatCard label="Выученные" value={stats.mastered} hint="Уверенно закреплены" />
         <StatCard label="Сложные слова" value={stats.difficult} hint="Требуют дополнительного повтора" />
         <StatCard label="Серия дней" value={storage.streakDays} hint="Текущий streak" />
-        <StatCard label="Завершено уроков" value={storage.studyHistory.length} hint="Всего записей в истории" />
+        <StatCard label="Завершено уроков" value={languageHistory.length} hint="Всего записей в истории по выбранному языку" />
       </section>
 
       <section className="stats-grid profile-summary-grid">

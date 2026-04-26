@@ -1,6 +1,7 @@
 import { useState, type KeyboardEvent } from 'react';
+import { LEARNING_LANGUAGE_OPTIONS, getLearningLanguageMenuLabel } from '../lib/languages';
 import { getTodayDateKey, percentage } from '../lib/utils';
-import type { AppStorage, LessonDurationMinutes, Word, WordProgress } from '../types';
+import type { AppStorage, LearningLanguage, LessonDurationMinutes, Word, WordProgress } from '../types';
 
 interface HomeDashboardProps {
   availableWords: Word[];
@@ -8,7 +9,9 @@ interface HomeDashboardProps {
   storage: AppStorage;
   progressList: WordProgress[];
   addedPacksCount: number;
+  learningLanguage: LearningLanguage;
   lessonDurationMinutes: LessonDurationMinutes;
+  onLearningLanguageChange: (value: LearningLanguage) => void;
   onLessonDurationChange: (value: LessonDurationMinutes) => void;
   onStartLesson: () => void;
   onOpenDictionary: () => void;
@@ -34,7 +37,9 @@ export function HomeDashboard({
   storage,
   progressList,
   addedPacksCount,
+  learningLanguage,
   lessonDurationMinutes,
+  onLearningLanguageChange,
   onLessonDurationChange,
   onStartLesson,
   onOpenDictionary,
@@ -43,7 +48,10 @@ export function HomeDashboard({
   onOpenPacks,
 }: HomeDashboardProps) {
   const [isDurationMenuOpen, setIsDurationMenuOpen] = useState(false);
-  const today = storage.dailyStats.find((item) => item.date === getTodayDateKey());
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+  const today = storage.dailyStats.find(
+    (item) => item.date === getTodayDateKey() && item.language === learningLanguage,
+  );
   const todayAccuracy = today ? percentage(today.correctAnswers, today.totalAnswers) : 0;
   const fallbackStat = `${availableWords.length}/${totalWords.length}`;
   const learnedWordIds = new Set(
@@ -73,7 +81,44 @@ export function HomeDashboard({
         </button>
 
         <section className="home-figma-sidepanel" aria-label="Язык и длительность урока">
-          <div className="home-figma-chip home-figma-chip-static">French</div>
+          <div className={isLanguageMenuOpen ? 'home-figma-duration-picker open' : 'home-figma-duration-picker'}>
+            <button
+              type="button"
+              className="home-figma-chip home-figma-chip-button"
+              aria-haspopup="menu"
+              aria-expanded={isLanguageMenuOpen}
+              onClick={() => {
+                setIsLanguageMenuOpen((current) => !current);
+                setIsDurationMenuOpen(false);
+              }}
+            >
+              {getLearningLanguageMenuLabel(learningLanguage)}
+            </button>
+
+            {isLanguageMenuOpen ? (
+              <div className="home-figma-duration-popover" role="menu" aria-label="Выбор языка обучения">
+                {LEARNING_LANGUAGE_OPTIONS.map((option) => {
+                  const isActive = option === learningLanguage;
+
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={isActive}
+                      className={isActive ? 'home-figma-duration-option active' : 'home-figma-duration-option'}
+                      onClick={() => {
+                        onLearningLanguageChange(option);
+                        setIsLanguageMenuOpen(false);
+                      }}
+                    >
+                      {getLearningLanguageMenuLabel(option)}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
 
           <div className={isDurationMenuOpen ? 'home-figma-duration-picker open' : 'home-figma-duration-picker'}>
             <button
@@ -83,6 +128,7 @@ export function HomeDashboard({
               aria-expanded={isDurationMenuOpen}
               onClick={() => {
                 setIsDurationMenuOpen((current) => !current);
+                setIsLanguageMenuOpen(false);
               }}
             >
               {lessonDurationMinutes} min

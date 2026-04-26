@@ -23,7 +23,7 @@ export function MemoryCheckExercise({
   onReplayAudio,
 }: MemoryCheckExerciseProps) {
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
-  const copy = getExerciseCopy(exercise.type);
+  const copy = getExerciseCopy(exercise.type, word.language);
 
   useEffect(() => {
     if (!isSubmitted) {

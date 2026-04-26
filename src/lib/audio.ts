@@ -122,6 +122,54 @@ function pickFrenchVoice(
   return rankedVoices[0]?.voice;
 }
 
+function getJapaneseVoiceScore(voice: SpeechSynthesisVoice): number {
+  const lang = voice.lang.toLowerCase();
+  const name = `${voice.name} ${voice.voiceURI}`.toLowerCase();
+
+  if (!lang.startsWith('ja')) {
+    return -1;
+  }
+
+  let score = 0;
+
+  if (lang === 'ja-jp') {
+    score += 100;
+  } else if (lang.startsWith('ja-')) {
+    score += 60;
+  } else {
+    score += 40;
+  }
+
+  if (name.includes('japan') || name.includes('japanese') || name.includes('nihongo')) {
+    score += 26;
+  }
+
+  if (name.includes('natural') || name.includes('online')) {
+    score += 16;
+  }
+
+  if (name.includes('microsoft') || name.includes('google') || name.includes('apple')) {
+    score += 10;
+  }
+
+  if (voice.localService) {
+    score += 4;
+  }
+
+  return score;
+}
+
+function pickJapaneseVoice(
+  availableVoices = cachedVoices.length > 0 ? cachedVoices : getVoices(),
+): SpeechSynthesisVoice | undefined {
+  const rankedVoices = availableVoices
+    .map((voice) => ({ voice, score: getJapaneseVoiceScore(voice) }))
+    .filter(({ score }) => score >= 0)
+    .sort((left, right) => right.score - left.score);
+
+  return rankedVoices[0]?.voice;
+}
+
 function normalizeSpeechText(value: string): string {
   return value
     .replace(/[’`]/g, "'")
@@ -154,7 +202,7 @@ async function playFileAudio(src: string): Promise<void> {
   }
 }
 
-async function speakFallback(text: string, token: number): Promise<void> {
+async function speakFallback(text: string, token: number, language: Word['language']): Promise<void> {
   if (!('speechSynthesis' in window)) {
     return;
   }
@@ -173,11 +221,12 @@ async function speakFallback(text: string, token: number): Promise<void> {
   }
 
   activeUtterance = new SpeechSynthesisUtterance(normalizeSpeechText(text));
-  activeUtterance.lang = 'fr-FR';
-  activeUtterance.rate = 0.86;
+  activeUtterance.lang = language === 'japanese' ? 'ja-JP' : 'fr-FR';
+  activeUtterance.rate = language === 'japanese' ? 0.92 : 0.86;
   activeUtterance.pitch = 1;
   activeUtterance.volume = 1;
-  activeUtterance.voice = pickFrenchVoice(voices) ?? null;
+  activeUtterance.voice =
+    (language === 'japanese' ? pickJapaneseVoice(voices) : pickFrenchVoice(voices)) ?? null;
 
   return new Promise((resolve, reject) => {
     if (!activeUtterance) {
@@ -228,7 +277,7 @@ export async function playWordAudio(word: Word): Promise<void> {
   }
 
   try {
-    await speakFallback(getSpokenWordText(word), token);
+    await speakFallback(getSpokenWordText(word), token, word.language);
   } catch {
     return;
   }

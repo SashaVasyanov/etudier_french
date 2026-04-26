@@ -3,6 +3,7 @@ import type {
   DailyLessonCompletionPayload,
   DailyLessonRecord,
   ExerciseOutcome,
+  LearningLanguage,
   LessonDurationMinutes,
   StudyHistoryEntry,
   UserPackState,
@@ -28,6 +29,7 @@ function createDefaultProfile(): UserProfile {
 
 function createDefaultStorage(): AppStorage {
   return {
+    learningLanguage: 'french',
     progressByWordId: {},
     dailyStats: [],
     completedDailyLessons: [],
@@ -42,14 +44,22 @@ function createDefaultStorage(): AppStorage {
 }
 
 function normalizeWord(word: Word): Word {
+  const language = word.language ?? 'french';
+  const normalizedSource = word.source ?? 'custom';
+  const rawTranscription = (word.transcription ?? '').trim();
+  const transcription =
+    language === 'french'
+      ? normalizedSource === 'custom'
+        ? normalizeTranscription(rawTranscription) || deriveFrenchLatinTranscription(word.original, '')
+        : deriveFrenchLatinTranscription(word.original, rawTranscription)
+      : normalizeTranscription(rawTranscription) || word.original.trim();
+
   return {
     ...word,
+    language,
     original: word.original.trim(),
     translation: word.translation.trim(),
-    transcription:
-      word.source === 'custom'
-        ? normalizeTranscription((word.transcription ?? '').trim()) || deriveFrenchLatinTranscription(word.original, '')
-        : deriveFrenchLatinTranscription(word.original, (word.transcription ?? '').trim()),
+    transcription,
     audio_original: word.audio_original ?? '',
     example_original: word.example_original.trim(),
     example_translation: word.example_translation.trim(),
@@ -108,6 +118,7 @@ function normalizeHistoryEntry(entry: Partial<StudyHistoryEntry>): StudyHistoryE
   return {
     id: entry.id,
     date: entry.date,
+    language: entry.language ?? 'french',
     completedAt: entry.completedAt,
     sessionId: entry.sessionId,
     mode: entry.mode,
@@ -146,6 +157,7 @@ export function loadStorage(): AppStorage {
     return {
       ...defaults,
       ...parsed,
+      learningLanguage: parsed.learningLanguage === 'japanese' ? 'japanese' : 'french',
       progressByWordId: Object.fromEntries(
         Object.entries(parsed.progressByWordId ?? {}).map(([wordId, progress]) => [
           wordId,
@@ -154,6 +166,7 @@ export function loadStorage(): AppStorage {
       ),
       dailyStats: (parsed.dailyStats ?? []).map((item) => ({
         ...item,
+        language: item.language ?? 'french',
         wordsLearned: item.wordsLearned ?? 0,
         reviewsCompleted: item.reviewsCompleted ?? 0,
       })),
@@ -161,6 +174,7 @@ export function loadStorage(): AppStorage {
         .filter((item): item is DailyLessonRecord => Boolean(item?.date && item?.completedAt && item?.sessionId))
         .map((item) => ({
           ...item,
+          language: item.language ?? 'french',
           timeSpentSeconds: item.timeSpentSeconds ?? 0,
         }))
         .slice(-180),
@@ -405,6 +419,7 @@ function buildUpdatedProgress(existing: WordProgress, outcome: ExerciseOutcome):
 
 function updateDailyStats(storage: AppStorage, outcomes: ExerciseOutcome[]): void {
   const today = getTodayDateKey();
+  const language = storage.learningLanguage;
   const correctAnswers = outcomes.filter((item) => item.isCorrect).length;
   const masteredWordIds = new Set<string>();
   const reviewWordIds = new Set<string>();
@@ -425,7 +440,7 @@ function updateDailyStats(storage: AppStorage, outcomes: ExerciseOutcome[]): voi
     }
   });
 
-  const existingDailyStat = storage.dailyStats.find((item) => item.date === today);
+  const existingDailyStat = storage.dailyStats.find((item) => item.date === today && item.language === language);
 
   if (existingDailyStat) {
     existingDailyStat.completedLessons += 1;
@@ -436,6 +451,7 @@ function updateDailyStats(storage: AppStorage, outcomes: ExerciseOutcome[]): voi
   } else {
     storage.dailyStats.push({
       date: today,
+      language,
       completedLessons: 1,
       correctAnswers,
       totalAnswers: outcomes.length,
@@ -517,7 +533,9 @@ export function markWordAsKnown(currentStorage: AppStorage, wordId: string): App
 }
 
 export function getCompletedDailyLesson(storage: AppStorage, date = getTodayDateKey()): DailyLessonRecord | null {
-  return storage.completedDailyLessons.find((item) => item.date === date) ?? null;
+  return storage.completedDailyLessons.find(
+    (item) => item.date === date && item.language === storage.learningLanguage,
+  ) ?? null;
 }
 
 export function completeDailyLesson(
@@ -525,7 +543,7 @@ export function completeDailyLesson(
   payload: DailyLessonCompletionPayload,
 ): AppStorage {
   const completedDailyLessons = currentStorage.completedDailyLessons
-    .filter((item) => item.date !== payload.record.date)
+    .filter((item) => !(item.date === payload.record.date && item.language === payload.record.language))
     .concat(payload.record)
     .sort((left, right) => left.date.localeCompare(right.date))
     .slice(-180);
@@ -588,6 +606,16 @@ export function setLessonDurationPreference(
   };
 }
 
+export function setLearningLanguagePreference(
+  currentStorage: AppStorage,
+  learningLanguage: LearningLanguage,
+): AppStorage {
+  return {
+    ...currentStorage,
+    learningLanguage,
+  };
+}
+
 export function addWordPack(currentStorage: AppStorage, packId: string): AppStorage {
   const now = new Date().toISOString();
 
@@ -635,7 +663,7 @@ export function addCustomWord(currentStorage: AppStorage, word: Word): AppStorag
   const customWords = currentStorage.customWords
     .filter((item) => item.id !== normalizedWord.id)
     .concat(normalizedWord)
-    .sort((left, right) => left.original.localeCompare(right.original, 'fr'));
+    .sort((left, right) => left.original.localeCompare(right.original, normalizedWord.language === 'japanese' ? 'ja' : 'fr'));
 
   return {
     ...currentStorage,

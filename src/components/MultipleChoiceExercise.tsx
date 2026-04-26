@@ -29,7 +29,7 @@ export function MultipleChoiceExercise({
   const isAudioExercise = exercise.type === 'audio_to_translation_choice';
   const isOriginalExercise = exercise.type === 'original_to_translation_choice';
   const isTranslationExercise = exercise.type === 'translation_to_original_choice';
-  const copy = getExerciseCopy(exercise.type);
+  const copy = getExerciseCopy(exercise.type, word.language);
   const feedbackLabel = getDisplayWord(word);
   const cardClassName = [
     'lesson-exercise-card',

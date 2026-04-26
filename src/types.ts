@@ -6,6 +6,7 @@ export type DictionaryTab = 'all' | 'learning' | 'known' | 'mastered' | 'difficu
 export type LessonModuleTheme = 'new' | 'practice' | 'review' | 'reinforcement' | 'recap' | 'mistakes';
 export type PackStatus = 'not_added' | 'added' | 'in_progress' | 'completed';
 export type WordSource = 'core' | 'pack' | 'custom';
+export type LearningLanguage = 'french' | 'japanese';
 
 export type ExerciseType =
   | 'audio_to_translation_choice'
@@ -16,6 +17,7 @@ export type ExerciseType =
 
 export interface Word {
   id: string;
+  language: LearningLanguage;
   original: string;
   translation: string;
   transcription: string;
@@ -91,6 +93,7 @@ export interface LessonSession {
 
 export interface DailyStats {
   date: string;
+  language: LearningLanguage;
   completedLessons: number;
   correctAnswers: number;
   totalAnswers: number;
@@ -100,6 +103,7 @@ export interface DailyStats {
 
 export interface DailyLessonRecord {
   date: string;
+  language: LearningLanguage;
   completedAt: string;
   sessionId: string;
   totalModules: number;
@@ -119,6 +123,7 @@ export interface DailyLessonRecord {
 export interface StudyHistoryEntry {
   id: string;
   date: string;
+  language: LearningLanguage;
   completedAt: string;
   sessionId: string;
   mode: LessonMode;
@@ -148,6 +153,7 @@ export interface UserPackState {
 }
 
 export interface AppStorage {
+  learningLanguage: LearningLanguage;
   progressByWordId: Record<string, WordProgress>;
   dailyStats: DailyStats[];
   completedDailyLessons: DailyLessonRecord[];
@@ -221,6 +227,7 @@ export interface LessonSummary {
 
 export interface WordPack {
   id: string;
+  language: LearningLanguage;
   title: string;
   description: string;
   accent: string;

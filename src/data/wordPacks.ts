@@ -1,4 +1,4 @@
-import type { Word, WordPack } from '../types';
+import type { LearningLanguage, Word, WordPack } from '../types';
 import { createPackCoverImage, createWordImage } from '../lib/wordImages';
 
 type PackCategory = 'plants' | 'animals' | 'food' | 'travel' | 'home' | 'core';
@@ -32,7 +32,7 @@ function getDefaultIllustrationType(category: PackCategory): string {
   }
 }
 
-function createPackWordFactory(packId: string, category: PackCategory, accent: string) {
+function createPackWordFactory(packId: string, category: PackCategory, accent: string, language: LearningLanguage) {
   return ({
     id,
     original,
@@ -45,6 +45,7 @@ function createPackWordFactory(packId: string, category: PackCategory, accent: s
     illustrationType,
   }: PackWordSeed): Word => ({
     id: `${packId}-${id}`,
+    language,
     original,
     translation,
     transcription,
@@ -65,16 +66,18 @@ function createPack(
   title: string,
   description: string,
   accent: string,
+  language: LearningLanguage,
   category: PackCategory,
   coverIllustrationType: string | PackWordSeed[],
   maybeWords?: PackWordSeed[],
 ): WordPack {
-  const createWord = createPackWordFactory(id, category, accent);
+  const createWord = createPackWordFactory(id, category, accent, language);
   const words = Array.isArray(coverIllustrationType) ? coverIllustrationType : maybeWords ?? [];
   const coverType = Array.isArray(coverIllustrationType) ? getDefaultIllustrationType(category) : coverIllustrationType;
 
   return {
     id,
+    language,
     title,
     description,
     accent,
@@ -84,7 +87,7 @@ function createPack(
 }
 
 export const STARTER_PACKS: WordPack[] = [
-  createPack('pack-plants', 'Растения', 'Французские слова про деревья, цветы, сад и базовую лексику о природе.', '#6ca66a', 'plants', 'tree', [
+  createPack('pack-plants', 'Растения', 'Французские слова про деревья, цветы, сад и базовую лексику о природе.', '#6ca66a', 'french', 'plants', 'tree', [
     { id: 'arbre', original: 'arbre', translation: 'дерево', transcription: '[aʁbʁ]', exampleOriginal: "L'arbre est vieux.", exampleTranslation: 'Это дерево старое.', partOfSpeech: 'noun', tags: ['природа', 'сад'], illustrationType: 'tree' },
     { id: 'fleur', original: 'fleur', translation: 'цветок', transcription: '[flœʁ]', exampleOriginal: 'La fleur sent bon.', exampleTranslation: 'Цветок приятно пахнет.', partOfSpeech: 'noun', tags: ['природа', 'сад'], illustrationType: 'flower' },
     { id: 'feuille', original: 'feuille', translation: 'лист', transcription: '[fœj]', exampleOriginal: 'La feuille tombe en automne.', exampleTranslation: 'Лист падает осенью.', partOfSpeech: 'noun', tags: ['природа'], illustrationType: 'leaf' },
@@ -106,7 +109,7 @@ export const STARTER_PACKS: WordPack[] = [
     { id: 'chêne', original: 'chêne', translation: 'дуб', transcription: '[ʃɛn]', exampleOriginal: 'Le chêne est très solide.', exampleTranslation: 'Дуб очень крепкий.', partOfSpeech: 'noun', tags: ['деревья'], illustrationType: 'tree' },
     { id: 'bouquet', original: 'bouquet', translation: 'букет', transcription: '[bukɛ]', exampleOriginal: "J'offre un bouquet à ma mère.", exampleTranslation: 'Я дарю букет маме.', partOfSpeech: 'noun', tags: ['цветы'], illustrationType: 'bouquet' },
   ]),
-  createPack('pack-animals', 'Животные', 'Базовый набор французских слов про домашних, диких и фермерских животных.', '#d77b5e', 'animals', 'cat', [
+  createPack('pack-animals', 'Животные', 'Базовый набор французских слов про домашних, диких и фермерских животных.', '#d77b5e', 'french', 'animals', 'cat', [
     { id: 'chien', original: 'chien', translation: 'собака', transcription: '[ʃjɛ̃]', exampleOriginal: 'Le chien dort près de la porte.', exampleTranslation: 'Собака спит у двери.', partOfSpeech: 'noun', tags: ['животные'], illustrationType: 'dog' },
     { id: 'chat', original: 'chat', translation: 'кот', transcription: '[ʃa]', exampleOriginal: 'Le chat aime le soleil.', exampleTranslation: 'Кот любит солнце.', partOfSpeech: 'noun', tags: ['животные'], illustrationType: 'cat' },
     { id: 'oiseau', original: 'oiseau', translation: 'птица', transcription: '[wazo]', exampleOriginal: "L'oiseau chante le matin.", exampleTranslation: 'Птица поет утром.', partOfSpeech: 'noun', tags: ['природа'], illustrationType: 'bird' },
@@ -128,7 +131,7 @@ export const STARTER_PACKS: WordPack[] = [
     { id: 'âne', original: 'âne', translation: 'осёл', transcription: '[an]', exampleOriginal: "L'âne porte un sac.", exampleTranslation: 'Осел несет мешок.', partOfSpeech: 'noun', tags: ['ферма'] },
     { id: 'écureuil', original: 'écureuil', translation: 'белка', transcription: '[ekyʁœj]', exampleOriginal: "L'écureuil cache des noix.", exampleTranslation: 'Белка прячет орехи.', partOfSpeech: 'noun', tags: ['лес'] },
   ]),
-  createPack('pack-food', 'Еда', 'Повседневная французская лексика про продукты, блюда и напитки.', '#d5a443', 'food', [
+  createPack('pack-food', 'Еда', 'Повседневная французская лексика про продукты, блюда и напитки.', '#d5a443', 'french', 'food', [
     { id: 'pain', original: 'pain', translation: 'хлеб', transcription: '[pɛ̃]', exampleOriginal: 'Je coupe le pain frais.', exampleTranslation: 'Я режу свежий хлеб.', partOfSpeech: 'noun', tags: ['еда'] },
     { id: 'fromage', original: 'fromage', translation: 'сыр', transcription: '[fʁɔmaʒ]', exampleOriginal: 'Le fromage est sur la table.', exampleTranslation: 'Сыр лежит на столе.', partOfSpeech: 'noun', tags: ['еда'] },
     { id: 'beurre', original: 'beurre', translation: 'масло', transcription: '[bœʁ]', exampleOriginal: 'Je mets du beurre sur le pain.', exampleTranslation: 'Я намазываю масло на хлеб.', partOfSpeech: 'noun', tags: ['еда'] },
@@ -150,7 +153,7 @@ export const STARTER_PACKS: WordPack[] = [
     { id: 'café', original: 'café', translation: 'кофе', transcription: '[kafe]', exampleOriginal: 'Le café est très fort.', exampleTranslation: 'Кофе очень крепкий.', partOfSpeech: 'noun', tags: ['напитки'] },
     { id: 'dessert', original: 'dessert', translation: 'десерт', transcription: '[dezɛʁ]', exampleOriginal: 'Le dessert est délicieux.', exampleTranslation: 'Десерт очень вкусный.', partOfSpeech: 'noun', tags: ['еда'] },
   ]),
-  createPack('pack-travel', 'Путешествия', 'Слова для поездок: транспорт, маршрут, проживание и ориентация в городе.', '#5d88d6', 'travel', [
+  createPack('pack-travel', 'Путешествия', 'Слова для поездок: транспорт, маршрут, проживание и ориентация в городе.', '#5d88d6', 'french', 'travel', [
     { id: 'voyage', original: 'voyage', translation: 'путешествие', transcription: '[vwajaʒ]', exampleOriginal: 'Le voyage commence demain.', exampleTranslation: 'Путешествие начинается завтра.', partOfSpeech: 'noun', tags: ['поездка'] },
     { id: 'valise', original: 'valise', translation: 'чемодан', transcription: '[valiz]', exampleOriginal: 'Ma valise est prête.', exampleTranslation: 'Мой чемодан готов.', partOfSpeech: 'noun', tags: ['поездка'] },
     { id: 'passeport', original: 'passeport', translation: 'паспорт', transcription: '[paspɔʁ]', exampleOriginal: 'Je garde mon passeport ici.', exampleTranslation: 'Я держу паспорт здесь.', partOfSpeech: 'noun', tags: ['документы'] },
@@ -172,7 +175,7 @@ export const STARTER_PACKS: WordPack[] = [
     { id: 'départ', original: 'départ', translation: 'отправление', transcription: '[depaʁ]', exampleOriginal: 'Le départ est annoncé.', exampleTranslation: 'Отправление объявлено.', partOfSpeech: 'noun', tags: ['транспорт'] },
     { id: 'arrivée', original: 'arrivée', translation: 'прибытие', transcription: '[aʁive]', exampleOriginal: "L'arrivée est prévue à 18 heures.", exampleTranslation: 'Прибытие запланировано на 18 часов.', partOfSpeech: 'noun', tags: ['транспорт'] },
   ]),
-  createPack('pack-home', 'Дом и быт', 'Практичная французская лексика для дома, мебели, комнат и повседневных дел.', '#8f76cb', 'home', [
+  createPack('pack-home', 'Дом и быт', 'Практичная французская лексика для дома, мебели, комнат и повседневных дел.', '#8f76cb', 'french', 'home', [
     { id: 'maison', original: 'maison', translation: 'дом', transcription: '[mɛzɔ̃]', exampleOriginal: 'La maison est lumineuse.', exampleTranslation: 'Дом светлый.', partOfSpeech: 'noun', tags: ['дом'] },
     { id: 'appartement', original: 'appartement', translation: 'квартира', transcription: '[apaʁtəmɑ̃]', exampleOriginal: "L'appartement est au troisième étage.", exampleTranslation: 'Квартира на третьем этаже.', partOfSpeech: 'noun', tags: ['дом'] },
     { id: 'cuisine', original: 'cuisine', translation: 'кухня', transcription: '[kɥizin]', exampleOriginal: 'La cuisine est propre.', exampleTranslation: 'Кухня чистая.', partOfSpeech: 'noun', tags: ['дом'] },
@@ -194,7 +197,7 @@ export const STARTER_PACKS: WordPack[] = [
     { id: 'serviette', original: 'serviette', translation: 'полотенце', transcription: '[sɛʁvjɛt]', exampleOriginal: 'La serviette est sèche.', exampleTranslation: 'Полотенце сухое.', partOfSpeech: 'noun', tags: ['быт'] },
     { id: 'étagère', original: 'étagère', translation: 'полка', transcription: '[etaʒɛʁ]', exampleOriginal: "L'étagère porte beaucoup de livres.", exampleTranslation: 'Полка держит много книг.', partOfSpeech: 'noun', tags: ['мебель'] },
   ]),
-  createPack('pack-clothes', 'Одежда', 'Одежда, обувь и аксессуары для повседневных ситуаций и покупок.', '#b76b6b', 'core', 'guide', [
+  createPack('pack-clothes', 'Одежда', 'Одежда, обувь и аксессуары для повседневных ситуаций и покупок.', '#b76b6b', 'french', 'core', 'guide', [
     { id: 'veste', original: 'veste', translation: 'куртка', transcription: '[vɛst]', exampleOriginal: 'Je mets ma veste avant de sortir.', exampleTranslation: 'Я надеваю куртку перед выходом.', partOfSpeech: 'noun', tags: ['одежда'] },
     { id: 'manteau', original: 'manteau', translation: 'пальто', transcription: '[mɑ̃to]', exampleOriginal: 'Le manteau est chaud.', exampleTranslation: 'Пальто тёплое.', partOfSpeech: 'noun', tags: ['одежда'] },
     { id: 'pull', original: 'pull', translation: 'свитер', transcription: '[pyl]', exampleOriginal: 'Ce pull est confortable.', exampleTranslation: 'Этот свитер удобный.', partOfSpeech: 'noun', tags: ['одежда'] },
@@ -216,7 +219,7 @@ export const STARTER_PACKS: WordPack[] = [
     { id: 'taille', original: 'taille', translation: 'размер', transcription: '[taj]', exampleOriginal: 'Cette taille me va bien.', exampleTranslation: 'Этот размер мне подходит.', partOfSpeech: 'noun', tags: ['магазин'] },
     { id: 'cabine', original: 'cabine d’essayage', translation: 'примерочная', transcription: '[kabin dɛsɛjaʒ]', exampleOriginal: "La cabine d’essayage est libre.", exampleTranslation: 'Примерочная свободна.', partOfSpeech: 'noun', tags: ['магазин'] },
   ]),
-  createPack('pack-work-study', 'Учёба и работа', 'Ключевая лексика для офиса, уроков, задач и общения на работе.', '#5d8b7e', 'core', 'guide', [
+  createPack('pack-work-study', 'Учёба и работа', 'Ключевая лексика для офиса, уроков, задач и общения на работе.', '#5d8b7e', 'french', 'core', 'guide', [
     { id: 'réunion', original: 'réunion', translation: 'встреча', transcription: '[ʁeynjɔ̃]', exampleOriginal: 'La réunion commence à neuf heures.', exampleTranslation: 'Встреча начинается в девять.', partOfSpeech: 'noun', tags: ['работа'] },
     { id: 'projet', original: 'projet', translation: 'проект', transcription: '[pʁɔʒɛ]', exampleOriginal: 'Le projet avance bien.', exampleTranslation: 'Проект идёт хорошо.', partOfSpeech: 'noun', tags: ['работа'] },
     { id: 'tâche', original: 'tâche', translation: 'задача', transcription: '[taʃ]', exampleOriginal: 'Je termine cette tâche aujourd’hui.', exampleTranslation: 'Я заканчиваю эту задачу сегодня.', partOfSpeech: 'noun', tags: ['работа'] },
@@ -238,7 +241,7 @@ export const STARTER_PACKS: WordPack[] = [
     { id: 'pause', original: 'pause', translation: 'перерыв', transcription: '[poz]', exampleOriginal: 'Nous faisons une pause à midi.', exampleTranslation: 'Мы делаем перерыв в полдень.', partOfSpeech: 'noun', tags: ['работа'] },
     { id: 'agenda', original: 'agenda', translation: 'ежедневник', transcription: '[aʒɑ̃da]', exampleOriginal: "Mon agenda est plein cette semaine.", exampleTranslation: 'Мой ежедневник заполнен на этой неделе.', partOfSpeech: 'noun', tags: ['работа'] },
   ]),
-  createPack('pack-city', 'Город и сервисы', 'Городская среда, услуги, здания и повседневные точки назначения.', '#4f7aa1', 'core', 'map', [
+  createPack('pack-city', 'Город и сервисы', 'Городская среда, услуги, здания и повседневные точки назначения.', '#4f7aa1', 'french', 'core', 'map', [
     { id: 'banque', original: 'banque', translation: 'банк', transcription: '[bɑ̃k]', exampleOriginal: 'La banque ferme à dix-sept heures.', exampleTranslation: 'Банк закрывается в пять.', partOfSpeech: 'noun', tags: ['город'] },
     { id: 'pharmacie', original: 'pharmacie', translation: 'аптека', transcription: '[faʁmasi]', exampleOriginal: 'La pharmacie est au coin de la rue.', exampleTranslation: 'Аптека на углу улицы.', partOfSpeech: 'noun', tags: ['город'] },
     { id: 'boulangerie', original: 'boulangerie', translation: 'булочная', transcription: '[bulɑ̃ʒʁi]', exampleOriginal: 'La boulangerie ouvre tôt.', exampleTranslation: 'Булочная открывается рано.', partOfSpeech: 'noun', tags: ['город'] },

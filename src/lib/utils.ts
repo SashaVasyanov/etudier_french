@@ -1,3 +1,5 @@
+import type { LearningLanguage } from '../types';
+
 export function shuffleArray<T>(items: T[]): T[] {
   const copy = [...items];
 
@@ -43,6 +45,21 @@ export function isFrenchAnswerMatch(userAnswer: string, correctAnswer: string): 
   const correctVariants = getFrenchAnswerVariants(correctAnswer);
 
   return [...userVariants].some((variant) => correctVariants.has(variant));
+}
+
+function normalizeJapaneseAnswerToken(value: string): string {
+  return value
+    .normalize('NFKC')
+    .replace(/[　\s]+/g, ' ')
+    .trim();
+}
+
+export function isAnswerMatch(userAnswer: string, correctAnswer: string, language: LearningLanguage): boolean {
+  if (language === 'french') {
+    return isFrenchAnswerMatch(userAnswer, correctAnswer);
+  }
+
+  return normalizeJapaneseAnswerToken(userAnswer) === normalizeJapaneseAnswerToken(correctAnswer);
 }
 
 function normalizeComparableText(value: string): string {

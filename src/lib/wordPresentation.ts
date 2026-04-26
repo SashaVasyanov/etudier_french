@@ -1,4 +1,4 @@
-import type { ExerciseType, Word } from '../types';
+import type { ExerciseType, LearningLanguage, Word } from '../types';
 
 const PART_OF_SPEECH_LABELS: Record<string, string> = {
   noun: 'существительное',
@@ -179,6 +179,10 @@ export function getFrenchArticleForWord(word: Word): string | null {
 }
 
 export function getDisplayWord(word: Word): string {
+  if (word.language !== 'french') {
+    return word.original;
+  }
+
   const article = getFrenchArticleForWord(word);
 
   if (!article) {
@@ -189,6 +193,10 @@ export function getDisplayWord(word: Word): string {
 }
 
 export function getSpokenWordText(word: Word): string {
+  if (word.language !== 'french') {
+    return word.original;
+  }
+
   if (word.part_of_speech === 'noun') {
     return getDisplayWord(word);
   }
@@ -202,6 +210,28 @@ export function isUsageFocusedWord(word: Word): boolean {
 
 export function getWordDescription(word: Word): string {
   const translation = word.translation.toLowerCase();
+
+  if (word.language === 'japanese') {
+    switch (word.part_of_speech) {
+      case 'noun':
+        return `Японское существительное со значением «${translation}». Обращайте внимание на кандзи, чтение и типичный контекст употребления.`;
+      case 'verb':
+        return `Японский глагол со значением «${translation}». Полезно запоминать его сразу в короткой фразе и с типичными частицами.`;
+      case 'adjective':
+        return `Японское прилагательное со значением «${translation}». Смотрите, как оно описывает предмет, состояние или впечатление в примере.`;
+      case 'adverb':
+        return `Японское наречие со значением «${translation}». Его лучше учить через ситуацию: когда, как или насколько происходит действие.`;
+      case 'determiner':
+        return `Базовый японский числительный или определитель со значением «${translation}». Запоминайте форму вместе с примером употребления.`;
+      case 'expression':
+        return `Готовое японское выражение со значением «${translation}». Его удобнее учить целиком как устойчивую единицу речи.`;
+      case 'interjection':
+        return `Частотная японская реплика со значением «${translation}». Обычно употребляется как готовая вежливая реакция или ответ.`;
+      default:
+        return `Японское слово со значением «${translation}». Старайтесь связывать написание, чтение и конкретный жизненный контекст.`;
+    }
+  }
+
   const article = getFrenchArticleForWord(word);
 
   switch (word.part_of_speech) {
@@ -235,6 +265,10 @@ export function getWordExampleLabel(word: Word): string {
 }
 
 export function getLessonWordBadge(word: Word): string {
+  if (word.language === 'japanese') {
+    return word.part_of_speech === 'expression' ? 'Базовое японское выражение' : 'Базовое японское слово';
+  }
+
   return word.part_of_speech === 'expression' ? 'Распространённое выражение' : 'Распространённое слово';
 }
 
@@ -248,7 +282,13 @@ export function getLessonWordNotes(word: Word): string[] {
   return Array.from(new Set(notes)).slice(0, 3);
 }
 
-export function getExerciseCopy(type: ExerciseType): { eyebrow: string; title: string; hint: string } {
+export function getExerciseCopy(
+  type: ExerciseType,
+  language: LearningLanguage = 'french',
+): { eyebrow: string; title: string; hint: string } {
+  const targetLanguageLabel = language === 'french' ? 'французском' : 'японском';
+  const sourceLanguageLabel = language === 'french' ? 'французское' : 'японское';
+
   switch (type) {
     case 'audio_to_translation_choice':
       return {
@@ -259,20 +299,20 @@ export function getExerciseCopy(type: ExerciseType): { eyebrow: string; title: s
     case 'translation_to_original_choice':
       return {
         eyebrow: 'Подбор слова',
-        title: 'Найдите французское слово',
-        hint: 'Смотрите на перевод и выберите правильный вариант на французском.',
+        title: `Найдите ${sourceLanguageLabel} слово`,
+        hint: `Смотрите на перевод и выберите правильный вариант на ${targetLanguageLabel}.`,
       };
     case 'original_to_translation_choice':
       return {
         eyebrow: 'Подбор перевода',
         title: 'Найдите правильный перевод',
-        hint: 'Смотрите на французское слово и выберите точное значение.',
+        hint: `Смотрите на слово на ${targetLanguageLabel} и выберите точное значение.`,
       };
     case 'audio_to_original_input':
       return {
         eyebrow: 'Аудио-ввод',
         title: 'Напишите слово',
-        hint: 'Слушайте внимательно и введите слово по-французски.',
+        hint: `Слушайте внимательно и введите слово ${language === 'french' ? 'по-французски' : 'по-японски'}.`,
       };
     case 'memory_check':
       return {

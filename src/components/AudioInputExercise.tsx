@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { getLearningLanguageAdverb, getLearningLanguageTitle } from '../lib/languages';
 import type { Exercise, Word } from '../types';
 import { getDisplayWord, getExerciseCopy } from '../lib/wordPresentation';
 import { LessonCard } from './LessonCard';
@@ -27,7 +28,9 @@ export function AudioInputExercise({
   onNext,
 }: AudioInputExerciseProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const copy = getExerciseCopy(exercise.type);
+  const copy = getExerciseCopy(exercise.type, word.language);
+  const languageAdverb = getLearningLanguageAdverb(word.language);
+  const languageTitle = getLearningLanguageTitle(word.language);
 
   useEffect(() => {
     if (!isSubmitted) {
@@ -63,7 +66,11 @@ export function AudioInputExercise({
             <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
               Повторить аудио
             </button>
-            <p className="audio-hint">Введите слово по памяти. Артикль не нужен, регистр не важен.</p>
+            <p className="audio-hint">
+              {word.language === 'french'
+                ? 'Введите слово по памяти. Артикль не нужен, регистр не важен.'
+                : 'Введите слово по памяти. Можно писать в японской записи, регистр не важен.'}
+            </p>
           </div>
         </header>
       }
@@ -80,7 +87,7 @@ export function AudioInputExercise({
             disabled={isSubmitted}
             autoComplete="off"
             spellCheck="false"
-            placeholder="Напишите слово на французском"
+            placeholder={`Напишите слово ${languageAdverb}`}
             onChange={(event) => onChange(event.target.value)}
             onKeyDown={(event) => {
               if (event.key !== 'Enter') {
@@ -101,7 +108,7 @@ export function AudioInputExercise({
           />
 
           <div className="input-meta">
-            <span>Ответ должен быть на французском</span>
+            <span>{`Ответ должен быть на ${languageTitle} языке`}</span>
           </div>
 
           {isSubmitted ? (

@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
-import type { AppStorage, Word, WordLevel } from '../types';
+import type { AppStorage, LearningLanguage, Word, WordLevel } from '../types';
 import { getTodayDateKey } from '../lib/utils';
 import { getPartOfSpeechLabel } from '../lib/wordPresentation';
 
 interface StatisticsScreenProps {
+  learningLanguage: LearningLanguage;
   storage: AppStorage;
   words: Word[];
 }
@@ -78,14 +79,16 @@ function buildDiagramSegments(items: Array<{ value: number; color: string }>): A
   });
 }
 
-function getMonthlyLessonCounts(storage: AppStorage): Array<{ key: string; label: string; count: number }> {
+function getMonthlyLessonCounts(storage: AppStorage, learningLanguage: LearningLanguage): Array<{ key: string; label: string; count: number }> {
   const formatter = new Intl.DateTimeFormat('ru-RU', { month: 'short', year: '2-digit' });
   const now = new Date();
 
   return Array.from({ length: 18 }, (_, index) => {
     const date = new Date(now.getFullYear(), now.getMonth() - (17 - index), 1);
     const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-    const count = storage.studyHistory.filter((entry) => entry.date.startsWith(monthKey)).length;
+    const count = storage.studyHistory.filter(
+      (entry) => entry.language === learningLanguage && entry.date.startsWith(monthKey),
+    ).length;
 
     return {
       key: monthKey,
@@ -121,7 +124,7 @@ function countSpeechTypes(words: Word[]): Array<{ label: string; value: number; 
     }));
 }
 
-export default function StatisticsScreen({ storage, words }: StatisticsScreenProps) {
+export default function StatisticsScreen({ learningLanguage, storage, words }: StatisticsScreenProps) {
   const [diagramMode, setDiagramMode] = useState<DiagramMode>('levels');
   const learnedWordList = useMemo(
     () =>
@@ -134,7 +137,7 @@ export default function StatisticsScreen({ storage, words }: StatisticsScreenPro
   const learnedWords = learnedWordList.length;
   const wordsInProcess = Math.max(0, words.length - learnedWords);
   const currentStreak = storage.lastLessonDate === getTodayDateKey() ? storage.streakDays : 0;
-  const monthlyLessons = useMemo(() => getMonthlyLessonCounts(storage), [storage]);
+  const monthlyLessons = useMemo(() => getMonthlyLessonCounts(storage, learningLanguage), [learningLanguage, storage]);
   const diagramItems = useMemo(
     () => (diagramMode === 'levels' ? countLevels(learnedWordList) : countSpeechTypes(learnedWordList)),
     [diagramMode, learnedWordList],

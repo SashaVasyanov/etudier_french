@@ -856,7 +856,7 @@ function createPreviewModule(words: Word[]): LessonModule {
   return {
     id: 'module-new-words',
     title: 'Новые слова',
-    description: 'Знакомство с новой французской лексикой на сегодня.',
+    description: 'Знакомство с новой лексикой на сегодня.',
     theme: 'new',
     position: 1,
     kind: 'preview',

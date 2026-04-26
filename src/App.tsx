@@ -12,6 +12,11 @@ import { TopNav } from './components/TopNav';
 import { getLessonPoolWords, getStarterPacks, getWordById, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
 import { createFlashcardSession, createLessonSession } from './lib/exercises';
+import {
+  getLearningLanguageProductTitle,
+  getLearningLanguageSectionEyebrow,
+  getLearningLanguageTitle,
+} from './lib/languages';
 import { derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
 import {
   addWordPack,
@@ -22,11 +27,13 @@ import {
   markWordAsKnown,
   recordStudyHistory,
   saveStorage,
+  setLearningLanguagePreference,
   setLessonDurationPreference,
   setWordPackStatus,
+  getWordProgress,
   updateProfileName,
 } from './lib/storage';
-import { getTodayDateKey, isFrenchAnswerMatch } from './lib/utils';
+import { getTodayDateKey, isAnswerMatch } from './lib/utils';
 import type {
   AppStorage,
   DailyLessonCompletionPayload,
@@ -76,11 +83,16 @@ function removeWordFromSession(session: LessonSession, wordId: string): LessonSe
   };
 }
 
-function buildEmptyCompletionPayload(sessionId: string, durationMinutes: AppStorage['lessonDurationMinutes']): DailyLessonCompletionPayload {
+function buildEmptyCompletionPayload(
+  sessionId: string,
+  durationMinutes: AppStorage['lessonDurationMinutes'],
+  language: AppStorage['learningLanguage'],
+): DailyLessonCompletionPayload {
   const date = getTodayDateKey();
   const completedAt = new Date().toISOString();
   const record: DailyLessonRecord = {
     date,
+    language,
     completedAt,
     sessionId,
     totalModules: 0,
@@ -99,6 +111,7 @@ function buildEmptyCompletionPayload(sessionId: string, durationMinutes: AppStor
   const historyEntry: StudyHistoryEntry = {
     id: `${sessionId}-history`,
     date,
+    language,
     completedAt,
     sessionId,
     mode: 'default',
@@ -130,23 +143,28 @@ function App() {
   const [isLoadingWords, setIsLoadingWords] = useState(true);
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
 
-  const packs = useMemo(() => getStarterPacks(), []);
+  const packs = useMemo(() => getStarterPacks(storage.learningLanguage), [storage.learningLanguage]);
   const selectedPack = useMemo(
     () => (selectedPackId ? packs.find((pack) => pack.id === selectedPackId) ?? null : null),
     [packs, selectedPackId],
   );
   const enabledPackIds = useMemo(() => getEnabledPackIds(storage), [storage]);
-  const words = useMemo(() => [...baseWords, ...storage.customWords], [baseWords, storage.customWords]);
+  const customWords = useMemo(
+    () => storage.customWords.filter((word) => word.language === storage.learningLanguage),
+    [storage.customWords, storage.learningLanguage],
+  );
+  const words = useMemo(() => [...baseWords, ...customWords], [baseWords, customWords]);
   const availableWords = useMemo(() => getActiveWords(words, enabledPackIds), [enabledPackIds, words]);
   const lessonPoolWords = useMemo(() => getLessonPoolWords(availableWords), [availableWords]);
-  const progressList = useMemo(() => Object.values(storage.progressByWordId), [storage]);
+  const progressList = useMemo(() => words.map((word) => getWordProgress(storage, word.id)), [storage, words]);
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
   const currentWord = currentStep ? getWordById(words, currentStep.wordId) : null;
   useEffect(() => {
     let isMounted = true;
+    setIsLoadingWords(true);
 
-    void loadWords()
+    void loadWords(storage.learningLanguage)
       .then((nextWords) => {
         if (!isMounted) {
           return;
@@ -163,7 +181,7 @@ function App() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [storage.learningLanguage]);
 
   useEffect(() => {
     saveStorage(storage);
@@ -267,11 +285,18 @@ function App() {
       title: options?.title,
     });
 
-    if (!nextSession) {
-      if (mode === 'default') {
-        const sessionId = `default-empty-${Date.now()}`;
-        setStorage((currentStorage) =>
-          completeDailyLesson(currentStorage, buildEmptyCompletionPayload(sessionId, currentStorage.lessonDurationMinutes)),
+      if (!nextSession) {
+        if (mode === 'default') {
+          const sessionId = `default-empty-${Date.now()}`;
+          setStorage((currentStorage) =>
+          completeDailyLesson(
+            currentStorage,
+            buildEmptyCompletionPayload(
+              sessionId,
+              currentStorage.lessonDurationMinutes,
+              currentStorage.learningLanguage,
+            ),
+          ),
         );
         setScreen('home');
       }
@@ -332,7 +357,7 @@ function App() {
 
     const isCorrect =
       currentExercise.type === 'audio_to_original_input'
-        ? isFrenchAnswerMatch(answer, currentExercise.correctAnswer)
+        ? isAnswerMatch(answer, currentExercise.correctAnswer, currentWord?.language ?? 'french')
         : answer === currentExercise.correctAnswer;
 
     const outcome: ExerciseOutcome = {
@@ -375,6 +400,7 @@ function App() {
       const historyEntry: StudyHistoryEntry = {
         id: `${activeSession.id}-history`,
         date: getTodayDateKey(),
+        language: currentStorage.learningLanguage,
         completedAt,
         sessionId: activeSession.id,
         mode: activeSession.mode,
@@ -395,6 +421,7 @@ function App() {
 
       const record: DailyLessonRecord = {
         date: getTodayDateKey(),
+        language: currentStorage.learningLanguage,
         completedAt,
         sessionId: activeSession.id,
         totalModules: activeSession.modules.filter((module) => module.wordIds.length > 0).length,
@@ -485,7 +512,9 @@ function App() {
           <section className="hero-card">
             <span className="eyebrow">Загрузка</span>
             <h1 className="hero-title">Подготавливаем словарь</h1>
-            <p className="hero-text">Загружаем французские слова, активные паки и локальный прогресс.</p>
+            <p className="hero-text">
+              {`Загружаем ${getLearningLanguageTitle(storage.learningLanguage)} слова, активные паки и локальный прогресс.`}
+            </p>
           </section>
       </AppShell>
     );
@@ -501,8 +530,8 @@ function App() {
     <AppShell>
         {screen !== 'lesson' && screen !== 'home' ? (
           <TopNav
-            eyebrow="Французский словарь и уроки"
-            title="Etudier French"
+            eyebrow={getLearningLanguageSectionEyebrow(storage.learningLanguage)}
+            title={getLearningLanguageProductTitle(storage.learningLanguage)}
             meta={`${storage.profile.displayName} · Учебных слов: ${lessonPoolWords.length} · Серия: ${storage.streakDays}`}
             navigation={<AppNavigation activeScreen={navScreen} lessonAvailable={lessonPoolWords.length > 0} onNavigate={handleNavigate} />}
           />
@@ -515,7 +544,13 @@ function App() {
             storage={storage}
             progressList={progressList}
             addedPacksCount={enabledPackIds.length}
+            learningLanguage={storage.learningLanguage}
             lessonDurationMinutes={storage.lessonDurationMinutes}
+            onLearningLanguageChange={(value) => {
+              clearSessionState('home');
+              setSelectedPackId(null);
+              setStorage((currentStorage) => setLearningLanguagePreference(currentStorage, value));
+            }}
             onLessonDurationChange={(value) => {
               setStorage((currentStorage) => setLessonDurationPreference(currentStorage, value));
             }}
@@ -635,6 +670,7 @@ function App() {
         <Suspense fallback={<section className="hero-card">Открываем раздел…</section>}>
           {screen === 'dictionary' ? (
             <DictionaryScreen
+              learningLanguage={storage.learningLanguage}
               words={availableWords}
               storage={storage}
               packs={packs}
@@ -642,6 +678,7 @@ function App() {
                 const customWord: Word = {
                   ...word,
                   id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                  language: storage.learningLanguage,
                   audio_original: '',
                   packIds: [],
                   source: 'custom',
@@ -700,6 +737,7 @@ function App() {
           ) : null}
           {screen === 'profile' ? (
             <ProfileScreen
+              learningLanguage={storage.learningLanguage}
               profile={storage.profile}
               storage={storage}
               progressList={progressList}
@@ -709,7 +747,7 @@ function App() {
             />
           ) : null}
           {screen === 'statistics' ? (
-            <StatisticsScreen storage={storage} words={availableWords} />
+            <StatisticsScreen learningLanguage={storage.learningLanguage} storage={storage} words={availableWords} />
           ) : null}
         </Suspense>
     </AppShell>

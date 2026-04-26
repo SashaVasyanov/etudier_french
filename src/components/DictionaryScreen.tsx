@@ -1,9 +1,10 @@
 import { useDeferredValue, useMemo, useState } from 'react';
 import { playWordAudio } from '../lib/audio';
+import { getLearningLanguageTitle } from '../lib/languages';
 import { getPackByWord } from '../lib/packs';
 import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordProgress } from '../lib/storage';
-import type { AppStorage, DictionaryTab, Word, WordLevel, WordPack } from '../types';
+import type { AppStorage, DictionaryTab, LearningLanguage, Word, WordLevel, WordPack } from '../types';
 import { AppCard } from './AppCard';
 import { PackWordRow } from './PackWordRow';
 import { StatusBadge } from './StatusBadge';
@@ -11,10 +12,11 @@ import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
 
 interface DictionaryScreenProps {
+  learningLanguage: LearningLanguage;
   words: Word[];
   storage: AppStorage;
   packs: WordPack[];
-  onAddWord: (word: Omit<Word, 'id' | 'audio_original' | 'packIds' | 'source'>) => void;
+  onAddWord: (word: Omit<Word, 'id' | 'language' | 'audio_original' | 'packIds' | 'source'>) => void;
 }
 
 const TABS: Array<{ id: DictionaryTab; label: string }> = [
@@ -25,7 +27,7 @@ const TABS: Array<{ id: DictionaryTab; label: string }> = [
   { id: 'difficult', label: 'Сложные' },
 ];
 
-export default function DictionaryScreen({ words, storage, packs, onAddWord }: DictionaryScreenProps) {
+export default function DictionaryScreen({ learningLanguage, words, storage, packs, onAddWord }: DictionaryScreenProps) {
   const [tab, setTab] = useState<DictionaryTab>('all');
   const [query, setQuery] = useState('');
   const [level, setLevel] = useState<'all' | WordLevel>('all');
@@ -42,6 +44,7 @@ export default function DictionaryScreen({ words, storage, packs, onAddWord }: D
     tags: '',
   });
   const deferredQuery = useDeferredValue(query);
+  const languageTitle = getLearningLanguageTitle(learningLanguage);
 
   const activePackOptions = useMemo(
     () => packs.filter((pack) => storage.packStates[pack.id]?.status && storage.packStates[pack.id]?.status !== 'not_added'),
@@ -134,7 +137,7 @@ export default function DictionaryScreen({ words, storage, packs, onAddWord }: D
             <input
               className="text-input"
               value={newWord.original}
-              placeholder="Французское слово"
+              placeholder={learningLanguage === 'french' ? 'Французское слово' : 'Японское слово'}
               required
               onChange={(event) => setNewWord((current) => ({ ...current, original: event.target.value }))}
             />
@@ -154,7 +157,7 @@ export default function DictionaryScreen({ words, storage, packs, onAddWord }: D
             <input
               className="text-input"
               value={newWord.example_original}
-              placeholder="Пример на французском"
+              placeholder={learningLanguage === 'french' ? 'Пример на французском' : 'Пример на японском'}
               onChange={(event) => setNewWord((current) => ({ ...current, example_original: event.target.value }))}
             />
             <input
@@ -206,7 +209,7 @@ export default function DictionaryScreen({ words, storage, packs, onAddWord }: D
           <input
             className="text-input"
             value={query}
-            placeholder="Поиск по слову, переводу или тегам"
+            placeholder={`Поиск по слову на ${languageTitle}, переводу или тегам`}
             onChange={(event) => setQuery(event.target.value)}
           />
           <select className="level-select" value={level} onChange={(event) => setLevel(event.target.value as 'all' | WordLevel)}>
