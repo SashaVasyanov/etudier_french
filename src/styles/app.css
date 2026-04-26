@@ -261,8 +261,7 @@
   color: var(--accent-strong);
 }
 
-.status-badge.review,
-.status-badge.known {
+.status-badge.review {
   background: var(--accent-soft);
   color: var(--accent-strong);
 }

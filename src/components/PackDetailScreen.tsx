@@ -22,13 +22,12 @@ interface PackDetailScreenProps {
   onStartPackFlashcards: (packId: string) => void;
 }
 
-type PackStatusFilter = 'all' | 'new' | 'learning' | 'known' | 'mastered' | 'difficult';
+type PackStatusFilter = 'all' | 'new' | 'learning' | 'mastered' | 'difficult';
 
 const FILTERS: Array<{ id: PackStatusFilter; label: string }> = [
   { id: 'all', label: 'Все слова' },
   { id: 'new', label: 'Новые' },
   { id: 'learning', label: 'Изучаемые' },
-  { id: 'known', label: 'Уже известные' },
   { id: 'mastered', label: 'Выученные' },
   { id: 'difficult', label: 'Сложные' },
 ];

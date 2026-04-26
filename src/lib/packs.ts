@@ -63,7 +63,7 @@ export function derivePackStatus(pack: WordPack, storage: AppStorage): PackStatu
   const wordsStarted = pack.words.filter((word) => getWordProgress(storage, word.id).shown_count > 0).length;
   const wordsCompleted = pack.words.filter((word) => {
     const status = getWordProgress(storage, word.id).status;
-    return status === 'known' || status === 'mastered';
+    return status === 'mastered';
   }).length;
 
   if (wordsCompleted === pack.words.length) {
@@ -84,7 +84,7 @@ export function getPackCompletionRatio(pack: WordPack, storage: AppStorage): num
 
   const completed = pack.words.filter((word) => {
     const status = getWordProgress(storage, word.id).status;
-    return status === 'known' || status === 'mastered';
+    return status === 'mastered';
   }).length;
 
   return Math.round((completed / pack.words.length) * 100);

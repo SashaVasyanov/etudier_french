@@ -395,7 +395,7 @@ function App() {
       );
       const wordsLearned = activeSession.sourceWordIds.filter((wordId) => {
         const status = storageWithOutcomes.progressByWordId[wordId]?.status;
-        return status === 'learning' || status === 'review' || status === 'known' || status === 'mastered';
+        return status === 'learning' || status === 'review' || status === 'mastered';
       }).length;
       const historyEntry: StudyHistoryEntry = {
         id: `${activeSession.id}-history`,

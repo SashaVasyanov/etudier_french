@@ -235,7 +235,7 @@ function getProgressAgeInDays(progress: WordProgress): number {
 function isLongTermMemoryCandidate(progress: WordProgress): boolean {
   const ageInDays = getProgressAgeInDays(progress);
 
-  if (progress.status === 'known' || progress.status === 'mastered') {
+  if (progress.status === 'mastered') {
     return ageInDays >= LONG_TERM_MEMORY_MIN_DAYS;
   }
 
@@ -508,8 +508,7 @@ function pickLongTermMemoryWords(
     .sort((left, right) => {
       const leftProgress = getWordProgress(storage, left.id);
       const rightProgress = getWordProgress(storage, right.id);
-      const statusPriority = (progress: WordProgress) =>
-        progress.status === 'mastered' ? 0 : progress.status === 'known' ? 1 : 2;
+      const statusPriority = (progress: WordProgress) => (progress.status === 'mastered' ? 0 : 1);
       const priorityDiff = statusPriority(leftProgress) - statusPriority(rightProgress);
 
       if (priorityDiff !== 0) {
@@ -995,7 +994,6 @@ export function buildLessonSummary(progressList: WordProgress[]): LessonSummary 
       countWordsByStatus(progressList, 'review') +
       countWordsByStatus(progressList, 'difficult'),
     reviewWords: countWordsByStatus(progressList, 'review'),
-    knownWords: countWordsByStatus(progressList, 'known'),
     difficultWords: countWordsByStatus(progressList, 'difficult'),
     masteredWords: countWordsByStatus(progressList, 'mastered'),
     totalWords: progressList.length,

@@ -14,8 +14,7 @@ interface ProfileScreenProps {
 
 function countStatuses(progressList: WordProgress[]) {
   return {
-    learned: progressList.filter((item) => item.shown_count > 0 || item.status === 'known' || item.status === 'mastered').length,
-    known: progressList.filter((item) => item.status === 'known').length,
+    learned: progressList.filter((item) => item.shown_count > 0 || item.status === 'mastered').length,
     mastered: progressList.filter((item) => item.status === 'mastered').length,
     difficult: progressList.filter((item) => item.status === 'difficult').length,
   };
@@ -100,8 +99,7 @@ export default function ProfileScreen({
 
       <section className="stats-grid profile-stats-grid">
         <StatCard label="Всего изучено" value={stats.learned} hint="Слова уже попадали в обучение" tone="accent" />
-        <StatCard label="Уже известные" value={stats.known} hint="Отмечены как знакомые" />
-        <StatCard label="Выученные" value={stats.mastered} hint="Уверенно закреплены" />
+        <StatCard label="Выученные" value={stats.mastered} hint="Сюда входят и вручную отмеченные знакомыми, и закреплённые повторением" />
         <StatCard label="Сложные слова" value={stats.difficult} hint="Требуют дополнительного повтора" />
         <StatCard label="Серия дней" value={storage.streakDays} hint="Текущий streak" />
         <StatCard label="Завершено уроков" value={languageHistory.length} hint="Всего записей в истории по выбранному языку" />

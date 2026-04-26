@@ -94,9 +94,12 @@ function createInitialProgress(wordId: string): WordProgress {
 }
 
 function normalizeProgress(progress: WordProgress): WordProgress {
+  const normalizedStatus = (progress.status as string) === 'known' ? 'mastered' : progress.status;
+
   return {
     ...createInitialProgress(progress.word_id),
     ...progress,
+    status: normalizedStatus,
   };
 }
 
@@ -207,10 +210,6 @@ export function saveStorage(storage: AppStorage): void {
 function resolveStatus(progress: WordProgress): WordStatus {
   const accuracy = progress.shown_count > 0 ? progress.correct_count / progress.shown_count : 0;
   const errorRate = progress.shown_count > 0 ? progress.wrong_count / progress.shown_count : 0;
-
-  if (progress.status === 'known') {
-    return 'known';
-  }
 
   if (
     progress.shown_count >= 8 &&
@@ -520,10 +519,11 @@ export function markWordAsKnown(currentStorage: AppStorage, wordId: string): App
       ...currentStorage.progressByWordId,
       [wordId]: {
         ...existing,
-        status: 'known',
+        status: 'mastered',
         shown_count: Math.max(existing.shown_count, 1),
         correct_count: Math.max(existing.correct_count, 1),
-        repetition_step: Math.max(existing.repetition_step, 1),
+        repetition_step: Math.max(existing.repetition_step, 6),
+        interval_days: Math.max(existing.interval_days, 14),
         last_seen_at: now,
         next_review_at: null,
         learned_at: now,

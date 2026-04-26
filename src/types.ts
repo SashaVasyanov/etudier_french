@@ -1,8 +1,8 @@
-export type WordStatus = 'new' | 'learning' | 'review' | 'known' | 'mastered' | 'difficult';
+export type WordStatus = 'new' | 'learning' | 'review' | 'mastered' | 'difficult';
 export type WordLevel = 'A1' | 'A2' | 'B1';
 export type LessonMode = 'default' | 'extra' | 'mistakes' | 'pack';
 export type LessonDurationMinutes = 10 | 20 | 30;
-export type DictionaryTab = 'all' | 'learning' | 'known' | 'mastered' | 'difficult';
+export type DictionaryTab = 'all' | 'learning' | 'mastered' | 'difficult';
 export type LessonModuleTheme = 'new' | 'practice' | 'review' | 'reinforcement' | 'recap' | 'mistakes';
 export type PackStatus = 'not_added' | 'added' | 'in_progress' | 'completed';
 export type WordSource = 'core' | 'pack' | 'custom';
@@ -218,7 +218,6 @@ export interface LessonSummary {
   newWords: number;
   learningWords: number;
   reviewWords: number;
-  knownWords: number;
   difficultWords: number;
   masteredWords: number;
   totalWords: number;

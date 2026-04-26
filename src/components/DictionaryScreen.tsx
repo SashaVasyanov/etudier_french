@@ -22,7 +22,6 @@ interface DictionaryScreenProps {
 const TABS: Array<{ id: DictionaryTab; label: string }> = [
   { id: 'all', label: 'Все слова' },
   { id: 'learning', label: 'Изучаемые' },
-  { id: 'known', label: 'Уже известные' },
   { id: 'mastered', label: 'Выученные' },
   { id: 'difficult', label: 'Сложные' },
 ];
@@ -61,11 +60,9 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
           ? true
           : tab === 'learning'
             ? progress.status === 'learning' || progress.status === 'review'
-            : tab === 'known'
-              ? progress.status === 'known'
-              : tab === 'mastered'
-                ? progress.status === 'mastered'
-                : progress.status === 'difficult';
+            : tab === 'mastered'
+              ? progress.status === 'mastered'
+              : progress.status === 'difficult';
       const matchesLevel = level === 'all' ? true : word.level === level;
       const matchesPack =
         packFilter === 'all' ? true : packFilter === 'core' ? word.source === 'core' : word.packIds.includes(packFilter);

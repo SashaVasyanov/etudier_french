@@ -56,7 +56,7 @@ export function HomeDashboard({
   const fallbackStat = `${availableWords.length}/${totalWords.length}`;
   const learnedWordIds = new Set(
     progressList
-      .filter((progress) => progress.status === 'known' || progress.status === 'mastered')
+      .filter((progress) => progress.status === 'mastered')
       .map((progress) => progress.word_id),
   );
   const wordsInProcess = Math.max(0, availableWords.length - learnedWordIds.size);

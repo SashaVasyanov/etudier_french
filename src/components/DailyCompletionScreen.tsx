@@ -54,7 +54,7 @@ export function DailyCompletionScreen({
       <AppCard as="section" className="mistake-card">
         <h3 className="mistake-title">Сводка по сегодняшнему уроку</h3>
         <p className="info-subtle">
-          Новых слов: {completion?.newWords ?? 0} · Уже знали: {completion?.knownWords ?? 0} · Повторение: {completion?.reviewWords ?? 0} · Закрепление: {completion?.reinforcementWords ?? 0}
+          Новых слов: {completion?.newWords ?? 0} · Сразу выученных: {completion?.knownWords ?? 0} · Повторение: {completion?.reviewWords ?? 0} · Закрепление: {completion?.reinforcementWords ?? 0}
         </p>
         <p className="info-subtle">
           В активной базе сейчас {words.length} слов. Сегодня в поток попало {totalKnownOrLearned} новых или сразу отмеченных знакомыми слов.
