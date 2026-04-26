@@ -16,6 +16,7 @@ const OPENVERSE_SEARCH_URL = 'https://api.openverse.org/v1/images/';
 function parseArgs(argv) {
   const options = {
     download: false,
+    downloadLinked: false,
     force: false,
     limit: Infinity,
     ids: new Set(),
@@ -25,6 +26,11 @@ function parseArgs(argv) {
   argv.forEach((arg) => {
     if (arg === '--download') {
       options.download = true;
+      return;
+    }
+
+    if (arg === '--download-linked') {
+      options.downloadLinked = true;
       return;
     }
 
@@ -142,6 +148,20 @@ async function downloadBinary(url) {
     buffer: Buffer.from(await response.arrayBuffer()),
     contentType: response.headers.get('content-type') ?? '',
   };
+}
+
+async function downloadBinaryWithFallback(...urls) {
+  const errors = [];
+
+  for (const url of urls.filter(Boolean)) {
+    try {
+      return await downloadBinary(url);
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+
+  throw new Error(errors[0] ?? 'download failed');
 }
 
 function buildAssociativeQueries(word) {
@@ -372,6 +392,28 @@ function isRealManifestEntry(entry) {
   return true;
 }
 
+function isRemoteImageEntry(entry) {
+  const source = String(entry?.imageUrl ?? entry?.imagePath ?? '');
+  return /^https?:\/\//i.test(source);
+}
+
+async function localizeManifestEntry(word, entry) {
+  const remoteUrl = entry.imageUrl ?? entry.imagePath;
+  const downloaded = await downloadBinary(remoteUrl);
+  const extension = inferExtension(downloaded.contentType, remoteUrl);
+  const filename = `${slugify(word.id || `${word.original}-${word.translation}`)}.${extension}`;
+  const outputPath = path.join(OUTPUT_DIR, filename);
+  const publicPath = `/${path.relative('public', outputPath).replaceAll(path.sep, '/')}`;
+
+  await fs.writeFile(outputPath, downloaded.buffer);
+
+  return {
+    ...entry,
+    imagePath: publicPath,
+    imageUrl: publicPath,
+  };
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const words = (await Promise.all(DATASET_FILES.map((file) => loadJson(file, [])))).flat();
@@ -388,6 +430,21 @@ async function main() {
     if (options.ids.size > 0 && !options.ids.has(word.id)) continue;
 
     const current = manifest[word.id];
+    if (options.downloadLinked && isRealManifestEntry(current) && isRemoteImageEntry(current)) {
+      processed += 1;
+
+      try {
+        manifest[word.id] = await localizeManifestEntry(word, current);
+        saved += 1;
+        console.log(`localized ${word.id}`);
+      } catch (error) {
+        failed += 1;
+        console.warn(`failed ${word.id}: ${error instanceof Error ? error.message : String(error)}`);
+      }
+
+      continue;
+    }
+
     if (!options.force && isRealManifestEntry(current)) {
       skipped += 1;
       continue;
@@ -400,8 +457,9 @@ async function main() {
       let publicPath = found.imageUrl;
 
       if (options.download) {
-        const downloaded = await downloadBinary(found.imageUrl);
-        const extension = inferExtension(downloaded.contentType, found.imageUrl);
+        const downloadUrl = found.fullImageUrl ?? found.imageUrl;
+        const downloaded = await downloadBinaryWithFallback(found.imageUrl, downloadUrl);
+        const extension = inferExtension(downloaded.contentType, downloadUrl);
         const filename = `${slugify(word.id || `${word.original}-${word.translation}`)}.${extension}`;
         const outputPath = path.join(OUTPUT_DIR, filename);
         publicPath = `/${path.relative('public', outputPath).replaceAll(path.sep, '/')}`;
