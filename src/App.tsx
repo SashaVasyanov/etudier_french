@@ -8,13 +8,11 @@ import { LessonResult } from './components/LessonResult';
 import { LessonWordPreview } from './components/LessonWordPreview';
 import { MemoryCheckExercise } from './components/MemoryCheckExercise';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
-import { TopNav } from './components/TopNav';
 import { getLessonPoolWords, getStarterPacks, getWordById, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
 import { createFlashcardSession, createLessonSession } from './lib/exercises';
 import {
   getLearningLanguageProductTitle,
-  getLearningLanguageSectionEyebrow,
   getLearningLanguageTitle,
 } from './lib/languages';
 import { derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
@@ -558,15 +556,15 @@ function App() {
 
   return (
     <AppShell>
-        {screen !== 'lesson' && screen !== 'home' ? (
-          <TopNav
-            eyebrow={getLearningLanguageSectionEyebrow(storage.learningLanguage)}
-            title={getLearningLanguageProductTitle(storage.learningLanguage)}
-            meta={`${storage.profile.displayName} · Учебных слов: ${lessonPoolWords.length} · Серия: ${storage.streakDays}`}
-            navigation={<AppNavigation activeScreen={navScreen} lessonAvailable={lessonPoolWords.length > 0} onNavigate={handleNavigate} />}
-          />
-        ) : null}
+      <div className={screen === 'lesson' ? 'desktop-app-layout lesson-desktop-layout' : 'desktop-app-layout'}>
+        <AppNavigation
+          activeScreen={navScreen}
+          lessonAvailable={lessonPoolWords.length > 0 || Boolean(session)}
+          streakDays={storage.streakDays}
+          onNavigate={handleNavigate}
+        />
 
+        <main className="desktop-app-content" aria-label={getLearningLanguageProductTitle(storage.learningLanguage)}>
         {screen === 'home' ? (
           <HomeDashboard
             availableWords={lessonPoolWords}
@@ -594,6 +592,8 @@ function App() {
               setStorage((currentStorage) => setLessonSourcePackPreference(currentStorage, packId));
             }}
             onStartLesson={() => startLesson('default')}
+            onStartExtraLesson={() => startLesson('extra')}
+            onStartFlashcards={() => startFlashcards('extra')}
             onOpenDictionary={() => setScreen('dictionary')}
             onOpenStatistics={() => setScreen('statistics')}
             onOpenProfile={() => setScreen('profile')}
@@ -789,6 +789,8 @@ function App() {
             <StatisticsScreen learningLanguage={storage.learningLanguage} storage={storage} words={availableWords} />
           ) : null}
         </Suspense>
+        </main>
+      </div>
     </AppShell>
   );
 }

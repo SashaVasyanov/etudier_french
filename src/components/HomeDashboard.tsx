@@ -1,4 +1,4 @@
-import { useState, type KeyboardEvent } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 import { LEARNING_LANGUAGE_OPTIONS, getLearningLanguageMenuLabel } from '../lib/languages';
 import { getTodayDateKey, percentage } from '../lib/utils';
 import type { AppStorage, LearningLanguage, LessonDurationMinutes, LessonWordTarget, Word, WordPack, WordProgress } from '../types';
@@ -19,6 +19,8 @@ interface HomeDashboardProps {
   onLessonWordTargetChange: (value: LessonWordTarget) => void;
   onLessonSourcePackChange: (packId: string | null) => void;
   onStartLesson: () => void;
+  onStartExtraLesson: () => void;
+  onStartFlashcards: () => void;
   onOpenDictionary: () => void;
   onOpenStatistics: () => void;
   onOpenProfile: () => void;
@@ -27,14 +29,15 @@ interface HomeDashboardProps {
 
 const DURATION_OPTIONS: LessonDurationMinutes[] = [10, 20, 30];
 const WORD_TARGET_OPTIONS: LessonWordTarget[] = [10, 15, 20, 25, 30, 35, 40, 45, 50];
+const WEEK_LABELS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
-function activateWithKeyboard(event: KeyboardEvent<HTMLElement>, action: () => void) {
-  if (event.key !== 'Enter' && event.key !== ' ') {
-    return;
+function getPackCompletion(pack: WordPack, storage: AppStorage): number {
+  if (pack.words.length === 0) {
+    return 0;
   }
 
-  event.preventDefault();
-  action();
+  const masteredWords = pack.words.filter((word) => storage.progressByWordId[word.id]?.status === 'mastered').length;
+  return Math.round((masteredWords / pack.words.length) * 100);
 }
 
 export function HomeDashboard({
@@ -53,256 +56,262 @@ export function HomeDashboard({
   onLessonWordTargetChange,
   onLessonSourcePackChange,
   onStartLesson,
+  onStartExtraLesson,
+  onStartFlashcards,
   onOpenDictionary,
   onOpenStatistics,
   onOpenProfile,
   onOpenPacks,
 }: HomeDashboardProps) {
-  const [isDurationMenuOpen, setIsDurationMenuOpen] = useState(false);
-  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
-  const [isWordTargetMenuOpen, setIsWordTargetMenuOpen] = useState(false);
-  const [isPackMenuOpen, setIsPackMenuOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<'language' | 'duration' | 'target' | 'pack' | null>(null);
   const today = storage.dailyStats.find(
     (item) => item.date === getTodayDateKey() && item.language === learningLanguage,
   );
   const todayAccuracy = today ? percentage(today.correctAnswers, today.totalAnswers) : 0;
-  const fallbackStat = `${availableWords.length}/${totalWords.length}`;
   const learnedWordIds = new Set(
     progressList
       .filter((progress) => progress.status === 'mastered')
       .map((progress) => progress.word_id),
   );
   const wordsInProcess = Math.max(0, availableWords.length - learnedWordIds.size);
-  const statisticSummary = `Точность сегодня ${todayAccuracy}%. Активная база ${fallbackStat}. Слов в работе ${wordsInProcess}.`;
   const selectedLessonPack = packs.find((pack) => pack.id === lessonSourcePackId) ?? null;
   const lessonPackLabel = selectedLessonPack ? selectedLessonPack.title : 'Все слова';
+  const recentPacks = useMemo(
+    () =>
+      [...packs]
+        .sort((left, right) => getPackCompletion(right, storage) - getPackCompletion(left, storage))
+        .slice(0, 4),
+    [packs, storage],
+  );
+  const weeklyPoints = WEEK_LABELS.map((label, index) => {
+    const value = storage.dailyStats
+      .filter((entry) => entry.language === learningLanguage)
+      .slice(-7)[index]?.wordsLearned ?? 0;
+
+    return { label, value };
+  });
+  const maxWeekly = Math.max(1, ...weeklyPoints.map((point) => point.value));
+  const overallProgress = percentage(learnedWordIds.size, Math.max(1, totalWords.length));
 
   return (
-    <section className="dashboard-shell home-figma-shell">
-      <div className="home-figma-board">
-        <section
-          className="home-figma-block home-figma-block-lesson"
-          role="button"
-          tabIndex={0}
-          aria-label="Начать урок"
-          onClick={onStartLesson}
-          onKeyDown={(event) => activateWithKeyboard(event, onStartLesson)}
-        >
-          <h2 className="home-figma-block-title">Lesson</h2>
+    <section className="dashboard-shell dashboard-modern">
+      <header className="dashboard-modern-head">
+        <div>
+          <h1>Доброе утро, {storage.profile.displayName}!</h1>
+          <p>Продолжайте обучение: уроки, паки и словарь доступны из одной панели.</p>
+        </div>
+        <button type="button" className="profile-chip" onClick={onOpenProfile}>
+          <span>{storage.profile.displayName.slice(0, 1).toUpperCase()}</span>
+          Настройки
+        </button>
+      </header>
+
+      <div className="dashboard-modern-grid">
+        <section className="dashboard-card lesson-summary-card">
+          <div className="dashboard-card-icon">□</div>
+          <div>
+            <span className="dashboard-card-kicker">Сегодняшний урок</span>
+            <h2>Продолжить занятие</h2>
+            <p>
+              {lessonWordTarget} слов · {lessonDurationMinutes} мин · {lessonPackLabel}
+            </p>
+          </div>
+          <div className="lesson-progress-line" aria-hidden="true">
+            <span style={{ width: `${Math.min(100, Math.max(8, overallProgress))}%` }} />
+          </div>
+          <button type="button" className="primary-button compact-action" onClick={onStartLesson}>
+            Начать урок
+          </button>
         </section>
 
-        <button type="button" className="home-figma-block" onClick={onOpenDictionary}>
-          <span className="home-figma-block-title">Dictionary</span>
-        </button>
+        <section className="dashboard-card progress-summary-card">
+          <span className="dashboard-card-kicker">Прогресс</span>
+          <div className="progress-ring-card" style={{ '--progress': `${overallProgress * 3.6}deg` } as CSSProperties}>
+            <strong>{overallProgress}%</strong>
+            <span>освоено</span>
+          </div>
+          <div className="progress-mini-list">
+            <span>{learnedWordIds.size} выучено</span>
+            <span>{wordsInProcess} в работе</span>
+            <span>{totalWords.length - availableWords.length} вне активного пула</span>
+          </div>
+        </section>
 
-        <section className="home-figma-sidepanel" aria-label="Настройки урока">
-          <div className={isLanguageMenuOpen ? 'home-figma-duration-picker open' : 'home-figma-duration-picker'}>
-            <button
-              type="button"
-              className="home-figma-chip home-figma-chip-button"
-              aria-haspopup="menu"
-              aria-expanded={isLanguageMenuOpen}
-              onClick={() => {
-                setIsLanguageMenuOpen((current) => !current);
-                setIsDurationMenuOpen(false);
-                setIsWordTargetMenuOpen(false);
-                setIsPackMenuOpen(false);
-              }}
-            >
-              {getLearningLanguageMenuLabel(learningLanguage)}
-            </button>
+        <section className="dashboard-card quick-practice-card">
+          <span className="dashboard-card-kicker">Быстрая практика</span>
+          <h2>Что потренировать?</h2>
+          <button type="button" className="quick-row-button" onClick={onStartFlashcards}>
+            <span>▣</span>
+            <strong>Карточки</strong>
+            <small>Повторить слова с картинками</small>
+          </button>
+          <button type="button" className="quick-row-button" onClick={onStartExtraLesson}>
+            <span>✎</span>
+            <strong>Смешанная практика</strong>
+            <small>Дополнительные упражнения</small>
+          </button>
+          <button type="button" className="quick-row-button" onClick={onOpenDictionary}>
+            <span>♪</span>
+            <strong>Словарь</strong>
+            <small>Открыть слова и аудио</small>
+          </button>
+        </section>
 
-            {isLanguageMenuOpen ? (
-              <div className="home-figma-duration-popover" role="menu" aria-label="Выбор языка обучения">
-                {LEARNING_LANGUAGE_OPTIONS.map((option) => {
-                  const isActive = option === learningLanguage;
-
-                  return (
+        <section className="dashboard-card lesson-settings-card">
+          <span className="dashboard-card-kicker">Настройки урока</span>
+          <div className="home-selector-grid">
+            <div className={openMenu === 'language' ? 'home-selector open' : 'home-selector'}>
+              <button type="button" onClick={() => setOpenMenu(openMenu === 'language' ? null : 'language')}>
+                {getLearningLanguageMenuLabel(learningLanguage)}
+              </button>
+              {openMenu === 'language' ? (
+                <div className="home-selector-menu" role="menu">
+                  {LEARNING_LANGUAGE_OPTIONS.map((option) => (
                     <button
                       key={option}
                       type="button"
-                      role="menuitemradio"
-                      aria-checked={isActive}
-                      className={isActive ? 'home-figma-duration-option active' : 'home-figma-duration-option'}
+                      className={option === learningLanguage ? 'active' : ''}
                       onClick={() => {
                         onLearningLanguageChange(option);
-                        setIsLanguageMenuOpen(false);
+                        setOpenMenu(null);
                       }}
                     >
                       {getLearningLanguageMenuLabel(option)}
                     </button>
-                  );
-                })}
-              </div>
-            ) : null}
-          </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
 
-          <div className={isDurationMenuOpen ? 'home-figma-duration-picker open' : 'home-figma-duration-picker'}>
-            <button
-              type="button"
-              className="home-figma-chip home-figma-chip-button"
-              aria-haspopup="menu"
-              aria-expanded={isDurationMenuOpen}
-              onClick={() => {
-                setIsDurationMenuOpen((current) => !current);
-                setIsLanguageMenuOpen(false);
-                setIsWordTargetMenuOpen(false);
-                setIsPackMenuOpen(false);
-              }}
-            >
-              {lessonDurationMinutes} min
-            </button>
-
-            {isDurationMenuOpen ? (
-              <div className="home-figma-duration-popover" role="menu" aria-label="Выбор длительности урока">
-                {DURATION_OPTIONS.map((option) => {
-                  const isActive = option === lessonDurationMinutes;
-
-                  return (
+            <div className={openMenu === 'duration' ? 'home-selector open' : 'home-selector'}>
+              <button type="button" onClick={() => setOpenMenu(openMenu === 'duration' ? null : 'duration')}>
+                {lessonDurationMinutes} мин
+              </button>
+              {openMenu === 'duration' ? (
+                <div className="home-selector-menu" role="menu">
+                  {DURATION_OPTIONS.map((option) => (
                     <button
                       key={option}
                       type="button"
-                      role="menuitemradio"
-                      aria-checked={isActive}
-                      className={isActive ? 'home-figma-duration-option active' : 'home-figma-duration-option'}
+                      className={option === lessonDurationMinutes ? 'active' : ''}
                       onClick={() => {
                         onLessonDurationChange(option);
-                        setIsDurationMenuOpen(false);
+                        setOpenMenu(null);
                       }}
                     >
-                      {option} min
+                      {option} минут
                     </button>
-                  );
-                })}
-              </div>
-            ) : null}
-          </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
 
-          <div className={isWordTargetMenuOpen ? 'home-figma-duration-picker open' : 'home-figma-duration-picker'}>
-            <button
-              type="button"
-              className="home-figma-chip home-figma-chip-button"
-              aria-haspopup="menu"
-              aria-expanded={isWordTargetMenuOpen}
-              onClick={() => {
-                setIsWordTargetMenuOpen((current) => !current);
-                setIsLanguageMenuOpen(false);
-                setIsDurationMenuOpen(false);
-                setIsPackMenuOpen(false);
-              }}
-            >
-              {lessonWordTarget} слов
-            </button>
-
-            {isWordTargetMenuOpen ? (
-              <div className="home-figma-duration-popover" role="menu" aria-label="Выбор количества слов в уроке">
-                {WORD_TARGET_OPTIONS.map((option) => {
-                  const isActive = option === lessonWordTarget;
-
-                  return (
+            <div className={openMenu === 'target' ? 'home-selector open' : 'home-selector'}>
+              <button type="button" onClick={() => setOpenMenu(openMenu === 'target' ? null : 'target')}>
+                {lessonWordTarget} слов
+              </button>
+              {openMenu === 'target' ? (
+                <div className="home-selector-menu" role="menu">
+                  {WORD_TARGET_OPTIONS.map((option) => (
                     <button
                       key={option}
                       type="button"
-                      role="menuitemradio"
-                      aria-checked={isActive}
-                      className={isActive ? 'home-figma-duration-option active' : 'home-figma-duration-option'}
+                      className={option === lessonWordTarget ? 'active' : ''}
                       onClick={() => {
                         onLessonWordTargetChange(option);
-                        setIsWordTargetMenuOpen(false);
+                        setOpenMenu(null);
                       }}
                     >
                       {option} слов
                     </button>
-                  );
-                })}
-              </div>
-            ) : null}
-          </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
 
-          <div className={isPackMenuOpen ? 'home-figma-duration-picker open' : 'home-figma-duration-picker'}>
-            <button
-              type="button"
-              className="home-figma-chip home-figma-chip-button home-figma-chip-pack"
-              aria-haspopup="menu"
-              aria-expanded={isPackMenuOpen}
-              onClick={() => {
-                setIsPackMenuOpen((current) => !current);
-                setIsLanguageMenuOpen(false);
-                setIsDurationMenuOpen(false);
-                setIsWordTargetMenuOpen(false);
-              }}
-              title={`Источник слов: ${lessonPackLabel}`}
-            >
-              {lessonPackLabel}
-            </button>
-
-            {isPackMenuOpen ? (
-              <div className="home-figma-duration-popover home-figma-pack-popover" role="menu" aria-label="Выбор пака для урока">
-                <button
-                  type="button"
-                  role="menuitemradio"
-                  aria-checked={lessonSourcePackId === null}
-                  className={lessonSourcePackId === null ? 'home-figma-duration-option active' : 'home-figma-duration-option'}
-                  onClick={() => {
-                    onLessonSourcePackChange(null);
-                    setIsPackMenuOpen(false);
-                  }}
-                >
-                  Все слова
-                </button>
-                {packs.map((pack) => {
-                  const isActive = pack.id === lessonSourcePackId;
-
-                  return (
+            <div className={openMenu === 'pack' ? 'home-selector open' : 'home-selector'}>
+              <button type="button" title={lessonPackLabel} onClick={() => setOpenMenu(openMenu === 'pack' ? null : 'pack')}>
+                {lessonPackLabel}
+              </button>
+              {openMenu === 'pack' ? (
+                <div className="home-selector-menu scrollable" role="menu">
+                  <button
+                    type="button"
+                    className={lessonSourcePackId === null ? 'active' : ''}
+                    onClick={() => {
+                      onLessonSourcePackChange(null);
+                      setOpenMenu(null);
+                    }}
+                  >
+                    Все слова
+                  </button>
+                  {packs.map((pack) => (
                     <button
                       key={pack.id}
                       type="button"
-                      role="menuitemradio"
-                      aria-checked={isActive}
-                      className={isActive ? 'home-figma-duration-option active' : 'home-figma-duration-option'}
+                      className={pack.id === lessonSourcePackId ? 'active' : ''}
                       onClick={() => {
                         onLessonSourcePackChange(pack.id);
-                        setIsPackMenuOpen(false);
+                        setOpenMenu(null);
                       }}
                     >
                       {pack.title}
                     </button>
-                  );
-                })}
-              </div>
-            ) : null}
+                  ))}
+                </div>
+              ) : null}
+            </div>
           </div>
         </section>
 
-        <button
-          type="button"
-          className="home-figma-block"
-          title={`Подключено паков: ${addedPacksCount}`}
-          onClick={onOpenPacks}
-        >
-          <span className="home-figma-block-title">Packs</span>
-        </button>
+        <section className="dashboard-card recent-packs-card">
+          <div className="card-title-row">
+            <span className="dashboard-card-kicker">Паки</span>
+            <button type="button" className="small-link-button" onClick={onOpenPacks}>
+              Все паки
+            </button>
+          </div>
+          <div className="recent-pack-list">
+            {recentPacks.map((pack) => {
+              const completion = getPackCompletion(pack, storage);
 
-        <section
-          className="home-figma-block home-figma-block-stat"
-          role="button"
-          tabIndex={0}
-          aria-label={`Открыть статистику. ${statisticSummary}`}
-          title={statisticSummary}
-          onClick={onOpenStatistics}
-          onKeyDown={(event) => activateWithKeyboard(event, onOpenStatistics)}
-        >
-          <h2 className="home-figma-block-title">Statistic</h2>
+              return (
+                <button key={pack.id} type="button" className="recent-pack-row" onClick={onOpenPacks}>
+                  <span className="recent-pack-icon">▧</span>
+                  <strong>{pack.title}</strong>
+                  <small>{pack.words.length} слов</small>
+                  <i aria-hidden="true">
+                    <b style={{ width: `${Math.max(8, completion)}%` }} />
+                  </i>
+                  <em>{completion}%</em>
+                </button>
+              );
+            })}
+          </div>
         </section>
 
-        <button
-          type="button"
-          className="home-figma-block"
-          title="Открыть профиль и настройки приложения"
-          onClick={onOpenProfile}
-        >
-          <span className="home-figma-block-title">Settings</span>
-        </button>
+        <section className="dashboard-card weekly-overview-card">
+          <div className="card-title-row">
+            <span className="dashboard-card-kicker">Неделя</span>
+            <button type="button" className="small-link-button" onClick={onOpenStatistics}>
+              Статистика
+            </button>
+          </div>
+          <div className="weekly-kpi-grid">
+            <span>{availableWords.length} слов</span>
+            <span>{todayAccuracy}% точность</span>
+            <span>{storage.streakDays} дн. серия</span>
+            <span>{addedPacksCount} паков</span>
+          </div>
+          <div className="weekly-mini-chart" aria-label="Слова по дням недели">
+            {weeklyPoints.map((point) => (
+              <div key={point.label}>
+                <span style={{ height: `${Math.max(10, (point.value / maxWeekly) * 100)}%` }} />
+                <small>{point.label}</small>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </section>
   );

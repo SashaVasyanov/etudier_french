@@ -29,14 +29,13 @@ async function main() {
     await driver.navigate().refresh();
 
     console.log('Waiting for app shell...');
-    await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Стартовать ежедневный урок")]')), timeoutMs);
+    await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
 
     console.log('Starting lesson...');
-    const startLessonButton = await findByText(driver, 'button', 'Стартовать ежедневный урок');
+    const startLessonButton = await findByText(driver, 'button', 'Начать урок');
     await startLessonButton.click();
 
     console.log('Waiting for study view...');
-    await driver.wait(until.elementLocated(By.xpath('//*[contains(., "Изучение слова")]')), timeoutMs);
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Понял, дальше")]')), timeoutMs);
 
     console.log('Moving to next step...');
