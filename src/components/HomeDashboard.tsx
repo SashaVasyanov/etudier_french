@@ -80,7 +80,7 @@ export function HomeDashboard({
     () =>
       [...packs]
         .sort((left, right) => getPackCompletion(right, storage) - getPackCompletion(left, storage))
-        .slice(0, 4),
+        .slice(0, 3),
     [packs, storage],
   );
   const weeklyPoints = WEEK_LABELS.map((label, index) => {
@@ -111,55 +111,13 @@ export function HomeDashboard({
           <div className="dashboard-card-icon">□</div>
           <div>
             <span className="dashboard-card-kicker">Сегодняшний урок</span>
-            <h2>Продолжить занятие</h2>
+            <h2>Начать урок</h2>
             <p>
               {lessonWordTarget} слов · {lessonDurationMinutes} мин · {lessonPackLabel}
             </p>
           </div>
-          <div className="lesson-progress-line" aria-hidden="true">
-            <span style={{ width: `${Math.min(100, Math.max(8, overallProgress))}%` }} />
-          </div>
-          <button type="button" className="primary-button compact-action" onClick={onStartLesson}>
-            Начать урок
-          </button>
-        </section>
 
-        <section className="dashboard-card progress-summary-card">
-          <span className="dashboard-card-kicker">Прогресс</span>
-          <div className="progress-ring-card" style={{ '--progress': `${overallProgress * 3.6}deg` } as CSSProperties}>
-            <strong>{overallProgress}%</strong>
-            <span>освоено</span>
-          </div>
-          <div className="progress-mini-list">
-            <span>{learnedWordIds.size} выучено</span>
-            <span>{wordsInProcess} в работе</span>
-            <span>{totalWords.length - availableWords.length} вне активного пула</span>
-          </div>
-        </section>
-
-        <section className="dashboard-card quick-practice-card">
-          <span className="dashboard-card-kicker">Быстрая практика</span>
-          <h2>Что потренировать?</h2>
-          <button type="button" className="quick-row-button" onClick={onStartFlashcards}>
-            <span>▣</span>
-            <strong>Карточки</strong>
-            <small>Повторить слова с картинками</small>
-          </button>
-          <button type="button" className="quick-row-button" onClick={onStartExtraLesson}>
-            <span>✎</span>
-            <strong>Смешанная практика</strong>
-            <small>Дополнительные упражнения</small>
-          </button>
-          <button type="button" className="quick-row-button" onClick={onOpenDictionary}>
-            <span>♪</span>
-            <strong>Словарь</strong>
-            <small>Открыть слова и аудио</small>
-          </button>
-        </section>
-
-        <section className="dashboard-card lesson-settings-card">
-          <span className="dashboard-card-kicker">Настройки урока</span>
-          <div className="home-selector-grid">
+          <div className="lesson-inline-settings" aria-label="Настройки урока">
             <div className={openMenu === 'language' ? 'home-selector open' : 'home-selector'}>
               <button type="button" onClick={() => setOpenMenu(openMenu === 'language' ? null : 'language')}>
                 {getLearningLanguageMenuLabel(learningLanguage)}
@@ -262,11 +220,49 @@ export function HomeDashboard({
               ) : null}
             </div>
           </div>
+
+          <div className="lesson-progress-line" aria-hidden="true">
+            <span style={{ width: `${Math.min(100, Math.max(8, overallProgress))}%` }} />
+          </div>
+          <button type="button" className="primary-button compact-action" onClick={onStartLesson}>
+            Начать урок
+          </button>
+        </section>
+
+        <section className="dashboard-card progress-summary-card">
+          <span className="dashboard-card-kicker">Прогресс</span>
+          <div className="progress-ring-card" style={{ '--progress': `${overallProgress * 3.6}deg` } as CSSProperties}>
+            <strong>{overallProgress}%</strong>
+            <span>освоено</span>
+          </div>
+          <div className="progress-mini-list">
+            <span>{learnedWordIds.size} выучено</span>
+            <span>{wordsInProcess} в работе</span>
+            <span>{totalWords.length - availableWords.length} вне активного пула</span>
+          </div>
+        </section>
+
+        <section className="dashboard-card quick-practice-card">
+          <span className="dashboard-card-kicker">Быстрая практика</span>
+          <h2>Что потренировать?</h2>
+          <button type="button" className="quick-row-button" onClick={onStartFlashcards}>
+            <span>▣</span>
+            <strong>Карточки</strong>
+            <small>Повторить слова с картинками</small>
+          </button>
+          <button type="button" className="quick-row-button" onClick={onStartExtraLesson}>
+            <span>✎</span>
+            <strong>Смешанная практика</strong>
+            <small>Дополнительные упражнения</small>
+          </button>
+          <button type="button" className="quick-inline-link" onClick={onOpenDictionary}>
+            Открыть словарь
+          </button>
         </section>
 
         <section className="dashboard-card recent-packs-card">
           <div className="card-title-row">
-            <span className="dashboard-card-kicker">Паки</span>
+            <span className="dashboard-card-kicker">Паки · {addedPacksCount} добавлено</span>
             <button type="button" className="small-link-button" onClick={onOpenPacks}>
               Все паки
             </button>
@@ -301,7 +297,6 @@ export function HomeDashboard({
             <span>{availableWords.length} слов</span>
             <span>{todayAccuracy}% точность</span>
             <span>{storage.streakDays} дн. серия</span>
-            <span>{addedPacksCount} паков</span>
           </div>
           <div className="weekly-mini-chart" aria-label="Слова по дням недели">
             {weeklyPoints.map((point) => (
