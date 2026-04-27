@@ -1,22 +1,42 @@
 import { useMemo } from 'react';
+import { LEARNING_LANGUAGE_OPTIONS, getLearningLanguageMenuLabel } from '../lib/languages';
 import { formatDateTimeLabel, formatDurationLabel, formatLongDateLabel, percentage } from '../lib/utils';
-import type { AppStorage, LearningLanguage, StudyHistoryEntry, UserProfile, WordProgress } from '../types';
-import { AppCard } from './AppCard';
-import { StatCard } from './StatCard';
+import type {
+  AppStorage,
+  LearningLanguage,
+  LessonDurationMinutes,
+  LessonWordTarget,
+  StudyHistoryEntry,
+  UserProfile,
+  WordPack,
+  WordProgress,
+} from '../types';
 
 interface ProfileScreenProps {
   learningLanguage: LearningLanguage;
   profile: UserProfile;
   storage: AppStorage;
   progressList: WordProgress[];
+  packs: WordPack[];
+  lessonDurationMinutes: LessonDurationMinutes;
+  lessonWordTarget: LessonWordTarget;
+  lessonSourcePackId: string | null;
   onProfileNameChange: (value: string) => void;
+  onLearningLanguageChange: (value: LearningLanguage) => void;
+  onLessonDurationChange: (value: LessonDurationMinutes) => void;
+  onLessonWordTargetChange: (value: LessonWordTarget) => void;
+  onLessonSourcePackChange: (packId: string | null) => void;
 }
+
+const DURATION_OPTIONS: LessonDurationMinutes[] = [10, 20, 30];
+const WORD_TARGET_OPTIONS: LessonWordTarget[] = [10, 15, 20, 25, 30, 35, 40, 45, 50];
 
 function countStatuses(progressList: WordProgress[]) {
   return {
     learned: progressList.filter((item) => item.shown_count > 0 || item.status === 'mastered').length,
     mastered: progressList.filter((item) => item.status === 'mastered').length,
     difficult: progressList.filter((item) => item.status === 'difficult').length,
+    learning: progressList.filter((item) => item.status === 'learning' || item.status === 'review').length,
   };
 }
 
@@ -61,7 +81,15 @@ export default function ProfileScreen({
   profile,
   storage,
   progressList,
+  packs,
+  lessonDurationMinutes,
+  lessonWordTarget,
+  lessonSourcePackId,
   onProfileNameChange,
+  onLearningLanguageChange,
+  onLessonDurationChange,
+  onLessonWordTargetChange,
+  onLessonSourcePackChange,
 }: ProfileScreenProps) {
   const stats = useMemo(() => countStatuses(progressList), [progressList]);
   const languageHistory = useMemo(
@@ -70,89 +98,209 @@ export default function ProfileScreen({
   );
   const history = useMemo(() => [...languageHistory].reverse(), [languageHistory]);
   const summary = useMemo(() => summarizeHistory(languageHistory), [languageHistory]);
+  const selectedPack = packs.find((pack) => pack.id === lessonSourcePackId) ?? null;
 
   return (
-    <section className="dashboard-shell">
-      <AppCard as="header" tone="hero" className="profile-hero">
-        <div className="profile-copy">
-          <span className="eyebrow">Профиль</span>
-          <h1 className="hero-title compact-title">Личный кабинет обучения</h1>
-          <p className="hero-text">Здесь сохраняются имя, серия дней, статистика по словам и лента завершённых занятий.</p>
+    <section className="settings-page">
+      <header className="settings-head">
+        <div>
+          <span className="dashboard-card-kicker">Настройки</span>
+          <h1>Профиль и обучение</h1>
+          <p>Здесь меняются рабочие параметры уроков, язык обучения и локальный профиль.</p>
         </div>
-
-        <div className="profile-name-card">
-          <label className="input-label" htmlFor="profile-name">
-            Имя профиля
-          </label>
-          <input
-            id="profile-name"
-            className="text-input"
-            value={profile.displayName}
-            onChange={(event) => onProfileNameChange(event.target.value)}
-            placeholder="Введите имя"
-          />
-          <p className="info-subtle">
-            Последнее занятие: {profile.lastStudiedAt ? formatDateTimeLabel(profile.lastStudiedAt) : 'пока нет завершённых уроков'}
-          </p>
-        </div>
-      </AppCard>
-
-      <section className="stats-grid profile-stats-grid">
-        <StatCard label="Всего изучено" value={stats.learned} hint="Слова уже попадали в обучение" tone="accent" />
-        <StatCard label="Выученные" value={stats.mastered} hint="Сюда входят и вручную отмеченные знакомыми, и закреплённые повторением" />
-        <StatCard label="Сложные слова" value={stats.difficult} hint="Требуют дополнительного повтора" />
-        <StatCard label="Серия дней" value={storage.streakDays} hint="Текущий streak" />
-        <StatCard label="Завершено уроков" value={languageHistory.length} hint="Всего записей в истории по выбранному языку" />
-      </section>
-
-      <section className="stats-grid profile-summary-grid">
-        <StatCard label="За 7 дней" value={summary.weeklyLessons} hint={`Слов: ${summary.totalWeeklyWords} · Точность ${summary.weeklyAccuracy}%`} tone="soft" />
-        <StatCard label="За 30 дней" value={summary.monthlyLessons} hint={`Слов: ${summary.totalMonthlyWords} · Точность ${summary.monthlyAccuracy}%`} tone="soft" />
-      </section>
-
-      <AppCard as="section" className="timeline-card">
-        <div className="section-heading">
+        <div className="settings-user-card" aria-label="Текущий профиль">
+          <span>{profile.displayName.slice(0, 1).toUpperCase()}</span>
           <div>
-            <span className="eyebrow">История</span>
-            <h2 className="section-title">Лента занятий</h2>
+            <strong>{profile.displayName}</strong>
+            <small>{profile.lastStudiedAt ? formatDateTimeLabel(profile.lastStudiedAt) : 'ещё нет завершённых уроков'}</small>
           </div>
-          <p className="hero-text">Каждая завершённая сессия сохраняется локально вместе с модулями, ошибками и длительностью.</p>
         </div>
+      </header>
 
-        {history.length === 0 ? (
-          <p className="mistake-empty">История пока пустая. Завершите ежедневный урок, чтобы появилась первая запись.</p>
-        ) : (
-          <div className="timeline-list">
-            {history.map((entry) => (
-              <article key={entry.id} className="timeline-item">
-                <div className="timeline-item-head">
+      <div className="settings-grid">
+        <section className="settings-panel settings-profile-panel">
+          <div className="settings-section-title">
+            <span className="settings-icon">◎</span>
+            <div>
+              <h2>Аккаунт</h2>
+              <p>Имя отображается на главном экране и в локальной истории.</p>
+            </div>
+          </div>
+          <label className="settings-field" htmlFor="profile-name">
+            <span>Имя профиля</span>
+            <input
+              id="profile-name"
+              className="settings-input"
+              value={profile.displayName}
+              onChange={(event) => onProfileNameChange(event.target.value)}
+              placeholder="Введите имя"
+            />
+          </label>
+          <div className="settings-mini-grid">
+            <span>
+              <strong>{stats.mastered}</strong>
+              Выучено
+            </span>
+            <span>
+              <strong>{stats.learning}</strong>
+              В работе
+            </span>
+            <span>
+              <strong>{stats.difficult}</strong>
+              Сложные
+            </span>
+          </div>
+        </section>
+
+        <section className="settings-panel">
+          <div className="settings-section-title">
+            <span className="settings-icon">▣</span>
+            <div>
+              <h2>Учёба</h2>
+              <p>Эти значения сразу используются при запуске следующего урока.</p>
+            </div>
+          </div>
+
+          <label className="settings-row">
+            <span>
+              Учебный язык
+              <small>Словарь и паки переключаются вместе с языком.</small>
+            </span>
+            <select
+              className="settings-select"
+              value={learningLanguage}
+              onChange={(event) => onLearningLanguageChange(event.target.value as LearningLanguage)}
+            >
+              {LEARNING_LANGUAGE_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {getLearningLanguageMenuLabel(option)}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="settings-row">
+            <span>
+              Длительность
+              <small>Влияет на размер и плотность урока.</small>
+            </span>
+            <select
+              className="settings-select"
+              value={lessonDurationMinutes}
+              onChange={(event) => onLessonDurationChange(Number(event.target.value) as LessonDurationMinutes)}
+            >
+              {DURATION_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option} минут
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="settings-row">
+            <span>
+              Слов в уроке
+              <small>Можно выбрать короткую или плотную сессию.</small>
+            </span>
+            <select
+              className="settings-select"
+              value={lessonWordTarget}
+              onChange={(event) => onLessonWordTargetChange(Number(event.target.value) as LessonWordTarget)}
+            >
+              {WORD_TARGET_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option} слов
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="settings-row">
+            <span>
+              Источник слов
+              <small>{selectedPack ? `Сейчас выбран пак “${selectedPack.title}”.` : 'Сейчас используются все активные слова.'}</small>
+            </span>
+            <select
+              className="settings-select"
+              value={lessonSourcePackId ?? ''}
+              onChange={(event) => onLessonSourcePackChange(event.target.value === '' ? null : event.target.value)}
+            >
+              <option value="">Все слова</option>
+              {packs.map((pack) => (
+                <option key={pack.id} value={pack.id}>
+                  {pack.title}
+                </option>
+              ))}
+            </select>
+          </label>
+        </section>
+
+        <section className="settings-panel">
+          <div className="settings-section-title">
+            <span className="settings-icon">↗</span>
+            <div>
+              <h2>Сводка</h2>
+              <p>Короткий срез по выбранному языку.</p>
+            </div>
+          </div>
+          <div className="settings-summary-list">
+            <span>
+              <strong>{summary.weeklyLessons}</strong>
+              уроков за 7 дней
+            </span>
+            <span>
+              <strong>{summary.totalWeeklyWords}</strong>
+              слов за 7 дней
+            </span>
+            <span>
+              <strong>{summary.weeklyAccuracy}%</strong>
+              точность за 7 дней
+            </span>
+            <span>
+              <strong>{summary.monthlyLessons}</strong>
+              уроков за 30 дней
+            </span>
+            <span>
+              <strong>{summary.totalMonthlyWords}</strong>
+              слов за 30 дней
+            </span>
+            <span>
+              <strong>{summary.monthlyAccuracy}%</strong>
+              точность за 30 дней
+            </span>
+          </div>
+        </section>
+
+        <section className="settings-panel settings-history-panel">
+          <div className="settings-section-title">
+            <span className="settings-icon">◷</span>
+            <div>
+              <h2>История</h2>
+              <p>Последние завершённые занятия сохраняются локально.</p>
+            </div>
+          </div>
+
+          {history.length === 0 ? (
+            <p className="settings-empty">История пока пустая. Завершите урок, чтобы появилась первая запись.</p>
+          ) : (
+            <div className="settings-history-list">
+              {history.slice(0, 8).map((entry) => (
+                <article key={entry.id} className="settings-history-item">
                   <div>
                     <strong>{formatLongDateLabel(entry.date)}</strong>
-                    <p className="info-subtle">{formatDateTimeLabel(entry.completedAt)}</p>
+                    <small>{formatDateTimeLabel(entry.completedAt)}</small>
                   </div>
-                  <span className="tag-badge">{getModeLabel(entry.mode)}</span>
-                </div>
-
-                <div className="timeline-stats">
-                  <span>Модулей: {entry.modulesCompleted}</span>
-                  <span>Слов выучено: {entry.wordsLearned}</span>
-                  <span>Ошибок: {entry.mistakesMade}</span>
-                  <span>Формат: {entry.durationMinutes} мин</span>
-                  <span>Время: {formatDurationLabel(entry.timeSpentSeconds)}</span>
-                </div>
-
-                <div className="badge-row wrap-row">
-                  {entry.moduleTitles.map((title) => (
-                    <span key={`${entry.id}-${title}`} className="tag-badge">
-                      {title}
-                    </span>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-      </AppCard>
+                  <span>{getModeLabel(entry.mode)}</span>
+                  <p>
+                    {entry.wordsLearned} слов · {entry.mistakesMade} ошибок · {entry.modulesCompleted} модулей ·{' '}
+                    {entry.durationMinutes} мин · {formatDurationLabel(entry.timeSpentSeconds)}
+                  </p>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
     </section>
   );
 }

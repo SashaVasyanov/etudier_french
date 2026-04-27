@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { AppStorage, LearningLanguage, Word, WordLevel } from '../types';
-import { getTodayDateKey } from '../lib/utils';
+import { formatDurationLabel, getTodayDateKey, percentage } from '../lib/utils';
 import { getPartOfSpeechLabel } from '../lib/wordPresentation';
 
 interface StatisticsScreenProps {
@@ -12,9 +12,9 @@ interface StatisticsScreenProps {
 type DiagramMode = 'levels' | 'speech';
 
 const LEVEL_COLORS: Record<WordLevel, string> = {
-  A1: '#009b3a',
-  A2: '#f2b705',
-  B1: '#ef4b2f',
+  A1: '#049d41',
+  A2: '#1a8ce2',
+  B1: '#f97316',
 };
 
 const LEVEL_LABELS: Record<WordLevel, string> = {
@@ -23,7 +23,8 @@ const LEVEL_LABELS: Record<WordLevel, string> = {
   B1: 'Intermediate · B1',
 };
 
-const SPEECH_COLORS = ['#009b3a', '#f2b705', '#ef4b2f', '#2a8bda', '#8b5cf6', '#111827', '#f97316', '#64748b'];
+const SPEECH_COLORS = ['#049d41', '#1a8ce2', '#f97316', '#e11d48', '#7c3aed', '#0f766e', '#ca8a04', '#475569'];
+const WEEKDAY_LABELS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
 function polarToCartesian(center: number, radius: number, angleInDegrees: number): { x: number; y: number } {
   const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180;
@@ -54,28 +55,45 @@ function buildDiagramSegments(items: Array<{ value: number; color: string }>): A
   const visibleItems = items.filter((item) => item.value > 0);
 
   if (total <= 0 || visibleItems.length === 0) {
-    return [{ color: '#d9d9d9', path: describeFullPie(20) }];
+    return [{ color: '#e2e4e9', path: describeFullPie(20) }];
   }
 
   if (visibleItems.length === 1) {
     return [{ color: visibleItems[0].color, path: describeFullPie(20) }];
   }
 
-  const gapDegrees = 0;
   let cursor = 0;
 
   return visibleItems.map((item) => {
     const share = (item.value / total) * 360;
-    const shouldKeepTinySlice = share < gapDegrees * 2;
-    const startAngle = shouldKeepTinySlice ? cursor : cursor + gapDegrees / 2;
-    const endAngle = shouldKeepTinySlice ? cursor + share : cursor + share - gapDegrees / 2;
     const segment = {
       color: item.color,
-      path: describePieSlice(startAngle, Math.max(startAngle + 0.01, endAngle), 20),
+      path: describePieSlice(cursor, Math.max(cursor + 0.01, cursor + share), 20),
     };
 
     cursor += share;
     return segment;
+  });
+}
+
+function toDateKey(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function getRecentWordCounts(storage: AppStorage, learningLanguage: LearningLanguage): Array<{ key: string; label: string; count: number }> {
+  const now = new Date();
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(now);
+    date.setDate(now.getDate() - (6 - index));
+    const key = toDateKey(date);
+    const daily = storage.dailyStats.find((entry) => entry.language === learningLanguage && entry.date === key);
+
+    return {
+      key,
+      label: WEEKDAY_LABELS[index] ?? '',
+      count: daily?.wordsLearned ?? 0,
+    };
   });
 }
 
@@ -120,12 +138,16 @@ function countSpeechTypes(words: Word[]): Array<{ label: string; value: number; 
     .map(([partOfSpeech, value], index) => ({
       label: getPartOfSpeechLabel(partOfSpeech),
       value,
-      color: SPEECH_COLORS[index % SPEECH_COLORS.length] ?? '#d9d9d9',
+      color: SPEECH_COLORS[index % SPEECH_COLORS.length] ?? '#475569',
     }));
 }
 
 export default function StatisticsScreen({ learningLanguage, storage, words }: StatisticsScreenProps) {
   const [diagramMode, setDiagramMode] = useState<DiagramMode>('levels');
+  const languageHistory = useMemo(
+    () => storage.studyHistory.filter((entry) => entry.language === learningLanguage),
+    [learningLanguage, storage.studyHistory],
+  );
   const learnedWordList = useMemo(
     () =>
       words.filter((word) => {
@@ -137,89 +159,135 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
   const learnedWords = learnedWordList.length;
   const wordsInProcess = Math.max(0, words.length - learnedWords);
   const currentStreak = storage.lastLessonDate === getTodayDateKey() ? storage.streakDays : 0;
+  const correctAnswers = languageHistory.reduce((sum, item) => sum + item.correctAnswers, 0);
+  const totalAnswers = languageHistory.reduce((sum, item) => sum + item.totalAnswers, 0);
+  const accuracy = percentage(correctAnswers, totalAnswers);
+  const studyTimeSeconds = languageHistory.reduce((sum, item) => sum + item.timeSpentSeconds, 0);
+  const weeklyWords = useMemo(() => getRecentWordCounts(storage, learningLanguage), [learningLanguage, storage]);
   const monthlyLessons = useMemo(() => getMonthlyLessonCounts(storage, learningLanguage), [learningLanguage, storage]);
   const diagramItems = useMemo(
     () => (diagramMode === 'levels' ? countLevels(learnedWordList) : countSpeechTypes(learnedWordList)),
     [diagramMode, learnedWordList],
   );
+  const maxWeeklyCount = Math.max(1, ...weeklyWords.map((item) => item.count));
   const maxMonthlyCount = Math.max(1, ...monthlyLessons.map((item) => item.count));
   const diagramSegments = useMemo(() => buildDiagramSegments(diagramItems), [diagramItems]);
+  const breakdownTotal = Math.max(1, diagramItems.reduce((sum, item) => sum + item.value, 0));
 
   return (
-    <section className="statistics-screen">
-      <div className="statistics-layout">
-        <div className="statistics-left-column">
-          <article className="statistics-green-card">
-            <span>Серия</span>
-            <strong>{currentStreak} дн.</strong>
-          </article>
-
-          <article className="statistics-green-card">
-            <span>Изучено слов</span>
-            <strong>{learnedWords}</strong>
-          </article>
+    <section className="analytics-page">
+      <header className="analytics-head">
+        <div>
+          <span className="dashboard-card-kicker">Статистика</span>
+          <h1>Прогресс обучения</h1>
+          <p>Сводка строится по локальной истории и выученным словам выбранного языка.</p>
         </div>
+      </header>
 
-        <div className="statistics-center">
-          <div className="statistics-diagram">
-            <svg className="statistics-diagram-svg" viewBox="0 0 42 42" role="img" aria-label="Разбивка выученных слов">
-              <circle className="statistics-diagram-track" cx="21" cy="21" r="20" />
-              {diagramSegments.map((segment, index) => (
-                <path
-                  key={`${segment.color}-${index}`}
-                  className="statistics-diagram-segment"
-                  d={segment.path}
-                  fill={segment.color}
-                />
-              ))}
-            </svg>
-            <div className="statistics-diagram-inner">
-              <strong>{diagramItems.reduce((sum, item) => sum + item.value, 0)}</strong>
+      <section className="analytics-kpi-grid" aria-label="Ключевые показатели">
+        <article className="analytics-kpi-card">
+          <span>Слов выучено</span>
+          <strong>{learnedWords}</strong>
+        </article>
+        <article className="analytics-kpi-card">
+          <span>Точность</span>
+          <strong>{accuracy}%</strong>
+        </article>
+        <article className="analytics-kpi-card">
+          <span>Серия</span>
+          <strong>{currentStreak} дн.</strong>
+        </article>
+        <article className="analytics-kpi-card">
+          <span>Время</span>
+          <strong>{formatDurationLabel(studyTimeSeconds)}</strong>
+        </article>
+      </section>
+
+      <div className="analytics-grid">
+        <section className="analytics-card analytics-chart-card">
+          <div className="analytics-card-head">
+            <div>
+              <h2>Слова за неделю</h2>
+              <p>{wordsInProcess} слов остаётся в активном процессе.</p>
             </div>
           </div>
+          <div className="analytics-week-chart" aria-label="Количество выученных слов за последние семь дней">
+            {weeklyWords.map((item) => (
+              <div key={item.key} className="analytics-week-bar">
+                <span style={{ height: `${Math.max(8, (item.count / maxWeeklyCount) * 100)}%` }} />
+                <strong>{item.count}</strong>
+                <small>{item.label}</small>
+              </div>
+            ))}
+          </div>
+        </section>
 
+        <section className="analytics-card analytics-donut-card">
+          <div className="analytics-card-head">
+            <div>
+              <h2>{diagramMode === 'levels' ? 'Уровни слов' : 'Части речи'}</h2>
+              <p>Разбивка только по выученным словам.</p>
+            </div>
+          </div>
+          <div className="analytics-donut">
+            <svg className="analytics-donut-svg" viewBox="0 0 42 42" role="img" aria-label="Разбивка выученных слов">
+              {diagramSegments.map((segment, index) => (
+                <path key={`${segment.color}-${index}`} d={segment.path} fill={segment.color} />
+              ))}
+            </svg>
+            <div className="analytics-donut-inner">
+              <strong>{learnedWords}</strong>
+            </div>
+          </div>
           <button
             type="button"
-            className="statistics-toggle"
+            className="analytics-toggle"
             onClick={() => setDiagramMode((mode) => (mode === 'levels' ? 'speech' : 'levels'))}
           >
             {diagramMode === 'levels' ? 'Показать части речи' : 'Показать уровни слов'}
           </button>
-        </div>
+        </section>
 
-        <div className="statistics-right-column">
-          <article className="statistics-green-card">
-            <span>Слов в процессе</span>
-            <strong>{wordsInProcess}</strong>
-          </article>
-
-          <article className="statistics-month-card">
-            <h2>Уроки по месяцам</h2>
-            <div className="statistics-month-chart" aria-label="Количество завершённых уроков по месяцам">
-              {monthlyLessons.map((item) => (
-                <div key={item.key} className="statistics-month-bar-row">
-                  <span>{item.label}</span>
-                  <div className="statistics-month-bar-track">
-                    <div
-                      className="statistics-month-bar"
-                      style={{ width: `${Math.max(8, (item.count / maxMonthlyCount) * 100)}%` }}
-                    />
-                  </div>
-                  <strong>{item.count}</strong>
-                </div>
-              ))}
+        <section className="analytics-card analytics-breakdown-card">
+          <div className="analytics-card-head">
+            <div>
+              <h2>Разбивка</h2>
+              <p>Контрастные цвета соответствуют секторам диаграммы.</p>
             </div>
-          </article>
-        </div>
-      </div>
+          </div>
+          <div className="analytics-breakdown-list">
+            {diagramItems.map((item) => (
+              <div key={item.label} className="analytics-breakdown-row">
+                <div>
+                  <i style={{ background: item.color }} />
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+                <b aria-hidden="true">
+                  <em style={{ width: `${Math.max(4, (item.value / breakdownTotal) * 100)}%`, background: item.color }} />
+                </b>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      <div className="statistics-legend" aria-label="Легенда диаграммы">
-        {diagramItems.map((item) => (
-          <span key={item.label} className="statistics-legend-item">
-            <i style={{ background: item.color }} />
-            {item.label}: {item.value}
-          </span>
-        ))}
+        <section className="analytics-card analytics-month-card">
+          <div className="analytics-card-head">
+            <div>
+              <h2>Уроки по месяцам</h2>
+              <p>Лента прокручивается горизонтально.</p>
+            </div>
+          </div>
+          <div className="analytics-month-strip" aria-label="Количество завершённых уроков по месяцам">
+            {monthlyLessons.map((item) => (
+              <div key={item.key} className="analytics-month-item">
+                <span style={{ height: `${Math.max(8, (item.count / maxMonthlyCount) * 100)}%` }} />
+                <strong>{item.count}</strong>
+                <small>{item.label}</small>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </section>
   );

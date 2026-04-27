@@ -780,8 +780,26 @@ function App() {
               profile={storage.profile}
               storage={storage}
               progressList={progressList}
+              packs={packs}
+              lessonDurationMinutes={storage.lessonDurationMinutes}
+              lessonWordTarget={storage.lessonWordTarget}
+              lessonSourcePackId={storage.lessonSourcePackId}
               onProfileNameChange={(value) => {
                 setStorage((currentStorage) => updateProfileName(currentStorage, value));
+              }}
+              onLearningLanguageChange={(value) => {
+                clearSessionState('profile');
+                setSelectedPackId(null);
+                setStorage((currentStorage) => setLearningLanguagePreference(currentStorage, value));
+              }}
+              onLessonDurationChange={(value) => {
+                setStorage((currentStorage) => setLessonDurationPreference(currentStorage, value));
+              }}
+              onLessonWordTargetChange={(value) => {
+                setStorage((currentStorage) => setLessonWordTargetPreference(currentStorage, value));
+              }}
+              onLessonSourcePackChange={(packId) => {
+                setStorage((currentStorage) => setLessonSourcePackPreference(currentStorage, packId));
               }}
             />
           ) : null}
