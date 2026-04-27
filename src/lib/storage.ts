@@ -5,6 +5,7 @@ import type {
   ExerciseOutcome,
   LearningLanguage,
   LessonDurationMinutes,
+  LessonWordTarget,
   StudyHistoryEntry,
   UserPackState,
   UserProfile,
@@ -36,6 +37,8 @@ function createDefaultStorage(): AppStorage {
     streakDays: 0,
     lastLessonDate: null,
     lessonDurationMinutes: 20,
+    lessonWordTarget: 20,
+    lessonSourcePackId: null,
     profile: createDefaultProfile(),
     studyHistory: [],
     packStates: {},
@@ -183,6 +186,18 @@ export function loadStorage(): AppStorage {
         .slice(-180),
       lessonDurationMinutes:
         parsed.lessonDurationMinutes === 10 || parsed.lessonDurationMinutes === 30 ? parsed.lessonDurationMinutes : 20,
+      lessonWordTarget:
+        parsed.lessonWordTarget === 10 ||
+        parsed.lessonWordTarget === 15 ||
+        parsed.lessonWordTarget === 25 ||
+        parsed.lessonWordTarget === 30 ||
+        parsed.lessonWordTarget === 35 ||
+        parsed.lessonWordTarget === 40 ||
+        parsed.lessonWordTarget === 45 ||
+        parsed.lessonWordTarget === 50
+          ? parsed.lessonWordTarget
+          : 20,
+      lessonSourcePackId: typeof parsed.lessonSourcePackId === 'string' ? parsed.lessonSourcePackId : null,
       profile: normalizeProfile(parsed.profile),
       studyHistory: (parsed.studyHistory ?? [])
         .map((entry) => normalizeHistoryEntry(entry))
@@ -603,6 +618,23 @@ export function setLessonDurationPreference(
   return {
     ...currentStorage,
     lessonDurationMinutes,
+  };
+}
+
+export function setLessonWordTargetPreference(
+  currentStorage: AppStorage,
+  lessonWordTarget: LessonWordTarget,
+): AppStorage {
+  return {
+    ...currentStorage,
+    lessonWordTarget,
+  };
+}
+
+export function setLessonSourcePackPreference(currentStorage: AppStorage, lessonSourcePackId: string | null): AppStorage {
+  return {
+    ...currentStorage,
+    lessonSourcePackId,
   };
 }
 

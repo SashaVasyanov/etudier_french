@@ -29,6 +29,8 @@ import {
   saveStorage,
   setLearningLanguagePreference,
   setLessonDurationPreference,
+  setLessonSourcePackPreference,
+  setLessonWordTargetPreference,
   setWordPackStatus,
   getWordProgress,
   updateProfileName,
@@ -148,6 +150,10 @@ function App() {
     () => (selectedPackId ? packs.find((pack) => pack.id === selectedPackId) ?? null : null),
     [packs, selectedPackId],
   );
+  const selectedLessonSourcePack = useMemo(
+    () => (storage.lessonSourcePackId ? packs.find((pack) => pack.id === storage.lessonSourcePackId) ?? null : null),
+    [packs, storage.lessonSourcePackId],
+  );
   const enabledPackIds = useMemo(() => getEnabledPackIds(storage), [storage]);
   const customWords = useMemo(
     () => storage.customWords.filter((word) => word.language === storage.learningLanguage),
@@ -155,7 +161,16 @@ function App() {
   );
   const words = useMemo(() => [...baseWords, ...customWords], [baseWords, customWords]);
   const availableWords = useMemo(() => getActiveWords(words, enabledPackIds), [enabledPackIds, words]);
-  const lessonPoolWords = useMemo(() => getLessonPoolWords(availableWords), [availableWords]);
+  const selectedLessonSourceWords = useMemo(() => {
+    if (!selectedLessonSourcePack) {
+      return null;
+    }
+
+    const packWords = words.filter((word) => word.packIds.includes(selectedLessonSourcePack.id));
+    return packWords.length > 0 ? packWords : selectedLessonSourcePack.words;
+  }, [selectedLessonSourcePack, words]);
+  const lessonSourceWords = selectedLessonSourceWords ?? availableWords;
+  const lessonPoolWords = useMemo(() => getLessonPoolWords(lessonSourceWords), [lessonSourceWords]);
   const progressList = useMemo(() => words.map((word) => getWordProgress(storage, word.id)), [storage, words]);
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
@@ -186,6 +201,14 @@ function App() {
   useEffect(() => {
     saveStorage(storage);
   }, [storage]);
+
+  useEffect(() => {
+    if (!storage.lessonSourcePackId || packs.some((pack) => pack.id === storage.lessonSourcePackId)) {
+      return;
+    }
+
+    setStorage((currentStorage) => setLessonSourcePackPreference(currentStorage, null));
+  }, [packs, storage.lessonSourcePackId]);
 
   useEffect(() => {
     if (words.length === 0) {
@@ -274,15 +297,21 @@ function App() {
           : mode === 'pack' && options?.packId
             ? words.filter((word) => word.packIds.includes(options.packId!))
             : lessonPoolWords;
+    const activePackIds =
+      mode === 'pack' && options?.packId
+        ? Array.from(new Set([...enabledPackIds, options.packId]))
+        : selectedLessonSourcePack
+          ? Array.from(new Set([...enabledPackIds, selectedLessonSourcePack.id]))
+          : enabledPackIds;
     const nextSession = createLessonSession({
       mode,
       words: lessonWords,
       storage,
       durationMinutes: storage.lessonDurationMinutes,
+      wordTarget: storage.lessonWordTarget,
       wordIds: options?.wordIds,
-      activePackIds:
-        mode === 'pack' && options?.packId ? Array.from(new Set([...enabledPackIds, options.packId])) : enabledPackIds,
-      title: options?.title,
+      activePackIds,
+      title: options?.title ?? (mode === 'default' && selectedLessonSourcePack ? `Урок: ${selectedLessonSourcePack.title}` : undefined),
     });
 
       if (!nextSession) {
@@ -331,6 +360,7 @@ function App() {
       words: flashcardWords,
       storage,
       durationMinutes: storage.lessonDurationMinutes,
+      wordTarget: storage.lessonWordTarget,
       activePackIds:
         mode === 'pack' && options?.packId ? Array.from(new Set([...enabledPackIds, options.packId])) : enabledPackIds,
       title: options?.title,
@@ -546,6 +576,9 @@ function App() {
             addedPacksCount={enabledPackIds.length}
             learningLanguage={storage.learningLanguage}
             lessonDurationMinutes={storage.lessonDurationMinutes}
+            lessonWordTarget={storage.lessonWordTarget}
+            lessonSourcePackId={storage.lessonSourcePackId}
+            packs={packs}
             onLearningLanguageChange={(value) => {
               clearSessionState('home');
               setSelectedPackId(null);
@@ -553,6 +586,12 @@ function App() {
             }}
             onLessonDurationChange={(value) => {
               setStorage((currentStorage) => setLessonDurationPreference(currentStorage, value));
+            }}
+            onLessonWordTargetChange={(value) => {
+              setStorage((currentStorage) => setLessonWordTargetPreference(currentStorage, value));
+            }}
+            onLessonSourcePackChange={(packId) => {
+              setStorage((currentStorage) => setLessonSourcePackPreference(currentStorage, packId));
             }}
             onStartLesson={() => startLesson('default')}
             onOpenDictionary={() => setScreen('dictionary')}

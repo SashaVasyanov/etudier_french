@@ -4,6 +4,7 @@ import type {
   ExerciseOption,
   ExerciseType,
   LessonDurationMinutes,
+  LessonWordTarget,
   LessonMode,
   LessonModule,
   LessonSession,
@@ -52,6 +53,8 @@ const LESSON_LIMITS: Record<
   },
 };
 
+type LessonLimits = (typeof LESSON_LIMITS)[LessonDurationMinutes];
+
 const LONG_TERM_MEMORY_MIN_DAYS = 3;
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
@@ -60,6 +63,7 @@ interface CreateLessonSessionInput {
   words: Word[];
   storage: AppStorage;
   durationMinutes: LessonDurationMinutes;
+  wordTarget?: LessonWordTarget;
   wordIds?: string[];
   activePackIds?: string[];
   title?: string;
@@ -70,8 +74,28 @@ interface CreateFlashcardSessionInput {
   words: Word[];
   storage: AppStorage;
   durationMinutes: LessonDurationMinutes;
+  wordTarget?: LessonWordTarget;
   activePackIds?: string[];
   title?: string;
+}
+
+function getLessonLimits(durationMinutes: LessonDurationMinutes, wordTarget?: LessonWordTarget): LessonLimits {
+  if (!wordTarget) {
+    return LESSON_LIMITS[durationMinutes];
+  }
+
+  const target = Math.max(10, Math.min(50, wordTarget));
+  const memoryCheckWords = Math.max(1, Math.min(3, Math.round(target / 30)));
+  const newWords = Math.max(3, Math.round(target * 0.34));
+
+  return {
+    newWords,
+    activeWords: Math.max(4, target - newWords - memoryCheckWords),
+    reinforcementWords: Math.max(4, Math.round(target * 0.5)),
+    recapWords: Math.max(3, Math.round(target * 0.28)),
+    mistakesWords: target,
+    memoryCheckWords,
+  };
 }
 
 function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'original'): ExerciseOption[] {
@@ -562,12 +586,13 @@ function createMistakesSession(
   words: Word[],
   activePackIds: string[],
   durationMinutes: LessonDurationMinutes,
+  wordTarget?: LessonWordTarget,
 ): LessonSession | null {
   if (words.length === 0) {
     return null;
   }
 
-  const limits = LESSON_LIMITS[durationMinutes];
+  const limits = getLessonLimits(durationMinutes, wordTarget);
   const mistakeWords = words.slice(0, limits.mistakesWords);
   const reviewModule = createExerciseModule(
     'module-mistakes',
@@ -604,8 +629,9 @@ function createDailySession(
   storage: AppStorage,
   activePackIds: string[],
   durationMinutes: LessonDurationMinutes,
+  wordTarget?: LessonWordTarget,
 ): LessonSession | null {
-  const limits = LESSON_LIMITS[durationMinutes];
+  const limits = getLessonLimits(durationMinutes, wordTarget);
   const newWords = pickNewWords(words, storage, limits.newWords);
   const learningWords = pickLearningWords(words, storage, limits.activeWords);
   const reviewWords = learningWords.filter((word) => {
@@ -706,9 +732,10 @@ function createExtraSession(
   storage: AppStorage,
   activePackIds: string[],
   durationMinutes: LessonDurationMinutes,
+  wordTarget?: LessonWordTarget,
   title?: string,
 ): LessonSession | null {
-  const limits = LESSON_LIMITS[durationMinutes];
+  const limits = getLessonLimits(durationMinutes, wordTarget);
   const focusWords = pickExtraFocusWords(words, storage, limits.activeWords);
   const newWords = words
     .filter((word) => getWordProgress(storage, word.id).status === 'new' && !focusWords.some((item) => item.id === word.id))
@@ -794,16 +821,18 @@ export function createFlashcardSession({
   words,
   storage,
   durationMinutes,
+  wordTarget,
   activePackIds = [],
   title,
 }: CreateFlashcardSessionInput): LessonSession | null {
-  const limits = LESSON_LIMITS[durationMinutes];
+  const limits = getLessonLimits(durationMinutes, wordTarget);
+  const flashcardLimit = wordTarget ?? Math.max(limits.newWords + 2, 6);
   const focusWords =
     mode === 'pack'
-      ? words.slice(0, Math.max(limits.newWords + 2, 6))
+      ? words.slice(0, flashcardLimit)
       : uniqueWords([...pickExtraFocusWords(words, storage, limits.activeWords), ...pickNewWords(words, storage, limits.newWords)]).slice(
           0,
-          Math.max(limits.newWords + 2, 6),
+          flashcardLimit,
         );
 
   if (focusWords.length === 0) {
@@ -963,20 +992,21 @@ export function createLessonSession({
   words,
   storage,
   durationMinutes,
+  wordTarget,
   wordIds,
   activePackIds = [],
   title,
 }: CreateLessonSessionInput): LessonSession | null {
   if (mode === 'mistakes' && wordIds?.length) {
-    return createMistakesSession(getPoolFromIds(words, wordIds), activePackIds, durationMinutes);
+    return createMistakesSession(getPoolFromIds(words, wordIds), activePackIds, durationMinutes, wordTarget);
   }
 
   if (mode === 'default') {
-    return createDailySession(words, storage, activePackIds, durationMinutes);
+    return createDailySession(words, storage, activePackIds, durationMinutes, wordTarget);
   }
 
   if (mode === 'extra' || mode === 'pack') {
-    return createExtraSession(mode, words, storage, activePackIds, durationMinutes, title);
+    return createExtraSession(mode, words, storage, activePackIds, durationMinutes, wordTarget, title);
   }
 
   return null;

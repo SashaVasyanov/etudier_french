@@ -502,7 +502,7 @@
   display: grid;
   align-content: start;
   justify-items: stretch;
-  gap: 58px;
+  gap: 26px;
   padding-top: 2px;
 }
 
@@ -549,6 +549,12 @@
   outline-offset: 4px;
 }
 
+.home-figma-chip-pack {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .home-figma-duration-popover {
   position: absolute;
   top: calc(100% + 12px);
@@ -562,6 +568,11 @@
   background: rgba(255, 255, 255, 0.98);
   box-shadow: var(--shadow-sm);
   z-index: 2;
+}
+
+.home-figma-pack-popover {
+  max-height: 320px;
+  overflow-y: auto;
 }
 
 .home-figma-duration-option {
