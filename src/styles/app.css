@@ -3217,7 +3217,7 @@
 .settings-page,
 .analytics-page {
   width: 100%;
-  max-width: 1220px;
+  max-width: min(1280px, calc(100vw - 64px));
   margin: 0 auto;
   display: grid;
   gap: 20px;
@@ -3287,9 +3287,10 @@
 
 .settings-grid {
   display: grid;
-  grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.25fr);
+  grid-template-columns: minmax(250px, 0.86fr) minmax(430px, 1.35fr) minmax(280px, 0.95fr);
   gap: 18px;
   align-items: start;
+  grid-auto-flow: dense;
 }
 
 .settings-panel,
@@ -3306,10 +3307,11 @@
   padding: 22px;
   display: grid;
   gap: 18px;
+  align-content: start;
 }
 
 .settings-history-panel {
-  grid-column: span 2;
+  grid-column: 1 / -1;
 }
 
 .settings-section-title,
@@ -3429,7 +3431,7 @@
 }
 
 .settings-summary-list {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .settings-mini-grid strong,

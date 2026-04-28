@@ -152,7 +152,7 @@ export default function ProfileScreen({
           </div>
         </section>
 
-        <section className="settings-panel">
+        <section className="settings-panel settings-study-panel">
           <div className="settings-section-title">
             <span className="settings-icon">▣</span>
             <div>
@@ -235,7 +235,7 @@ export default function ProfileScreen({
           </label>
         </section>
 
-        <section className="settings-panel">
+        <section className="settings-panel settings-summary-panel">
           <div className="settings-section-title">
             <span className="settings-icon">↗</span>
             <div>
