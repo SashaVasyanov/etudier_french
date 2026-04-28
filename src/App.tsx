@@ -577,24 +577,9 @@ function App() {
             lessonWordTarget={storage.lessonWordTarget}
             lessonSourcePackId={storage.lessonSourcePackId}
             packs={packs}
-            onLearningLanguageChange={(value) => {
-              clearSessionState('home');
-              setSelectedPackId(null);
-              setStorage((currentStorage) => setLearningLanguagePreference(currentStorage, value));
-            }}
-            onLessonDurationChange={(value) => {
-              setStorage((currentStorage) => setLessonDurationPreference(currentStorage, value));
-            }}
-            onLessonWordTargetChange={(value) => {
-              setStorage((currentStorage) => setLessonWordTargetPreference(currentStorage, value));
-            }}
-            onLessonSourcePackChange={(packId) => {
-              setStorage((currentStorage) => setLessonSourcePackPreference(currentStorage, packId));
-            }}
             onStartLesson={() => startLesson('default')}
             onStartExtraLesson={() => startLesson('extra')}
             onStartFlashcards={() => startFlashcards('extra')}
-            onOpenDictionary={() => setScreen('dictionary')}
             onOpenStatistics={() => setScreen('statistics')}
             onOpenProfile={() => setScreen('profile')}
             onOpenPacks={() => {

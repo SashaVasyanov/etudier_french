@@ -2485,16 +2485,16 @@
 }
 
 .profile-chip {
-  min-height: 54px;
-  padding: 8px 14px 8px 8px;
+  min-width: 168px;
+  min-height: 56px;
+  padding: 0 28px;
   border: 1px solid rgba(24, 34, 58, 0.08);
   border-radius: 14px;
   background: #fff;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: #344054;
-  font-weight: 700;
+  display: grid;
+  place-items: center;
+  color: #101828;
+  font-weight: 800;
   box-shadow: 0 12px 34px rgba(26, 33, 58, 0.05);
 }
 
@@ -2530,10 +2530,23 @@
 .lesson-summary-card {
   min-height: 252px;
   align-content: space-between;
+  text-align: left;
+  color: inherit;
+  font: inherit;
   background:
     radial-gradient(circle at 84% 58%, rgba(83, 99, 255, 0.15), transparent 27%),
     linear-gradient(135deg, rgba(245, 245, 255, 0.98), rgba(255, 255, 255, 0.96));
-  cursor: default;
+  cursor: pointer;
+}
+
+.lesson-summary-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 54px rgba(26, 33, 58, 0.08);
+}
+
+.lesson-summary-card:focus-visible {
+  outline: 3px solid rgba(26, 140, 226, 0.2);
+  outline-offset: 3px;
 }
 
 .dashboard-card-icon {
@@ -2690,17 +2703,6 @@
   grid-column: 3;
   grid-row: 1 / 3;
   color: #98a2b3;
-}
-
-.quick-inline-link {
-  justify-self: start;
-  min-height: 34px;
-  padding: 0 14px;
-  border: 1px solid rgba(26, 140, 226, 0.16);
-  border-radius: 999px;
-  background: rgba(26, 140, 226, 0.06);
-  color: #1a8ce2;
-  font-weight: 800;
 }
 
 .home-selector-grid {
@@ -2889,27 +2891,45 @@
 
 .weekly-mini-chart {
   height: 138px;
-  padding: 16px 6px 4px;
+  padding: 12px 6px 4px;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  align-items: end;
-  gap: 14px;
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 6px;
   border-radius: 18px;
   background: linear-gradient(180deg, rgba(26, 140, 226, 0.05), rgba(26, 140, 226, 0.01));
+  overflow: hidden;
 }
 
-.weekly-mini-chart div {
-  height: 100%;
-  display: grid;
-  align-items: end;
-  justify-items: center;
-  gap: 8px;
-}
-
-.weekly-mini-chart span {
+.weekly-line-svg {
   width: 100%;
-  border-radius: 999px 999px 6px 6px;
-  background: linear-gradient(180deg, #1a8ce2, rgba(26, 140, 226, 0.16));
+  min-width: 0;
+  height: 100%;
+}
+
+.weekly-line-area {
+  fill: rgba(26, 140, 226, 0.12);
+}
+
+.weekly-line-path {
+  fill: none;
+  stroke: #1a8ce2;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.weekly-line-dot {
+  fill: #1a8ce2;
+  stroke: #fff;
+  stroke-width: 3;
+}
+
+.weekly-line-labels {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  justify-items: center;
+  gap: 6px;
 }
 
 .weekly-mini-chart small {

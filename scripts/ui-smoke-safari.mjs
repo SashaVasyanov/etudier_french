@@ -32,7 +32,7 @@ async function main() {
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
 
     console.log('Starting lesson...');
-    const startLessonButton = await findByText(driver, 'button', 'Начать урок');
+    const startLessonButton = await driver.findElement(By.xpath('//button[contains(., "Начать урок")]'));
     await startLessonButton.click();
 
     console.log('Waiting for study view...');
