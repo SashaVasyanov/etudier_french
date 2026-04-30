@@ -14,6 +14,8 @@ interface MultipleChoiceExerciseProps {
   onSelect: (answer: string) => void;
   onNext: () => void;
   onReplayAudio?: () => void;
+  onMarkKnown?: () => void;
+  onIgnoreWord?: () => void;
 }
 
 export function MultipleChoiceExercise({
@@ -24,6 +26,8 @@ export function MultipleChoiceExercise({
   onSelect,
   onNext,
   onReplayAudio,
+  onMarkKnown,
+  onIgnoreWord,
 }: MultipleChoiceExerciseProps) {
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
   const isAudioExercise = exercise.type === 'audio_to_translation_choice';
@@ -153,11 +157,27 @@ export function MultipleChoiceExercise({
         </>
       }
       actions={
-        isSubmitted ? (
-          <button ref={nextButtonRef} type="button" className="primary-button full-width" onClick={onNext}>
-            Дальше
-          </button>
-        ) : null
+        <>
+          {isSubmitted ? (
+            <button ref={nextButtonRef} type="button" className="primary-button full-width" onClick={onNext}>
+              Дальше
+            </button>
+          ) : null}
+          {onMarkKnown || onIgnoreWord ? (
+            <div className="lesson-word-action-row">
+              {onMarkKnown ? (
+                <button type="button" className="secondary-button full-width" onClick={onMarkKnown}>
+                  Уже знаю
+                </button>
+              ) : null}
+              {onIgnoreWord ? (
+                <button type="button" className="danger-button full-width" onClick={onIgnoreWord}>
+                  Не хочу учить
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+        </>
       }
     />
   );

@@ -18,11 +18,13 @@ interface ProfileScreenProps {
   storage: AppStorage;
   progressList: WordProgress[];
   packs: WordPack[];
+  lessonDurationEnabled: boolean;
   lessonDurationMinutes: LessonDurationMinutes;
   lessonWordTarget: LessonWordTarget;
   lessonSourcePackId: string | null;
   onProfileNameChange: (value: string) => void;
   onLearningLanguageChange: (value: LearningLanguage) => void;
+  onLessonDurationEnabledChange: (value: boolean) => void;
   onLessonDurationChange: (value: LessonDurationMinutes) => void;
   onLessonWordTargetChange: (value: LessonWordTarget) => void;
   onLessonSourcePackChange: (packId: string | null) => void;
@@ -82,11 +84,13 @@ export default function ProfileScreen({
   storage,
   progressList,
   packs,
+  lessonDurationEnabled,
   lessonDurationMinutes,
   lessonWordTarget,
   lessonSourcePackId,
   onProfileNameChange,
   onLearningLanguageChange,
+  onLessonDurationEnabledChange,
   onLessonDurationChange,
   onLessonWordTargetChange,
   onLessonSourcePackChange,
@@ -99,6 +103,7 @@ export default function ProfileScreen({
   const history = useMemo(() => [...languageHistory].reverse(), [languageHistory]);
   const summary = useMemo(() => summarizeHistory(languageHistory), [languageHistory]);
   const selectedPack = packs.find((pack) => pack.id === lessonSourcePackId) ?? null;
+  const displayName = profile.displayName.trim() || 'Ученик';
 
   return (
     <section className="settings-page">
@@ -109,9 +114,9 @@ export default function ProfileScreen({
           <p>Здесь меняются рабочие параметры уроков, язык обучения и локальный профиль.</p>
         </div>
         <div className="settings-user-card" aria-label="Текущий профиль">
-          <span>{profile.displayName.slice(0, 1).toUpperCase()}</span>
+          <span>{displayName.slice(0, 1).toUpperCase()}</span>
           <div>
-            <strong>{profile.displayName}</strong>
+            <strong>{displayName}</strong>
             <small>{profile.lastStudiedAt ? formatDateTimeLabel(profile.lastStudiedAt) : 'ещё нет завершённых уроков'}</small>
           </div>
         </div>
@@ -179,6 +184,25 @@ export default function ProfileScreen({
             </select>
           </label>
 
+          <div className="settings-row">
+            <span>
+              Лимит длительности
+              <small>
+                {lessonDurationEnabled
+                  ? 'Урок ограничен выбранными минутами и количеством слов.'
+                  : 'Урок идёт без лимита, пока выбранный пул слов не закончится.'}
+              </small>
+            </span>
+            <label className="settings-toggle">
+              <input
+                type="checkbox"
+                checked={lessonDurationEnabled}
+                onChange={(event) => onLessonDurationEnabledChange(event.target.checked)}
+              />
+              <span>{lessonDurationEnabled ? 'Включён' : 'Выключен'}</span>
+            </label>
+          </div>
+
           <label className="settings-row">
             <span>
               Длительность
@@ -187,6 +211,7 @@ export default function ProfileScreen({
             <select
               className="settings-select"
               value={lessonDurationMinutes}
+              disabled={!lessonDurationEnabled}
               onChange={(event) => onLessonDurationChange(Number(event.target.value) as LessonDurationMinutes)}
             >
               {DURATION_OPTIONS.map((option) => (
@@ -205,6 +230,7 @@ export default function ProfileScreen({
             <select
               className="settings-select"
               value={lessonWordTarget}
+              disabled={!lessonDurationEnabled}
               onChange={(event) => onLessonWordTargetChange(Number(event.target.value) as LessonWordTarget)}
             >
               {WORD_TARGET_OPTIONS.map((option) => (

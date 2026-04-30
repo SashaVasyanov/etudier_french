@@ -10,6 +10,7 @@ interface HomeDashboardProps {
   packs: WordPack[];
   addedPacksCount: number;
   learningLanguage: LearningLanguage;
+  lessonDurationEnabled: boolean;
   lessonDurationMinutes: LessonDurationMinutes;
   lessonWordTarget: LessonWordTarget;
   lessonSourcePackId: string | null;
@@ -40,6 +41,7 @@ export function HomeDashboard({
   packs,
   addedPacksCount,
   learningLanguage,
+  lessonDurationEnabled,
   lessonDurationMinutes,
   lessonWordTarget,
   lessonSourcePackId,
@@ -62,6 +64,10 @@ export function HomeDashboard({
   const wordsInProcess = Math.max(0, availableWords.length - learnedWordIds.size);
   const selectedLessonPack = packs.find((pack) => pack.id === lessonSourcePackId) ?? null;
   const lessonPackLabel = selectedLessonPack ? selectedLessonPack.title : 'Все слова';
+  const displayName = storage.profile.displayName.trim() || 'Ученик';
+  const lessonMeta = lessonDurationEnabled
+    ? `${lessonWordTarget} слов · ${lessonDurationMinutes} мин · ${lessonPackLabel}`
+    : `Весь пул · без лимита · ${lessonPackLabel}`;
   const recentPacks = useMemo(
     () =>
       [...packs]
@@ -94,7 +100,7 @@ export function HomeDashboard({
     <section className="dashboard-shell dashboard-modern">
       <header className="dashboard-modern-head">
         <div>
-          <h1>Доброе утро, {storage.profile.displayName}!</h1>
+          <h1>Доброе утро, {displayName}!</h1>
           <p>Продолжайте обучение: уроки, паки и словарь доступны из одной панели.</p>
         </div>
         <button type="button" className="profile-chip" onClick={onOpenProfile}>
@@ -108,9 +114,7 @@ export function HomeDashboard({
           <div>
             <span className="dashboard-card-kicker">Сегодняшний урок</span>
             <h2>Начать урок</h2>
-            <p>
-              {lessonWordTarget} слов · {lessonDurationMinutes} мин · {lessonPackLabel}
-            </p>
+            <p>{lessonMeta}</p>
           </div>
 
           <div className="lesson-progress-line" aria-hidden="true">

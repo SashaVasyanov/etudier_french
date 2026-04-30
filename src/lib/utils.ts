@@ -1,4 +1,4 @@
-import type { LearningLanguage } from '../types';
+import type { LearningLanguage, Word } from '../types';
 
 export function shuffleArray<T>(items: T[]): T[] {
   const copy = [...items];
@@ -54,12 +54,43 @@ function normalizeJapaneseAnswerToken(value: string): string {
     .trim();
 }
 
-export function isAnswerMatch(userAnswer: string, correctAnswer: string, language: LearningLanguage): boolean {
+function katakanaToHiragana(value: string): string {
+  return [...value]
+    .map((char) => {
+      const code = char.charCodeAt(0);
+      return code >= 0x30a1 && code <= 0x30f6 ? String.fromCharCode(code - 0x60) : char;
+    })
+    .join('');
+}
+
+function extractJapaneseReading(word?: Word): string | null {
+  if (!word?.transcription) {
+    return null;
+  }
+
+  const bracketContent = word.transcription.match(/\[([^\]]+)\]/)?.[1] ?? word.transcription;
+  const kanaPart = bracketContent.split('·')[0]?.trim();
+
+  return kanaPart || null;
+}
+
+function getJapaneseAnswerVariants(correctAnswer: string, word?: Word): Set<string> {
+  const values = [correctAnswer, word?.original, extractJapaneseReading(word)].filter((value): value is string => Boolean(value));
+  const variants = values.flatMap((value) => {
+    const normalized = normalizeJapaneseAnswerToken(value);
+    return [normalized, katakanaToHiragana(normalized)];
+  });
+
+  return new Set(variants.filter(Boolean));
+}
+
+export function isAnswerMatch(userAnswer: string, correctAnswer: string, language: LearningLanguage, word?: Word): boolean {
   if (language === 'french') {
     return isFrenchAnswerMatch(userAnswer, correctAnswer);
   }
 
-  return normalizeJapaneseAnswerToken(userAnswer) === normalizeJapaneseAnswerToken(correctAnswer);
+  const normalizedUserAnswer = katakanaToHiragana(normalizeJapaneseAnswerToken(userAnswer));
+  return getJapaneseAnswerVariants(correctAnswer, word).has(normalizedUserAnswer);
 }
 
 function normalizeComparableText(value: string): string {

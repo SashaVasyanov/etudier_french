@@ -4,7 +4,6 @@ import type {
   ExerciseOption,
   ExerciseType,
   LessonDurationMinutes,
-  LessonWordTarget,
   LessonMode,
   LessonModule,
   LessonSession,
@@ -63,7 +62,8 @@ interface CreateLessonSessionInput {
   words: Word[];
   storage: AppStorage;
   durationMinutes: LessonDurationMinutes;
-  wordTarget?: LessonWordTarget;
+  wordTarget?: number;
+  useFullPool?: boolean;
   wordIds?: string[];
   activePackIds?: string[];
   title?: string;
@@ -74,12 +74,27 @@ interface CreateFlashcardSessionInput {
   words: Word[];
   storage: AppStorage;
   durationMinutes: LessonDurationMinutes;
-  wordTarget?: LessonWordTarget;
+  wordTarget?: number;
+  useFullPool?: boolean;
   activePackIds?: string[];
   title?: string;
 }
 
-function getLessonLimits(durationMinutes: LessonDurationMinutes, wordTarget?: LessonWordTarget): LessonLimits {
+function getLessonLimits(durationMinutes: LessonDurationMinutes, wordTarget?: number, useFullPool = false): LessonLimits {
+  if (useFullPool && wordTarget && wordTarget > 0) {
+    const target = Math.max(10, wordTarget);
+    const memoryCheckWords = Math.max(1, Math.min(6, Math.round(target / 40)));
+
+    return {
+      newWords: target,
+      activeWords: target,
+      reinforcementWords: target,
+      recapWords: target,
+      mistakesWords: target,
+      memoryCheckWords,
+    };
+  }
+
   if (!wordTarget) {
     return LESSON_LIMITS[durationMinutes];
   }
@@ -258,6 +273,10 @@ function getProgressAgeInDays(progress: WordProgress): number {
 
 function isLongTermMemoryCandidate(progress: WordProgress): boolean {
   const ageInDays = getProgressAgeInDays(progress);
+
+  if (progress.status === 'ignored') {
+    return false;
+  }
 
   if (progress.status === 'mastered') {
     return ageInDays >= LONG_TERM_MEMORY_MIN_DAYS;
@@ -586,13 +605,14 @@ function createMistakesSession(
   words: Word[],
   activePackIds: string[],
   durationMinutes: LessonDurationMinutes,
-  wordTarget?: LessonWordTarget,
+  wordTarget?: number,
+  useFullPool = false,
 ): LessonSession | null {
   if (words.length === 0) {
     return null;
   }
 
-  const limits = getLessonLimits(durationMinutes, wordTarget);
+  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool);
   const mistakeWords = words.slice(0, limits.mistakesWords);
   const reviewModule = createExerciseModule(
     'module-mistakes',
@@ -629,9 +649,10 @@ function createDailySession(
   storage: AppStorage,
   activePackIds: string[],
   durationMinutes: LessonDurationMinutes,
-  wordTarget?: LessonWordTarget,
+  wordTarget?: number,
+  useFullPool = false,
 ): LessonSession | null {
-  const limits = getLessonLimits(durationMinutes, wordTarget);
+  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool);
   const newWords = pickNewWords(words, storage, limits.newWords);
   const learningWords = pickLearningWords(words, storage, limits.activeWords);
   const reviewWords = learningWords.filter((word) => {
@@ -732,10 +753,11 @@ function createExtraSession(
   storage: AppStorage,
   activePackIds: string[],
   durationMinutes: LessonDurationMinutes,
-  wordTarget?: LessonWordTarget,
+  wordTarget?: number,
+  useFullPool = false,
   title?: string,
 ): LessonSession | null {
-  const limits = getLessonLimits(durationMinutes, wordTarget);
+  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool);
   const focusWords = pickExtraFocusWords(words, storage, limits.activeWords);
   const newWords = words
     .filter((word) => getWordProgress(storage, word.id).status === 'new' && !focusWords.some((item) => item.id === word.id))
@@ -822,11 +844,12 @@ export function createFlashcardSession({
   storage,
   durationMinutes,
   wordTarget,
+  useFullPool = false,
   activePackIds = [],
   title,
 }: CreateFlashcardSessionInput): LessonSession | null {
-  const limits = getLessonLimits(durationMinutes, wordTarget);
-  const flashcardLimit = wordTarget ?? Math.max(limits.newWords + 2, 6);
+  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool);
+  const flashcardLimit = useFullPool ? Math.max(words.length, wordTarget ?? 0) : wordTarget ?? Math.max(limits.newWords + 2, 6);
   const focusWords =
     mode === 'pack'
       ? words.slice(0, flashcardLimit)
@@ -993,20 +1016,21 @@ export function createLessonSession({
   storage,
   durationMinutes,
   wordTarget,
+  useFullPool = false,
   wordIds,
   activePackIds = [],
   title,
 }: CreateLessonSessionInput): LessonSession | null {
   if (mode === 'mistakes' && wordIds?.length) {
-    return createMistakesSession(getPoolFromIds(words, wordIds), activePackIds, durationMinutes, wordTarget);
+    return createMistakesSession(getPoolFromIds(words, wordIds), activePackIds, durationMinutes, wordTarget, useFullPool);
   }
 
   if (mode === 'default') {
-    return createDailySession(words, storage, activePackIds, durationMinutes, wordTarget);
+    return createDailySession(words, storage, activePackIds, durationMinutes, wordTarget, useFullPool);
   }
 
   if (mode === 'extra' || mode === 'pack') {
-    return createExtraSession(mode, words, storage, activePackIds, durationMinutes, wordTarget, title);
+    return createExtraSession(mode, words, storage, activePackIds, durationMinutes, wordTarget, useFullPool, title);
   }
 
   return null;

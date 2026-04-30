@@ -11,6 +11,8 @@ interface MemoryCheckExerciseProps {
   onSelect: (answer: string) => void;
   onNext: () => void;
   onReplayAudio: () => void;
+  onMarkKnown?: () => void;
+  onIgnoreWord?: () => void;
 }
 
 export function MemoryCheckExercise({
@@ -21,6 +23,8 @@ export function MemoryCheckExercise({
   onSelect,
   onNext,
   onReplayAudio,
+  onMarkKnown,
+  onIgnoreWord,
 }: MemoryCheckExerciseProps) {
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
   const copy = getExerciseCopy(exercise.type, word.language);
@@ -90,11 +94,27 @@ export function MemoryCheckExercise({
         </div>
       }
       actions={
-        isSubmitted ? (
-          <button ref={nextButtonRef} type="button" className="primary-button full-width" onClick={onNext}>
-            Дальше
-          </button>
-        ) : null
+        <>
+          {isSubmitted ? (
+            <button ref={nextButtonRef} type="button" className="primary-button full-width" onClick={onNext}>
+              Дальше
+            </button>
+          ) : null}
+          {onMarkKnown || onIgnoreWord ? (
+            <div className="lesson-word-action-row">
+              {onMarkKnown ? (
+                <button type="button" className="secondary-button full-width" onClick={onMarkKnown}>
+                  Уже знаю
+                </button>
+              ) : null}
+              {onIgnoreWord ? (
+                <button type="button" className="danger-button full-width" onClick={onIgnoreWord}>
+                  Не хочу учить
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+        </>
       }
     />
   );

@@ -1,4 +1,4 @@
-export type WordStatus = 'new' | 'learning' | 'review' | 'mastered' | 'difficult';
+export type WordStatus = 'new' | 'learning' | 'review' | 'mastered' | 'difficult' | 'ignored';
 export type WordLevel = 'A1' | 'A2' | 'B1';
 export type LessonMode = 'default' | 'extra' | 'mistakes' | 'pack';
 export type LessonDurationMinutes = 10 | 20 | 30;
@@ -160,6 +160,7 @@ export interface AppStorage {
   completedDailyLessons: DailyLessonRecord[];
   streakDays: number;
   lastLessonDate: string | null;
+  lessonDurationEnabled: boolean;
   lessonDurationMinutes: LessonDurationMinutes;
   lessonWordTarget: LessonWordTarget;
   lessonSourcePackId: string | null;
@@ -167,6 +168,7 @@ export interface AppStorage {
   studyHistory: StudyHistoryEntry[];
   packStates: Record<string, UserPackState>;
   customWords: Word[];
+  customPacks: WordPack[];
 }
 
 export interface DailyLessonCompletionPayload {

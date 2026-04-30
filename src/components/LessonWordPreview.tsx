@@ -10,6 +10,7 @@ interface LessonWordPreviewProps {
   total: number;
   onReplayAudio: () => void;
   onMarkKnown?: () => void;
+  onIgnoreWord?: () => void;
   onNext: () => void;
 }
 
@@ -17,6 +18,7 @@ export function LessonWordPreview({
   word,
   onReplayAudio,
   onMarkKnown,
+  onIgnoreWord,
   onNext,
 }: LessonWordPreviewProps) {
   const lessonNotes = getLessonWordNotes(word);
@@ -63,6 +65,11 @@ export function LessonWordPreview({
             {onMarkKnown ? (
               <button type="button" className="secondary-button full-width" onClick={onMarkKnown}>
                 Уже знаю это слово
+              </button>
+            ) : null}
+            {onIgnoreWord ? (
+              <button type="button" className="danger-button full-width" onClick={onIgnoreWord}>
+                Не хочу учить
               </button>
             ) : null}
           </div>

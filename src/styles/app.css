@@ -271,6 +271,11 @@
   color: var(--danger);
 }
 
+.status-badge.ignored {
+  background: rgba(101, 110, 129, 0.14);
+  color: #4b5565;
+}
+
 .status-badge.new,
 .status-badge.not_added {
   background: rgba(197, 111, 52, 0.12);
@@ -1222,7 +1227,7 @@
   width: 100%;
   max-width: 520px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
 }
 
 .flashcard-body {
@@ -1635,6 +1640,13 @@
 
 .lesson-preview-toolbar .primary-button {
   order: 1;
+}
+
+.lesson-word-action-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
 }
 
 .lesson-preview-image.word-image-frame {
@@ -3056,6 +3068,34 @@
   gap: 22px;
 }
 
+.pack-import-card .app-card-shell {
+  gap: 18px;
+}
+
+.pack-import-form {
+  display: grid;
+  gap: 12px;
+}
+
+.pack-import-textarea {
+  min-height: 150px;
+  padding-top: 14px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.pack-import-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.pack-import-footer small {
+  color: #667085;
+  font-weight: 700;
+}
+
 .pack-card .app-card-shell {
   padding: 20px;
 }
@@ -3381,6 +3421,12 @@
   border-color: rgba(26, 140, 226, 0.45);
 }
 
+.settings-select:disabled {
+  background: #f3f5f9;
+  color: #98a2b3;
+  cursor: not-allowed;
+}
+
 .settings-row {
   min-height: 72px;
   padding: 14px;
@@ -3404,6 +3450,27 @@
   color: #667085;
   font-weight: 600;
   line-height: 1.35;
+}
+
+.settings-toggle {
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid rgba(24, 34, 58, 0.1);
+  border-radius: 14px;
+  background: #f8f9fc;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #101828;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.settings-toggle input {
+  accent-color: var(--accent);
+  width: 18px;
+  height: 18px;
 }
 
 .settings-mini-grid,

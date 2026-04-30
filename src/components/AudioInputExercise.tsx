@@ -14,6 +14,8 @@ interface AudioInputExerciseProps {
   onSubmit: () => void;
   onReplayAudio: () => void;
   onNext: () => void;
+  onMarkKnown?: () => void;
+  onIgnoreWord?: () => void;
 }
 
 export function AudioInputExercise({
@@ -26,6 +28,8 @@ export function AudioInputExercise({
   onSubmit,
   onReplayAudio,
   onNext,
+  onMarkKnown,
+  onIgnoreWord,
 }: AudioInputExerciseProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const copy = getExerciseCopy(exercise.type, word.language);
@@ -120,14 +124,30 @@ export function AudioInputExercise({
         </div>
       }
       actions={
-        <button
-          type="button"
-          className="primary-button full-width"
-          disabled={!isSubmitted && !value.trim()}
-          onClick={isSubmitted ? onNext : onSubmit}
-        >
-          {isSubmitted ? 'Далее' : 'Проверить'}
-        </button>
+        <>
+          <button
+            type="button"
+            className="primary-button full-width"
+            disabled={!isSubmitted && !value.trim()}
+            onClick={isSubmitted ? onNext : onSubmit}
+          >
+            {isSubmitted ? 'Далее' : 'Проверить'}
+          </button>
+          {onMarkKnown || onIgnoreWord ? (
+            <div className="lesson-word-action-row">
+              {onMarkKnown ? (
+                <button type="button" className="secondary-button full-width" onClick={onMarkKnown}>
+                  Уже знаю
+                </button>
+              ) : null}
+              {onIgnoreWord ? (
+                <button type="button" className="danger-button full-width" onClick={onIgnoreWord}>
+                  Не хочу учить
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+        </>
       }
     />
   );

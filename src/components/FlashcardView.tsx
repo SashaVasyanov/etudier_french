@@ -13,6 +13,7 @@ interface FlashcardViewProps {
   total: number;
   onReplayAudio: () => void;
   onMarkKnown?: () => void;
+  onIgnoreWord?: () => void;
   onDefer: () => void;
   onNext: () => void;
 }
@@ -23,6 +24,7 @@ export function FlashcardView({
   total,
   onReplayAudio,
   onMarkKnown,
+  onIgnoreWord,
   onDefer,
   onNext,
 }: FlashcardViewProps) {
@@ -93,6 +95,11 @@ export function FlashcardView({
                 Уже знаю
               </button>
             ) : null}
+            {onIgnoreWord ? (
+              <button type="button" className="danger-button full-width" onClick={onIgnoreWord}>
+                Не хочу учить
+              </button>
+            ) : null}
             <button type="button" className="ghost-button full-width" onClick={onDefer}>
               Повторить позже
             </button>
@@ -101,9 +108,16 @@ export function FlashcardView({
             </button>
           </>
         ) : (
-          <button type="button" className="ghost-button full-width" onClick={onDefer}>
-            Вернуться позже
-          </button>
+          <>
+            <button type="button" className="ghost-button full-width" onClick={onDefer}>
+              Вернуться позже
+            </button>
+            {onIgnoreWord ? (
+              <button type="button" className="danger-button full-width" onClick={onIgnoreWord}>
+                Не хочу учить
+              </button>
+            ) : null}
+          </>
         )
       }
     />

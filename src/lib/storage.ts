@@ -36,6 +36,7 @@ function createDefaultStorage(): AppStorage {
     completedDailyLessons: [],
     streakDays: 0,
     lastLessonDate: null,
+    lessonDurationEnabled: true,
     lessonDurationMinutes: 20,
     lessonWordTarget: 20,
     lessonSourcePackId: null,
@@ -43,6 +44,7 @@ function createDefaultStorage(): AppStorage {
     studyHistory: [],
     packStates: {},
     customWords: [],
+    customPacks: [],
   };
 }
 
@@ -102,7 +104,26 @@ function normalizeProgress(progress: WordProgress): WordProgress {
   return {
     ...createInitialProgress(progress.word_id),
     ...progress,
-    status: normalizedStatus,
+    status: normalizedStatus === 'ignored' ? 'ignored' : normalizedStatus,
+  };
+}
+
+function normalizeCustomPack(pack: Partial<import('../types').WordPack>): import('../types').WordPack | null {
+  if (!pack.id || !pack.title || !pack.language || !Array.isArray(pack.words)) {
+    return null;
+  }
+
+  return {
+    id: pack.id,
+    language: pack.language,
+    title: pack.title,
+    description: pack.description ?? 'Импортированный пользовательский пак.',
+    accent: pack.accent ?? '#1a8ce2',
+    coverImageUrl: pack.coverImageUrl,
+    coverImageAlt: pack.coverImageAlt,
+    words: pack.words
+      .filter((word): word is Word => Boolean(word?.id && word?.original && word?.translation))
+      .map((word) => normalizeWord({ ...word, source: 'pack', packIds: [pack.id!] })),
   };
 }
 
@@ -186,6 +207,7 @@ export function loadStorage(): AppStorage {
         .slice(-180),
       lessonDurationMinutes:
         parsed.lessonDurationMinutes === 10 || parsed.lessonDurationMinutes === 30 ? parsed.lessonDurationMinutes : 20,
+      lessonDurationEnabled: typeof parsed.lessonDurationEnabled === 'boolean' ? parsed.lessonDurationEnabled : true,
       lessonWordTarget:
         parsed.lessonWordTarget === 10 ||
         parsed.lessonWordTarget === 15 ||
@@ -212,6 +234,9 @@ export function loadStorage(): AppStorage {
       customWords: (parsed.customWords ?? [])
         .filter((word): word is Word => Boolean(word?.id && word?.original && word?.translation))
         .map((word) => normalizeWord(word)),
+      customPacks: (parsed.customPacks ?? [])
+        .map((pack) => normalizeCustomPack(pack))
+        .filter((pack): pack is import('../types').WordPack => pack !== null),
     };
   } catch {
     return createDefaultStorage();
@@ -223,6 +248,10 @@ export function saveStorage(storage: AppStorage): void {
 }
 
 function resolveStatus(progress: WordProgress): WordStatus {
+  if (progress.status === 'ignored') {
+    return 'ignored';
+  }
+
   const accuracy = progress.shown_count > 0 ? progress.correct_count / progress.shown_count : 0;
   const errorRate = progress.shown_count > 0 ? progress.wrong_count / progress.shown_count : 0;
 
@@ -399,6 +428,15 @@ function nextIntervalDays(progress: WordProgress, outcome: ExerciseOutcome): num
 
 function buildUpdatedProgress(existing: WordProgress, outcome: ExerciseOutcome): WordProgress {
   const now = new Date();
+
+  if (existing.status === 'ignored') {
+    return {
+      ...existing,
+      last_seen_at: now.toISOString(),
+      next_review_at: null,
+    };
+  }
+
   const easeFactor = clamp(existing.ease_factor + getExerciseEaseDelta(existing, outcome), 1.3, 3.4);
   const intervalDays = nextIntervalDays(existing, outcome);
   const repetitionStep = outcome.isCorrect
@@ -547,6 +585,24 @@ export function markWordAsKnown(currentStorage: AppStorage, wordId: string): App
   };
 }
 
+export function markWordAsIgnored(currentStorage: AppStorage, wordId: string): AppStorage {
+  const now = new Date().toISOString();
+  const existing = currentStorage.progressByWordId[wordId] ?? createInitialProgress(wordId);
+
+  return {
+    ...currentStorage,
+    progressByWordId: {
+      ...currentStorage.progressByWordId,
+      [wordId]: {
+        ...existing,
+        status: 'ignored',
+        last_seen_at: now,
+        next_review_at: null,
+      },
+    },
+  };
+}
+
 export function getCompletedDailyLesson(storage: AppStorage, date = getTodayDateKey()): DailyLessonRecord | null {
   return storage.completedDailyLessons.find(
     (item) => item.date === date && item.language === storage.learningLanguage,
@@ -599,7 +655,7 @@ export function recordStudyHistory(currentStorage: AppStorage, historyEntry: Stu
 }
 
 export function updateProfileName(currentStorage: AppStorage, displayName: string): AppStorage {
-  const normalizedName = displayName.trim() || 'Ученик';
+  const normalizedName = displayName.replace(/\s+/g, ' ').trimStart();
 
   return {
     ...currentStorage,
@@ -618,6 +674,16 @@ export function setLessonDurationPreference(
   return {
     ...currentStorage,
     lessonDurationMinutes,
+  };
+}
+
+export function setLessonDurationEnabledPreference(
+  currentStorage: AppStorage,
+  lessonDurationEnabled: boolean,
+): AppStorage {
+  return {
+    ...currentStorage,
+    lessonDurationEnabled,
   };
 }
 
@@ -660,6 +726,31 @@ export function addWordPack(currentStorage: AppStorage, packId: string): AppStor
         status: 'added',
         addedAt: currentStorage.packStates[packId]?.addedAt ?? now,
         completedAt: currentStorage.packStates[packId]?.completedAt ?? null,
+      },
+    },
+  };
+}
+
+export function addCustomPack(currentStorage: AppStorage, pack: import('../types').WordPack): AppStorage {
+  const now = new Date().toISOString();
+  const normalizedPack = normalizeCustomPack(pack);
+
+  if (!normalizedPack || normalizedPack.words.length === 0) {
+    return currentStorage;
+  }
+
+  return {
+    ...currentStorage,
+    customPacks: currentStorage.customPacks
+      .filter((item) => item.id !== normalizedPack.id)
+      .concat(normalizedPack),
+    packStates: {
+      ...currentStorage.packStates,
+      [normalizedPack.id]: {
+        packId: normalizedPack.id,
+        status: 'added',
+        addedAt: currentStorage.packStates[normalizedPack.id]?.addedAt ?? now,
+        completedAt: currentStorage.packStates[normalizedPack.id]?.completedAt ?? null,
       },
     },
   };

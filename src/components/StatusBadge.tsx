@@ -13,6 +13,8 @@ function getLabel(status: StatusBadgeValue): string {
       return 'выучено';
     case 'difficult':
       return 'сложное';
+    case 'ignored':
+      return 'не учить';
     case 'learning':
     case 'review':
       return 'изучается';
@@ -37,7 +39,9 @@ export function StatusBadge({ status, label }: StatusBadgeProps) {
         ? 'review'
         : status === 'difficult'
           ? 'difficult'
-          : 'new';
+          : status === 'ignored'
+            ? 'ignored'
+            : 'new';
 
   return <span className={`status-badge ${tone}`}>{label ?? getLabel(status)}</span>;
 }

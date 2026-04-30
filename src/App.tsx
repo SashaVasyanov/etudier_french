@@ -17,15 +17,18 @@ import {
 } from './lib/languages';
 import { derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
 import {
+  addCustomPack,
   addWordPack,
   addCustomWord,
   applyOutcomes,
   completeDailyLesson,
   loadStorage,
+  markWordAsIgnored,
   markWordAsKnown,
   recordStudyHistory,
   saveStorage,
   setLearningLanguagePreference,
+  setLessonDurationEnabledPreference,
   setLessonDurationPreference,
   setLessonSourcePackPreference,
   setLessonWordTargetPreference,
@@ -33,6 +36,7 @@ import {
   getWordProgress,
   updateProfileName,
 } from './lib/storage';
+import { parseImportedPack } from './lib/importPacks';
 import { getTodayDateKey, isAnswerMatch } from './lib/utils';
 import type {
   AppStorage,
@@ -143,7 +147,12 @@ function App() {
   const [isLoadingWords, setIsLoadingWords] = useState(true);
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
 
-  const packs = useMemo(() => getStarterPacks(storage.learningLanguage), [storage.learningLanguage]);
+  const starterPacks = useMemo(() => getStarterPacks(storage.learningLanguage), [storage.learningLanguage]);
+  const importedPacks = useMemo(
+    () => storage.customPacks.filter((pack) => pack.language === storage.learningLanguage),
+    [storage.customPacks, storage.learningLanguage],
+  );
+  const packs = useMemo(() => [...starterPacks, ...importedPacks], [starterPacks, importedPacks]);
   const selectedPack = useMemo(
     () => (selectedPackId ? packs.find((pack) => pack.id === selectedPackId) ?? null : null),
     [packs, selectedPackId],
@@ -157,7 +166,8 @@ function App() {
     () => storage.customWords.filter((word) => word.language === storage.learningLanguage),
     [storage.customWords, storage.learningLanguage],
   );
-  const words = useMemo(() => [...baseWords, ...customWords], [baseWords, customWords]);
+  const customPackWords = useMemo(() => importedPacks.flatMap((pack) => pack.words), [importedPacks]);
+  const words = useMemo(() => [...baseWords, ...customWords, ...customPackWords], [baseWords, customPackWords, customWords]);
   const availableWords = useMemo(() => getActiveWords(words, enabledPackIds), [enabledPackIds, words]);
   const selectedLessonSourceWords = useMemo(() => {
     if (!selectedLessonSourcePack) {
@@ -168,7 +178,10 @@ function App() {
     return packWords.length > 0 ? packWords : selectedLessonSourcePack.words;
   }, [selectedLessonSourcePack, words]);
   const lessonSourceWords = selectedLessonSourceWords ?? availableWords;
-  const lessonPoolWords = useMemo(() => getLessonPoolWords(lessonSourceWords), [lessonSourceWords]);
+  const lessonPoolWords = useMemo(
+    () => getLessonPoolWords(lessonSourceWords).filter((word) => getWordProgress(storage, word.id).status !== 'ignored'),
+    [lessonSourceWords, storage],
+  );
   const progressList = useMemo(() => words.map((word) => getWordProgress(storage, word.id)), [storage, words]);
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
@@ -287,7 +300,7 @@ function App() {
       return;
     }
 
-    const lessonWords =
+    const lessonWordsBase =
       options?.wordIds && options.wordIds.length > 0
         ? words
         : mode === 'default'
@@ -295,27 +308,30 @@ function App() {
           : mode === 'pack' && options?.packId
             ? words.filter((word) => word.packIds.includes(options.packId!))
             : lessonPoolWords;
+    const lessonWords = lessonWordsBase.filter((word) => getWordProgress(storage, word.id).status !== 'ignored');
     const activePackIds =
       mode === 'pack' && options?.packId
         ? Array.from(new Set([...enabledPackIds, options.packId]))
         : selectedLessonSourcePack
           ? Array.from(new Set([...enabledPackIds, selectedLessonSourcePack.id]))
           : enabledPackIds;
+    const lessonWordTarget = storage.lessonDurationEnabled ? storage.lessonWordTarget : Math.max(lessonWords.length, 10);
     const nextSession = createLessonSession({
       mode,
       words: lessonWords,
       storage,
       durationMinutes: storage.lessonDurationMinutes,
-      wordTarget: storage.lessonWordTarget,
+      wordTarget: lessonWordTarget,
+      useFullPool: !storage.lessonDurationEnabled,
       wordIds: options?.wordIds,
       activePackIds,
       title: options?.title ?? (mode === 'default' && selectedLessonSourcePack ? `Урок: ${selectedLessonSourcePack.title}` : undefined),
     });
 
-      if (!nextSession) {
-        if (mode === 'default') {
-          const sessionId = `default-empty-${Date.now()}`;
-          setStorage((currentStorage) =>
+    if (!nextSession) {
+      if (mode === 'default') {
+        const sessionId = `default-empty-${Date.now()}`;
+        setStorage((currentStorage) =>
           completeDailyLesson(
             currentStorage,
             buildEmptyCompletionPayload(
@@ -349,16 +365,19 @@ function App() {
       return;
     }
 
-    const flashcardWords =
+    const flashcardWordsBase =
       mode === 'pack' && options?.packId
         ? words.filter((word) => word.packIds.includes(options.packId!))
         : lessonPoolWords;
+    const flashcardWords = flashcardWordsBase.filter((word) => getWordProgress(storage, word.id).status !== 'ignored');
+    const flashcardWordTarget = storage.lessonDurationEnabled ? storage.lessonWordTarget : Math.max(flashcardWords.length, 10);
     const nextSession = createFlashcardSession({
       mode,
       words: flashcardWords,
       storage,
       durationMinutes: storage.lessonDurationMinutes,
-      wordTarget: storage.lessonWordTarget,
+      wordTarget: flashcardWordTarget,
+      useFullPool: !storage.lessonDurationEnabled,
       activePackIds:
         mode === 'pack' && options?.packId ? Array.from(new Set([...enabledPackIds, options.packId])) : enabledPackIds,
       title: options?.title,
@@ -385,7 +404,7 @@ function App() {
 
     const isCorrect =
       currentExercise.type === 'audio_to_original_input'
-        ? isAnswerMatch(answer, currentExercise.correctAnswer, currentWord?.language ?? 'french')
+        ? isAnswerMatch(answer, currentExercise.correctAnswer, currentWord?.language ?? 'french', currentWord ?? undefined)
         : answer === currentExercise.correctAnswer;
 
     const outcome: ExerciseOutcome = {
@@ -506,7 +525,26 @@ function App() {
     resetExerciseState();
 
     if (nextSession.steps.length === 0) {
-      finishLesson(session, outcomes, nextKnownWordIds);
+      finishLesson(nextSession, outcomes, nextKnownWordIds);
+      return;
+    }
+
+    setSession(nextSession);
+    setStepIndex((current) => Math.min(current, nextSession.steps.length - 1));
+  }
+
+  function handleIgnoreWord() {
+    if (!session || !currentWord) {
+      return;
+    }
+
+    const nextSession = removeWordFromSession(session, currentWord.id);
+
+    setStorage((currentStorage) => markWordAsIgnored(currentStorage, currentWord.id));
+    resetExerciseState();
+
+    if (nextSession.steps.length === 0) {
+      finishLesson(nextSession);
       return;
     }
 
@@ -573,6 +611,7 @@ function App() {
             progressList={progressList}
             addedPacksCount={enabledPackIds.length}
             learningLanguage={storage.learningLanguage}
+            lessonDurationEnabled={storage.lessonDurationEnabled}
             lessonDurationMinutes={storage.lessonDurationMinutes}
             lessonWordTarget={storage.lessonWordTarget}
             lessonSourcePackId={storage.lessonSourcePackId}
@@ -616,6 +655,8 @@ function App() {
                     onReplayAudio={() => {
                       void playWordAudio(currentWord);
                     }}
+                    onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
+                    onIgnoreWord={handleIgnoreWord}
                     onNext={goToNextStep}
                   />
                 ) : currentExercise?.options ? (
@@ -635,6 +676,8 @@ function App() {
                           }
                         : undefined
                     }
+                    onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
+                    onIgnoreWord={handleIgnoreWord}
                     onNext={goToNextStep}
                   />
                 ) : currentExercise ? (
@@ -649,6 +692,8 @@ function App() {
                     onReplayAudio={() => {
                       void playWordAudio(currentWord);
                     }}
+                    onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
+                    onIgnoreWord={handleIgnoreWord}
                     onNext={goToNextStep}
                   />
                 ) : null
@@ -661,6 +706,7 @@ function App() {
                     void playWordAudio(currentWord);
                   }}
                   onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
+                  onIgnoreWord={handleIgnoreWord}
                   onDefer={goToNextStep}
                   onNext={goToNextStep}
                 />
@@ -673,6 +719,7 @@ function App() {
                     void playWordAudio(currentWord);
                   }}
                   onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
+                  onIgnoreWord={handleIgnoreWord}
                   onNext={goToNextStep}
                 />
               )}
@@ -714,10 +761,20 @@ function App() {
           ) : null}
           {screen === 'packs' ? (
             <PacksScreen
+              learningLanguage={storage.learningLanguage}
               packs={packs}
               storage={storage}
               onAddPack={(packId) => {
                 setStorage((currentStorage) => addWordPack(currentStorage, packId));
+              }}
+              onImportPack={(title, rawText) => {
+                const importedPack = parseImportedPack({ title, rawText, language: storage.learningLanguage });
+
+                if (!importedPack) {
+                  return;
+                }
+
+                setStorage((currentStorage) => addCustomPack(currentStorage, importedPack));
               }}
               onOpenPack={(packId) => {
                 setSelectedPackId(packId);
@@ -766,6 +823,7 @@ function App() {
               storage={storage}
               progressList={progressList}
               packs={packs}
+              lessonDurationEnabled={storage.lessonDurationEnabled}
               lessonDurationMinutes={storage.lessonDurationMinutes}
               lessonWordTarget={storage.lessonWordTarget}
               lessonSourcePackId={storage.lessonSourcePackId}
@@ -776,6 +834,9 @@ function App() {
                 clearSessionState('profile');
                 setSelectedPackId(null);
                 setStorage((currentStorage) => setLearningLanguagePreference(currentStorage, value));
+              }}
+              onLessonDurationEnabledChange={(value) => {
+                setStorage((currentStorage) => setLessonDurationEnabledPreference(currentStorage, value));
               }}
               onLessonDurationChange={(value) => {
                 setStorage((currentStorage) => setLessonDurationPreference(currentStorage, value));
