@@ -671,9 +671,19 @@ export function setLessonDurationPreference(
   currentStorage: AppStorage,
   lessonDurationMinutes: LessonDurationMinutes,
 ): AppStorage {
+  const lessonWordTargetByDuration: Record<LessonDurationMinutes, LessonWordTarget> = {
+    10: 10,
+    20: 20,
+    30: 30,
+  };
+
   return {
     ...currentStorage,
     lessonDurationMinutes,
+    // The main duration control is the primary lesson-size control. Keeping the
+    // target in sync prevents a hidden custom target from making 10/20/30-minute
+    // choices feel identical to the learner.
+    lessonWordTarget: lessonWordTargetByDuration[lessonDurationMinutes],
   };
 }
 

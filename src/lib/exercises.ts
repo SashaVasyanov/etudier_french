@@ -655,22 +655,42 @@ function createDailySession(
   const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool);
   const newWords = pickNewWords(words, storage, limits.newWords);
   const learningWords = pickLearningWords(words, storage, limits.activeWords);
-  const reviewWords = learningWords.filter((word) => {
+  const introductionWords = newWords.length > 0 ? newWords : learningWords.slice(0, Math.max(1, limits.newWords));
+  const scheduledReviewWords = learningWords.filter((word) => {
     const progress = getWordProgress(storage, word.id);
     return progress.status === 'review' || progress.status === 'difficult' || progress.status === 'learning';
   });
-  const reinforcementWords = pickReinforcementWords(newWords, reviewWords, limits.reinforcementWords);
-  const recapWords = pickRecapWords(newWords, reviewWords, reinforcementWords, limits.recapWords);
+  // A daily lesson always has five meaningful modules. On a learner's first
+  // day there are no previously scheduled reviews, so the same new words are
+  // deliberately revisited in module 3 instead of dropping that module.
+  const reviewWords =
+    scheduledReviewWords.length > 0
+      ? scheduledReviewWords
+      : introductionWords.slice(0, Math.max(1, Math.min(introductionWords.length, limits.activeWords)));
+  const selectedReinforcementWords = pickReinforcementWords(
+    introductionWords,
+    reviewWords,
+    limits.reinforcementWords,
+  );
+  const reinforcementWords =
+    selectedReinforcementWords.length > 0
+      ? selectedReinforcementWords
+      : uniqueWords([...introductionWords, ...reviewWords]).slice(0, Math.max(1, limits.reinforcementWords));
+  const selectedRecapWords = pickRecapWords(introductionWords, reviewWords, reinforcementWords, limits.recapWords);
+  const recapWords =
+    selectedRecapWords.length > 0
+      ? selectedRecapWords
+      : uniqueWords([...reviewWords, ...reinforcementWords, ...introductionWords]).slice(0, Math.max(1, limits.recapWords));
   const memoryCheckWords = pickLongTermMemoryWords(
     words,
     storage,
     limits.memoryCheckWords,
-    new Set(uniqueWords([...newWords, ...reviewWords, ...reinforcementWords, ...recapWords]).map((word) => word.id)),
+    new Set(uniqueWords([...introductionWords, ...reviewWords, ...reinforcementWords, ...recapWords]).map((word) => word.id)),
   );
 
   if (
-    newWords.length === 0 &&
-    learningWords.length === 0 &&
+    introductionWords.length === 0 &&
+    reviewWords.length === 0 &&
     reinforcementWords.length === 0 &&
     recapWords.length === 0 &&
     memoryCheckWords.length === 0
@@ -678,12 +698,12 @@ function createDailySession(
     return null;
   }
 
-  const module1 = createPreviewModule(newWords);
+  const module1 = createPreviewModule(introductionWords);
   const module2 = createExerciseModule(
     'module-training-new',
     'Тренировка новых слов',
     'Быстрое закрепление слов, которые вы только что увидели.',
-    newWords,
+    introductionWords,
     ['original_to_translation_choice', 'translation_to_original_choice'],
     uniqueWords(words),
     storage,
@@ -720,9 +740,7 @@ function createDailySession(
     uniqueWords(words),
   );
 
-  const modules = renumberModules(
-    [module1, module2.module, module3.module, module4.module, module5.module].filter((module) => module.wordIds.length > 0),
-  );
+  const modules = renumberModules([module1, module2.module, module3.module, module4.module, module5.module]);
   const exercises = [...module2.exercises, ...module3.exercises, ...module4.exercises, ...module5.exercises];
   const steps = buildSteps(modules, {
     [module2.module.id]: module2.exercises,
@@ -740,7 +758,7 @@ function createDailySession(
     startedAt: new Date().toISOString(),
     exerciseIds: exercises.map((exercise) => exercise.id),
     exercises,
-    sourceWordIds: uniqueWords([...newWords, ...learningWords, ...reinforcementWords, ...recapWords, ...memoryCheckWords]).map((word) => word.id),
+    sourceWordIds: uniqueWords([...introductionWords, ...reviewWords, ...reinforcementWords, ...recapWords, ...memoryCheckWords]).map((word) => word.id),
     modules,
     steps,
     activePackIds,

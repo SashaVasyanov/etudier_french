@@ -1,9 +1,17 @@
-import { useMemo, type CSSProperties } from 'react';
+import { useMemo } from 'react';
 import { getTodayDateKey, percentage } from '../lib/utils';
-import type { AppStorage, LearningLanguage, LessonDurationMinutes, LessonWordTarget, Word, WordPack, WordProgress } from '../types';
+import type {
+  AppStorage,
+  DailyLessonRecord,
+  LearningLanguage,
+  LessonDurationMinutes,
+  LessonWordTarget,
+  Word,
+  WordPack,
+  WordProgress,
+} from '../types';
 
 interface HomeDashboardProps {
-  availableWords: Word[];
   totalWords: Word[];
   storage: AppStorage;
   progressList: WordProgress[];
@@ -14,15 +22,25 @@ interface HomeDashboardProps {
   lessonDurationMinutes: LessonDurationMinutes;
   lessonWordTarget: LessonWordTarget;
   lessonSourcePackId: string | null;
+  dailyCompletion: DailyLessonRecord | null;
   onStartLesson: () => void;
   onStartExtraLesson: () => void;
   onStartFlashcards: () => void;
+  onLessonDurationChange: (value: LessonDurationMinutes) => void;
   onOpenStatistics: () => void;
   onOpenProfile: () => void;
   onOpenPacks: () => void;
 }
 
-const WEEK_LABELS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+const DAILY_MODULES = [
+  { number: '1', title: 'Новые слова', tone: 'blue' },
+  { number: '2', title: 'Первая практика', tone: 'violet' },
+  { number: '3', title: 'Повторение', tone: 'orange' },
+  { number: '4', title: 'Закрепление', tone: 'green' },
+  { number: '5', title: 'Мини-проверка', tone: 'pink' },
+];
+
+const DURATION_OPTIONS: LessonDurationMinutes[] = [10, 20, 30];
 
 function getPackCompletion(pack: WordPack, storage: AppStorage): number {
   if (pack.words.length === 0) {
@@ -34,7 +52,6 @@ function getPackCompletion(pack: WordPack, storage: AppStorage): number {
 }
 
 export function HomeDashboard({
-  availableWords,
   totalWords,
   storage,
   progressList,
@@ -45,9 +62,11 @@ export function HomeDashboard({
   lessonDurationMinutes,
   lessonWordTarget,
   lessonSourcePackId,
+  dailyCompletion,
   onStartLesson,
   onStartExtraLesson,
   onStartFlashcards,
+  onLessonDurationChange,
   onOpenStatistics,
   onOpenProfile,
   onOpenPacks,
@@ -61,146 +80,146 @@ export function HomeDashboard({
       .filter((progress) => progress.status === 'mastered')
       .map((progress) => progress.word_id),
   );
-  const wordsInProcess = Math.max(0, availableWords.length - learnedWordIds.size);
+  const wordsInProcess = progressList.filter((progress) => progress.status === 'learning' || progress.status === 'review').length;
   const selectedLessonPack = packs.find((pack) => pack.id === lessonSourcePackId) ?? null;
   const lessonPackLabel = selectedLessonPack ? selectedLessonPack.title : 'Все слова';
   const displayName = storage.profile.displayName.trim() || 'Ученик';
-  const lessonMeta = lessonDurationEnabled
-    ? `${lessonWordTarget} слов · ${lessonDurationMinutes} мин · ${lessonPackLabel}`
-    : `Весь пул · без лимита · ${lessonPackLabel}`;
-  const recentPacks = useMemo(
+  const activePack = useMemo(
     () =>
       [...packs]
         .sort((left, right) => getPackCompletion(right, storage) - getPackCompletion(left, storage))
-        .slice(0, 3),
+        .find((pack) => pack.id === selectedLessonPack?.id) ?? packs[0] ?? null,
     [packs, storage],
   );
-  const weeklyPoints = WEEK_LABELS.map((label, index) => {
-    const value = storage.dailyStats
-      .filter((entry) => entry.language === learningLanguage)
-      .slice(-7)[index]?.wordsLearned ?? 0;
-
-    return { label, value };
-  });
-  const maxWeekly = Math.max(1, ...weeklyPoints.map((point) => point.value));
-  const weeklyChartPoints = weeklyPoints.map((point, index) => {
-    const x = 24 + index * 98;
-    const y = 118 - (point.value / maxWeekly) * 82;
-
-    return { ...point, x, y };
-  });
-  const weeklyLinePath = weeklyChartPoints.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
-  const weeklyAreaPath =
-    weeklyChartPoints.length > 0
-      ? `${weeklyLinePath} L ${weeklyChartPoints[weeklyChartPoints.length - 1].x} 130 L ${weeklyChartPoints[0].x} 130 Z`
-      : '';
   const overallProgress = percentage(learnedWordIds.size, Math.max(1, totalWords.length));
+  const isDailyComplete = Boolean(dailyCompletion);
+  const completedModuleCount = dailyCompletion?.completedModules ?? 0;
+  const durationMeta = lessonDurationEnabled
+    ? `${lessonDurationMinutes} минут · до ${lessonWordTarget} слов`
+    : 'В своём темпе · без лимита';
+  const packCompletion = activePack ? getPackCompletion(activePack, storage) : 0;
+  const difficultCount = progressList.filter((progress) => progress.status === 'difficult').length;
 
   return (
-    <section className="dashboard-shell dashboard-modern">
-      <header className="dashboard-modern-head">
-        <div>
-          <h1>Доброе утро, {displayName}!</h1>
-          <p>Продолжайте обучение: уроки, паки и словарь доступны из одной панели.</p>
+    <section className="learning-home">
+      <header className="learning-home-head">
+        <div className="learning-home-greeting">
+          <span className="home-language-chip">FR · французский</span>
+          <h1>{isDailyComplete ? 'Классная работа, ' : 'Привет, '}{displayName}!</h1>
+          <p>{isDailyComplete ? 'Дневная цель закрыта — можно закрепить результат в комфортном темпе.' : 'Сегодня достаточно одного короткого шага к уверенной речи.'}</p>
         </div>
-        <button type="button" className="profile-chip" onClick={onOpenProfile}>
-          Профиль
-        </button>
+        <div className="home-head-actions">
+          <span className="streak-chip" aria-label={`Серия: ${storage.streakDays} дней`}>🔥 {storage.streakDays || '—'} дн.</span>
+          <button type="button" className="home-avatar-button" aria-label="Открыть профиль" onClick={onOpenProfile}>
+            {displayName.slice(0, 1).toUpperCase()}
+          </button>
+        </div>
       </header>
 
-      <div className="dashboard-modern-grid">
-        <button type="button" className="dashboard-card lesson-summary-card" onClick={onStartLesson}>
-          <div className="dashboard-card-icon">□</div>
-          <div>
-            <span className="dashboard-card-kicker">Сегодняшний урок</span>
-            <h2>Начать урок</h2>
-            <p>{lessonMeta}</p>
-          </div>
+      <section className={isDailyComplete ? 'daily-journey-card is-complete' : 'daily-journey-card'}>
+        <div className="daily-journey-copy">
+          <span className="daily-card-kicker">Твоя программа на сегодня</span>
+          <h2>{isDailyComplete ? 'На сегодня заданий нет' : 'Французский — по чуть-чуть, но каждый день'}</h2>
+          <p>{isDailyComplete ? 'Все 5 модулей завершены. Выбирай лёгкую дополнительную практику или возвращайся к словам.' : `${durationMeta} · тема: ${lessonPackLabel}`}</p>
+        </div>
 
-          <div className="lesson-progress-line" aria-hidden="true">
-            <span style={{ width: `${Math.min(100, Math.max(8, overallProgress))}%` }} />
-          </div>
-        </button>
+        <div className="daily-route" aria-label={`Прогресс дня: ${completedModuleCount} из 5 модулей`}>
+          {DAILY_MODULES.map((module, index) => {
+            const isDone = isDailyComplete || index < completedModuleCount;
 
-        <section className="dashboard-card progress-summary-card">
-          <span className="dashboard-card-kicker">Прогресс</span>
-          <div className="progress-ring-card" style={{ '--progress': `${overallProgress * 3.6}deg` } as CSSProperties}>
-            <strong>{overallProgress}%</strong>
-            <span>освоено</span>
-          </div>
-          <div className="progress-mini-list">
-            <span>{learnedWordIds.size} выучено</span>
-            <span>{wordsInProcess} в работе</span>
-            <span>{totalWords.length - availableWords.length} вне активного пула</span>
-          </div>
-        </section>
+            return (
+              <div key={module.number} className={isDone ? 'daily-route-step done' : `daily-route-step ${module.tone}`}>
+                <span>{isDone ? '✓' : module.number}</span>
+                <strong>{module.title}</strong>
+              </div>
+            );
+          })}
+        </div>
 
-        <section className="dashboard-card quick-practice-card">
-          <span className="dashboard-card-kicker">Быстрая практика</span>
-          <h2>Что потренировать?</h2>
-          <button type="button" className="quick-row-button" onClick={onStartFlashcards}>
-            <span>▣</span>
-            <strong>Карточки</strong>
-            <small>Повторить слова с картинками</small>
-          </button>
-          <button type="button" className="quick-row-button" onClick={onStartExtraLesson}>
-            <span>✎</span>
-            <strong>Смешанная практика</strong>
-            <small>Дополнительные упражнения</small>
-          </button>
-        </section>
+        {!isDailyComplete ? (
+          <div className="daily-journey-footer">
+            <div className="duration-switch" role="radiogroup" aria-label="Выбор длительности урока">
+              {DURATION_OPTIONS.map((duration) => {
+                const isActive = duration === lessonDurationMinutes;
 
-        <section className="dashboard-card recent-packs-card">
-          <div className="card-title-row">
-            <span className="dashboard-card-kicker">Паки · {addedPacksCount} добавлено</span>
-            <button type="button" className="small-link-button" onClick={onOpenPacks}>
-              Все паки
-            </button>
-          </div>
-          <div className="recent-pack-list">
-            {recentPacks.map((pack) => {
-              const completion = getPackCompletion(pack, storage);
-
-              return (
-                <button key={pack.id} type="button" className="recent-pack-row" onClick={onOpenPacks}>
-                  <span className="recent-pack-icon">▧</span>
-                  <strong>{pack.title}</strong>
-                  <small>{pack.words.length} слов</small>
-                  <i aria-hidden="true">
-                    <b style={{ width: `${Math.max(8, completion)}%` }} />
-                  </i>
-                  <em>{completion}%</em>
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="dashboard-card weekly-overview-card">
-          <div className="card-title-row">
-            <span className="dashboard-card-kicker">Неделя</span>
-            <button type="button" className="small-link-button" onClick={onOpenStatistics}>
-              Статистика
-            </button>
-          </div>
-          <div className="weekly-kpi-grid">
-            <span>{availableWords.length} слов</span>
-            <span>{todayAccuracy}% точность</span>
-            <span>{storage.streakDays} дн. серия</span>
-          </div>
-          <div className="weekly-mini-chart" aria-label="Слова по дням недели">
-            <svg className="weekly-line-svg" viewBox="0 0 640 150" preserveAspectRatio="none" role="img">
-              <path className="weekly-line-area" d={weeklyAreaPath} />
-              <path className="weekly-line-path" d={weeklyLinePath} />
-              {weeklyChartPoints.map((point) => (
-                <circle key={point.label} className="weekly-line-dot" cx={point.x} cy={point.y} r="4" />
-              ))}
-            </svg>
-            <div className="weekly-line-labels" aria-hidden="true">
-              {weeklyPoints.map((point) => (
-                <small key={point.label}>{point.label}</small>
-              ))}
+                return (
+                  <button
+                    key={duration}
+                    type="button"
+                    className={isActive ? 'active' : ''}
+                    aria-pressed={isActive}
+                    onClick={() => onLessonDurationChange(duration)}
+                  >
+                    {duration} мин
+                  </button>
+                );
+              })}
             </div>
+            <button type="button" className="daily-start-button" onClick={onStartLesson}>
+              Начать урок <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        ) : (
+          <div className="daily-journey-footer">
+            <span className="daily-complete-meta">✓ {completedModuleCount || 5} из 5 модулей · {dailyCompletion?.totalAnswers ?? 0} ответов</span>
+            <button type="button" className="daily-start-button" onClick={onStartExtraLesson}>
+              Продолжить практику <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        )}
+      </section>
+
+      <div className="learning-home-grid">
+        <section className="home-bento-card progress-bento-card">
+          <div className="bento-heading">
+            <span className="bento-icon blue">↗</span>
+            <div>
+              <span>Твой прогресс</span>
+              <h2>{overallProgress}% пути</h2>
+            </div>
+          </div>
+          <div className="home-progress-track" aria-label={`Освоено ${overallProgress}%`}>
+            <span style={{ width: `${overallProgress}%` }} />
+          </div>
+          <div className="progress-bento-stats">
+            <span><strong>{learnedWordIds.size}</strong> освоено</span>
+            <span><strong>{wordsInProcess}</strong> в работе</span>
+            <span><strong>{difficultCount}</strong> требуют внимания</span>
+          </div>
+          <button type="button" className="text-action-button" onClick={onOpenStatistics}>Смотреть статистику <span aria-hidden="true">→</span></button>
+        </section>
+
+        <section className="home-bento-card practice-bento-card">
+          <span className="bento-icon yellow">⚡</span>
+          <div>
+            <span>Когда есть пара минут</span>
+            <h2>Быстрая практика</h2>
+          </div>
+          <div className="practice-bento-actions">
+            <button type="button" onClick={onStartFlashcards}><span>◈</span> Карточки</button>
+            <button type="button" onClick={onStartExtraLesson}><span>✦</span> Микс заданий</button>
+          </div>
+        </section>
+
+        <section className="home-bento-card pack-bento-card">
+          <div className="bento-heading">
+            <span className="bento-icon pink">✿</span>
+            <div>
+              <span>Словари по темам</span>
+              <h2>{activePack?.title ?? 'Выбери пак'}</h2>
+            </div>
+          </div>
+          <p>{activePack ? `${activePack.words.length} слов · ${packCompletion}% освоено` : `${addedPacksCount} паков уже добавлено`}</p>
+          <div className="pack-bento-progress"><span style={{ width: `${packCompletion}%` }} /></div>
+          <button type="button" className="text-action-button" onClick={onOpenPacks}>Открыть паки <span aria-hidden="true">→</span></button>
+        </section>
+
+        <section className="home-bento-card today-bento-card">
+          <span className="bento-icon green">☘</span>
+          <div>
+            <span>Сегодняшний ритм</span>
+            <h2>{todayAccuracy > 0 ? `${todayAccuracy}% точность` : 'Первый шаг ждёт'}</h2>
+            <p>{today ? `${today.wordsLearned} слов в активном повторении` : 'Начни короткий урок — и появится твоя статистика.'}</p>
           </div>
         </section>
       </div>

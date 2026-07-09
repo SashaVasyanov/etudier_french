@@ -2,6 +2,7 @@ import { Suspense, lazy, startTransition, useEffect, useMemo, useState } from 'r
 import { AppNavigation } from './components/AppNavigation';
 import { AppShell } from './components/AppShell';
 import { AudioInputExercise } from './components/AudioInputExercise';
+import { DailyCompletionScreen } from './components/DailyCompletionScreen';
 import { FlashcardView } from './components/FlashcardView';
 import { HomeDashboard } from './components/HomeDashboard';
 import { LessonResult } from './components/LessonResult';
@@ -34,6 +35,7 @@ import {
   setLessonWordTargetPreference,
   setWordPackStatus,
   getWordProgress,
+  getCompletedDailyLesson,
   updateProfileName,
 } from './lib/storage';
 import { parseImportedPack } from './lib/importPacks';
@@ -62,6 +64,7 @@ type Screen =
   | 'home'
   | 'lesson'
   | 'result'
+  | 'dailyComplete'
   | 'dictionary'
   | 'statistics'
   | 'profile'
@@ -186,6 +189,7 @@ function App() {
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
   const currentWord = currentStep ? getWordById(words, currentStep.wordId) : null;
+  const dailyCompletion = getCompletedDailyLesson(storage);
   useEffect(() => {
     let isMounted = true;
     setIsLoadingWords(true);
@@ -292,6 +296,11 @@ function App() {
   }
 
   function startLesson(mode: LessonMode, options?: { wordIds?: string[]; title?: string; packId?: string }) {
+    if (mode === 'default' && getCompletedDailyLesson(storage)) {
+      setScreen('dailyComplete');
+      return;
+    }
+
     if (mode !== 'pack' && lessonPoolWords.length === 0) {
       return;
     }
@@ -341,7 +350,7 @@ function App() {
             ),
           ),
         );
-        setScreen('home');
+        setScreen('dailyComplete');
       }
       return;
     }
@@ -453,7 +462,10 @@ function App() {
         mode: activeSession.mode,
         durationMinutes: activeSession.durationMinutes,
         moduleTitles: activeSession.modules.map((module) => module.title),
-        modulesCompleted: activeSession.modules.filter((module) => module.wordIds.length > 0).length,
+        modulesCompleted:
+          activeSession.mode === 'default'
+            ? activeSession.modules.length
+            : activeSession.modules.filter((module) => module.wordIds.length > 0).length,
         wordsLearned,
         mistakesMade: lessonOutcomes.filter((outcome) => !outcome.isCorrect).length,
         correctAnswers: lessonOutcomes.filter((outcome) => outcome.isCorrect).length,
@@ -471,8 +483,8 @@ function App() {
         language: currentStorage.learningLanguage,
         completedAt,
         sessionId: activeSession.id,
-        totalModules: activeSession.modules.filter((module) => module.wordIds.length > 0).length,
-        completedModules: activeSession.modules.filter((module) => module.wordIds.length > 0).length,
+        totalModules: activeSession.modules.length,
+        completedModules: activeSession.modules.length,
         totalSteps: activeSession.steps.length,
         completedSteps: activeSession.steps.length,
         correctAnswers: historyEntry.correctAnswers,
@@ -488,7 +500,7 @@ function App() {
       return completeDailyLesson(storageWithOutcomes, { record, historyEntry });
     });
 
-    clearSessionState('result', { preserveOutcomes: true });
+    clearSessionState(activeSession.mode === 'default' ? 'dailyComplete' : 'result', { preserveOutcomes: true });
   }
 
   function goToNextStep() {
@@ -559,7 +571,7 @@ function App() {
         return;
       }
 
-      setScreen('home');
+      setScreen(getCompletedDailyLesson(storage) ? 'dailyComplete' : 'home');
       return;
     }
 
@@ -605,7 +617,6 @@ function App() {
         <main className="desktop-app-content" aria-label={getLearningLanguageProductTitle(storage.learningLanguage)}>
         {screen === 'home' ? (
           <HomeDashboard
-            availableWords={lessonPoolWords}
             totalWords={words}
             storage={storage}
             progressList={progressList}
@@ -615,10 +626,14 @@ function App() {
             lessonDurationMinutes={storage.lessonDurationMinutes}
             lessonWordTarget={storage.lessonWordTarget}
             lessonSourcePackId={storage.lessonSourcePackId}
+            dailyCompletion={dailyCompletion}
             packs={packs}
             onStartLesson={() => startLesson('default')}
             onStartExtraLesson={() => startLesson('extra')}
             onStartFlashcards={() => startFlashcards('extra')}
+            onLessonDurationChange={(value) => {
+              setStorage((currentStorage) => setLessonDurationPreference(currentStorage, value));
+            }}
             onOpenStatistics={() => setScreen('statistics')}
             onOpenProfile={() => setScreen('profile')}
             onOpenPacks={() => {
@@ -631,6 +646,22 @@ function App() {
         {screen === 'lesson' && currentStep && currentWord && session ? (
           <section className="lesson-shell">
             <div className="lesson-focus-screen">
+              <header className="lesson-session-progress" aria-label="Прогресс текущего урока">
+                <div className="lesson-session-topline">
+                  <span className="lesson-session-module">Модуль {currentStep.modulePosition} из {currentStep.moduleCount}</span>
+                  <span>{currentStep.indexInModule} / {currentStep.totalInModule} в модуле</span>
+                </div>
+                <div className="lesson-session-title-row">
+                  <div>
+                    <strong>{currentStep.moduleTitle}</strong>
+                    <small>{currentStep.moduleDescription}</small>
+                  </div>
+                  <span>{stepIndex + 1} / {session.steps.length}</span>
+                </div>
+                <div className="lesson-session-track" aria-hidden="true">
+                  <span style={{ width: `${((stepIndex + 1) / session.steps.length) * 100}%` }} />
+                </div>
+              </header>
               <button
                 type="button"
                 className="lesson-close-button"
@@ -735,6 +766,21 @@ function App() {
             onFinish={() => {
               clearSessionState('home');
             }}
+          />
+        ) : null}
+
+        {screen === 'dailyComplete' ? (
+          <DailyCompletionScreen
+            completion={dailyCompletion}
+            words={availableWords}
+            lessonDurationMinutes={storage.lessonDurationMinutes}
+            onLessonDurationChange={(value) => {
+              setStorage((currentStorage) => setLessonDurationPreference(currentStorage, value));
+            }}
+            onContinueLearning={() => startLesson('extra')}
+            onOpenDictionary={() => setScreen('dictionary')}
+            onReviewDifficult={() => startLesson('mistakes', { wordIds: dailyCompletion?.difficultWordIds ?? [] })}
+            onBackHome={() => setScreen('home')}
           />
         ) : null}
 
