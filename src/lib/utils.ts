@@ -210,15 +210,25 @@ function extractJapaneseReadingParts(word?: Word): { kana: string | null; romaji
   return { kana, romaji };
 }
 
+// Some kanji have more than one common standalone reading. The speech engine
+// can choose either one when it is asked to pronounce an isolated character,
+// so those readings must be accepted in an audio exercise as well.
+const JAPANESE_READING_ALIASES: Record<string, string[]> = {
+  何: ['なん', 'nan'],
+};
+
 function getJapaneseAnswerVariants(correctAnswer: string, word?: Word): Set<string> {
   const { kana, romaji } = extractJapaneseReadingParts(word);
-  const writingValues = [correctAnswer, word?.original, kana].filter((value): value is string => Boolean(value));
+  const readingAliases = word ? JAPANESE_READING_ALIASES[word.original] ?? [] : [];
+  const writingValues = [correctAnswer, word?.original, kana, ...readingAliases].filter((value): value is string => Boolean(value));
   const variants = writingValues.flatMap((value) => {
     const normalized = normalizeJapaneseAnswerToken(value);
     return [normalized, katakanaToHiragana(normalized)];
   });
 
-  const romajiValues = [romaji, kana ? kanaToRomaji(kana) : null].filter((value): value is string => Boolean(value));
+  const romajiValues = [romaji, kana ? kanaToRomaji(kana) : null, ...readingAliases].filter(
+    (value): value is string => Boolean(value),
+  );
 
   return new Set([
     ...variants.filter(Boolean),

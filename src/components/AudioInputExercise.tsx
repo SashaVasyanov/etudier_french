@@ -35,6 +35,14 @@ export function AudioInputExercise({
   const copy = getExerciseCopy(exercise.type, word.language);
   const languageAdverb = getLearningLanguageAdverb(word.language);
   const languageTitle = getLearningLanguageTitle(word.language);
+  const answerFormatHint =
+    word.language === 'japanese'
+      ? 'Подойдут кандзи, хирагана, катакана или ромадзи'
+      : `Ответ должен быть на ${languageTitle} языке`;
+  const feedbackAnswer =
+    word.language === 'japanese' && word.transcription
+      ? `${getDisplayWord(word)} · ${word.transcription}`
+      : getDisplayWord(word);
 
   useEffect(() => {
     if (!isSubmitted) {
@@ -112,13 +120,13 @@ export function AudioInputExercise({
           />
 
           <div className="input-meta">
-            <span>{`Ответ должен быть на ${languageTitle} языке`}</span>
+            <span>{answerFormatHint}</span>
           </div>
 
           {isSubmitted ? (
             <div className={isCorrect ? 'answer-feedback success' : 'answer-feedback error'}>
               <strong>{isCorrect ? 'Верно' : 'Неправильно'}</strong>
-              <span>{getDisplayWord(word)}</span>
+              <span>{feedbackAnswer}</span>
             </div>
           ) : null}
         </div>
