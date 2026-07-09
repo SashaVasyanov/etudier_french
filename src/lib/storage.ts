@@ -57,7 +57,7 @@ function normalizeWord(word: Word): Word {
       ? normalizedSource === 'custom'
         ? normalizeTranscription(rawTranscription) || deriveFrenchLatinTranscription(word.original, '')
         : deriveFrenchLatinTranscription(word.original, rawTranscription)
-      : normalizeTranscription(rawTranscription) || word.original.trim();
+      : rawTranscription.normalize('NFKC') || word.original.trim();
 
   return {
     ...word,

@@ -1558,6 +1558,27 @@
   text-align: left;
 }
 
+.lesson-preview-example-card {
+  width: 100%;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.64);
+  display: grid;
+  gap: 8px;
+}
+
+.lesson-preview-example-translation,
+.word-example-translation {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.lesson-preview-example-translation {
+  text-align: left;
+}
+
 .lesson-preview-content {
   width: min(100%, 620px);
   display: grid;

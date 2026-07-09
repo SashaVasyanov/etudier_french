@@ -55,7 +55,10 @@ export function LessonWordPreview({
                 </li>
               ))}
             </ul>
-            <p className="lesson-preview-example">{word.example_original}</p>
+            <div className="lesson-preview-example-card">
+              <p className="lesson-preview-example">{word.example_original}</p>
+              {word.example_translation ? <p className="lesson-preview-example-translation">{word.example_translation}</p> : null}
+            </div>
           </div>
 
           <div className="lesson-preview-toolbar">

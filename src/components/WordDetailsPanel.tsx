@@ -20,6 +20,7 @@ export function WordDetailsPanel({ word }: WordDetailsPanelProps) {
       <div className="flashcard-meta-item">
         <span className="eyebrow">{getWordExampleLabel(word)}</span>
         <strong>{word.example_original}</strong>
+        {word.example_translation ? <p className="detail-copy word-example-translation">{word.example_translation}</p> : null}
       </div>
     </div>
   );

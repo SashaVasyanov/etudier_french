@@ -63,25 +63,167 @@ function katakanaToHiragana(value: string): string {
     .join('');
 }
 
-function extractJapaneseReading(word?: Word): string | null {
+function normalizeJapaneseRomaji(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFKC')
+    .replace(/[āâ]/g, 'aa')
+    .replace(/[īî]/g, 'ii')
+    .replace(/[ūû]/g, 'uu')
+    .replace(/[ēê]/g, 'ee')
+    .replace(/[ōô]/g, 'ou')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z]/g, '');
+}
+
+function getJapaneseRomajiVariants(value: string): Set<string> {
+  const normalized = normalizeJapaneseRomaji(value);
+
+  if (!normalized) {
+    return new Set();
+  }
+
+  const alternateSpellings = normalized
+    .replace(/shi/g, 'si')
+    .replace(/chi/g, 'ti')
+    .replace(/tsu/g, 'tu')
+    .replace(/fu/g, 'hu')
+    .replace(/sha/g, 'sya')
+    .replace(/shu/g, 'syu')
+    .replace(/sho/g, 'syo')
+    .replace(/ja/g, 'zya')
+    .replace(/ju/g, 'zyu')
+    .replace(/jo/g, 'zyo');
+  const shortenLongVowels = (romaji: string) =>
+    romaji
+      .replace(/ou/g, 'o')
+      .replace(/oo/g, 'o')
+      .replace(/uu/g, 'u')
+      .replace(/ii/g, 'i')
+      .replace(/ee/g, 'e');
+
+  return new Set([
+    normalized,
+    alternateSpellings,
+    shortenLongVowels(normalized),
+    shortenLongVowels(alternateSpellings),
+  ]);
+}
+
+const JAPANESE_KANA_ROMAJI: Record<string, string> = {
+  きゃ: 'kya', きゅ: 'kyu', きょ: 'kyo',
+  ぎゃ: 'gya', ぎゅ: 'gyu', ぎょ: 'gyo',
+  しゃ: 'sha', しゅ: 'shu', しょ: 'sho', しぇ: 'she',
+  じゃ: 'ja', じゅ: 'ju', じょ: 'jo', じぇ: 'je',
+  ちゃ: 'cha', ちゅ: 'chu', ちょ: 'cho', ちぇ: 'che',
+  にゃ: 'nya', にゅ: 'nyu', にょ: 'nyo',
+  ひゃ: 'hya', ひゅ: 'hyu', ひょ: 'hyo',
+  びゃ: 'bya', びゅ: 'byu', びょ: 'byo',
+  ぴゃ: 'pya', ぴゅ: 'pyu', ぴょ: 'pyo',
+  みゃ: 'mya', みゅ: 'myu', みょ: 'myo',
+  りゃ: 'rya', りゅ: 'ryu', りょ: 'ryo',
+  ふぁ: 'fa', ふぃ: 'fi', ふぇ: 'fe', ふぉ: 'fo',
+  てぃ: 'ti', でぃ: 'di', とぅ: 'tu', どぅ: 'du',
+  うぃ: 'wi', うぇ: 'we', うぉ: 'wo', ゔぁ: 'va', ゔぃ: 'vi', ゔぇ: 've', ゔぉ: 'vo',
+  あ: 'a', い: 'i', う: 'u', え: 'e', お: 'o',
+  か: 'ka', き: 'ki', く: 'ku', け: 'ke', こ: 'ko',
+  が: 'ga', ぎ: 'gi', ぐ: 'gu', げ: 'ge', ご: 'go',
+  さ: 'sa', し: 'shi', す: 'su', せ: 'se', そ: 'so',
+  ざ: 'za', じ: 'ji', ず: 'zu', ぜ: 'ze', ぞ: 'zo',
+  た: 'ta', ち: 'chi', つ: 'tsu', て: 'te', と: 'to',
+  だ: 'da', ぢ: 'ji', づ: 'zu', で: 'de', ど: 'do',
+  な: 'na', に: 'ni', ぬ: 'nu', ね: 'ne', の: 'no',
+  は: 'ha', ひ: 'hi', ふ: 'fu', へ: 'he', ほ: 'ho',
+  ば: 'ba', び: 'bi', ぶ: 'bu', べ: 'be', ぼ: 'bo',
+  ぱ: 'pa', ぴ: 'pi', ぷ: 'pu', ぺ: 'pe', ぽ: 'po',
+  ま: 'ma', み: 'mi', む: 'mu', め: 'me', も: 'mo',
+  や: 'ya', ゆ: 'yu', よ: 'yo',
+  ら: 'ra', り: 'ri', る: 'ru', れ: 're', ろ: 'ro',
+  わ: 'wa', ゐ: 'wi', ゑ: 'we', を: 'wo', ん: 'n',
+  ゔ: 'vu', ゕ: 'ka', ゖ: 'ke',
+  ぁ: 'a', ぃ: 'i', ぅ: 'u', ぇ: 'e', ぉ: 'o', ゃ: 'ya', ゅ: 'yu', ょ: 'yo',
+};
+
+function getGeminatedPrefix(syllable: string): string {
+  if (syllable.startsWith('ch') || syllable.startsWith('ts')) {
+    return 't';
+  }
+
+  if (syllable.startsWith('sh')) {
+    return 's';
+  }
+
+  return /^[aeiou]/.test(syllable) ? '' : syllable.slice(0, 1);
+}
+
+function getLastRomajiVowel(value: string): string {
+  return [...value].reverse().find((char) => /[aeiou]/.test(char)) ?? '';
+}
+
+function kanaToRomaji(value: string): string {
+  const kana = katakanaToHiragana(normalizeJapaneseAnswerToken(value));
+  let result = '';
+  let isGeminated = false;
+
+  for (let index = 0; index < kana.length; index += 1) {
+    const character = kana[index];
+
+    if (character === 'っ') {
+      isGeminated = true;
+      continue;
+    }
+
+    if (character === 'ー') {
+      result += getLastRomajiVowel(result);
+      continue;
+    }
+
+    const pair = kana.slice(index, index + 2);
+    const syllable = JAPANESE_KANA_ROMAJI[pair] ?? JAPANESE_KANA_ROMAJI[character];
+
+    if (!syllable) {
+      continue;
+    }
+
+    if (JAPANESE_KANA_ROMAJI[pair]) {
+      index += 1;
+    }
+
+    result += `${isGeminated ? getGeminatedPrefix(syllable) : ''}${syllable}`;
+    isGeminated = false;
+  }
+
+  return result;
+}
+
+function extractJapaneseReadingParts(word?: Word): { kana: string | null; romaji: string | null } {
   if (!word?.transcription) {
-    return null;
+    return { kana: null, romaji: null };
   }
 
   const bracketContent = word.transcription.match(/\[([^\]]+)\]/)?.[1] ?? word.transcription;
-  const kanaPart = bracketContent.split('·')[0]?.trim();
+  const parts = bracketContent.split(/[·・]/).map((part) => part.trim()).filter(Boolean);
+  const kana = parts.find((part) => /[\u3040-\u30ff]/.test(part)) ?? null;
+  const romaji = parts.find((part) => /[a-z]/i.test(part)) ?? null;
 
-  return kanaPart || null;
+  return { kana, romaji };
 }
 
 function getJapaneseAnswerVariants(correctAnswer: string, word?: Word): Set<string> {
-  const values = [correctAnswer, word?.original, extractJapaneseReading(word)].filter((value): value is string => Boolean(value));
-  const variants = values.flatMap((value) => {
+  const { kana, romaji } = extractJapaneseReadingParts(word);
+  const writingValues = [correctAnswer, word?.original, kana].filter((value): value is string => Boolean(value));
+  const variants = writingValues.flatMap((value) => {
     const normalized = normalizeJapaneseAnswerToken(value);
     return [normalized, katakanaToHiragana(normalized)];
   });
 
-  return new Set(variants.filter(Boolean));
+  const romajiValues = [romaji, kana ? kanaToRomaji(kana) : null].filter((value): value is string => Boolean(value));
+
+  return new Set([
+    ...variants.filter(Boolean),
+    ...romajiValues.flatMap((value) => [...getJapaneseRomajiVariants(value)]),
+  ]);
 }
 
 export function isAnswerMatch(userAnswer: string, correctAnswer: string, language: LearningLanguage, word?: Word): boolean {
@@ -90,7 +232,9 @@ export function isAnswerMatch(userAnswer: string, correctAnswer: string, languag
   }
 
   const normalizedUserAnswer = katakanaToHiragana(normalizeJapaneseAnswerToken(userAnswer));
-  return getJapaneseAnswerVariants(correctAnswer, word).has(normalizedUserAnswer);
+  const answerVariants = getJapaneseAnswerVariants(correctAnswer, word);
+
+  return answerVariants.has(normalizedUserAnswer) || [...getJapaneseRomajiVariants(userAnswer)].some((variant) => answerVariants.has(variant));
 }
 
 function normalizeComparableText(value: string): string {
