@@ -31,6 +31,9 @@ export function AppNavigation({ activeScreen, lessonAvailable, streakDays, onNav
               key={item.id}
               type="button"
               className={isActive ? 'nav-button active' : 'nav-button'}
+              aria-current={isActive ? 'page' : undefined}
+              aria-label={item.label}
+              title={item.label}
               disabled={item.id === 'lesson' && !lessonAvailable && !isActive}
               onClick={() => onNavigate(item.id)}
             >

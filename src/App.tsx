@@ -587,13 +587,17 @@ function App() {
   if (isLoadingWords) {
     return (
       <AppShell>
-          <section className="hero-card">
-            <span className="eyebrow">Загрузка</span>
+        <section className="app-loading-state" aria-live="polite" aria-busy="true">
+          <span className="loading-mark" aria-hidden="true">é</span>
+          <div>
+            <span className="eyebrow">Почти готово</span>
             <h1 className="hero-title">Подготавливаем словарь</h1>
             <p className="hero-text">
               {`Загружаем ${getLearningLanguageTitle(storage.learningLanguage)} слова, активные паки и локальный прогресс.`}
             </p>
-          </section>
+          </div>
+          <div className="loading-progress" aria-hidden="true"><span /></div>
+        </section>
       </AppShell>
     );
   }
