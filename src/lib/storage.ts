@@ -16,6 +16,23 @@ import type {
 import { addDays, clamp, deriveFrenchLatinTranscription, getTodayDateKey, normalizeTranscription, isReviewDue, startOfDay } from './utils';
 
 const STORAGE_KEY = 'anki-plus-storage';
+const MAX_PROFILE_NAME_LENGTH = 80;
+const MAX_CUSTOM_WORDS = 2_000;
+const MAX_CUSTOM_PACKS = 50;
+const MAX_WORDS_PER_PACK = 2_000;
+const VALID_WORD_STATUSES = new Set<WordStatus>(['new', 'learning', 'review', 'mastered', 'difficult', 'ignored']);
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function cleanText(value: unknown, fallback = '', maxLength = 1_000): string {
+  return typeof value === 'string' ? value.trim().slice(0, maxLength) : fallback;
+}
+
+function finiteNumber(value: unknown, fallback: number, minimum = 0): number {
+  return typeof value === 'number' && Number.isFinite(value) ? Math.max(minimum, value) : fallback;
+}
 
 function createDefaultProfile(): UserProfile {
   const now = new Date().toISOString();
@@ -51,26 +68,28 @@ function createDefaultStorage(): AppStorage {
 function normalizeWord(word: Word): Word {
   const language = word.language ?? 'french';
   const normalizedSource = word.source ?? 'custom';
-  const rawTranscription = (word.transcription ?? '').trim();
+  const original = cleanText(word.original, '', 240);
+  const translation = cleanText(word.translation, '', 400);
+  const rawTranscription = cleanText(word.transcription, '', 240);
   const transcription =
     language === 'french'
       ? normalizedSource === 'custom'
-        ? normalizeTranscription(rawTranscription) || deriveFrenchLatinTranscription(word.original, '')
-        : deriveFrenchLatinTranscription(word.original, rawTranscription)
-      : rawTranscription.normalize('NFKC') || word.original.trim();
+        ? normalizeTranscription(rawTranscription) || deriveFrenchLatinTranscription(original, '')
+        : deriveFrenchLatinTranscription(original, rawTranscription)
+      : rawTranscription.normalize('NFKC') || original;
 
   return {
     ...word,
     language,
-    original: word.original.trim(),
-    translation: word.translation.trim(),
+    original,
+    translation,
     transcription,
-    audio_original: word.audio_original ?? '',
-    example_original: word.example_original.trim(),
-    example_translation: word.example_translation.trim(),
-    part_of_speech: word.part_of_speech.trim() || 'word',
-    tags: Array.isArray(word.tags) ? word.tags.map((tag) => tag.trim()).filter(Boolean) : [],
-    packIds: Array.isArray(word.packIds) ? word.packIds : [],
+    audio_original: cleanText(word.audio_original, '', 2_048),
+    example_original: cleanText(word.example_original, original, 1_000),
+    example_translation: cleanText(word.example_translation, translation, 1_000),
+    part_of_speech: cleanText(word.part_of_speech, 'word', 80) || 'word',
+    tags: Array.isArray(word.tags) ? word.tags.map((tag) => cleanText(tag, '', 80)).filter(Boolean).slice(0, 30) : [],
+    packIds: Array.isArray(word.packIds) ? word.packIds.filter((id) => typeof id === 'string').slice(0, 50) : [],
     source: word.source ?? 'custom',
     imagePath: word.imagePath ?? undefined,
     imageUrl: word.imageUrl ?? undefined,
@@ -98,17 +117,33 @@ function createInitialProgress(wordId: string): WordProgress {
   };
 }
 
-function normalizeProgress(progress: WordProgress): WordProgress {
+function normalizeProgress(progress: Partial<WordProgress>, wordId: string): WordProgress {
   const normalizedStatus = (progress.status as string) === 'known' ? 'mastered' : progress.status;
+  const base = createInitialProgress(wordId);
 
   return {
-    ...createInitialProgress(progress.word_id),
-    ...progress,
-    status: normalizedStatus === 'ignored' ? 'ignored' : normalizedStatus,
+    ...base,
+    word_id: wordId,
+    shown_count: Math.floor(finiteNumber(progress.shown_count, base.shown_count)),
+    correct_count: Math.floor(finiteNumber(progress.correct_count, base.correct_count)),
+    wrong_count: Math.floor(finiteNumber(progress.wrong_count, base.wrong_count)),
+    ease_factor: clamp(finiteNumber(progress.ease_factor, base.ease_factor), 1.3, 3.4),
+    interval_days: Math.floor(finiteNumber(progress.interval_days, base.interval_days)),
+    repetition_step: Math.floor(finiteNumber(progress.repetition_step, base.repetition_step)),
+    last_seen_at: typeof progress.last_seen_at === 'string' ? progress.last_seen_at : null,
+    next_review_at: typeof progress.next_review_at === 'string' ? progress.next_review_at : null,
+    learned_at: typeof progress.learned_at === 'string' ? progress.learned_at : null,
+    status: normalizedStatus && VALID_WORD_STATUSES.has(normalizedStatus) ? normalizedStatus : base.status,
   };
 }
 
-function normalizeCustomPack(pack: Partial<import('../types').WordPack>): import('../types').WordPack | null {
+function normalizeCustomPack(value: unknown): import('../types').WordPack | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const pack = value as Partial<import('../types').WordPack>;
+
   if (!pack.id || !pack.title || !pack.language || !Array.isArray(pack.words)) {
     return null;
   }
@@ -116,12 +151,13 @@ function normalizeCustomPack(pack: Partial<import('../types').WordPack>): import
   return {
     id: pack.id,
     language: pack.language,
-    title: pack.title,
-    description: pack.description ?? 'Импортированный пользовательский пак.',
+    title: cleanText(pack.title, 'Импортированный пак', 80),
+    description: cleanText(pack.description, 'Импортированный пользовательский пак.', 500),
     accent: pack.accent ?? '#1a8ce2',
     coverImageUrl: pack.coverImageUrl,
     coverImageAlt: pack.coverImageAlt,
     words: pack.words
+      .slice(0, MAX_WORDS_PER_PACK)
       .filter((word): word is Word => Boolean(word?.id && word?.original && word?.translation))
       .map((word) => normalizeWord({ ...word, source: 'pack', packIds: [pack.id!] })),
   };
@@ -133,11 +169,17 @@ function normalizeProfile(profile?: Partial<UserProfile>): UserProfile {
   return {
     ...fallback,
     ...profile,
-    displayName: profile?.displayName?.trim() || fallback.displayName,
+    displayName: cleanText(profile?.displayName, fallback.displayName, MAX_PROFILE_NAME_LENGTH) || fallback.displayName,
   };
 }
 
-function normalizeHistoryEntry(entry: Partial<StudyHistoryEntry>): StudyHistoryEntry | null {
+function normalizeHistoryEntry(value: unknown): StudyHistoryEntry | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const entry = value as Partial<StudyHistoryEntry>;
+
   if (!entry.id || !entry.date || !entry.completedAt || !entry.sessionId || !entry.mode) {
     return null;
   }
@@ -171,34 +213,56 @@ function normalizePackState(packState: Partial<UserPackState> | undefined, packI
 }
 
 export function loadStorage(): AppStorage {
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-
-  if (!raw) {
-    return createDefaultStorage();
-  }
-
   try {
-    const parsed = JSON.parse(raw) as Partial<AppStorage>;
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+
+    if (!raw) {
+      return createDefaultStorage();
+    }
+
+    const parsedValue: unknown = JSON.parse(raw);
+
+    if (!isRecord(parsedValue)) {
+      return createDefaultStorage();
+    }
+
+    const parsed = parsedValue as Partial<AppStorage>;
     const defaults = createDefaultStorage();
+    const progressEntries: Array<[string, unknown]> = isRecord(parsed.progressByWordId)
+      ? Object.entries(parsed.progressByWordId)
+      : [];
+    const dailyStats: unknown[] = Array.isArray(parsed.dailyStats) ? parsed.dailyStats : [];
+    const completedDailyLessons: unknown[] = Array.isArray(parsed.completedDailyLessons) ? parsed.completedDailyLessons : [];
+    const studyHistory: unknown[] = Array.isArray(parsed.studyHistory) ? parsed.studyHistory : [];
+    const packStateEntries = isRecord(parsed.packStates) ? Object.entries(parsed.packStates) : [];
+    const customWords: unknown[] = Array.isArray(parsed.customWords) ? parsed.customWords : [];
+    const customPacks: unknown[] = Array.isArray(parsed.customPacks) ? parsed.customPacks : [];
 
     return {
       ...defaults,
       ...parsed,
       learningLanguage: parsed.learningLanguage === 'japanese' ? 'japanese' : 'french',
       progressByWordId: Object.fromEntries(
-        Object.entries(parsed.progressByWordId ?? {}).map(([wordId, progress]) => [
-          wordId,
-          normalizeProgress(progress),
-        ]),
+        progressEntries
+          .filter((entry): entry is [string, Partial<WordProgress>] => isRecord(entry[1]))
+          .map(([wordId, progress]) => [wordId, normalizeProgress(progress, wordId)]),
       ),
-      dailyStats: (parsed.dailyStats ?? []).map((item) => ({
-        ...item,
-        language: item.language ?? 'french',
-        wordsLearned: item.wordsLearned ?? 0,
-        reviewsCompleted: item.reviewsCompleted ?? 0,
-      })),
-      completedDailyLessons: (parsed.completedDailyLessons ?? [])
-        .filter((item): item is DailyLessonRecord => Boolean(item?.date && item?.completedAt && item?.sessionId))
+      dailyStats: dailyStats
+        .filter((item): item is Record<string, unknown> => isRecord(item) && typeof item.date === 'string')
+        .map((item) => ({
+          date: item.date as string,
+          language: (item.language === 'japanese' ? 'japanese' : 'french') as LearningLanguage,
+          completedLessons: Math.floor(finiteNumber(item.completedLessons, 0)),
+          correctAnswers: Math.floor(finiteNumber(item.correctAnswers, 0)),
+          totalAnswers: Math.floor(finiteNumber(item.totalAnswers, 0)),
+          wordsLearned: Math.floor(finiteNumber(item.wordsLearned, 0)),
+          reviewsCompleted: Math.floor(finiteNumber(item.reviewsCompleted, 0)),
+        }))
+        .slice(-180),
+      completedDailyLessons: completedDailyLessons
+        .filter((item): item is DailyLessonRecord =>
+          isRecord(item) && typeof item.date === 'string' && typeof item.completedAt === 'string' && typeof item.sessionId === 'string',
+        )
         .map((item) => ({
           ...item,
           language: item.language ?? 'french',
@@ -220,21 +284,26 @@ export function loadStorage(): AppStorage {
           ? parsed.lessonWordTarget
           : 20,
       lessonSourcePackId: typeof parsed.lessonSourcePackId === 'string' ? parsed.lessonSourcePackId : null,
-      profile: normalizeProfile(parsed.profile),
-      studyHistory: (parsed.studyHistory ?? [])
+      profile: normalizeProfile(isRecord(parsed.profile) ? parsed.profile as Partial<UserProfile> : undefined),
+      studyHistory: studyHistory
         .map((entry) => normalizeHistoryEntry(entry))
         .filter((entry): entry is StudyHistoryEntry => entry !== null)
         .slice(-180),
       packStates: Object.fromEntries(
-        Object.entries(parsed.packStates ?? {}).map(([packId, packState]) => [
+        packStateEntries.map(([packId, packState]) => [
           packId,
-          normalizePackState(packState, packId),
+          normalizePackState(isRecord(packState) ? packState as Partial<UserPackState> : undefined, packId),
         ]),
       ),
-      customWords: (parsed.customWords ?? [])
-        .filter((word): word is Word => Boolean(word?.id && word?.original && word?.translation))
+      customWords: customWords
+        .slice(-MAX_CUSTOM_WORDS)
+        .filter((word): word is Word =>
+          isRecord(word) && typeof word.id === 'string' && typeof word.original === 'string' && typeof word.translation === 'string',
+        )
         .map((word) => normalizeWord(word)),
-      customPacks: (parsed.customPacks ?? [])
+      customPacks: customPacks
+        .slice(-MAX_CUSTOM_PACKS)
+        .filter(isRecord)
         .map((pack) => normalizeCustomPack(pack))
         .filter((pack): pack is import('../types').WordPack => pack !== null),
     };
@@ -244,7 +313,11 @@ export function loadStorage(): AppStorage {
 }
 
 export function saveStorage(storage: AppStorage): void {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(storage));
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(storage));
+  } catch {
+    // Storage can be unavailable or full. The in-memory session remains usable.
+  }
 }
 
 function resolveStatus(progress: WordProgress): WordStatus {
@@ -655,7 +728,7 @@ export function recordStudyHistory(currentStorage: AppStorage, historyEntry: Stu
 }
 
 export function updateProfileName(currentStorage: AppStorage, displayName: string): AppStorage {
-  const normalizedName = displayName.replace(/\s+/g, ' ').trimStart();
+  const normalizedName = displayName.replace(/\s+/g, ' ').trimStart().slice(0, MAX_PROFILE_NAME_LENGTH);
 
   return {
     ...currentStorage,

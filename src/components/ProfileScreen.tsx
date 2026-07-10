@@ -156,6 +156,7 @@ export default function ProfileScreen({
               id="profile-name"
               className="settings-input"
               value={profile.displayName}
+              maxLength={80}
               onChange={(event) => onProfileNameChange(event.target.value)}
               placeholder="Введите имя"
             />

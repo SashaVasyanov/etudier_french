@@ -407,7 +407,7 @@ function buildExerciseSequence(
     const wordPool = preferredWords.length > 0 ? preferredWords : available;
     const shuffledWordPool = shuffleArray(wordPool);
 
-    let selected = shuffledWordPool.find((item) => item.queue[0] !== previousType) ?? shuffledWordPool[0];
+    const selected = shuffledWordPool.find((item) => item.queue[0] !== previousType) ?? shuffledWordPool[0];
 
     if (!selected) {
       break;

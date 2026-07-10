@@ -1,4 +1,4 @@
-import { Suspense, lazy, startTransition, useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, startTransition, useEffect, useMemo, useRef, useState } from 'react';
 import { AppNavigation } from './components/AppNavigation';
 import { AppShell } from './components/AppShell';
 import { AudioInputExercise } from './components/AudioInputExercise';
@@ -9,7 +9,7 @@ import { LessonResult } from './components/LessonResult';
 import { LessonWordPreview } from './components/LessonWordPreview';
 import { MemoryCheckExercise } from './components/MemoryCheckExercise';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
-import { getLessonPoolWords, getStarterPacks, getWordById, loadWords } from './data/words';
+import { getLessonPoolWords, getStarterPacks, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
 import { createFlashcardSession, createLessonSession } from './lib/exercises';
 import {
@@ -148,7 +148,10 @@ function App() {
   const [outcomes, setOutcomes] = useState<ExerciseOutcome[]>([]);
   const [knownWordIds, setKnownWordIds] = useState<string[]>([]);
   const [isLoadingWords, setIsLoadingWords] = useState(true);
+  const [wordsLoadError, setWordsLoadError] = useState<string | null>(null);
+  const [wordsReloadKey, setWordsReloadKey] = useState(0);
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
+  const storageRef = useRef(storage);
 
   const starterPacks = useMemo(() => getStarterPacks(storage.learningLanguage), [storage.learningLanguage]);
   const importedPacks = useMemo(
@@ -171,6 +174,7 @@ function App() {
   );
   const customPackWords = useMemo(() => importedPacks.flatMap((pack) => pack.words), [importedPacks]);
   const words = useMemo(() => [...baseWords, ...customWords, ...customPackWords], [baseWords, customPackWords, customWords]);
+  const wordsById = useMemo(() => new Map(words.map((word) => [word.id, word])), [words]);
   const availableWords = useMemo(() => getActiveWords(words, enabledPackIds), [enabledPackIds, words]);
   const selectedLessonSourceWords = useMemo(() => {
     if (!selectedLessonSourcePack) {
@@ -188,11 +192,12 @@ function App() {
   const progressList = useMemo(() => words.map((word) => getWordProgress(storage, word.id)), [storage, words]);
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
-  const currentWord = currentStep ? getWordById(words, currentStep.wordId) : null;
+  const currentWord = currentStep ? wordsById.get(currentStep.wordId) ?? null : null;
   const dailyCompletion = getCompletedDailyLesson(storage);
   useEffect(() => {
     let isMounted = true;
     setIsLoadingWords(true);
+    setWordsLoadError(null);
 
     void loadWords(storage.learningLanguage)
       .then((nextWords) => {
@@ -201,6 +206,12 @@ function App() {
         }
 
         setBaseWords(nextWords);
+      })
+      .catch(() => {
+        if (isMounted) {
+          setBaseWords([]);
+          setWordsLoadError('Не удалось загрузить словарь. Проверьте соединение и попробуйте ещё раз.');
+        }
       })
       .finally(() => {
         if (isMounted) {
@@ -211,11 +222,34 @@ function App() {
     return () => {
       isMounted = false;
     };
-  }, [storage.learningLanguage]);
+  }, [storage.learningLanguage, wordsReloadKey]);
 
   useEffect(() => {
-    saveStorage(storage);
+    storageRef.current = storage;
   }, [storage]);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      saveStorage(storage);
+    }, 180);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [storage]);
+
+  useEffect(() => {
+    const persistLatestStorage = () => {
+      saveStorage(storageRef.current);
+    };
+
+    window.addEventListener('pagehide', persistLatestStorage);
+
+    return () => {
+      window.removeEventListener('pagehide', persistLatestStorage);
+      persistLatestStorage();
+    };
+  }, []);
 
   useEffect(() => {
     if (!storage.lessonSourcePackId || packs.some((pack) => pack.id === storage.lessonSourcePackId)) {
@@ -274,8 +308,10 @@ function App() {
       new Set(outcomes.filter((outcome) => !outcome.isCorrect).map((outcome) => outcome.wordId)),
     );
 
-    return incorrectWordIds.map((wordId) => getWordById(words, wordId));
-  }, [outcomes, words]);
+    return incorrectWordIds
+      .map((wordId) => wordsById.get(wordId))
+      .filter((word): word is Word => Boolean(word));
+  }, [outcomes, wordsById]);
 
   function resetExerciseState() {
     setSelectedAnswer(null);
@@ -432,12 +468,12 @@ function App() {
     const selectedOptionWordId = currentExercise.options?.find((option) => option.label === answer)?.id;
     const selectedOriginalWord =
       currentExercise.type === 'translation_to_original_choice' && selectedOptionWordId
-        ? getWordById(words, selectedOptionWordId)
+        ? wordsById.get(selectedOptionWordId) ?? null
         : null;
     const resultAudioWord = selectedOriginalWord ?? currentWord;
 
     if (resultAudioWord) {
-      void playWordAudio(resultAudioWord);
+      void playWordAudio(resultAudioWord, { force: true });
     }
   }
 
@@ -608,6 +644,24 @@ function App() {
             </p>
           </div>
           <div className="loading-progress" aria-hidden="true"><span /></div>
+        </section>
+      </AppShell>
+    );
+  }
+
+  if (wordsLoadError) {
+    return (
+      <AppShell>
+        <section className="app-loading-state app-error-state" role="alert">
+          <span className="loading-mark error" aria-hidden="true">!</span>
+          <div>
+            <span className="eyebrow">Словарь недоступен</span>
+            <h1 className="hero-title">Не получилось запустить обучение</h1>
+            <p className="hero-text">{wordsLoadError}</p>
+          </div>
+          <button type="button" className="primary-button" onClick={() => setWordsReloadKey((key) => key + 1)}>
+            Повторить загрузку
+          </button>
         </section>
       </AppShell>
     );
@@ -890,6 +944,8 @@ function App() {
               onLearningLanguageChange={(value) => {
                 clearSessionState('profile');
                 setSelectedPackId(null);
+                setBaseWords([]);
+                setIsLoadingWords(true);
                 setStorage((currentStorage) => setLearningLanguagePreference(currentStorage, value));
               }}
               onLessonDurationEnabledChange={(value) => {

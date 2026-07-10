@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import type { Word } from '../types';
 import { createFallbackWordImage } from '../lib/wordImages';
 
@@ -8,8 +8,8 @@ interface WordImageProps {
   className?: string;
 }
 
-export function WordImage({ word, size = 'medium', className = '' }: WordImageProps) {
-  const fallback = createFallbackWordImage(word);
+export const WordImage = memo(function WordImage({ word, size = 'medium', className = '' }: WordImageProps) {
+  const fallback = useMemo(() => createFallbackWordImage(word), [word]);
   const primarySrc = word.imagePath || word.imageUrl || fallback.src;
   const srcWithVersion =
     primarySrc.startsWith('/generated-word-images/')
@@ -29,6 +29,7 @@ export function WordImage({ word, size = 'medium', className = '' }: WordImagePr
         src={src}
         alt={alt}
         loading="lazy"
+        decoding="async"
         onError={() => {
           if (src !== fallback.src) {
             setSrc(fallback.src);
@@ -37,4 +38,4 @@ export function WordImage({ word, size = 'medium', className = '' }: WordImagePr
       />
     </div>
   );
-}
+});

@@ -50,7 +50,7 @@ export function isFrenchAnswerMatch(userAnswer: string, correctAnswer: string): 
 function normalizeJapaneseAnswerToken(value: string): string {
   return value
     .normalize('NFKC')
-    .replace(/[　\s]+/g, ' ')
+    .replace(/[\u3000\s]+/g, ' ')
     .trim();
 }
 

@@ -6,6 +6,15 @@ interface ParseImportedPackInput {
   language: LearningLanguage;
 }
 
+export const IMPORT_LIMITS = {
+  titleLength: 80,
+  rawTextLength: 500_000,
+  wordsPerPack: 2_000,
+  wordLength: 240,
+  translationLength: 400,
+  transcriptionLength: 240,
+} as const;
+
 function hashText(value: string): string {
   let hash = 0;
 
@@ -47,7 +56,9 @@ function splitImportedLine(line: string): string[] {
 }
 
 function parseWordFields(parts: string[], language: LearningLanguage): Pick<Word, 'original' | 'translation' | 'transcription'> | null {
-  const [first, second, third] = parts;
+  const first = parts[0]?.slice(0, IMPORT_LIMITS.wordLength);
+  const second = parts[1]?.slice(0, IMPORT_LIMITS.translationLength);
+  const third = parts[2]?.slice(0, IMPORT_LIMITS.transcriptionLength);
 
   if (!first || !second) {
     return null;
@@ -69,7 +80,7 @@ function parseWordFields(parts: string[], language: LearningLanguage): Pick<Word
 }
 
 export function parseImportedPack({ title, rawText, language }: ParseImportedPackInput): WordPack | null {
-  const cleanTitle = title.trim();
+  const cleanTitle = title.trim().slice(0, IMPORT_LIMITS.titleLength);
 
   if (!cleanTitle) {
     return null;
@@ -78,7 +89,9 @@ export function parseImportedPack({ title, rawText, language }: ParseImportedPac
   const packId = `custom-pack-${slugify(cleanTitle)}-${Date.now().toString(36)}`;
   const seen = new Set<string>();
   const words = rawText
+    .slice(0, IMPORT_LIMITS.rawTextLength)
     .split(/\r?\n/)
+    .slice(0, IMPORT_LIMITS.wordsPerPack)
     .map((line) => splitImportedLine(line))
     .map((parts) => parseWordFields(parts, language))
     .filter((word): word is Pick<Word, 'original' | 'translation' | 'transcription'> => word !== null)

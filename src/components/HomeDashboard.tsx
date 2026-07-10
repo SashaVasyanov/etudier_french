@@ -89,7 +89,7 @@ export function HomeDashboard({
       [...packs]
         .sort((left, right) => getPackCompletion(right, storage) - getPackCompletion(left, storage))
         .find((pack) => pack.id === selectedLessonPack?.id) ?? packs[0] ?? null,
-    [packs, storage],
+    [packs, selectedLessonPack?.id, storage],
   );
   const overallProgress = percentage(learnedWordIds.size, Math.max(1, totalWords.length));
   const isDailyComplete = Boolean(dailyCompletion);

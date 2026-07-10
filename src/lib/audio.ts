@@ -50,14 +50,20 @@ function waitForVoices(): Promise<SpeechSynthesisVoice[]> {
   }
 
   voicesReadyPromise = new Promise((resolve) => {
+    let isSettled = false;
     const finish = () => {
+      if (isSettled) {
+        return;
+      }
+
+      isSettled = true;
       window.clearTimeout(timeoutId);
       removeVoicesChangedListener(finish);
+      voicesReadyPromise = null;
       resolve(getVoices());
     };
     const timeoutId = window.setTimeout(() => {
-      removeVoicesChangedListener(finish);
-      resolve(getVoices());
+      finish();
     }, VOICE_WAIT_TIMEOUT_MS);
 
     addVoicesChangedListener(finish);
@@ -193,11 +199,22 @@ async function playFileAudio(src: string): Promise<void> {
   const audio = new Audio(src);
   activeAudio = audio;
   audio.preload = 'auto';
+  const release = () => {
+    if (activeAudio === audio) {
+      activeAudio = null;
+    }
+
+    audio.onended = null;
+    audio.onerror = null;
+  };
+
+  audio.onended = release;
+  audio.onerror = release;
 
   try {
     await audio.play();
   } catch (error) {
-    activeAudio = null;
+    release();
     throw error;
   }
 }
@@ -258,9 +275,13 @@ async function speakFallback(text: string, token: number, language: Word['langua
   });
 }
 
-export async function playWordAudio(word: Word): Promise<void> {
-  if (!canReplay()) {
+export async function playWordAudio(word: Word, options?: { force?: boolean }): Promise<void> {
+  if (!options?.force && !canReplay()) {
     return;
+  }
+
+  if (options?.force) {
+    lastPlayAt = Date.now();
   }
 
   stopAudio();
@@ -287,6 +308,8 @@ export function stopAudio(): void {
   playbackToken += 1;
 
   if (activeAudio) {
+    activeAudio.onended = null;
+    activeAudio.onerror = null;
     activeAudio.pause();
     activeAudio.currentTime = 0;
     activeAudio = null;
@@ -297,9 +320,4 @@ export function stopAudio(): void {
   }
 
   activeUtterance = null;
-}
-
-if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-  addVoicesChangedListener(getVoices);
-  void waitForVoices();
 }

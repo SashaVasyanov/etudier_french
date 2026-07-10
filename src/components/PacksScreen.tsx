@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { derivePackStatus, getPackCompletionRatio } from '../lib/packs';
 import { getLearningLanguageMenuLabel } from '../lib/languages';
+import { IMPORT_LIMITS } from '../lib/importPacks';
 import type { AppStorage, LearningLanguage, WordPack } from '../types';
 import { AppCard } from './AppCard';
 import { PackCard } from './PackCard';
@@ -56,12 +57,14 @@ export default function PacksScreen({ learningLanguage, packs, storage, onAddPac
           <input
             className="text-input"
             value={importTitle}
+            maxLength={IMPORT_LIMITS.titleLength}
             placeholder="Название пака"
             onChange={(event) => setImportTitle(event.target.value)}
           />
           <textarea
             className="text-input pack-import-textarea"
             value={importText}
+            maxLength={IMPORT_LIMITS.rawTextLength}
             placeholder={'bonjour\tпривет\nmerci\tспасибо\nau revoir\tдо свидания'}
             onChange={(event) => setImportText(event.target.value)}
           />

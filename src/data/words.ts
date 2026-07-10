@@ -1,10 +1,10 @@
 import { getPackWords, STARTER_PACKS } from './wordPacks';
-import { JAPANESE_CORE_WORDS } from './japaneseWords';
 import type { LearningLanguage, Word, WordLevel, WordPack } from '../types';
 import { createFallbackWordImage } from '../lib/wordImages';
 import { deriveFrenchLatinTranscription } from '../lib/utils';
 
 const DATASET_URLS = ['/data/words_a1.json', '/data/words_a2.json', '/data/words_b1.json'] as const;
+const FETCH_TIMEOUT_MS = 10_000;
 const LEVEL_ORDER: Record<WordLevel, number> = {
   A1: 0,
   A2: 1,
@@ -1403,13 +1403,38 @@ function normalizeWord(word: Word): Word {
 }
 
 async function loadWordImageManifest(): Promise<WordImageManifest> {
-  const response = await fetch('/data/word_images.json');
+  try {
+    const manifest = await fetchJson<unknown>('/data/word_images.json');
 
-  if (!response.ok) {
+    if (!manifest || typeof manifest !== 'object' || Array.isArray(manifest)) {
+      return {};
+    }
+
+    return manifest as WordImageManifest;
+  } catch {
     return {};
   }
+}
 
-  return (await response.json()) as WordImageManifest;
+async function fetchJson<T>(url: string): Promise<T> {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+      cache: 'force-cache',
+      credentials: 'same-origin',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Resource unavailable: ${url}`);
+    }
+
+    return (await response.json()) as T;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
 }
 
 function sortWordsByCurriculum(words: Word[], language: LearningLanguage): Word[] {
@@ -1431,54 +1456,57 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
     return cached;
   }
 
-  const wordsPromise =
-    language === 'japanese'
-      ? loadWordImageManifest().then((wordImageManifest) =>
-          sortWordsByCurriculum(
-            JAPANESE_CORE_WORDS.map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
-            language,
-          ),
-        )
-      : Promise.all([
-          Promise.all(
-            DATASET_URLS.map(async (url) => {
-              const response = await fetch(url);
+  const wordsPromise = (async () => {
+    const wordImageManifestPromise = loadWordImageManifest();
 
-              if (!response.ok) {
-                throw new Error(`Failed to load dataset: ${url}`);
-              }
+    if (language === 'japanese') {
+      const [{ JAPANESE_CORE_WORDS }, wordImageManifest] = await Promise.all([
+        import('./japaneseWords'),
+        wordImageManifestPromise,
+      ]);
 
-              return (await response.json()) as Array<Omit<Word, 'packIds' | 'source' | 'language'>>;
-            }),
-          ),
-          loadWordImageManifest(),
-        ]).then(([parts, wordImageManifest]) =>
-          sortWordsByCurriculum(
-            [
-              ...parts
-                .flat()
-                .map((word) =>
-                  normalizeWord({ ...word, language: 'french', ...wordImageManifest[word.id], packIds: [], source: 'core' } as Word),
-                )
-                .filter((word) => isSupportedCoreWord(word)),
-              ...getPackWords().map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
-            ],
-            language,
-          ),
-        );
+      return sortWordsByCurriculum(
+        JAPANESE_CORE_WORDS.map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
+        language,
+      );
+    }
 
-  wordsPromiseByLanguage.set(language, wordsPromise);
-  return wordsPromise;
-}
+    const [datasetResults, wordImageManifest] = await Promise.all([
+      Promise.allSettled(
+        DATASET_URLS.map((url) =>
+          fetchJson<Array<Omit<Word, 'packIds' | 'source' | 'language'>>>(url),
+        ),
+      ),
+      wordImageManifestPromise,
+    ]);
+    const parts = datasetResults
+      .filter((result): result is PromiseFulfilledResult<Array<Omit<Word, 'packIds' | 'source' | 'language'>>> => result.status === 'fulfilled')
+      .map((result) => result.value);
 
-export function getWordById(words: Word[], wordId: string): Word {
-  const word = words.find((item) => item.id === wordId);
+    if (parts.length === 0) {
+      throw new Error('Word datasets are unavailable');
+    }
 
-  if (!word) {
-    throw new Error(`Word not found: ${wordId}`);
-  }
+    return sortWordsByCurriculum(
+      [
+        ...parts
+          .flat()
+          .map((word) =>
+            normalizeWord({ ...word, language: 'french', ...wordImageManifest[word.id], packIds: [], source: 'core' } as Word),
+          )
+          .filter((word) => isSupportedCoreWord(word)),
+        ...getPackWords().map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
+      ],
+      language,
+    );
+  })();
+  const recoverablePromise = wordsPromise.catch((error: unknown) => {
+    wordsPromiseByLanguage.delete(language);
+    throw error;
+  });
 
-  return word;
+  wordsPromiseByLanguage.set(language, recoverablePromise);
+  return recoverablePromise;
 }
 
 export function getStarterPacks(language: LearningLanguage): WordPack[] {

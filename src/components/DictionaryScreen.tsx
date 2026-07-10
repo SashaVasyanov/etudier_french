@@ -1,4 +1,4 @@
-import { useDeferredValue, useMemo, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import { playWordAudio } from '../lib/audio';
 import { getLearningLanguageTitle } from '../lib/languages';
 import { getPackByWord } from '../lib/packs';
@@ -25,12 +25,15 @@ const TABS: Array<{ id: DictionaryTab; label: string }> = [
   { id: 'mastered', label: 'Выученные' },
   { id: 'difficult', label: 'Сложные' },
 ];
+const INITIAL_VISIBLE_WORDS = 80;
+const VISIBLE_WORDS_STEP = 80;
 
 export default function DictionaryScreen({ learningLanguage, words, storage, packs, onAddWord }: DictionaryScreenProps) {
   const [tab, setTab] = useState<DictionaryTab>('all');
   const [query, setQuery] = useState('');
   const [level, setLevel] = useState<'all' | WordLevel>('all');
   const [packFilter, setPackFilter] = useState<'all' | 'core' | string>('all');
+  const [visibleWordCount, setVisibleWordCount] = useState(INITIAL_VISIBLE_WORDS);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newWord, setNewWord] = useState({
     original: '',
@@ -44,6 +47,16 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
   });
   const deferredQuery = useDeferredValue(query);
   const languageTitle = getLearningLanguageTitle(learningLanguage);
+  const searchIndexByWordId = useMemo(
+    () =>
+      new Map(
+        words.map((word) => [
+          word.id,
+          [word.original, word.translation, word.example_original, ...word.tags].join(' ').toLocaleLowerCase(),
+        ]),
+      ),
+    [words],
+  );
 
   const activePackOptions = useMemo(
     () => packs.filter((pack) => storage.packStates[pack.id]?.status && storage.packStates[pack.id]?.status !== 'not_added'),
@@ -54,26 +67,34 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
     const normalizedQuery = deferredQuery.trim().toLocaleLowerCase();
 
     return words.filter((word) => {
-      const progress = getWordProgress(storage, word.id);
+      const status = storage.progressByWordId[word.id]?.status ?? 'new';
       const matchesTab =
         tab === 'all'
           ? true
           : tab === 'learning'
-            ? progress.status === 'learning' || progress.status === 'review'
+            ? status === 'learning' || status === 'review'
             : tab === 'mastered'
-              ? progress.status === 'mastered'
-              : progress.status === 'difficult';
+              ? status === 'mastered'
+              : status === 'difficult';
       const matchesLevel = level === 'all' ? true : word.level === level;
       const matchesPack =
         packFilter === 'all' ? true : packFilter === 'core' ? word.source === 'core' : word.packIds.includes(packFilter);
       const matchesQuery =
         normalizedQuery.length === 0
           ? true
-          : [word.original, word.translation, word.example_original, ...word.tags].join(' ').toLocaleLowerCase().includes(normalizedQuery);
+          : searchIndexByWordId.get(word.id)?.includes(normalizedQuery) ?? false;
 
       return matchesTab && matchesLevel && matchesPack && matchesQuery;
     });
-  }, [deferredQuery, level, packFilter, storage, tab, words]);
+  }, [deferredQuery, level, packFilter, searchIndexByWordId, storage.progressByWordId, tab, words]);
+  const visibleWords = useMemo(
+    () => filteredWords.slice(0, visibleWordCount),
+    [filteredWords, visibleWordCount],
+  );
+
+  useEffect(() => {
+    setVisibleWordCount(INITIAL_VISIBLE_WORDS);
+  }, [deferredQuery, level, packFilter, tab]);
 
   function resetNewWordForm() {
     setNewWord({
@@ -134,6 +155,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
             <input
               className="text-input"
               value={newWord.original}
+              maxLength={240}
               placeholder={learningLanguage === 'french' ? 'Французское слово' : 'Японское слово'}
               required
               onChange={(event) => setNewWord((current) => ({ ...current, original: event.target.value }))}
@@ -141,6 +163,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
             <input
               className="text-input"
               value={newWord.translation}
+              maxLength={400}
               placeholder="Перевод"
               required
               onChange={(event) => setNewWord((current) => ({ ...current, translation: event.target.value }))}
@@ -148,24 +171,28 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
             <input
               className="text-input"
               value={newWord.transcription}
+              maxLength={240}
               placeholder="Транскрипция"
               onChange={(event) => setNewWord((current) => ({ ...current, transcription: event.target.value }))}
             />
             <input
               className="text-input"
               value={newWord.example_original}
+              maxLength={1000}
               placeholder={learningLanguage === 'french' ? 'Пример на французском' : 'Пример на японском'}
               onChange={(event) => setNewWord((current) => ({ ...current, example_original: event.target.value }))}
             />
             <input
               className="text-input"
               value={newWord.example_translation}
+              maxLength={1000}
               placeholder="Перевод примера"
               onChange={(event) => setNewWord((current) => ({ ...current, example_translation: event.target.value }))}
             />
             <input
               className="text-input"
               value={newWord.part_of_speech}
+              maxLength={80}
               placeholder="Часть речи"
               onChange={(event) => setNewWord((current) => ({ ...current, part_of_speech: event.target.value }))}
             />
@@ -181,6 +208,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
             <input
               className="text-input"
               value={newWord.tags}
+              maxLength={500}
               placeholder="Теги через запятую"
               onChange={(event) => setNewWord((current) => ({ ...current, tags: event.target.value }))}
             />
@@ -246,7 +274,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
       </AppCard>
 
       <section className="dictionary-grid">
-        {filteredWords.map((word) => {
+        {visibleWords.map((word) => {
           const progress = getWordProgress(storage, word.id);
           const wordPacks = getPackByWord(word, packs);
 
@@ -293,6 +321,15 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
           );
         })}
       </section>
+      {visibleWords.length < filteredWords.length ? (
+        <button
+          type="button"
+          className="secondary-button dictionary-load-more"
+          onClick={() => setVisibleWordCount((count) => Math.min(count + VISIBLE_WORDS_STEP, filteredWords.length))}
+        >
+          Показать ещё {Math.min(VISIBLE_WORDS_STEP, filteredWords.length - visibleWords.length)} слов
+        </button>
+      ) : null}
     </section>
   );
 }
