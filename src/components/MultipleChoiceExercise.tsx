@@ -150,8 +150,15 @@ export function MultipleChoiceExercise({
           </div>
           {isSubmitted ? (
             <div className={selectedAnswer === exercise.correctAnswer ? 'answer-feedback success' : 'answer-feedback error'}>
-              <strong>{selectedAnswer === exercise.correctAnswer ? 'Верно' : 'Неправильно'}</strong>
-              <span>{feedbackLabel}</span>
+              <div>
+                <strong>{selectedAnswer === exercise.correctAnswer ? 'Верно' : 'Неправильно'}</strong>
+                <span>{feedbackLabel}</span>
+              </div>
+              {onReplayAudio ? (
+                <button type="button" className="feedback-replay-button" onClick={onReplayAudio}>
+                  Прослушать ещё раз
+                </button>
+              ) : null}
             </div>
           ) : null}
         </>

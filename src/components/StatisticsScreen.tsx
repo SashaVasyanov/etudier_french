@@ -173,6 +173,9 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
   const maxMonthlyCount = Math.max(1, ...monthlyLessons.map((item) => item.count));
   const diagramSegments = useMemo(() => buildDiagramSegments(diagramItems), [diagramItems]);
   const breakdownTotal = Math.max(1, diagramItems.reduce((sum, item) => sum + item.value, 0));
+  const weeklyTotal = weeklyWords.reduce((sum, item) => sum + item.count, 0);
+  const completedLessons = languageHistory.length;
+  const hasDiagramData = diagramItems.some((item) => item.value > 0);
 
   return (
     <section className="analytics-page">
@@ -185,21 +188,21 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
       </header>
 
       <section className="analytics-kpi-grid" aria-label="Ключевые показатели">
-        <article className="analytics-kpi-card">
-          <span>Слов выучено</span>
-          <strong>{learnedWords}</strong>
+        <article className="analytics-kpi-card analytics-kpi-violet">
+          <span className="analytics-kpi-icon" aria-hidden="true">◆</span>
+          <div><span>Слов выучено</span><strong>{learnedWords}</strong><small>из {words.length} в словаре</small></div>
         </article>
-        <article className="analytics-kpi-card">
-          <span>Точность</span>
-          <strong>{accuracy}%</strong>
+        <article className="analytics-kpi-card analytics-kpi-green">
+          <span className="analytics-kpi-icon" aria-hidden="true">✓</span>
+          <div><span>Точность</span><strong>{accuracy}%</strong><small>{correctAnswers} из {totalAnswers} ответов</small></div>
         </article>
-        <article className="analytics-kpi-card">
-          <span>Серия</span>
-          <strong>{currentStreak} дн.</strong>
+        <article className="analytics-kpi-card analytics-kpi-orange">
+          <span className="analytics-kpi-icon" aria-hidden="true">🔥</span>
+          <div><span>Серия</span><strong>{currentStreak} дн.</strong><small>{completedLessons} уроков завершено</small></div>
         </article>
-        <article className="analytics-kpi-card">
-          <span>Время</span>
-          <strong>{formatDurationLabel(studyTimeSeconds)}</strong>
+        <article className="analytics-kpi-card analytics-kpi-blue">
+          <span className="analytics-kpi-icon" aria-hidden="true">◷</span>
+          <div><span>Время</span><strong>{formatDurationLabel(studyTimeSeconds)}</strong><small>за всё время</small></div>
         </article>
       </section>
 
@@ -210,15 +213,17 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
               <h2>Слова за неделю</h2>
               <p>{wordsInProcess} слов остаётся в активном процессе.</p>
             </div>
+            <span className="analytics-summary-badge">+{weeklyTotal} слов</span>
           </div>
-          <div className="analytics-week-chart" aria-label="Количество выученных слов за последние семь дней">
+          <div className={weeklyTotal === 0 ? 'analytics-week-chart is-empty' : 'analytics-week-chart'} aria-label="Количество выученных слов за последние семь дней">
             {weeklyWords.map((item) => (
-              <div key={item.key} className="analytics-week-bar">
-                <span style={{ height: `${Math.max(8, (item.count / maxWeeklyCount) * 100)}%` }} />
+              <div key={item.key} className={item.key === getTodayDateKey() ? 'analytics-week-bar today' : 'analytics-week-bar'}>
+                <span style={{ height: item.count === 0 ? '3px' : `${Math.max(12, (item.count / maxWeeklyCount) * 100)}%` }} />
                 <strong>{item.count}</strong>
                 <small>{item.label}</small>
               </div>
             ))}
+            {weeklyTotal === 0 ? <p className="analytics-chart-empty">Завершите урок — здесь появится динамика недели</p> : null}
           </div>
         </section>
 
@@ -237,6 +242,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
             </svg>
             <div className="analytics-donut-inner">
               <strong>{learnedWords}</strong>
+              <small>освоено</small>
             </div>
           </div>
           <button
@@ -256,7 +262,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
             </div>
           </div>
           <div className="analytics-breakdown-list">
-            {diagramItems.map((item) => (
+            {hasDiagramData ? diagramItems.map((item) => (
               <div key={item.label} className="analytics-breakdown-row">
                 <div>
                   <i style={{ background: item.color }} />
@@ -267,7 +273,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
                   <em style={{ width: `${Math.max(4, (item.value / breakdownTotal) * 100)}%`, background: item.color }} />
                 </b>
               </div>
-            ))}
+            )) : <p className="analytics-empty-copy">Разбивка появится после освоения первых слов.</p>}
           </div>
         </section>
 
@@ -275,13 +281,14 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
           <div className="analytics-card-head">
             <div>
               <h2>Уроки по месяцам</h2>
-              <p>Лента прокручивается горизонтально.</p>
+              <p>История занятий за последние 18 месяцев.</p>
             </div>
+            <span className="analytics-summary-badge">{completedLessons} всего</span>
           </div>
           <div className="analytics-month-strip" aria-label="Количество завершённых уроков по месяцам">
             {monthlyLessons.map((item) => (
               <div key={item.key} className="analytics-month-item">
-                <span style={{ height: `${Math.max(8, (item.count / maxMonthlyCount) * 100)}%` }} />
+                <span style={{ height: item.count === 0 ? '3px' : `${Math.max(12, (item.count / maxMonthlyCount) * 100)}%` }} />
                 <strong>{item.count}</strong>
                 <small>{item.label}</small>
               </div>

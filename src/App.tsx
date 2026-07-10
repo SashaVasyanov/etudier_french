@@ -428,6 +428,17 @@ function App() {
     setOutcomes((current) => [...current, outcome]);
     setSelectedAnswer(answer);
     setIsSubmitted(true);
+
+    const selectedOptionWordId = currentExercise.options?.find((option) => option.label === answer)?.id;
+    const selectedOriginalWord =
+      currentExercise.type === 'translation_to_original_choice' && selectedOptionWordId
+        ? getWordById(words, selectedOptionWordId)
+        : null;
+    const resultAudioWord = selectedOriginalWord ?? currentWord;
+
+    if (resultAudioWord) {
+      void playWordAudio(resultAudioWord);
+    }
   }
 
   function finishLesson(
@@ -704,13 +715,9 @@ function App() {
                       setSelectedAnswer(answer);
                       handleSubmit(answer);
                     }}
-                    onReplayAudio={
-                      currentExercise.type === 'audio_to_translation_choice'
-                        ? () => {
-                            void playWordAudio(currentWord);
-                          }
-                        : undefined
-                    }
+                    onReplayAudio={() => {
+                      void playWordAudio(currentWord);
+                    }}
                     onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
                     onIgnoreWord={handleIgnoreWord}
                     onNext={goToNextStep}

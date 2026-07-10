@@ -122,6 +122,25 @@ export default function ProfileScreen({
         </div>
       </header>
 
+      <section className="settings-profile-overview" aria-label="Сводка профиля">
+        <article>
+          <span className="settings-overview-icon violet" aria-hidden="true">◆</span>
+          <div><strong>{stats.learned}</strong><small>слов встречалось</small></div>
+        </article>
+        <article>
+          <span className="settings-overview-icon green" aria-hidden="true">✓</span>
+          <div><strong>{stats.mastered}</strong><small>слов освоено</small></div>
+        </article>
+        <article>
+          <span className="settings-overview-icon orange" aria-hidden="true">🔥</span>
+          <div><strong>{storage.streakDays}</strong><small>дней в серии</small></div>
+        </article>
+        <article>
+          <span className="settings-overview-icon blue" aria-hidden="true">◷</span>
+          <div><strong>{languageHistory.length}</strong><small>уроков завершено</small></div>
+        </article>
+      </section>
+
       <div className="settings-grid">
         <section className="settings-panel settings-profile-panel">
           <div className="settings-section-title">
