@@ -24,6 +24,7 @@ export interface Word {
   transcription: string;
   audio_original: string;
   example_original: string;
+  example_reading?: string;
   example_translation: string;
   part_of_speech: string;
   level: WordLevel;

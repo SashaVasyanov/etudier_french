@@ -12,7 +12,8 @@ function createJapaneseWord(seed: JapaneseWordSeed): Word {
   return {
     ...seed,
     example_original: contextualExample?.[0] ?? seed.example_original,
-    example_translation: contextualExample?.[1] ?? seed.example_translation,
+    example_reading: contextualExample?.[1],
+    example_translation: contextualExample?.[2] ?? seed.example_translation,
     language: 'japanese',
     audio_original: '',
     packIds: [],

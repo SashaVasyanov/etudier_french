@@ -1,7 +1,7 @@
 {
   "name": "etudier",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -30,6 +30,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "kuromoji": "^0.1.2",
     "playwright": "^1.58.2",
     "selenium-webdriver": "^4.41.0",
     "typescript": "^5.7.2",

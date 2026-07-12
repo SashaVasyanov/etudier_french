@@ -218,6 +218,14 @@ export function getJapaneseHiraganaReading(word: Word): string | null {
     .join('');
 }
 
+export function getJapaneseExampleReading(word: Word): string | null {
+  if (word.language !== 'japanese') {
+    return null;
+  }
+
+  return word.example_reading?.trim() || null;
+}
+
 export function getSpokenWordText(word: Word): string {
   if (word.language === 'japanese') {
     return getJapaneseHiraganaReading(word) ?? word.original;

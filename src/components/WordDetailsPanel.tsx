@@ -1,4 +1,5 @@
 import type { Word } from '../types';
+import { JapaneseExampleReading } from './JapaneseExampleReading';
 import {
   getPartOfSpeechLabel,
   getWordDescription,
@@ -20,6 +21,7 @@ export function WordDetailsPanel({ word }: WordDetailsPanelProps) {
       <div className="flashcard-meta-item">
         <span className="eyebrow">{getWordExampleLabel(word)}</span>
         <strong>{word.example_original}</strong>
+        <JapaneseExampleReading word={word} />
         {word.example_translation ? <p className="detail-copy word-example-translation">{word.example_translation}</p> : null}
       </div>
     </div>

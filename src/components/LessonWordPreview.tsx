@@ -1,5 +1,6 @@
 import type { Word } from '../types';
 import { AudioButton } from './AudioButton';
+import { JapaneseExampleReading } from './JapaneseExampleReading';
 import { LessonCard } from './LessonCard';
 import { WordImage } from './WordImage';
 import { getDisplayWord, getLessonWordBadge, getLessonWordNotes, getPartOfSpeechLabel } from '../lib/wordPresentation';
@@ -57,6 +58,7 @@ export function LessonWordPreview({
             </ul>
             <div className="lesson-preview-example-card">
               <p className="lesson-preview-example">{word.example_original}</p>
+              <JapaneseExampleReading word={word} />
               {word.example_translation ? <p className="lesson-preview-example-translation">{word.example_translation}</p> : null}
             </div>
           </div>

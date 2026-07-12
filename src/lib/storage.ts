@@ -86,6 +86,7 @@ function normalizeWord(word: Word): Word {
     transcription,
     audio_original: cleanText(word.audio_original, '', 2_048),
     example_original: cleanText(word.example_original, original, 1_000),
+    example_reading: language === 'japanese' ? cleanText(word.example_reading, '', 1_000) || undefined : undefined,
     example_translation: cleanText(word.example_translation, translation, 1_000),
     part_of_speech: cleanText(word.part_of_speech, 'word', 80) || 'word',
     tags: Array.isArray(word.tags) ? word.tags.map((tag) => cleanText(tag, '', 80)).filter(Boolean).slice(0, 30) : [],

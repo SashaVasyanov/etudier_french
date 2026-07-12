@@ -1,11 +1,20 @@
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import kuromoji from 'kuromoji';
 
 const WORDS_SOURCE = process.env.JAPANESE_WORDS_SOURCE ?? 'src/data/japaneseWords.ts';
 const JAPANESE_SENTENCES_SOURCE = process.env.TATOEBA_JAPANESE_SENTENCES ?? '/tmp/etudier-jpn-sentences.tsv';
 const RUSSIAN_SENTENCES_SOURCE = process.env.TATOEBA_RUSSIAN_SENTENCES ?? '/tmp/etudier-rus-sentences.tsv';
 const LINKS_SOURCE = process.env.TATOEBA_JAPANESE_RUSSIAN_LINKS ?? '/tmp/etudier-jpn-rus-links.tsv';
+const TRANSCRIPTIONS_SOURCE = process.env.TATOEBA_TRANSCRIPTIONS ?? '/tmp/etudier-transcriptions.csv';
 const OUTPUT = process.env.JAPANESE_EXAMPLES_OUTPUT ?? 'src/data/japaneseExamples.ts';
+const KUROMOJI_DICTIONARY_PATH = fileURLToPath(new URL('../node_modules/kuromoji/dict/', import.meta.url));
+const HIRAGANA_READING_OVERRIDES = {
+  '彼は私に１人で行けと命令した。': 'かれはわたしにひとりでいけとめいれいした。',
+  'あの仔猫にはタマと名付けました。': 'あのこねこにはたまとなづけました。',
+  '昔々その村に１人のけちな老人が住んでいました。': 'むかしむかしそのむらにひとりのけちなろうじんがすんでいました。',
+};
 const TATOEBA_EXPORTS = {
   [JAPANESE_SENTENCES_SOURCE]: 'https://downloads.tatoeba.org/exports/per_language/jpn/jpn_sentences.tsv.bz2',
   [RUSSIAN_SENTENCES_SOURCE]: 'https://downloads.tatoeba.org/exports/per_language/rus/rus_sentences.tsv.bz2',
@@ -151,6 +160,42 @@ function parseTsv(path) {
   return fs.readFileSync(path, 'utf8').trim().split('\n').map((line) => line.split('\t'));
 }
 
+function katakanaToHiragana(value) {
+  return [...value]
+    .map((character) => {
+      const code = character.charCodeAt(0);
+      return code >= 0x30a1 && code <= 0x30f6 ? String.fromCharCode(code - 0x60) : character;
+    })
+    .join('');
+}
+
+function createTokenizer() {
+  return new Promise((resolve, reject) => {
+    kuromoji.builder({ dicPath: KUROMOJI_DICTIONARY_PATH }).build((error, tokenizer) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+
+      resolve(tokenizer);
+    });
+  });
+}
+
+function createHiraganaReading(tokenizer, sentence) {
+  return tokenizer
+    .tokenize(sentence)
+    .map((token) => katakanaToHiragana(token.reading && token.reading !== '*' ? token.reading : token.surface_form))
+    .join('');
+}
+
+function parseTatoebaHiraganaTranscription(value) {
+  const withoutAnnotations = value.replace(/\[([^|\]]+)\|([^\]]*)\]/g, (_match, surface, reading) => (
+    reading ? reading.replaceAll('|', '') : surface
+  ));
+  return katakanaToHiragana(withoutAnnotations);
+}
+
 async function ensureTatoebaSource(path, url) {
   if (fs.existsSync(path)) return;
 
@@ -164,6 +209,21 @@ async function ensureTatoebaSource(path, url) {
   fs.writeFileSync(archivePath, Buffer.from(await response.arrayBuffer()));
   const decompressed = execFileSync('bzip2', ['-dc', archivePath], { maxBuffer: 256 * 1024 * 1024 });
   fs.writeFileSync(path, decompressed);
+}
+
+async function ensureTatoebaTranscriptions() {
+  if (fs.existsSync(TRANSCRIPTIONS_SOURCE)) return;
+
+  const archivePath = `${TRANSCRIPTIONS_SOURCE}.tar.bz2`;
+  const response = await fetch('https://downloads.tatoeba.org/exports/transcriptions.tar.bz2');
+
+  if (!response.ok) {
+    throw new Error(`Unable to download Tatoeba transcriptions: HTTP ${response.status}`);
+  }
+
+  fs.writeFileSync(archivePath, Buffer.from(await response.arrayBuffer()));
+  const extracted = execFileSync('tar', ['-xOf', archivePath, 'transcriptions.csv'], { maxBuffer: 256 * 1024 * 1024 });
+  fs.writeFileSync(TRANSCRIPTIONS_SOURCE, extracted);
 }
 
 function parseWords() {
@@ -234,9 +294,17 @@ function scoreSentence(word, japanese, russian) {
 for (const [path, url] of Object.entries(TATOEBA_EXPORTS)) {
   await ensureTatoebaSource(path, url);
 }
+await ensureTatoebaTranscriptions();
 
 const words = parseWords();
 const russianSentences = new Map(parseTsv(RUSSIAN_SENTENCES_SOURCE).map(([id, , text]) => [id, text]));
+const japaneseSentences = parseTsv(JAPANESE_SENTENCES_SOURCE);
+const japaneseIdByText = new Map(japaneseSentences.map(([id, , text]) => [text, id]));
+const hiraganaBySentenceId = new Map(
+  parseTsv(TRANSCRIPTIONS_SOURCE)
+    .filter(([, language, script]) => language === 'jpn' && script === 'Hrkt')
+    .map(([id, , , , transcription]) => [id, parseTatoebaHiraganaTranscription(transcription)]),
+);
 const russianIdsByJapaneseId = new Map();
 
 for (const [japaneseId, russianId] of parseTsv(LINKS_SOURCE)) {
@@ -245,13 +313,13 @@ for (const [japaneseId, russianId] of parseTsv(LINKS_SOURCE)) {
   russianIdsByJapaneseId.set(japaneseId, ids);
 }
 
-const linkedSentences = parseTsv(JAPANESE_SENTENCES_SOURCE).flatMap(([id, , text]) => {
+const linkedSentences = japaneseSentences.flatMap(([id, , text]) => {
   const russianIds = russianIdsByJapaneseId.get(id) ?? [];
 
   return russianIds
     .map((russianId) => russianSentences.get(russianId))
     .filter(Boolean)
-    .map((russian) => ({ japanese: text, russian }));
+    .map((russian) => ({ japaneseId: id, japanese: text, russian }));
 });
 
 const examples = {};
@@ -262,7 +330,12 @@ for (const word of words) {
     ?? (word.original.endsWith('する') ? MANUAL_EXAMPLES[getDictionaryStem(word.original)] : undefined);
 
   if (manual) {
-    examples[word.original] = { original: manual[0], translation: manual[1], source: 'curated' };
+    examples[word.original] = {
+      original: manual[0],
+      translation: manual[1],
+      sentenceId: japaneseIdByText.get(manual[0]),
+      source: 'curated',
+    };
     continue;
   }
 
@@ -271,7 +344,12 @@ for (const word of words) {
     .sort((left, right) => scoreSentence(word, right.japanese, right.russian) - scoreSentence(word, left.japanese, left.russian))[0];
 
   if (best) {
-    examples[word.original] = { original: best.japanese, translation: best.russian, source: 'tatoeba' };
+    examples[word.original] = {
+      original: best.japanese,
+      translation: best.russian,
+      sentenceId: best.japaneseId,
+      source: 'tatoeba',
+    };
     sourcedCount += 1;
   }
 }
@@ -283,16 +361,20 @@ if (unresolved.length > 0) {
   throw new Error('Every Japanese word must have a contextual example');
 }
 
+const tokenizer = await createTokenizer();
 const serialized = words
   .map((word) => {
     const example = examples[word.original];
-    return `  ${JSON.stringify(word.original)}: [${JSON.stringify(example.original)}, ${JSON.stringify(example.translation)}],`;
+    const reading = HIRAGANA_READING_OVERRIDES[example.original]
+      ?? hiraganaBySentenceId.get(example.sentenceId)
+      ?? createHiraganaReading(tokenizer, example.original);
+    return `  ${JSON.stringify(word.original)}: [${JSON.stringify(example.original)}, ${JSON.stringify(reading)}, ${JSON.stringify(example.translation)}],`;
   })
   .join('\n');
 
 fs.writeFileSync(
   OUTPUT,
-  `// Tatoeba examples are used under CC BY 2.0 FR: https://tatoeba.org/eng/terms_of_use\n// Examples are keyed by the displayed dictionary form so dictionary regeneration cannot shift them to another word.\nexport const JAPANESE_EXAMPLES: Readonly<Record<string, readonly [original: string, translation: string]>> = {\n${serialized}\n};\n`,
+  `// Tatoeba examples are used under CC BY 2.0 FR: https://tatoeba.org/eng/terms_of_use\n// Examples are keyed by the displayed dictionary form so dictionary regeneration cannot shift them to another word.\nexport const JAPANESE_EXAMPLES: Readonly<Record<string, readonly [original: string, reading: string, translation: string]>> = {\n${serialized}\n};\n`,
 );
 
 console.log(`Generated ${Object.keys(examples).length} examples (${sourcedCount} from Tatoeba, ${Object.keys(MANUAL_EXAMPLES).length} curated).`);

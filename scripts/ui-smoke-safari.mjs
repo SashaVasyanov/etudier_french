@@ -123,8 +123,11 @@ async function main() {
     const japanesePreviewWord = await driver.findElement(By.css('.lesson-preview-title')).getText();
     const japaneseReading = await driver.findElement(By.css('.lesson-preview-description')).getText();
     const japaneseExample = await driver.findElement(By.css('.lesson-preview-example')).getText();
+    const japaneseExampleReading = await driver.findElement(By.css('.japanese-example-reading')).getText();
     const japaneseExampleTranslation = await driver.findElement(By.css('.lesson-preview-example-translation')).getText();
     assert.ok(japaneseExample.includes(japanesePreviewWord), 'Japanese example does not contain the studied word');
+    assert.ok(/[\u3040-\u309f]/.test(japaneseExampleReading), 'Japanese example has no hiragana reading');
+    assert.ok(!/[\p{Script=Han}\p{Script=Katakana}]/u.test(japaneseExampleReading), 'Japanese example reading is not hiragana-only');
     assert.ok(!/よく使う言葉/.test(japaneseExample), 'Japanese example still uses the generic frequency template');
     assert.ok(!/^(?:Слово |«.+» — часто)/.test(japaneseExampleTranslation), 'Japanese example was not contextually translated');
     console.log('Checking Japanese speech reading...');
@@ -233,6 +236,10 @@ async function main() {
       `return {
         width: window.innerWidth,
         scrollWidth: document.documentElement.scrollWidth,
+        exampleReadings: [...document.querySelectorAll('.japanese-example-reading')].map((item) => ({
+          width: item.clientWidth,
+          scrollWidth: item.scrollWidth,
+        })),
         choices: [...document.querySelectorAll('.japanese-kanji-choice')].map((button) => ({
           width: button.clientWidth,
           scrollWidth: button.scrollWidth,
@@ -242,6 +249,10 @@ async function main() {
       };`,
     );
     assert.ok(japaneseViewportMetrics.scrollWidth <= japaneseViewportMetrics.width, 'Japanese exercise overflows the narrow viewport');
+    assert.ok(
+      japaneseViewportMetrics.exampleReadings.every((item) => item.scrollWidth <= item.width),
+      'Japanese example reading overflows in the narrow viewport',
+    );
     assert.ok(
       japaneseViewportMetrics.choices.every((item) => item.scrollWidth <= item.width && item.scrollHeight <= item.height),
       'Kanji choice overflows its button in the narrow viewport',
