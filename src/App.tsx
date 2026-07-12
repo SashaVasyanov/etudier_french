@@ -1,5 +1,6 @@
 import { Suspense, lazy, startTransition, useEffect, useMemo, useRef, useState } from 'react';
 import { AppNavigation } from './components/AppNavigation';
+import { AppIcon } from './components/AppIcon';
 import { AppShell } from './components/AppShell';
 import { AudioInputExercise } from './components/AudioInputExercise';
 import { DailyCompletionScreen } from './components/DailyCompletionScreen';
@@ -739,7 +740,7 @@ function App() {
                   clearSessionState('home');
                 }}
               >
-                ×
+                <AppIcon name="close" size={25} />
               </button>
               {currentStep.kind === 'exercise' ? (
                 currentExercise?.type === 'memory_check' ? (

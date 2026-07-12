@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="background" x1="176" y1="112" x2="864" y2="920" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F73F2" />
+      <stop offset="0.55" stop-color="#665FEA" />
+      <stop offset="1" stop-color="#8A5BDD" />
+    </linearGradient>
+    <linearGradient id="shine" x1="238" y1="144" x2="664" y2="672" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.28" />
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+    <filter id="shadow" x="120" y="100" width="784" height="824" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="28" stdDeviation="24" flood-color="#252061" flood-opacity="0.24" />
+    </filter>
+  </defs>
+
+  <rect x="64" y="64" width="896" height="896" rx="224" fill="url(#background)" />
+  <path d="M96 360C124 184 256 96 434 96H736C830 96 900 132 936 196V256C874 214 804 194 720 194H420C272 194 164 252 96 360Z" fill="url(#shine)" />
+  <rect x="82" y="82" width="860" height="860" rx="207" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="8" />
+
+  <g filter="url(#shadow)">
+    <text x="512" y="704" fill="#FFFFFF" font-family="Georgia, 'Times New Roman', serif" font-size="612" font-weight="700" text-anchor="middle">é</text>
+  </g>
+  <circle cx="778" cy="260" r="42" fill="#FFD36C" />
+  <circle cx="778" cy="260" r="24" fill="#FFE6A7" />
+</svg>

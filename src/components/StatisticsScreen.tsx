@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import type { AppStorage, LearningLanguage, Word, WordLevel } from '../types';
 import { formatDurationLabel, getTodayDateKey, percentage } from '../lib/utils';
 import { getPartOfSpeechLabel } from '../lib/wordPresentation';
+import { AppIcon } from './AppIcon';
 
 interface StatisticsScreenProps {
   learningLanguage: LearningLanguage;
@@ -189,19 +190,19 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
 
       <section className="analytics-kpi-grid" aria-label="Ключевые показатели">
         <article className="analytics-kpi-card analytics-kpi-violet">
-          <span className="analytics-kpi-icon" aria-hidden="true">◆</span>
+          <span className="analytics-kpi-icon"><AppIcon name="book-open" size={22} /></span>
           <div><span>Слов выучено</span><strong>{learnedWords}</strong><small>из {words.length} в словаре</small></div>
         </article>
         <article className="analytics-kpi-card analytics-kpi-green">
-          <span className="analytics-kpi-icon" aria-hidden="true">✓</span>
+          <span className="analytics-kpi-icon"><AppIcon name="target" size={22} /></span>
           <div><span>Точность</span><strong>{accuracy}%</strong><small>{correctAnswers} из {totalAnswers} ответов</small></div>
         </article>
         <article className="analytics-kpi-card analytics-kpi-orange">
-          <span className="analytics-kpi-icon" aria-hidden="true">🔥</span>
+          <span className="analytics-kpi-icon"><AppIcon name="flame" size={22} /></span>
           <div><span>Серия</span><strong>{currentStreak} дн.</strong><small>{completedLessons} уроков завершено</small></div>
         </article>
         <article className="analytics-kpi-card analytics-kpi-blue">
-          <span className="analytics-kpi-icon" aria-hidden="true">◷</span>
+          <span className="analytics-kpi-icon"><AppIcon name="clock" size={22} /></span>
           <div><span>Время</span><strong>{formatDurationLabel(studyTimeSeconds)}</strong><small>за всё время</small></div>
         </article>
       </section>

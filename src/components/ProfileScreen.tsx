@@ -11,6 +11,7 @@ import type {
   WordPack,
   WordProgress,
 } from '../types';
+import { AppIcon } from './AppIcon';
 
 interface ProfileScreenProps {
   learningLanguage: LearningLanguage;
@@ -124,19 +125,19 @@ export default function ProfileScreen({
 
       <section className="settings-profile-overview" aria-label="Сводка профиля">
         <article>
-          <span className="settings-overview-icon violet" aria-hidden="true">◆</span>
+          <span className="settings-overview-icon violet"><AppIcon name="book-open" size={22} /></span>
           <div><strong>{stats.learned}</strong><small>слов встречалось</small></div>
         </article>
         <article>
-          <span className="settings-overview-icon green" aria-hidden="true">✓</span>
+          <span className="settings-overview-icon green"><AppIcon name="check-circle" size={22} /></span>
           <div><strong>{stats.mastered}</strong><small>слов освоено</small></div>
         </article>
         <article>
-          <span className="settings-overview-icon orange" aria-hidden="true">🔥</span>
+          <span className="settings-overview-icon orange"><AppIcon name="flame" size={22} /></span>
           <div><strong>{storage.streakDays}</strong><small>дней в серии</small></div>
         </article>
         <article>
-          <span className="settings-overview-icon blue" aria-hidden="true">◷</span>
+          <span className="settings-overview-icon blue"><AppIcon name="calendar" size={22} /></span>
           <div><strong>{languageHistory.length}</strong><small>уроков завершено</small></div>
         </article>
       </section>
@@ -144,7 +145,7 @@ export default function ProfileScreen({
       <div className="settings-grid">
         <section className="settings-panel settings-profile-panel">
           <div className="settings-section-title">
-            <span className="settings-icon">◎</span>
+            <span className="settings-icon"><AppIcon name="user" size={21} /></span>
             <div>
               <h2>Аккаунт</h2>
               <p>Имя отображается на главном экране и в локальной истории.</p>
@@ -179,7 +180,7 @@ export default function ProfileScreen({
 
         <section className="settings-panel settings-study-panel">
           <div className="settings-section-title">
-            <span className="settings-icon">▣</span>
+            <span className="settings-icon"><AppIcon name="settings" size={21} /></span>
             <div>
               <h2>Учёба</h2>
               <p>Эти значения сразу используются при запуске следующего урока.</p>
@@ -283,7 +284,7 @@ export default function ProfileScreen({
 
         <section className="settings-panel settings-summary-panel">
           <div className="settings-section-title">
-            <span className="settings-icon">↗</span>
+            <span className="settings-icon"><AppIcon name="trend-up" size={21} /></span>
             <div>
               <h2>Сводка</h2>
               <p>Короткий срез по выбранному языку.</p>
@@ -319,7 +320,7 @@ export default function ProfileScreen({
 
         <section className="settings-panel settings-history-panel">
           <div className="settings-section-title">
-            <span className="settings-icon">◷</span>
+            <span className="settings-icon"><AppIcon name="clock" size={21} /></span>
             <div>
               <h2>История</h2>
               <p>Последние завершённые занятия сохраняются локально.</p>

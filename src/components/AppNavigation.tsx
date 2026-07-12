@@ -1,3 +1,5 @@
+import { AppIcon, type AppIconName } from './AppIcon';
+
 interface AppNavigationProps {
   activeScreen: 'home' | 'lesson' | 'dictionary' | 'statistics' | 'profile' | 'packs';
   lessonAvailable: boolean;
@@ -5,13 +7,13 @@ interface AppNavigationProps {
   onNavigate: (screen: 'home' | 'lesson' | 'dictionary' | 'statistics' | 'profile' | 'packs') => void;
 }
 
-const NAV_ITEMS: Array<{ id: AppNavigationProps['activeScreen']; label: string; icon: string }> = [
-  { id: 'home', label: 'Главная', icon: '⌂' },
-  { id: 'lesson', label: 'Учиться', icon: '◉' },
-  { id: 'dictionary', label: 'Словарь', icon: 'Аа' },
-  { id: 'statistics', label: 'Прогресс', icon: '↗' },
-  { id: 'packs', label: 'Темы', icon: '✿' },
-  { id: 'profile', label: 'Профиль', icon: '☻' },
+const NAV_ITEMS: Array<{ id: AppNavigationProps['activeScreen']; label: string; icon: AppIconName }> = [
+  { id: 'home', label: 'Главная', icon: 'home' },
+  { id: 'lesson', label: 'Учиться', icon: 'play' },
+  { id: 'dictionary', label: 'Словарь', icon: 'book-open' },
+  { id: 'statistics', label: 'Прогресс', icon: 'chart' },
+  { id: 'packs', label: 'Темы', icon: 'grid' },
+  { id: 'profile', label: 'Профиль', icon: 'user' },
 ];
 
 export function AppNavigation({ activeScreen, lessonAvailable, streakDays, onNavigate }: AppNavigationProps) {
@@ -37,7 +39,7 @@ export function AppNavigation({ activeScreen, lessonAvailable, streakDays, onNav
               disabled={item.id === 'lesson' && !lessonAvailable && !isActive}
               onClick={() => onNavigate(item.id)}
             >
-              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-icon"><AppIcon name={item.icon} size={21} /></span>
               <strong>{item.label}</strong>
             </button>
           );
@@ -45,9 +47,7 @@ export function AppNavigation({ activeScreen, lessonAvailable, streakDays, onNav
       </nav>
 
       <div className="sidebar-streak-card">
-        <span className="sidebar-streak-icon" aria-hidden="true">
-          🔥
-        </span>
+        <span className="sidebar-streak-icon"><AppIcon name="flame" size={22} /></span>
         <strong>{streakDays || '—'} дн. подряд</strong>
         <p>Маленькая практика каждый день.</p>
       </div>

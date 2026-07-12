@@ -423,14 +423,9 @@
   line-height: 1.2;
 }
 
-.audio-button-dot {
-  width: 8px;
-  height: 8px;
-  min-width: 8px;
-  min-height: 8px;
-  flex: 0 0 8px;
-  border-radius: 999px;
-  background: currentColor;
+.app-icon-svg {
+  display: block;
+  flex: none;
 }
 
 .full-width {
@@ -4128,7 +4123,8 @@
 
 .nav-icon {
   color: inherit;
-  font-size: 1.05rem;
+  display: grid;
+  place-items: center;
 }
 
 .nav-button:hover {
@@ -4369,17 +4365,19 @@
   border-radius: 15px;
   background: #fff;
   color: #4859db;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-weight: 900;
   box-shadow: 0 8px 18px rgba(34, 39, 114, 0.14);
 }
 
-.daily-start-button span {
-  margin-left: 7px;
-  font-size: 1.05rem;
-}
-
 .daily-complete-meta {
   color: rgba(255, 255, 255, 0.84);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   font-size: 0.9rem;
   font-weight: 700;
 }
@@ -4484,6 +4482,9 @@
   border: 0;
   background: transparent;
   color: #4a61df;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.86rem;
   font-weight: 800;
 }
@@ -4511,12 +4512,15 @@
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.82);
   color: #3b3a37;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   font-size: 0.82rem;
   font-weight: 800;
 }
 
-.practice-bento-actions button span {
-  margin-right: 5px;
+.practice-bento-actions button .app-icon-svg {
   color: #d18b09;
 }
 

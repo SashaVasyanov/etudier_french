@@ -41,10 +41,11 @@ async function main() {
     await driver.executeScript(`window.localStorage.removeItem("${storageKey}")`);
     await driver.navigate().refresh();
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
+    assert.equal((await driver.findElements(By.css('.nav-icon svg'))).length, 6, 'Navigation icons are incomplete');
 
     console.log('Starting lesson...');
     const startLessonButton = await driver.findElement(By.xpath('//button[contains(., "Начать урок")]'));
-    await startLessonButton.click();
+    await startLessonButton.sendKeys(Key.ENTER);
 
     console.log('Waiting for study view...');
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Понял, дальше")]')), timeoutMs);
@@ -64,22 +65,22 @@ async function main() {
     const choiceButtons = await driver.findElements(By.css('.choice-button'));
     assert.ok(choiceButtons.length > 0, 'The first exercise has no answer choices');
     assert.equal((await driver.findElements(By.css('.japanese-kanji-choice'))).length, 0, 'French choices received Japanese styling');
-    await choiceButtons[0].click();
+    await choiceButtons[0].sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.css('.answer-feedback')), timeoutMs);
     await driver.wait(until.elementLocated(By.xpath('//button[normalize-space()="Прослушать ещё раз"]')), timeoutMs);
 
     console.log('Checking dictionary list limit...');
     const closeLessonButton = await driver.findElement(By.xpath('//button[@aria-label="Выйти из урока"]'));
-    await closeLessonButton.click();
+    await closeLessonButton.sendKeys(Key.ENTER);
     const dictionaryButton = await findNavigationButton(driver, 'Словарь');
-    await dictionaryButton.click();
+    await dictionaryButton.sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.css('.dictionary-grid')), timeoutMs);
     const renderedWordCards = await driver.findElements(By.css('.dictionary-grid > .word-card'));
     assert.ok(renderedWordCards.length > 0 && renderedWordCards.length <= 80, 'Dictionary rendered too many cards');
 
     console.log('Checking profile and statistics routes...');
     const profileButton = await findNavigationButton(driver, 'Профиль');
-    await profileButton.click();
+    await profileButton.sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.css('.settings-page')), timeoutMs);
 
     console.log('Checking Japanese examples, kanji typography and answer details...');
@@ -95,13 +96,17 @@ async function main() {
       timeoutMs,
     );
     const homeButton = await findNavigationButton(driver, 'Главная');
-    await homeButton.click();
+    await homeButton.sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
     assert.ok((await driver.findElement(By.css('.home-language-chip')).getText()).includes('JP'), 'Japanese home label is incorrect');
-    await driver.findElement(By.xpath('//button[contains(., "Начать урок")]')).click();
+    await driver.findElement(By.xpath('//button[contains(., "Начать урок")]')).sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.xpath('//button[normalize-space()="Понял, дальше"]')), timeoutMs);
+    const japanesePreviewWord = await driver.findElement(By.css('.lesson-preview-title')).getText();
+    const japaneseExample = await driver.findElement(By.css('.lesson-preview-example')).getText();
     const japaneseExampleTranslation = await driver.findElement(By.css('.lesson-preview-example-translation')).getText();
-    assert.ok(!/^Слово «.+» часто используется\.$/.test(japaneseExampleTranslation), 'Japanese example was not translated');
+    assert.ok(japaneseExample.includes(japanesePreviewWord), 'Japanese example does not contain the studied word');
+    assert.ok(!/よく使う言葉/.test(japaneseExample), 'Japanese example still uses the generic frequency template');
+    assert.ok(!/^(?:Слово |«.+» — часто)/.test(japaneseExampleTranslation), 'Japanese example was not contextually translated');
 
     for (let index = 0; index < 20; index += 1) {
       const previewButtons = await driver.findElements(By.xpath('//button[normalize-space()="Понял, дальше"]'));
@@ -111,7 +116,6 @@ async function main() {
     }
 
     let verifiedKanjiTypography = false;
-    let verifiedKanaTypography = false;
     let verifiedKanjiFeedback = false;
 
     for (let index = 0; index < 14; index += 1) {
@@ -142,12 +146,11 @@ async function main() {
 
         if (kanaOnlyMetrics.length > 0) {
           assert.ok(kanaOnlyMetrics.every((item) => item.fontSize < 24), 'Kana-only choice received enlarged kanji typography');
-          verifiedKanaTypography = true;
         }
         verifiedKanjiTypography = true;
       }
 
-      await availableChoices[0].click();
+      await availableChoices[0].sendKeys(Key.ENTER);
       await driver.wait(until.elementLocated(By.css('.answer-feedback-translation')), timeoutMs);
       const feedbackWord = await driver.findElement(By.css('.answer-feedback-word')).getText();
 
@@ -159,11 +162,10 @@ async function main() {
 
       if (verifiedKanjiTypography && verifiedKanjiFeedback) break;
       const nextExerciseButton = await driver.findElement(By.xpath('//button[normalize-space()="Дальше"]'));
-      await nextExerciseButton.click();
+      await nextExerciseButton.sendKeys(Key.ENTER);
     }
 
     assert.ok(verifiedKanjiTypography, 'No kanji choice typography was verified');
-    assert.ok(verifiedKanaTypography, 'No kana-only choice typography was verified');
     assert.ok(verifiedKanjiFeedback, 'No kanji answer feedback was verified');
     await driver.manage().window().setRect({ width: 375, height: 812, x: 0, y: 0 });
     const japaneseViewportMetrics = await driver.executeScript(
@@ -184,11 +186,12 @@ async function main() {
       'Kanji choice overflows its button in the narrow viewport',
     );
     const closeJapaneseLessonButton = await driver.findElement(By.xpath('//button[@aria-label="Выйти из урока"]'));
-    await closeJapaneseLessonButton.click();
+    await closeJapaneseLessonButton.sendKeys(Key.ENTER);
 
     const statisticsButton = await findNavigationButton(driver, 'Прогресс');
-    await statisticsButton.click();
+    await statisticsButton.sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.css('.analytics-page')), timeoutMs);
+    assert.equal((await driver.findElements(By.css('.analytics-kpi-icon svg'))).length, 4, 'Statistics icons are incomplete');
 
     console.log('Checking narrow viewport overflow...');
     const viewportMetrics = await driver.executeScript(

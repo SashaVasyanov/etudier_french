@@ -10,6 +10,7 @@ import type {
   WordPack,
   WordProgress,
 } from '../types';
+import { AppIcon } from './AppIcon';
 
 interface HomeDashboardProps {
   totalWords: Word[];
@@ -111,7 +112,7 @@ export function HomeDashboard({
           <p>{isDailyComplete ? 'Дневная цель закрыта — можно закрепить результат в комфортном темпе.' : 'Сегодня достаточно одного короткого шага к уверенной речи.'}</p>
         </div>
         <div className="home-head-actions">
-          <span className="streak-chip" aria-label={`Серия: ${storage.streakDays} дней`}>🔥 {storage.streakDays || '—'} дн.</span>
+          <span className="streak-chip" aria-label={`Серия: ${storage.streakDays} дней`}><AppIcon name="flame" size={18} /> {storage.streakDays || '—'} дн.</span>
           <button type="button" className="home-avatar-button" aria-label="Открыть профиль" onClick={onOpenProfile}>
             {displayName.slice(0, 1).toUpperCase()}
           </button>
@@ -131,7 +132,7 @@ export function HomeDashboard({
 
             return (
               <div key={module.number} className={isDone ? 'daily-route-step done' : `daily-route-step ${module.tone}`}>
-                <span>{isDone ? '✓' : module.number}</span>
+                <span>{isDone ? <AppIcon name="check" size={15} /> : module.number}</span>
                 <strong>{module.title}</strong>
               </div>
             );
@@ -158,14 +159,14 @@ export function HomeDashboard({
               })}
             </div>
             <button type="button" className="daily-start-button" onClick={onStartLesson}>
-              Начать урок <span aria-hidden="true">→</span>
+              Начать урок <AppIcon name="arrow-right" size={19} />
             </button>
           </div>
         ) : (
           <div className="daily-journey-footer">
-            <span className="daily-complete-meta">✓ {completedModuleCount || 5} из 5 модулей · {dailyCompletion?.totalAnswers ?? 0} ответов</span>
+            <span className="daily-complete-meta"><AppIcon name="check-circle" size={18} /> {completedModuleCount || 5} из 5 модулей · {dailyCompletion?.totalAnswers ?? 0} ответов</span>
             <button type="button" className="daily-start-button" onClick={onStartExtraLesson}>
-              Продолжить практику <span aria-hidden="true">→</span>
+              Продолжить практику <AppIcon name="arrow-right" size={19} />
             </button>
           </div>
         )}
@@ -174,7 +175,7 @@ export function HomeDashboard({
       <div className="learning-home-grid">
         <section className="home-bento-card progress-bento-card">
           <div className="bento-heading">
-            <span className="bento-icon blue">↗</span>
+            <span className="bento-icon blue"><AppIcon name="trend-up" size={23} /></span>
             <div>
               <span>Твой прогресс</span>
               <h2>{overallProgress}% пути</h2>
@@ -188,24 +189,24 @@ export function HomeDashboard({
             <span><strong>{wordsInProcess}</strong> в работе</span>
             <span><strong>{difficultCount}</strong> требуют внимания</span>
           </div>
-          <button type="button" className="text-action-button" onClick={onOpenStatistics}>Смотреть статистику <span aria-hidden="true">→</span></button>
+          <button type="button" className="text-action-button" onClick={onOpenStatistics}>Смотреть статистику <AppIcon name="arrow-right" size={17} /></button>
         </section>
 
         <section className="home-bento-card practice-bento-card">
-          <span className="bento-icon yellow">⚡</span>
+          <span className="bento-icon yellow"><AppIcon name="sparkles" size={23} /></span>
           <div>
             <span>Когда есть пара минут</span>
             <h2>Быстрая практика</h2>
           </div>
           <div className="practice-bento-actions">
-            <button type="button" onClick={onStartFlashcards}><span>◈</span> Карточки</button>
-            <button type="button" onClick={onStartExtraLesson}><span>✦</span> Микс заданий</button>
+            <button type="button" onClick={onStartFlashcards}><AppIcon name="cards" size={18} /> Карточки</button>
+            <button type="button" onClick={onStartExtraLesson}><AppIcon name="sparkles" size={18} /> Микс заданий</button>
           </div>
         </section>
 
         <section className="home-bento-card pack-bento-card">
           <div className="bento-heading">
-            <span className="bento-icon pink">✿</span>
+            <span className="bento-icon pink"><AppIcon name="layers" size={23} /></span>
             <div>
               <span>Словари по темам</span>
               <h2>{activePack?.title ?? 'Выбери пак'}</h2>
@@ -213,11 +214,11 @@ export function HomeDashboard({
           </div>
           <p>{activePack ? `${activePack.words.length} слов · ${packCompletion}% освоено` : `${addedPacksCount} паков уже добавлено`}</p>
           <div className="pack-bento-progress"><span style={{ width: `${packCompletion}%` }} /></div>
-          <button type="button" className="text-action-button" onClick={onOpenPacks}>Открыть паки <span aria-hidden="true">→</span></button>
+          <button type="button" className="text-action-button" onClick={onOpenPacks}>Открыть паки <AppIcon name="arrow-right" size={17} /></button>
         </section>
 
         <section className="home-bento-card today-bento-card">
-          <span className="bento-icon green">☘</span>
+          <span className="bento-icon green"><AppIcon name="leaf" size={23} /></span>
           <div>
             <span>Сегодняшний ритм</span>
             <h2>{todayAccuracy > 0 ? `${todayAccuracy}% точность` : 'Первый шаг ждёт'}</h2>
