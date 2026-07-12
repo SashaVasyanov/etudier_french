@@ -1460,13 +1460,16 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
     const wordImageManifestPromise = loadWordImageManifest();
 
     if (language === 'japanese') {
-      const [{ JAPANESE_CORE_WORDS }, wordImageManifest] = await Promise.all([
+      const [{ JAPANESE_CORE_WORDS }, { applyJapaneseWordCorrection }, wordImageManifest] = await Promise.all([
         import('./japaneseWords'),
+        import('./japaneseWordCorrections'),
         wordImageManifestPromise,
       ]);
 
       return sortWordsByCurriculum(
-        JAPANESE_CORE_WORDS.map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
+        JAPANESE_CORE_WORDS.map((word) =>
+          normalizeWord(applyJapaneseWordCorrection({ ...word, ...wordImageManifest[word.id] })),
+        ),
         language,
       );
     }

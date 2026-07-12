@@ -118,6 +118,32 @@ async function main() {
     await homeButton.sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
     assert.ok((await driver.findElement(By.css('.home-language-chip')).getText()).includes('JP'), 'Japanese home label is incorrect');
+
+    console.log('Checking corrected Japanese translations...');
+    const japaneseDictionaryButton = await findNavigationButton(driver, 'Словарь');
+    await japaneseDictionaryButton.sendKeys(Key.ENTER);
+    await driver.wait(until.elementLocated(By.css('.dictionary-toolbar input')), timeoutMs);
+    const dictionarySearch = await driver.findElement(By.css('.dictionary-toolbar input'));
+    await dictionarySearch.sendKeys('разговор / история');
+    await driver.wait(
+      async () => (await driver.findElements(By.css('.dictionary-grid > .word-card'))).length === 1,
+      timeoutMs,
+    );
+    let correctedCardText = await driver.findElement(By.css('.dictionary-grid > .word-card')).getText();
+    assert.ok(correctedCardText.includes('話'), 'Corrected 話 entry is missing');
+    assert.ok(correctedCardText.includes('разговор / история'), '話 still displays the rare dictionary gloss');
+    await dictionarySearch.clear();
+    await dictionarySearch.sendKeys('господин / госпожа');
+    await driver.wait(
+      async () => (await driver.findElements(By.css('.dictionary-grid > .word-card'))).length === 1,
+      timeoutMs,
+    );
+    correctedCardText = await driver.findElement(By.css('.dictionary-grid > .word-card')).getText();
+    assert.ok(correctedCardText.includes('様'), 'Corrected 様 entry is missing');
+    assert.ok(correctedCardText.includes('[さま · sama]'), '様 still uses the contextually incorrect reading');
+    await (await findNavigationButton(driver, 'Главная')).sendKeys(Key.ENTER);
+    await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
+
     await driver.findElement(By.xpath('//button[contains(., "Начать урок")]')).sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.xpath('//button[normalize-space()="Понял, дальше"]')), timeoutMs);
     const japanesePreviewWord = await driver.findElement(By.css('.lesson-preview-title')).getText();
