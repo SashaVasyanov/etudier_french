@@ -247,6 +247,22 @@ export function isAnswerMatch(userAnswer: string, correctAnswer: string, languag
   return answerVariants.has(normalizedUserAnswer) || [...getJapaneseRomajiVariants(userAnswer)].some((variant) => answerVariants.has(variant));
 }
 
+export function isJapaneseReadingMatch(userAnswer: string, correctAnswer: string, word?: Word): boolean {
+  const normalizedUserAnswer = katakanaToHiragana(normalizeJapaneseAnswerToken(userAnswer));
+
+  if (!normalizedUserAnswer || !/^[\u3040-\u309fー]+$/.test(normalizedUserAnswer)) {
+    return false;
+  }
+
+  const { kana } = extractJapaneseReadingParts(word);
+  const readingAliases = word ? JAPANESE_READING_ALIASES[word.original] ?? [] : [];
+  const acceptedReadings = [correctAnswer, kana, ...readingAliases]
+    .filter((value): value is string => typeof value === 'string' && /[\u3040-\u30ff]/.test(value))
+    .map((value) => katakanaToHiragana(normalizeJapaneseAnswerToken(value)));
+
+  return acceptedReadings.includes(normalizedUserAnswer);
+}
+
 function normalizeComparableText(value: string): string {
   return value
     .toLowerCase()

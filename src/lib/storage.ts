@@ -402,8 +402,14 @@ function getBaseExerciseEaseDelta(outcome: ExerciseOutcome): number {
     switch (outcome.type) {
       case 'memory_check':
         return -0.28;
+      case 'translation_to_original_input':
+        return -0.2;
       case 'audio_to_original_input':
         return -0.18;
+      case 'kanji_to_hiragana_input':
+        return -0.18;
+      case 'sentence_cloze_input':
+        return -0.16;
       case 'translation_to_original_choice':
         return -0.16;
       case 'audio_to_translation_choice':
@@ -414,8 +420,14 @@ function getBaseExerciseEaseDelta(outcome: ExerciseOutcome): number {
   }
 
   switch (outcome.type) {
+    case 'translation_to_original_input':
+      return 0.18;
     case 'audio_to_original_input':
       return 0.18;
+    case 'kanji_to_hiragana_input':
+      return 0.16;
+    case 'sentence_cloze_input':
+      return 0.14;
     case 'translation_to_original_choice':
       return 0.12;
     case 'memory_check':
@@ -443,8 +455,14 @@ function getExerciseEaseDelta(progress: WordProgress, outcome: ExerciseOutcome):
 
 function getBaseExerciseIntervalMultiplier(type: ExerciseOutcome['type']): number {
   switch (type) {
+    case 'translation_to_original_input':
+      return 1.18;
     case 'audio_to_original_input':
       return 1.18;
+    case 'kanji_to_hiragana_input':
+      return 1.15;
+    case 'sentence_cloze_input':
+      return 1.12;
     case 'translation_to_original_choice':
       return 1.08;
     case 'memory_check':

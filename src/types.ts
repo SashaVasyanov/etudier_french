@@ -14,6 +14,9 @@ export type ExerciseType =
   | 'translation_to_original_choice'
   | 'original_to_translation_choice'
   | 'audio_to_original_input'
+  | 'translation_to_original_input'
+  | 'kanji_to_hiragana_input'
+  | 'sentence_cloze_input'
   | 'memory_check';
 
 export interface Word {
@@ -67,6 +70,7 @@ export interface Exercise {
   correctAnswer: string;
   context?: string;
   options?: ExerciseOption[];
+  retryOfExerciseId?: string;
 }
 
 export interface ExerciseOutcome {

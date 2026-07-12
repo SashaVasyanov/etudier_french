@@ -2,7 +2,7 @@ import { Suspense, lazy, startTransition, useEffect, useMemo, useRef, useState }
 import { AppNavigation } from './components/AppNavigation';
 import { AppIcon } from './components/AppIcon';
 import { AppShell } from './components/AppShell';
-import { AudioInputExercise } from './components/AudioInputExercise';
+import { TextInputExercise } from './components/TextInputExercise';
 import { DailyCompletionScreen } from './components/DailyCompletionScreen';
 import { FlashcardView } from './components/FlashcardView';
 import { HomeDashboard } from './components/HomeDashboard';
@@ -12,7 +12,7 @@ import { MemoryCheckExercise } from './components/MemoryCheckExercise';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
 import { getLessonPoolWords, getStarterPacks, loadWords } from './data/words';
 import { playWordAudio, stopAudio } from './lib/audio';
-import { createFlashcardSession, createLessonSession } from './lib/exercises';
+import { createFlashcardSession, createLessonSession, scheduleExerciseRetry } from './lib/exercises';
 import {
   getLearningLanguageProductTitle,
   getLearningLanguageTitle,
@@ -40,7 +40,7 @@ import {
   updateProfileName,
 } from './lib/storage';
 import { parseImportedPack } from './lib/importPacks';
-import { getTodayDateKey, isAnswerMatch } from './lib/utils';
+import { getTodayDateKey, isAnswerMatch, isJapaneseReadingMatch } from './lib/utils';
 import type {
   AppStorage,
   DailyLessonCompletionPayload,
@@ -448,10 +448,16 @@ function App() {
       return;
     }
 
+    const isWordInputExercise =
+      currentExercise.type === 'audio_to_original_input' ||
+      currentExercise.type === 'translation_to_original_input' ||
+      currentExercise.type === 'sentence_cloze_input';
     const isCorrect =
-      currentExercise.type === 'audio_to_original_input'
-        ? isAnswerMatch(answer, currentExercise.correctAnswer, currentWord?.language ?? 'french', currentWord ?? undefined)
-        : answer === currentExercise.correctAnswer;
+      currentExercise.type === 'kanji_to_hiragana_input'
+        ? isJapaneseReadingMatch(answer, currentExercise.correctAnswer, currentWord ?? undefined)
+        : isWordInputExercise
+          ? isAnswerMatch(answer, currentExercise.correctAnswer, currentWord?.language ?? 'french', currentWord ?? undefined)
+          : answer === currentExercise.correctAnswer;
 
     const outcome: ExerciseOutcome = {
       exerciseId: currentExercise.id,
@@ -465,6 +471,14 @@ function App() {
     setOutcomes((current) => [...current, outcome]);
     setSelectedAnswer(answer);
     setIsSubmitted(true);
+
+    if (!isCorrect && session && currentWord) {
+      setSession((currentSession) =>
+        currentSession
+          ? scheduleExerciseRetry(currentSession, stepIndex, currentExercise, currentWord)
+          : currentSession,
+      );
+    }
 
     const selectedOptionWordId = currentExercise.options?.find((option) => option.label === answer)?.id;
     const selectedOriginalWord =
@@ -778,7 +792,7 @@ function App() {
                     onNext={goToNextStep}
                   />
                 ) : currentExercise ? (
-                  <AudioInputExercise
+                  <TextInputExercise
                     exercise={currentExercise}
                     word={currentWord}
                     value={typedAnswer}

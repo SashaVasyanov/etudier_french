@@ -181,14 +181,28 @@ async function main() {
 
     let verifiedKanjiTypography = false;
     let verifiedKanjiFeedback = false;
+    let verifiedActiveRecall = false;
+    let verifiedKanjiReading = false;
+    let verifiedSentenceCloze = false;
+    let verifiedDelayedRetry = false;
 
-    for (let index = 0; index < 14; index += 1) {
-      await driver.wait(until.elementLocated(By.css('.choice-button')), timeoutMs);
+    for (let index = 0; index < 60; index += 1) {
+      await driver.wait(
+        async () =>
+          (await driver.findElements(By.css('.choice-button:not([disabled])'))).length > 0 ||
+          (await driver.findElements(By.css('.text-input:not([disabled])'))).length > 0,
+        timeoutMs,
+      );
       const kanjiChoices = await driver.findElements(By.css('.japanese-kanji-choice'));
       const availableChoices = await driver.findElements(By.css('.choice-button:not([disabled])'));
-      assert.ok(availableChoices.length > 0, 'Japanese exercise has no available choices');
+      const inputFields = await driver.findElements(By.css('.text-input:not([disabled])'));
+      const eyebrow = await driver.findElement(By.css('.lesson-card .eyebrow')).getText();
 
-      if (kanjiChoices.length > 0) {
+      if (eyebrow === 'Возврат к ошибке') {
+        verifiedDelayedRetry = true;
+      }
+
+      if (availableChoices.length > 0 && kanjiChoices.length > 0) {
         const typographyMetrics = await driver.executeScript(
           `return [...document.querySelectorAll('.choice-button')].map((button) => ({
             hasKanji: /\\p{Script=Han}/u.test(button.textContent ?? ''),
@@ -214,7 +228,42 @@ async function main() {
         verifiedKanjiTypography = true;
       }
 
-      await availableChoices[0].sendKeys(Key.ENTER);
+      if (availableChoices.length > 0) {
+        await availableChoices[0].sendKeys(Key.ENTER);
+      } else {
+        assert.equal(inputFields.length, 1, 'Japanese exercise has no usable answer control');
+
+        if (eyebrow === 'Активное вспоминание') {
+          verifiedActiveRecall = true;
+          assert.equal((await driver.findElements(By.css('.choice-button'))).length, 0, 'Active recall still exposes choices');
+        }
+
+        if (eyebrow === 'Чтение кандзи') {
+          const readingMetrics = await driver.executeScript(
+            `const prompt = document.querySelector('.lesson-kanji-reading-prompt');
+             return prompt ? {
+               fontSize: Number.parseFloat(getComputedStyle(prompt).fontSize),
+               width: prompt.clientWidth,
+               scrollWidth: prompt.scrollWidth,
+             } : null;`,
+          );
+          assert.ok(readingMetrics?.fontSize >= 42, 'Kanji reading prompt is too small');
+          assert.ok(readingMetrics.scrollWidth <= readingMetrics.width, 'Kanji reading prompt overflows');
+          verifiedKanjiReading = true;
+        }
+
+        if (eyebrow === 'Слово в контексте') {
+          const clozeText = await driver.findElement(By.css('.cloze-prompt')).getText();
+          const clozeTranslation = await driver.findElement(By.css('.cloze-context')).getText();
+          assert.ok(clozeText.includes('＿＿'), 'Sentence cloze has no visible gap');
+          assert.ok(clozeTranslation.length > 0, 'Sentence cloze has no contextual translation');
+          verifiedSentenceCloze = true;
+        }
+
+        await inputFields[0].sendKeys('неверный ответ');
+        await driver.findElement(By.xpath('//button[normalize-space()="Проверить"]')).sendKeys(Key.ENTER);
+      }
+
       await driver.wait(until.elementLocated(By.css('.answer-feedback-translation')), timeoutMs);
       const feedbackWord = await driver.findElement(By.css('.answer-feedback-word')).getText();
 
@@ -224,13 +273,24 @@ async function main() {
         verifiedKanjiFeedback = true;
       }
 
-      if (verifiedKanjiTypography && verifiedKanjiFeedback) break;
+      if (
+        verifiedKanjiTypography &&
+        verifiedKanjiFeedback &&
+        verifiedActiveRecall &&
+        verifiedKanjiReading &&
+        verifiedSentenceCloze &&
+        verifiedDelayedRetry
+      ) break;
       const nextExerciseButton = await driver.findElement(By.xpath('//button[normalize-space()="Дальше"]'));
       await nextExerciseButton.sendKeys(Key.ENTER);
     }
 
     assert.ok(verifiedKanjiTypography, 'No kanji choice typography was verified');
     assert.ok(verifiedKanjiFeedback, 'No kanji answer feedback was verified');
+    assert.ok(verifiedActiveRecall, 'Translation-to-word active recall was not verified');
+    assert.ok(verifiedKanjiReading, 'Kanji-to-hiragana exercise was not verified');
+    assert.ok(verifiedSentenceCloze, 'Sentence cloze exercise was not verified');
+    assert.ok(verifiedDelayedRetry, 'A failed word did not return after intervening tasks');
     await driver.manage().window().setRect({ width: 375, height: 812, x: 0, y: 0 });
     const japaneseViewportMetrics = await driver.executeScript(
       `return {

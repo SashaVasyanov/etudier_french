@@ -1310,6 +1310,61 @@
   gap: var(--space-3);
 }
 
+.exercise-input-panel {
+  width: 100%;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.lesson-kanji-reading-prompt {
+  max-width: 100%;
+  font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  font-size: clamp(3rem, 7vw, 5.6rem);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.cloze-prompt-panel,
+.cloze-answer-context {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.64);
+  overflow: hidden;
+}
+
+.cloze-prompt,
+.cloze-context {
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.cloze-prompt {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 3.2vw, 2.45rem);
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+.cloze-context {
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.cloze-answer-context {
+  text-align: left;
+  background: rgba(246, 241, 232, 0.54);
+}
+
 .audio-button-prominent {
   min-width: min(260px, 100%);
 }

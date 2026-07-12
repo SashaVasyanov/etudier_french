@@ -348,6 +348,24 @@ export function getExerciseCopy(
         title: 'Напишите слово',
         hint: `Слушайте внимательно и введите слово ${language === 'french' ? 'по-французски' : 'по-японски'}.`,
       };
+    case 'translation_to_original_input':
+      return {
+        eyebrow: 'Активное вспоминание',
+        title: 'Напишите слово',
+        hint: 'Вспомните слово по переводу без вариантов ответа.',
+      };
+    case 'kanji_to_hiragana_input':
+      return {
+        eyebrow: 'Чтение кандзи',
+        title: 'Введите чтение',
+        hint: 'Напишите чтение слова хираганой.',
+      };
+    case 'sentence_cloze_input':
+      return {
+        eyebrow: 'Слово в контексте',
+        title: 'Заполните пропуск',
+        hint: 'Вспомните слово по смыслу предложения.',
+      };
     case 'memory_check':
       return {
         eyebrow: 'Вспоминание',

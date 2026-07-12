@@ -14,6 +14,7 @@ import type {
 } from '../types';
 import { getWordProgress } from './storage';
 import { isReviewDue, shuffleArray } from './utils';
+import { containsJapaneseKanji, getJapaneseHiraganaReading } from './wordPresentation';
 
 const LESSON_LIMITS: Record<
   LessonDurationMinutes,
@@ -142,6 +143,52 @@ function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'or
   ]);
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function createSentenceCloze(word: Word): string | null {
+  const example = word.example_original.trim();
+  const original = word.original.trim();
+
+  if (!example || !original) {
+    return null;
+  }
+
+  if (word.language === 'japanese') {
+    return example.includes(original) ? example.replace(original, '＿＿') : null;
+  }
+
+  const pattern = new RegExp(`(^|[^\\p{L}])${escapeRegExp(original)}(?=$|[^\\p{L}])`, 'iu');
+  return pattern.test(example) ? example.replace(pattern, '$1＿＿') : null;
+}
+
+function canCreateExercise(word: Word, type: ExerciseType): boolean {
+  if (type === 'kanji_to_hiragana_input') {
+    return word.language === 'japanese' && containsJapaneseKanji(word.original) && Boolean(getJapaneseHiraganaReading(word));
+  }
+
+  if (type === 'sentence_cloze_input') {
+    return Boolean(createSentenceCloze(word));
+  }
+
+  return true;
+}
+
+function getAvailableExerciseTypes(word: Word, exerciseTypes: ExerciseType[]): ExerciseType[] {
+  const availableTypes = exerciseTypes.map((type) => {
+    if (canCreateExercise(word, type)) {
+      return type;
+    }
+
+    return type === 'kanji_to_hiragana_input' || type === 'sentence_cloze_input'
+      ? 'translation_to_original_input'
+      : null;
+  });
+
+  return Array.from(new Set(availableTypes.filter((type): type is ExerciseType => type !== null)));
+}
+
 function createExercise(word: Word, optionPool: Word[], type: ExerciseType, index: number): Exercise {
   switch (type) {
     case 'audio_to_translation_choice':
@@ -179,6 +226,45 @@ function createExercise(word: Word, optionPool: Word[], type: ExerciseType, inde
         prompt: 'Напишите слово, которое слышите',
         correctAnswer: word.original,
       };
+    case 'translation_to_original_input':
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: word.translation,
+        correctAnswer: word.original,
+      };
+    case 'kanji_to_hiragana_input': {
+      const reading = getJapaneseHiraganaReading(word);
+
+      if (!reading) {
+        return createExercise(word, optionPool, 'translation_to_original_input', index);
+      }
+
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: word.original,
+        correctAnswer: reading,
+      };
+    }
+    case 'sentence_cloze_input': {
+      const cloze = createSentenceCloze(word);
+
+      if (!cloze) {
+        return createExercise(word, optionPool, 'translation_to_original_input', index);
+      }
+
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: cloze,
+        context: word.example_translation,
+        correctAnswer: word.original,
+      };
+    }
     case 'memory_check':
       return {
         id: `${word.id}-${type}-${index}`,
@@ -348,6 +434,7 @@ function getMemoryBand(progress: WordProgress): 'fragile' | 'growing' | 'stable'
 function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTypes: ExerciseType[]): ExerciseType[] {
   const progress = getWordProgress(storage, word.id);
   const band = getMemoryBand(progress);
+  const availableExerciseTypes = getAvailableExerciseTypes(word, exerciseTypes);
 
   const priorities: Record<'fragile' | 'growing' | 'stable', Record<ExerciseType, number>> = {
     fragile: {
@@ -355,6 +442,9 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       translation_to_original_choice: 1,
       audio_to_translation_choice: 2,
       audio_to_original_input: 3,
+      translation_to_original_input: 2,
+      kanji_to_hiragana_input: 2,
+      sentence_cloze_input: 1,
       memory_check: 4,
     },
     growing: {
@@ -362,6 +452,9 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       translation_to_original_choice: 0,
       audio_to_translation_choice: 2,
       audio_to_original_input: 2,
+      translation_to_original_input: 0,
+      kanji_to_hiragana_input: 1,
+      sentence_cloze_input: 0,
       memory_check: 3,
     },
     stable: {
@@ -369,13 +462,16 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       translation_to_original_choice: 0,
       audio_to_translation_choice: 3,
       audio_to_original_input: 1,
+      translation_to_original_input: 0,
+      kanji_to_hiragana_input: 0,
+      sentence_cloze_input: 0,
       memory_check: 0,
     },
   };
 
   const buckets = new Map<number, ExerciseType[]>();
 
-  exerciseTypes.forEach((type) => {
+  availableExerciseTypes.forEach((type) => {
     const priority = priorities[band][type];
     const bucket = buckets.get(priority) ?? [];
     bucket.push(type);
@@ -395,7 +491,9 @@ function buildExerciseSequence(
   const orderedWords = storage ? rankWordsForStudy(words, storage) : shuffleArray(words);
   const queues = orderedWords.map((word) => ({
     word,
-    queue: storage ? reorderExerciseTypesForWord(word, storage, exerciseTypes) : shuffleArray(exerciseTypes),
+    queue: storage
+      ? reorderExerciseTypesForWord(word, storage, exerciseTypes)
+      : shuffleArray(getAvailableExerciseTypes(word, exerciseTypes)),
   }));
   const sequence: Array<{ word: Word; type: ExerciseType }> = [];
   let previousWordId: string | null = null;
@@ -619,7 +717,7 @@ function createMistakesSession(
     'Сложные слова',
     'Точечное повторение слов, где были ошибки.',
     mistakeWords,
-    ['original_to_translation_choice', 'audio_to_original_input'],
+    ['translation_to_original_input', 'sentence_cloze_input', 'kanji_to_hiragana_input'],
     uniqueWords(words),
     undefined,
   );
@@ -704,7 +802,7 @@ function createDailySession(
     'Тренировка новых слов',
     'Быстрое закрепление слов, которые вы только что увидели.',
     introductionWords,
-    ['original_to_translation_choice', 'translation_to_original_choice'],
+    ['original_to_translation_choice', 'translation_to_original_input'],
     uniqueWords(words),
     storage,
   );
@@ -713,7 +811,7 @@ function createDailySession(
     'Повторение не до конца выученных слов',
     'Возврат к словам, которые еще требуют внимания.',
     reviewWords,
-    ['original_to_translation_choice', 'audio_to_original_input'],
+    ['audio_to_original_input', 'kanji_to_hiragana_input'],
     uniqueWords(words),
     storage,
   );
@@ -722,7 +820,7 @@ function createDailySession(
     'Смешанное закрепление',
     'Слова возвращаются в новом порядке, чтобы проверить узнавание без заучивания по шаблону.',
     reinforcementWords,
-    ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_original_input'],
+    ['sentence_cloze_input', 'translation_to_original_choice'],
     uniqueWords(words),
     storage,
   );
@@ -732,7 +830,7 @@ function createDailySession(
       'Финальная мини-проверка',
       'Короткий итоговый блок: ключевые слова дня и редкая проверка давно выученного.',
       recapWords,
-      ['translation_to_original_choice', 'audio_to_original_input'],
+      ['translation_to_original_input', 'sentence_cloze_input'],
       uniqueWords(words),
       storage,
     ),
@@ -801,7 +899,7 @@ function createExtraSession(
       ? 'Тренируйте слова выбранного пака вне ежедневного лимита.'
       : 'Продолжайте обучение после завершения ежедневного урока.',
     focusWords,
-    ['original_to_translation_choice', 'translation_to_original_choice'],
+    ['original_to_translation_choice', 'translation_to_original_input'],
     uniqueWords(words),
     storage,
   );
@@ -812,7 +910,7 @@ function createExtraSession(
       ? 'Просмотрите и закрепите новые слова, которые лежат внутри выбранного пака.'
       : 'Здесь появляются слова, которые еще не попали в дневной урок.',
     newWords,
-    ['original_to_translation_choice', 'translation_to_original_choice'],
+    ['original_to_translation_choice', 'translation_to_original_input'],
     uniqueWords(words),
     storage,
   );
@@ -822,7 +920,7 @@ function createExtraSession(
       'Смешанное закрепление',
       'Финальный блок на закрепление активных, новых и давно выученных слов.',
       mixedWords,
-      ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_original_input'],
+      ['sentence_cloze_input', 'audio_to_original_input', 'kanji_to_hiragana_input'],
       uniqueWords(words),
       storage,
     ),
@@ -1026,6 +1124,112 @@ function buildSteps(modules: LessonModule[], moduleExercises: Record<string, Exe
   });
 
   return steps;
+}
+
+export function scheduleExerciseRetry(
+  session: LessonSession,
+  currentStepIndex: number,
+  failedExercise: Exercise,
+  word: Word,
+): LessonSession {
+  const retryAlreadyScheduled =
+    Boolean(failedExercise.retryOfExerciseId) ||
+    session.exercises.some((exercise) => exercise.wordId === word.id && Boolean(exercise.retryOfExerciseId));
+
+  if (retryAlreadyScheduled) {
+    return session;
+  }
+
+  const candidateTypes: ExerciseType[] = [
+    ...(word.language === 'japanese' && failedExercise.type !== 'kanji_to_hiragana_input'
+      ? (['kanji_to_hiragana_input'] as ExerciseType[])
+      : []),
+    ...(failedExercise.type !== 'sentence_cloze_input' ? (['sentence_cloze_input'] as ExerciseType[]) : []),
+    'translation_to_original_input',
+  ];
+  const retryType = candidateTypes.find((type) => canCreateExercise(word, type)) ?? 'translation_to_original_input';
+  const retryIndex = session.exercises.length;
+  const baseRetryExercise = createExercise(word, [word], retryType, retryIndex);
+  const retryExercise: Exercise = {
+    ...baseRetryExercise,
+    id: `${failedExercise.id}-retry-${retryIndex}`,
+    retryOfExerciseId: failedExercise.id,
+  };
+  // Place the retry after three other tasks whenever enough lesson steps remain.
+  const insertionIndex = Math.min(session.steps.length, currentStepIndex + 4);
+  const anchorStep =
+    session.steps[insertionIndex] ??
+    [...session.steps].reverse().find((step) => step.kind === 'exercise') ??
+    session.steps[currentStepIndex];
+
+  if (!anchorStep) {
+    return session;
+  }
+
+  const retryStep: LessonStep = {
+    id: `${anchorStep.moduleId}-${retryExercise.id}`,
+    moduleId: anchorStep.moduleId,
+    moduleTitle: anchorStep.moduleTitle,
+    moduleDescription: anchorStep.moduleDescription,
+    moduleTheme: anchorStep.moduleTheme,
+    modulePosition: anchorStep.modulePosition,
+    moduleCount: anchorStep.moduleCount,
+    allowMarkKnown: false,
+    kind: 'exercise',
+    exercise: retryExercise,
+    wordId: word.id,
+    indexInModule: 1,
+    totalInModule: 1,
+  };
+  const insertedSteps = [
+    ...session.steps.slice(0, insertionIndex),
+    retryStep,
+    ...session.steps.slice(insertionIndex),
+  ];
+  const modules = session.modules.map((module) => {
+    const moduleSteps = insertedSteps.filter((step) => step.moduleId === module.id);
+
+    return {
+      ...module,
+      exerciseTypes:
+        module.id === anchorStep.moduleId
+          ? Array.from(new Set([...module.exerciseTypes, retryExercise.type]))
+          : module.exerciseTypes,
+      stepIds: moduleSteps.map((step) => step.id),
+    };
+  });
+  const moduleById = new Map(modules.map((module) => [module.id, module]));
+  const moduleStepCounts = new Map<string, number>();
+  const totalStepsByModule = new Map<string, number>();
+
+  insertedSteps.forEach((step) => {
+    totalStepsByModule.set(step.moduleId, (totalStepsByModule.get(step.moduleId) ?? 0) + 1);
+  });
+
+  const steps = insertedSteps.map((step) => {
+    const module = moduleById.get(step.moduleId);
+    const indexInModule = (moduleStepCounts.get(step.moduleId) ?? 0) + 1;
+    moduleStepCounts.set(step.moduleId, indexInModule);
+
+    return {
+      ...step,
+      moduleTitle: module?.title ?? step.moduleTitle,
+      moduleDescription: module?.description ?? step.moduleDescription,
+      moduleTheme: module?.theme ?? step.moduleTheme,
+      modulePosition: module?.position ?? step.modulePosition,
+      moduleCount: modules.length,
+      indexInModule,
+      totalInModule: totalStepsByModule.get(step.moduleId) ?? step.totalInModule,
+    };
+  });
+
+  return {
+    ...session,
+    modules,
+    steps,
+    exercises: [...session.exercises, retryExercise],
+    exerciseIds: [...session.exerciseIds, retryExercise.id],
+  };
 }
 
 export function createLessonSession({
