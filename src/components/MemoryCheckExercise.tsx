@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import type { Exercise, Word } from '../types';
-import { getDisplayWord, getExerciseCopy } from '../lib/wordPresentation';
+import { getExerciseCopy } from '../lib/wordPresentation';
 import { LessonCard } from './LessonCard';
+import { AnswerWordDetails } from './AnswerWordDetails';
 
 interface MemoryCheckExerciseProps {
   exercise: Exercise;
@@ -88,7 +89,7 @@ export function MemoryCheckExercise({
           {isSubmitted ? (
             <div className={selectedAnswer === 'Помню' ? 'answer-feedback success' : 'answer-feedback error'}>
               <strong>{selectedAnswer === 'Помню' ? 'Отмечено: помню' : 'Отмечено: не помню'}</strong>
-              <span>{getDisplayWord(word)}</span>
+              <AnswerWordDetails word={word} />
             </div>
           ) : null}
         </div>

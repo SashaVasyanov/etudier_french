@@ -4824,6 +4824,55 @@ button:active:not(:disabled) {
   color: #9d3d2d;
 }
 
+.lesson-choice-grid .choice-button.japanese-kanji-choice {
+  min-height: 84px;
+  padding-block: 12px;
+}
+
+.lesson-choice-grid .choice-button.japanese-kanji-choice .choice-button-label {
+  font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  font-size: clamp(1.7rem, 2.4vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.answer-word-details {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 3px 10px;
+  min-width: 0;
+}
+
+.answer-feedback-word {
+  font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.answer-feedback-reading {
+  min-width: 0;
+  font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  opacity: 0.82;
+  overflow-wrap: anywhere;
+}
+
+.answer-feedback-translation {
+  grid-column: 1 / -1;
+  min-width: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.35;
+  opacity: 0.88;
+  overflow-wrap: anywhere;
+}
+
 .choice-button.correct::before,
 .choice-button.incorrect::before {
   width: 22px;
@@ -4958,6 +5007,14 @@ button:active:not(:disabled) {
   .lesson-choice-grid .choice-button,
   .lesson-choice-stack .choice-button {
     min-height: 58px;
+  }
+
+  .lesson-choice-grid .choice-button.japanese-kanji-choice {
+    min-height: 68px;
+  }
+
+  .lesson-choice-grid .choice-button.japanese-kanji-choice .choice-button-label {
+    font-size: clamp(1.5rem, 7vw, 1.9rem);
   }
 
   .lesson-preview-toolbar {

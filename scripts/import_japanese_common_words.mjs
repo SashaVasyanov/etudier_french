@@ -291,13 +291,21 @@ const body = selected
   .map((word, index) => {
     const id = `ja-${String(index + 1).padStart(4, '0')}`;
     const level = getLevel(index);
+    const primaryTranslation = word.translation
+      .split(/\s*\/\s*|,\s*/)[0]
+      ?.replace(/^\[([^\]]+)]\s*/, '$1 ')
+      .replace(/^\([^)]*\)\s*/, '')
+      .trim() || word.translation.trim();
+    const translatedWord = primaryTranslation
+      ? `${primaryTranslation.charAt(0).toLocaleUpperCase('ru-RU')}${primaryTranslation.slice(1)}`
+      : word.translation;
     const payload = {
       id,
       original: word.original,
       translation: word.translation,
       transcription: word.transcription,
       example_original: `${word.original}はよく使う言葉です。`,
-      example_translation: `«${word.original}» — частотное японское слово.`,
+      example_translation: `«${translatedWord}» — часто употребляемое слово.`,
       part_of_speech: word.part_of_speech,
       level,
       tags: [...word.tags, `top-${index + 1}`],

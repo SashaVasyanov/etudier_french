@@ -6,13 +6,28 @@ type JapaneseWordSeed = Pick<
 >;
 
 function createJapaneseWord(seed: JapaneseWordSeed): Word {
+  const isGenericFrequencyExample = seed.example_original === `${seed.original}はよく使う言葉です。`;
+
   return {
     ...seed,
+    example_translation: isGenericFrequencyExample
+      ? `«${getPrimaryTranslation(seed.translation)}» — часто употребляемое слово.`
+      : seed.example_translation,
     language: 'japanese',
     audio_original: '',
     packIds: [],
     source: 'core',
   };
+}
+
+function getPrimaryTranslation(translation: string): string {
+  const primary = translation
+    .split(/\s*\/\s*|,\s*/)[0]
+    ?.replace(/^\[([^\]]+)]\s*/, '$1 ')
+    .replace(/^\([^)]*\)\s*/, '')
+    .trim() || translation.trim();
+
+  return primary ? `${primary.charAt(0).toLocaleUpperCase('ru-RU')}${primary.slice(1)}` : translation;
 }
 
 export const JAPANESE_CORE_WORDS: Word[] = [

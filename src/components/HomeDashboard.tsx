@@ -99,12 +99,14 @@ export function HomeDashboard({
     : 'В своём темпе · без лимита';
   const packCompletion = activePack ? getPackCompletion(activePack, storage) : 0;
   const difficultCount = progressList.filter((progress) => progress.status === 'difficult').length;
+  const learningLanguageLabel = learningLanguage === 'japanese' ? 'Японский' : 'Французский';
+  const learningLanguageChip = learningLanguage === 'japanese' ? 'JP · японский' : 'FR · французский';
 
   return (
     <section className="learning-home">
       <header className="learning-home-head">
         <div className="learning-home-greeting">
-          <span className="home-language-chip">FR · французский</span>
+          <span className="home-language-chip">{learningLanguageChip}</span>
           <h1>{isDailyComplete ? 'Классная работа, ' : 'Привет, '}{displayName}!</h1>
           <p>{isDailyComplete ? 'Дневная цель закрыта — можно закрепить результат в комфортном темпе.' : 'Сегодня достаточно одного короткого шага к уверенной речи.'}</p>
         </div>
@@ -119,7 +121,7 @@ export function HomeDashboard({
       <section className={isDailyComplete ? 'daily-journey-card is-complete' : 'daily-journey-card'}>
         <div className="daily-journey-copy">
           <span className="daily-card-kicker">Твоя программа на сегодня</span>
-          <h2>{isDailyComplete ? 'На сегодня заданий нет' : 'Французский — по чуть-чуть, но каждый день'}</h2>
+          <h2>{isDailyComplete ? 'На сегодня заданий нет' : `${learningLanguageLabel} — по чуть-чуть, но каждый день`}</h2>
           <p>{isDailyComplete ? 'Все 5 модулей завершены. Выбирай лёгкую дополнительную практику или возвращайся к словам.' : `${durationMeta} · тема: ${lessonPackLabel}`}</p>
         </div>
 

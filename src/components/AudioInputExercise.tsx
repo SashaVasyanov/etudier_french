@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { getLearningLanguageAdverb, getLearningLanguageTitle } from '../lib/languages';
 import type { Exercise, Word } from '../types';
-import { getDisplayWord, getExerciseCopy } from '../lib/wordPresentation';
+import { getExerciseCopy } from '../lib/wordPresentation';
 import { LessonCard } from './LessonCard';
+import { AnswerWordDetails } from './AnswerWordDetails';
 
 interface AudioInputExerciseProps {
   exercise: Exercise;
@@ -39,10 +40,6 @@ export function AudioInputExercise({
     word.language === 'japanese'
       ? 'Подойдут кандзи, хирагана, катакана или ромадзи'
       : `Ответ должен быть на ${languageTitle} языке`;
-  const feedbackAnswer =
-    word.language === 'japanese' && word.transcription
-      ? `${getDisplayWord(word)} · ${word.transcription}`
-      : getDisplayWord(word);
 
   useEffect(() => {
     if (!isSubmitted) {
@@ -126,7 +123,7 @@ export function AudioInputExercise({
           {isSubmitted ? (
             <div className={isCorrect ? 'answer-feedback success' : 'answer-feedback error'}>
               <strong>{isCorrect ? 'Верно' : 'Неправильно'}</strong>
-              <span>{feedbackAnswer}</span>
+              <AnswerWordDetails word={word} />
             </div>
           ) : null}
         </div>

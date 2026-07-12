@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { Exercise, Word } from '../types';
-import { getDisplayWord, getExerciseCopy } from '../lib/wordPresentation';
+import { containsJapaneseKanji, getDisplayWord, getExerciseCopy } from '../lib/wordPresentation';
+import { AnswerWordDetails } from './AnswerWordDetails';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
 import { LessonChoiceButton } from './LessonChoiceButton';
@@ -34,7 +35,6 @@ export function MultipleChoiceExercise({
   const isOriginalExercise = exercise.type === 'original_to_translation_choice';
   const isTranslationExercise = exercise.type === 'translation_to_original_choice';
   const copy = getExerciseCopy(exercise.type, word.language);
-  const feedbackLabel = getDisplayWord(word);
   const cardClassName = [
     'lesson-exercise-card',
     isTranslationExercise ? 'lesson-image-choice-card' : '',
@@ -141,6 +141,7 @@ export function MultipleChoiceExercise({
                   key={option.id + option.label}
                   state={state}
                   disabled={isSubmitted}
+                  className={word.language === 'japanese' && containsJapaneseKanji(option.label) ? 'japanese-kanji-choice' : ''}
                   onClick={() => onSelect(option.label)}
                 >
                   {option.label}
@@ -152,7 +153,7 @@ export function MultipleChoiceExercise({
             <div className={selectedAnswer === exercise.correctAnswer ? 'answer-feedback success' : 'answer-feedback error'}>
               <div>
                 <strong>{selectedAnswer === exercise.correctAnswer ? 'Верно' : 'Неправильно'}</strong>
-                <span>{feedbackLabel}</span>
+                <AnswerWordDetails word={word} />
               </div>
               {onReplayAudio ? (
                 <button type="button" className="feedback-replay-button" onClick={onReplayAudio}>

@@ -192,6 +192,32 @@ export function getDisplayWord(word: Word): string {
   return article.endsWith("'") ? `${article}${word.original}` : `${article} ${word.original}`;
 }
 
+export function containsJapaneseKanji(value: string): boolean {
+  return /\p{Script=Han}/u.test(value);
+}
+
+export function getJapaneseHiraganaReading(word: Word): string | null {
+  if (word.language !== 'japanese' || !word.transcription) {
+    return null;
+  }
+
+  const kana = word.transcription
+    .replace(/^\[|]$/g, '')
+    .split('·')[0]
+    ?.trim();
+
+  if (!kana || !/[\u3040-\u30ff]/.test(kana)) {
+    return null;
+  }
+
+  return [...kana]
+    .map((character) => {
+      const code = character.charCodeAt(0);
+      return code >= 0x30a1 && code <= 0x30f6 ? String.fromCharCode(code - 0x60) : character;
+    })
+    .join('');
+}
+
 export function getSpokenWordText(word: Word): string {
   if (word.language !== 'french') {
     return word.original;
