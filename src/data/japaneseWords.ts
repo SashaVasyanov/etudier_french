@@ -1,4 +1,5 @@
 import type { Word } from '../types';
+import { JAPANESE_EXAMPLES } from './japaneseExamples';
 
 type JapaneseWordSeed = Pick<
   Word,
@@ -6,28 +7,18 @@ type JapaneseWordSeed = Pick<
 >;
 
 function createJapaneseWord(seed: JapaneseWordSeed): Word {
-  const isGenericFrequencyExample = seed.example_original === `${seed.original}はよく使う言葉です。`;
+  const exampleIndex = Number.parseInt(seed.id.slice(3), 10) - 1;
+  const contextualExample = JAPANESE_EXAMPLES[exampleIndex];
 
   return {
     ...seed,
-    example_translation: isGenericFrequencyExample
-      ? `«${getPrimaryTranslation(seed.translation)}» — часто употребляемое слово.`
-      : seed.example_translation,
+    example_original: contextualExample?.[0] ?? seed.example_original,
+    example_translation: contextualExample?.[1] ?? seed.example_translation,
     language: 'japanese',
     audio_original: '',
     packIds: [],
     source: 'core',
   };
-}
-
-function getPrimaryTranslation(translation: string): string {
-  const primary = translation
-    .split(/\s*\/\s*|,\s*/)[0]
-    ?.replace(/^\[([^\]]+)]\s*/, '$1 ')
-    .replace(/^\([^)]*\)\s*/, '')
-    .trim() || translation.trim();
-
-  return primary ? `${primary.charAt(0).toLocaleUpperCase('ru-RU')}${primary.slice(1)}` : translation;
 }
 
 export const JAPANESE_CORE_WORDS: Word[] = [

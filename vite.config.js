@@ -16,6 +16,9 @@ export default defineConfig({
                     if (id.includes('/src/lib/wordImages.ts')) {
                         return 'illustrations';
                     }
+                    if (id.includes('/src/data/japaneseExamples.ts')) {
+                        return 'japanese-examples';
+                    }
                     return undefined;
                 },
             },

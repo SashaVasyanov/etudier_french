@@ -20,6 +20,10 @@ export default defineConfig({
             return 'illustrations';
           }
 
+          if (id.includes('/src/data/japaneseExamples.ts')) {
+            return 'japanese-examples';
+          }
+
           return undefined;
         },
       },

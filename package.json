@@ -9,6 +9,7 @@
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint src vite.config.ts",
     "images:generate": "node scripts/generate-word-images.mjs",
+    "japanese:examples": "node scripts/build_japanese_examples.mjs",
     "preview": "vite preview",
     "preview:host": "vite preview --host 127.0.0.1 --port 4173",
     "tauri": "tauri",
