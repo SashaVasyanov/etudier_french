@@ -129,6 +129,7 @@ async function main() {
       async () => (await driver.findElements(By.css('.dictionary-grid > .word-card'))).length === 1,
       timeoutMs,
     );
+    console.log('Corrected 話 translation verified.');
     let correctedCardText = await driver.findElement(By.css('.dictionary-grid > .word-card')).getText();
     assert.ok(correctedCardText.includes('話'), 'Corrected 話 entry is missing');
     assert.ok(correctedCardText.includes('разговор / история'), '話 still displays the rare dictionary gloss');
@@ -138,9 +139,33 @@ async function main() {
       async () => (await driver.findElements(By.css('.dictionary-grid > .word-card'))).length === 1,
       timeoutMs,
     );
+    console.log('Corrected 様 translation verified.');
     correctedCardText = await driver.findElement(By.css('.dictionary-grid > .word-card')).getText();
     assert.ok(correctedCardText.includes('様'), 'Corrected 様 entry is missing');
     assert.ok(correctedCardText.includes('[さま · sama]'), '様 still uses the contextually incorrect reading');
+    await dictionarySearch.clear();
+    await dictionarySearch.sendKeys(' ');
+    await driver.wait(
+      async () => (await driver.findElements(By.css('.dictionary-grid > .word-card'))).length === 80,
+      timeoutMs,
+    );
+    console.log('Japanese dictionary image grid loaded.');
+    const japaneseImageMetrics = await driver.executeScript(
+      `const images = [...document.querySelectorAll('.dictionary-grid > .word-card .word-image')];
+       return {
+         count: images.length,
+         localCount: images.filter((image) => image.getAttribute('src')?.startsWith('data:image/svg+xml')).length,
+         semanticCount: images.filter((image) => image.dataset.imageSource === 'generated:semantic-svg-v2').length,
+         emptyAltCount: images.filter((image) => !image.getAttribute('alt')?.trim()).length,
+         illustrationTypes: [...new Set(images.map((image) => image.dataset.illustrationType).filter(Boolean))],
+       };`,
+    );
+    console.log(`Japanese image types: ${japaneseImageMetrics.illustrationTypes.join(', ')}`);
+    assert.equal(japaneseImageMetrics.count, 80, 'Japanese dictionary image coverage is incomplete');
+    assert.equal(japaneseImageMetrics.localCount, 80, 'Japanese mnemonic images are not fully local');
+    assert.equal(japaneseImageMetrics.semanticCount, 80, 'Japanese words did not receive semantic illustrations');
+    assert.equal(japaneseImageMetrics.emptyAltCount, 0, 'Japanese images have missing alternative text');
+    assert.ok(japaneseImageMetrics.illustrationTypes.length >= 10, 'Japanese mnemonic illustrations are not diverse enough');
     await (await findNavigationButton(driver, 'Главная')).sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
 

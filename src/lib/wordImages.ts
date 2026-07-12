@@ -1,6 +1,6 @@
 import type { Word } from '../types';
 
-export type IllustrationCategory = 'plants' | 'animals' | 'food' | 'travel' | 'home' | 'core';
+export type IllustrationCategory = 'plants' | 'animals' | 'food' | 'travel' | 'home' | 'japanese' | 'core';
 
 interface IllustrationTheme {
   backgroundStart: string;
@@ -61,6 +61,14 @@ const THEMES: Record<IllustrationCategory, IllustrationTheme> = {
     secondary: '#b39ce9',
     accent: '#f2c8a1',
     line: '#4b3b86',
+  },
+  japanese: {
+    backgroundStart: '#f2f4ff',
+    backgroundEnd: '#e3e8ff',
+    foreground: '#4b61b3',
+    secondary: '#9cabe4',
+    accent: '#e36b70',
+    line: '#2f427f',
   },
   core: {
     backgroundStart: '#edf4ff',
@@ -337,6 +345,111 @@ const ILLUSTRATION_SHAPES: Record<string, IllustrationShape> = {
     primary: 'M120 159c0-26 22-48 48-48s48 22 48 48-22 48-48 48-48-22-48-48Z',
     secondary: 'M142 159c0-14 12-26 26-26s26 12 26 26-12 26-26 26-26-12-26-26Z',
   },
+  person: {
+    primary: 'M168 83a27 27 0 1 0 0 54 27 27 0 0 0 0-54Zm-50 116c0-38 22-66 50-66s50 28 50 66H118Z',
+    secondary: 'M144 142c7 9 15 13 24 13s17-4 24-13',
+  },
+  people: {
+    primary: 'M119 103a21 21 0 1 0 0 42 21 21 0 0 0 0-42Zm98 0a21 21 0 1 0 0 42 21 21 0 0 0 0-42ZM83 200c0-31 16-54 36-54s36 23 36 54H83Zm98 0c0-31 16-54 36-54s36 23 36 54h-72Z',
+    secondary: 'M137 200c0-37 19-64 43-64s43 27 43 64h-86Z',
+  },
+  speech: {
+    primary: 'M89 91h158c14 0 25 11 25 25v55c0 14-11 25-25 25h-82l-38 28 8-28H89c-14 0-25-11-25-25v-55c0-14 11-25 25-25Z',
+    secondary: 'M103 132h112m-112 26h79',
+  },
+  question: {
+    primary: 'M132 119c1-27 18-44 44-44 27 0 45 16 45 39 0 19-10 29-27 39-13 8-18 15-18 29h-18c0-23 8-34 25-45 13-8 19-13 19-23 0-13-10-21-26-21-15 0-24 10-25 26h-19Zm34 76a12 12 0 1 0 0 24 12 12 0 0 0 0-24Z',
+    secondary: 'M93 188a28 28 0 1 0 0-56 28 28 0 0 0 0 56Z',
+  },
+  heart: {
+    primary: 'M168 207 91 137c-29-27-10-75 28-75 20 0 38 12 49 30 11-18 29-30 49-30 38 0 57 48 28 75l-77 70Z',
+    secondary: 'M118 91c10-8 24-8 34 0',
+  },
+  clock: {
+    primary: 'M168 72a76 76 0 1 0 0 152 76 76 0 0 0 0-152Z',
+    secondary: 'M168 96v58l39 22',
+    detail: 'M168 79v13m0 124v13M91 150h13m128 0h13',
+  },
+  work: {
+    primary: 'M84 119h168c13 0 24 11 24 24v57c0 13-11 24-24 24H84c-13 0-24-11-24-24v-57c0-13 11-24 24-24Z',
+    secondary: 'M132 119V99c0-13 10-23 23-23h26c13 0 23 10 23 23v20',
+    detail: 'M60 163h216m-118-12h20v25h-20z',
+  },
+  book: {
+    primary: 'M73 88h70c14 0 25 11 25 25v99c-8-12-20-18-36-18H73V88Zm194 0h-70c-14 0-29 11-29 25v99c8-12 24-18 40-18h59V88Z',
+    secondary: 'M168 113v99m-72-91h42m-42 24h42m64-24h42m-42 24h42',
+  },
+  phone: {
+    primary: 'M131 67h74c12 0 22 10 22 22v128c0 12-10 22-22 22h-74c-12 0-22-10-22-22V89c0-12 10-22 22-22Z',
+    secondary: 'M127 94h82v105h-82Z',
+    detail: 'M154 215h28',
+  },
+  car: {
+    primary: 'M78 151h18l19-45c5-12 16-20 29-20h61c13 0 24 8 29 20l18 45h10c12 0 22 10 22 22v24H56v-24c0-12 10-22 22-22Z',
+    secondary: 'M126 106h82l17 45H108l18-45Z',
+    detail: 'M93 190a16 16 0 1 0 0 32 16 16 0 0 0 0-32Zm150 0a16 16 0 1 0 0 32 16 16 0 0 0 0-32Z',
+  },
+  eye: {
+    primary: 'M63 151c27-40 62-60 105-60s78 20 105 60c-27 40-62 60-105 60S90 191 63 151Z',
+    secondary: 'M168 116a35 35 0 1 0 0 70 35 35 0 0 0 0-70Z',
+    detail: 'M168 137a14 14 0 1 0 0 28 14 14 0 0 0 0-28Z',
+  },
+  money: {
+    primary: 'M73 96h190v112H73V96Z',
+    secondary: 'M168 118a34 34 0 1 0 0 68 34 34 0 0 0 0-68Z',
+    detail: 'M88 113c13 0 23-6 29-17m102 0c6 11 16 17 29 17M88 191c13 0 23 6 29 17m102 0c6-11 16-17 29-17',
+  },
+  family: {
+    primary: 'M108 109a22 22 0 1 0 0 44 22 22 0 0 0 0-44Zm119 0a22 22 0 1 0 0 44 22 22 0 0 0 0-44ZM70 204c0-32 17-55 38-55s38 23 38 55H70Zm120 0c0-32 17-55 37-55 21 0 39 23 39 55h-76Z',
+    secondary: 'M168 136a18 18 0 1 0 0 36 18 18 0 0 0 0-36Zm-30 68c0-28 13-48 30-48s30 20 30 48h-60Z',
+  },
+  idea: {
+    primary: 'M168 69c-39 0-68 29-68 65 0 23 12 40 29 53 8 6 12 13 12 23h54c0-10 4-17 12-23 17-13 29-30 29-53 0-36-29-65-68-65Z',
+    secondary: 'M141 211h54m-47 17h40',
+    detail: 'M168 90v26m-57-42 17 18m98-18-17 18M88 132h25m110 0h25',
+  },
+  shield: {
+    primary: 'M168 66c25 18 52 28 79 30v48c0 43-27 72-79 96-52-24-79-53-79-96V96c27-2 54-12 79-30Z',
+    secondary: 'm129 151 24 24 51-58',
+  },
+  search: {
+    primary: 'M144 76a61 61 0 1 0 0 122 61 61 0 0 0 0-122Z',
+    secondary: 'm188 187 55 45',
+    detail: 'M121 127c8-17 23-27 42-27',
+  },
+  write: {
+    primary: 'M79 76h127v150H79V76Z',
+    secondary: 'm126 187 89-89 24 24-89 89-31 8 7-32Z',
+    detail: 'M101 108h72m-72 28h52m-52 28h36',
+  },
+  listen: {
+    primary: 'M103 161v-23c0-38 28-68 65-68s65 30 65 68v23',
+    secondary: 'M92 153h27v56H92c-11 0-20-9-20-20v-16c0-11 9-20 20-20Zm152 0h-27v56h27c11 0 20-9 20-20v-16c0-11-9-20-20-20Z',
+    detail: 'M132 122c9-9 21-14 36-14s27 5 36 14',
+  },
+  walk: {
+    primary: 'M168 67a22 22 0 1 0 0 44 22 22 0 0 0 0-44Zm-10 59 25-22 34 31-13 14-21-18-9 35 27 25-13 15-38-34-23 31-17-10 30-42 8-43-28 27-13-13 41-39Z',
+    secondary: 'M91 220h150',
+  },
+  star: {
+    primary: 'm168 66 25 51 56 8-40 39 9 56-50-26-50 26 9-56-40-39 56-8 25-51Z',
+    secondary: 'M168 101v70m-35-35h70',
+  },
+  globe: {
+    primary: 'M168 70a80 80 0 1 0 0 160 80 80 0 0 0 0-160Z',
+    secondary: 'M88 150h160M168 70c25 22 38 49 38 80s-13 58-38 80c-25-22-38-49-38-80s13-58 38-80Z',
+    detail: 'M103 108h130m-130 84h130',
+  },
+  calendar: {
+    primary: 'M84 91h168v132H84V91Z',
+    secondary: 'M84 125h168M121 70v42m94-42v42',
+    detail: 'M113 151h23v20h-23zm44 0h23v20h-23zm44 0h23v20h-23zm-88 34h23v20h-23zm44 0h23v20h-23z',
+  },
+  gift: {
+    primary: 'M78 126h180v104H78V126Z',
+    secondary: 'M66 100h204v40H66v-40Zm92 0h20v130h-20z',
+    detail: 'M168 100c-27-2-48-12-48-29 0-12 9-20 21-20 17 0 27 18 27 49Zm0 0c27-2 48-12 48-29 0-12-9-20-21-20-17 0-27 18-27 49Z',
+  },
 };
 
 function svgToDataUrl(svg: string): string {
@@ -419,9 +532,14 @@ export function getWordImageCategory(word: Word): IllustrationCategory {
     word.imagePackCategory === 'animals' ||
     word.imagePackCategory === 'food' ||
     word.imagePackCategory === 'travel' ||
-    word.imagePackCategory === 'home'
+    word.imagePackCategory === 'home' ||
+    word.imagePackCategory === 'japanese'
   ) {
     return word.imagePackCategory;
+  }
+
+  if (word.language === 'japanese') {
+    return 'japanese';
   }
 
   if (word.tags.some((tag) => ['plants', 'nature'].includes(tag))) {
@@ -447,7 +565,7 @@ export function getWordImageCategory(word: Word): IllustrationCategory {
   return 'core';
 }
 
-function inferIllustrationType(word: Word): string {
+export function getWordIllustrationType(word: Word): string {
   const key = `${word.original} ${word.translation} ${word.tags.join(' ')}`.toLowerCase();
   const matches = (values: string[]) => values.some((value) => key.includes(value));
 
@@ -510,6 +628,29 @@ function inferIllustrationType(word: Word): string {
   if (matches(['serviette', 'полотенце'])) return 'towel';
   if (matches(['étagère', 'полка'])) return 'shelf';
   if (matches(['assiette', 'plate', 'тарел'])) return 'plate';
+  if (matches(['семья', 'родител', 'мать', 'отец', 'сын', 'дочь', 'родствен'])) return 'family';
+  if (matches(['люди', 'народ', 'группа', 'команда', 'все /', 'весь состав', 'вместе'])) return 'people';
+  if (matches(['человек', 'женщина', 'мужчина', 'ребёнок', 'ребенок', 'друг', 'товарищ', 'спутник', 'господин', 'госпожа'])) return 'person';
+  if (matches(['вопрос', 'что?', 'кто?', 'почему', 'проблема', 'задача', 'сомнен'])) return 'question';
+  if (matches(['разговор', 'история', 'слово', 'высказыван', 'говорить', 'сообщать', 'ответ', 'обещать'])) return 'speech';
+  if (matches(['любов', 'чувство', 'настроение', 'счаст', 'радость', 'добр', 'нравиться'])) return 'heart';
+  if (matches(['время', 'момент', 'час', 'минута', 'раньше', 'после', 'сегодня', 'завтра', 'вчера'])) return 'clock';
+  if (matches(['год', 'месяц', 'недел', 'дата', 'расписание', 'план /'])) return 'calendar';
+  if (matches(['работа', 'работать', 'дело', 'профес', 'служба', 'должность', 'офис'])) return 'work';
+  if (matches(['книга', 'читать', 'учить', 'учиться', 'преподавать', 'школа', 'информация', 'знание', 'понимать', 'объяснять', 'исследовать'])) return 'book';
+  if (matches(['телефон', 'звонок', 'звонить', 'связываться'])) return 'phone';
+  if (matches(['машина', 'автомобил', 'водить', 'управлять'])) return 'car';
+  if (matches(['глаз', 'видеть', 'смотреть', 'взгляд', 'наблюдать'])) return 'eye';
+  if (matches(['деньги', 'цена', 'стоимость', 'платить', 'выгода', 'польза', 'золото'])) return 'money';
+  if (matches(['идея', 'мысль', 'понимание', 'решать', 'результат', 'значение', 'означать', 'смысл'])) return 'idea';
+  if (matches(['безопас', 'защищать', 'защита', 'охрана', 'порядок', 'надёж'])) return 'shield';
+  if (matches(['искать', 'поиск', 'находить', 'обнаруж', 'расследован'])) return 'search';
+  if (matches(['писать', 'записывать', 'подпис', 'письмо'])) return 'write';
+  if (matches(['слушать', 'слышать', 'звук', 'голос', 'музык'])) return 'listen';
+  if (matches(['ходить', 'идти', 'приходить', 'входить', 'двигаться', 'гулять', 'бежать'])) return 'walk';
+  if (matches(['мир', 'страна', 'земля', 'международ', 'путешествовать'])) return 'globe';
+  if (matches(['лучший', 'высший', 'важный', 'успех', 'удача', 'замечатель', 'прекрас'])) return 'star';
+  if (matches(['подарок', 'дарить', 'получать', 'спасибо', 'благодар'])) return 'gift';
 
   const category = getWordImageCategory(word);
 
@@ -519,15 +660,26 @@ function inferIllustrationType(word: Word): string {
   if (category === 'travel') return 'map';
   if (category === 'home') return 'house';
 
-  return 'tree';
+  if (word.part_of_speech === 'verb') return 'walk';
+  if (word.part_of_speech === 'pronoun') return 'person';
+  if (word.part_of_speech === 'interjection' || word.part_of_speech === 'expression') return 'speech';
+  if (word.part_of_speech === 'adjective') return 'star';
+  if (word.part_of_speech === 'adverb' || word.part_of_speech === 'conjunction') return 'clock';
+
+  return 'idea';
 }
 
-export function createFallbackWordImage(word: Word): { src: string; alt: string } {
+export function createFallbackWordImage(
+  word: Word,
+): { src: string; alt: string; category: IllustrationCategory; illustrationType: string } {
   const category = getWordImageCategory(word);
-  const created = createWordImage(category, word.original, word.translation, word.illustrationType ?? inferIllustrationType(word));
+  const illustrationType = word.illustrationType ?? getWordIllustrationType(word);
+  const created = createWordImage(category, word.original, word.translation, illustrationType);
 
   return {
     src: created.imagePath ?? created.imageUrl ?? '',
     alt: created.imageAlt ?? `${word.translation}: ${word.original}`,
+    category,
+    illustrationType,
   };
 }

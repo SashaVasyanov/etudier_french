@@ -28,6 +28,8 @@ export const WordImage = memo(function WordImage({ word, size = 'medium', classN
         className="word-image"
         src={src}
         alt={alt}
+        data-illustration-type={word.illustrationType ?? fallback.illustrationType}
+        data-image-source={word.imageSource ?? 'generated:semantic-svg-v2'}
         loading="lazy"
         decoding="async"
         onError={() => {

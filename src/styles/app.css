@@ -3151,15 +3151,15 @@
 }
 
 .pack-word-row {
-  grid-template-columns: 74px minmax(0, 1fr);
+  grid-template-columns: 94px minmax(0, 1fr);
   align-items: center;
   padding: 12px 18px;
 }
 
 .pack-word-row-media .word-image-frame {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
 }
 
 .pack-word-row-details {

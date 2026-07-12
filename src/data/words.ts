@@ -1395,10 +1395,10 @@ function normalizeWord(word: Word): Word {
     imagePath: word.imagePath ?? word.imageUrl ?? fallbackImage?.src ?? undefined,
     imageUrl: word.imageUrl ?? fallbackImage?.src ?? undefined,
     imageAlt: word.imageAlt ?? fallbackImage?.alt ?? undefined,
-    imagePackCategory: word.imagePackCategory ?? undefined,
-    illustrationType: word.illustrationType ?? undefined,
+    imagePackCategory: word.imagePackCategory ?? fallbackImage?.category,
+    illustrationType: word.illustrationType ?? fallbackImage?.illustrationType,
     imagePrompt: word.imagePrompt ?? undefined,
-    imageSource: word.imageSource ?? undefined,
+    imageSource: word.imageSource ?? (fallbackImage ? 'generated:semantic-svg-v2' : undefined),
   };
 }
 
