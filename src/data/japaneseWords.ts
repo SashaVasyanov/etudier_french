@@ -7,8 +7,7 @@ type JapaneseWordSeed = Pick<
 >;
 
 function createJapaneseWord(seed: JapaneseWordSeed): Word {
-  const exampleIndex = Number.parseInt(seed.id.slice(3), 10) - 1;
-  const contextualExample = JAPANESE_EXAMPLES[exampleIndex];
+  const contextualExample = JAPANESE_EXAMPLES[seed.original];
 
   return {
     ...seed,

@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-  etudier_french_lib::run();
+  etudier_lib::run();
 }

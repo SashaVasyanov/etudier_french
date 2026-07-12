@@ -1,6 +1,6 @@
 [package]
-name = "etudier-french"
-version = "0.1.0"
+name = "etudier"
+version = "0.1.1"
 description = "Desktop shell for the étudier app"
 authors = ["Codex"]
 license = ""
@@ -11,7 +11,7 @@ rust-version = "1.77.2"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "etudier_french_lib"
+name = "etudier_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

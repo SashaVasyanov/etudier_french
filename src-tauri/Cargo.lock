@@ -716,8 +716,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "etudier-french"
-version = "0.1.0"
+name = "etudier"
+version = "0.1.1"
 dependencies = [
  "tauri",
  "tauri-build",

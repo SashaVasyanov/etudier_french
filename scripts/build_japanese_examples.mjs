@@ -284,13 +284,15 @@ if (unresolved.length > 0) {
 }
 
 const serialized = words
-  .map((word) => examples[word.original])
-  .map((example) => `  [${JSON.stringify(example.original)}, ${JSON.stringify(example.translation)}],`)
+  .map((word) => {
+    const example = examples[word.original];
+    return `  ${JSON.stringify(word.original)}: [${JSON.stringify(example.original)}, ${JSON.stringify(example.translation)}],`;
+  })
   .join('\n');
 
 fs.writeFileSync(
   OUTPUT,
-  `// Tatoeba examples are used under CC BY 2.0 FR: https://tatoeba.org/eng/terms_of_use\n// Array order matches JAPANESE_CORE_WORDS to avoid repeating word keys in the production bundle.\nexport const JAPANESE_EXAMPLES: ReadonlyArray<readonly [original: string, translation: string]> = [\n${serialized}\n];\n`,
+  `// Tatoeba examples are used under CC BY 2.0 FR: https://tatoeba.org/eng/terms_of_use\n// Examples are keyed by the displayed dictionary form so dictionary regeneration cannot shift them to another word.\nexport const JAPANESE_EXAMPLES: Readonly<Record<string, readonly [original: string, translation: string]>> = {\n${serialized}\n};\n`,
 );
 
 console.log(`Generated ${Object.keys(examples).length} examples (${sourcedCount} from Tatoeba, ${Object.keys(MANUAL_EXAMPLES).length} curated).`);
