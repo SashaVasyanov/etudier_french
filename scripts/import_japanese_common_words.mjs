@@ -160,10 +160,14 @@ function isBadGloss(value) {
   );
 }
 
-function getBestGloss(entry) {
-  const glosses = entry.sense
+function getBestGloss(entry, partOfSpeech) {
+  const rawGlosses = entry.sense
     .flatMap((sense) => sense.gloss ?? [])
-    .filter((item) => item.lang === 'rus' && item.text && !/^\d+$/.test(item.text))
+    .filter((item) => item.lang === 'rus' && item.text && !/^\d+$/.test(item.text));
+  const verbGlosses = partOfSpeech === 'verb'
+    ? rawGlosses.filter((item) => /[～~]する|\{[^}]*する[^}]*\}/.test(item.text))
+    : [];
+  const glosses = (verbGlosses.length > 0 ? verbGlosses : rawGlosses)
     .map((item) => cleanGloss(item.text))
     .filter((item) => !isBadGloss(item));
 
@@ -190,27 +194,31 @@ function getReading(entry, surface) {
 }
 
 function createCandidate(entry, surface, rank) {
-  const gloss = getBestGloss(entry);
+  const partOfSpeech = getPartOfSpeech(entry.sense.flatMap((sense) => sense.partOfSpeech ?? []));
+  const gloss = getBestGloss(entry, partOfSpeech);
 
   if (!gloss || !isUsableSurface(surface)) {
     return null;
   }
 
-  const partOfSpeech = getPartOfSpeech(entry.sense.flatMap((sense) => sense.partOfSpeech ?? []));
-
   if (partOfSpeech === 'affix' || (partOfSpeech === 'counter' && surface.length <= 1)) {
     return null;
   }
 
-  const reading = getReading(entry, surface);
-  const original = isKanaOnly(surface)
-    ? surface
-    : surface;
+  const dictionaryOverride = partOfSpeech === 'verb' && surface === '出来'
+    ? { original: '出来る', reading: 'できる', translation: 'мочь / уметь / быть возможным' }
+    : null;
+  const isSuruVerb = partOfSpeech === 'verb'
+    && entry.sense.some((sense) => sense.partOfSpeech.some((pos) => /^vs/.test(pos)))
+    && !surface.endsWith('する');
+  const baseReading = getReading(entry, surface);
+  const original = dictionaryOverride?.original ?? (isSuruVerb ? `${surface}する` : surface);
+  const reading = dictionaryOverride?.reading ?? (isSuruVerb ? `${baseReading}する` : baseReading);
 
   return {
     original,
     reading,
-    translation: gloss,
+    translation: dictionaryOverride?.translation ?? gloss,
     transcription: `[${reading} · ${kanaToRomaji(reading)}]`,
     part_of_speech: partOfSpeech,
     tags: ['частотное', isKanaOnly(original) ? 'хирагана' : 'кандзи'],

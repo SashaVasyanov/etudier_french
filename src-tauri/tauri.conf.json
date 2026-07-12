@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "Etudier French",
+  "productName": "étudier",
   "version": "0.1.0",
   "identifier": "com.etudier.french",
   "build": {
@@ -14,7 +14,7 @@
       {
         "create": false,
         "label": "main",
-        "title": "Etudier French",
+        "title": "étudier",
         "width": 1440,
         "height": 920,
         "minWidth": 1100,

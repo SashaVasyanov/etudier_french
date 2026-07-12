@@ -219,8 +219,8 @@ export function getJapaneseHiraganaReading(word: Word): string | null {
 }
 
 export function getSpokenWordText(word: Word): string {
-  if (word.language !== 'french') {
-    return word.original;
+  if (word.language === 'japanese') {
+    return getJapaneseHiraganaReading(word) ?? word.original;
   }
 
   if (word.part_of_speech === 'noun') {

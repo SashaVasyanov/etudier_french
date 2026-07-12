@@ -4093,20 +4093,33 @@
 .sidebar-logo {
   padding: 0 10px;
   gap: 10px;
+  min-height: 32px;
   font-family: inherit;
   font-size: 1.06rem;
   letter-spacing: -0.04em;
 }
 
 .sidebar-logo span {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: grid;
+  place-items: center;
+  padding-bottom: 2px;
+  box-sizing: border-box;
   box-shadow: none;
   background: linear-gradient(135deg, #4869f4, #8b5cf6);
   color: #fff;
   font-family: Georgia, serif;
   font-size: 1.35rem;
   font-weight: 700;
+  line-height: 1;
+}
+
+.sidebar-logo strong {
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
   line-height: 1;
 }
 

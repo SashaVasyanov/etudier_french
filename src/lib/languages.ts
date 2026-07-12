@@ -18,8 +18,8 @@ export function getLearningLanguageLocale(language: LearningLanguage): string {
   return language === 'french' ? 'fr' : 'ja';
 }
 
-export function getLearningLanguageProductTitle(language: LearningLanguage): string {
-  return language === 'french' ? 'Etudier French' : 'Etudier Japanese';
+export function getLearningLanguageProductTitle(_language: LearningLanguage): string {
+  return 'étudier';
 }
 
 export function getLearningLanguageSectionEyebrow(language: LearningLanguage): string {

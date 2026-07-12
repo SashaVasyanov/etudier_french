@@ -143,6 +143,8 @@ const MANUAL_EXAMPLES = {
   尾行: ['探偵は容疑者の尾行を続けました。', 'Детектив продолжил слежку за подозреваемым.'],
   軍事: ['両国は軍事協力について話し合いました。', 'Две страны обсудили военное сотрудничество.'],
   女房: ['女房と一緒に夕食を作りました。', 'Я приготовил ужин вместе с женой.'],
+  軍人: ['その軍人は家族に手紙を書きました。', 'Этот военнослужащий написал письмо семье.'],
+  通過: ['急行列車はこの駅を通過します。', 'Скорый поезд проезжает эту станцию без остановки.'],
 };
 
 function parseTsv(path) {
@@ -170,8 +172,39 @@ function parseWords() {
   return [...source.matchAll(/createJapaneseWord\((\{.*?\})\),/g)].map((match) => JSON.parse(match[1]));
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function getDictionaryStem(original) {
+  if (original.endsWith('する')) return original.slice(0, -2);
+  if (original.endsWith('る')) return original.slice(0, -1);
+  return original;
+}
+
+function getWordMatchQuality(word, japanese) {
+  if (japanese.includes(word.original)) return 3;
+
+  if (word.part_of_speech !== 'verb') return 0;
+  const stem = getDictionaryStem(word.original);
+
+  if (!stem) return 0;
+  const escapedStem = escapeRegExp(stem);
+
+  if (word.original.endsWith('する')) {
+    if (new RegExp(`${escapedStem}(?:し|せ|さ)`).test(japanese)) return 2;
+    return japanese.includes(stem) ? 1 : 0;
+  }
+
+  if (word.original.endsWith('る')) {
+    return new RegExp(`${escapedStem}(?:ます|ました|ません|ない|なかった|た|て|られ|させ)`).test(japanese) ? 2 : 0;
+  }
+
+  return 0;
+}
+
 function isUsableSentence(word, japanese, russian) {
-  if (!japanese.includes(word.original)) return false;
+  if (getWordMatchQuality(word, japanese) === 0) return false;
   if (japanese.length < 5 || japanese.length > 48 || russian.length < 5 || russian.length > 120) return false;
   if (/[\r\n\t]/.test(japanese) || /[\r\n\t]/.test(russian)) return false;
   if (/言葉|単語|意味/.test(japanese) || /\b(?:слово|означает|переводится)\b/i.test(russian)) return false;
@@ -195,7 +228,7 @@ function scoreSentence(word, japanese, russian) {
   const politeBonus = /(?:です|ます|ました|ません)[。！？]$/.test(japanese) ? 4 : 0;
   const targetBonus = japanese.split(word.original).length === 2 ? 3 : 0;
 
-  return punctuationBonus + politeBonus + targetBonus - lengthPenalty;
+  return (getWordMatchQuality(word, japanese) * 20) + punctuationBonus + politeBonus + targetBonus - lengthPenalty;
 }
 
 for (const [path, url] of Object.entries(TATOEBA_EXPORTS)) {
@@ -225,7 +258,8 @@ const examples = {};
 let sourcedCount = 0;
 
 for (const word of words) {
-  const manual = MANUAL_EXAMPLES[word.original];
+  const manual = MANUAL_EXAMPLES[word.original]
+    ?? (word.original.endsWith('する') ? MANUAL_EXAMPLES[getDictionaryStem(word.original)] : undefined);
 
   if (manual) {
     examples[word.original] = { original: manual[0], translation: manual[1], source: 'curated' };
@@ -243,6 +277,12 @@ for (const word of words) {
 }
 
 const unresolved = words.filter((word) => !examples[word.original]);
+if (unresolved.length > 0) {
+  console.log(`Unresolved: ${unresolved.length}`);
+  console.log(unresolved.map((word) => `${word.original} (${word.translation})`).join('\n'));
+  throw new Error('Every Japanese word must have a contextual example');
+}
+
 const serialized = words
   .map((word) => examples[word.original])
   .map((example) => `  [${JSON.stringify(example.original)}, ${JSON.stringify(example.translation)}],`)
@@ -254,5 +294,4 @@ fs.writeFileSync(
 );
 
 console.log(`Generated ${Object.keys(examples).length} examples (${sourcedCount} from Tatoeba, ${Object.keys(MANUAL_EXAMPLES).length} curated).`);
-console.log(`Unresolved: ${unresolved.length}`);
-console.log(unresolved.map((word) => `${word.original} (${word.translation})`).join('\n'));
+console.log('Unresolved: 0');

@@ -42,6 +42,25 @@ async function main() {
     await driver.navigate().refresh();
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
     assert.equal((await driver.findElements(By.css('.nav-icon svg'))).length, 6, 'Navigation icons are incomplete');
+    const brandMetrics = await driver.executeScript(
+      `const logo = document.querySelector('.sidebar-logo');
+       const mark = logo?.querySelector('span')?.getBoundingClientRect();
+       const label = logo?.querySelector('strong')?.getBoundingClientRect();
+       return {
+         title: document.title,
+         label: logo?.querySelector('strong')?.textContent?.trim(),
+         markCenter: mark ? mark.top + (mark.height / 2) : null,
+         labelCenter: label ? label.top + (label.height / 2) : null,
+       };`,
+    );
+    assert.equal(brandMetrics.title, 'étudier', 'Window title is inconsistent with the product name');
+    assert.equal(brandMetrics.label, 'étudier', 'Sidebar brand contains an extra product suffix');
+    assert.ok(
+      brandMetrics.markCenter !== null
+        && brandMetrics.labelCenter !== null
+        && Math.abs(brandMetrics.markCenter - brandMetrics.labelCenter) <= 1,
+      'Sidebar brand mark and label are not vertically aligned',
+    );
 
     console.log('Starting lesson...');
     const startLessonButton = await driver.findElement(By.xpath('//button[contains(., "Начать урок")]'));
@@ -102,11 +121,53 @@ async function main() {
     await driver.findElement(By.xpath('//button[contains(., "Начать урок")]')).sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.xpath('//button[normalize-space()="Понял, дальше"]')), timeoutMs);
     const japanesePreviewWord = await driver.findElement(By.css('.lesson-preview-title')).getText();
+    const japaneseReading = await driver.findElement(By.css('.lesson-preview-description')).getText();
     const japaneseExample = await driver.findElement(By.css('.lesson-preview-example')).getText();
     const japaneseExampleTranslation = await driver.findElement(By.css('.lesson-preview-example-translation')).getText();
     assert.ok(japaneseExample.includes(japanesePreviewWord), 'Japanese example does not contain the studied word');
     assert.ok(!/よく使う言葉/.test(japaneseExample), 'Japanese example still uses the generic frequency template');
     assert.ok(!/^(?:Слово |«.+» — часто)/.test(japaneseExampleTranslation), 'Japanese example was not contextually translated');
+    console.log('Checking Japanese speech reading...');
+    const audioHookInstalled = await driver.executeScript(
+      `window.__spokenTexts = [];
+       const speech = window.speechSynthesis;
+       window.__originalSpeechSpeak = speech.speak;
+       window.__originalSpeechUtterance = window.SpeechSynthesisUtterance;
+       window.SpeechSynthesisUtterance = class {
+         constructor(text) {
+           this.text = text;
+           window.__spokenTexts.push(text);
+         }
+       };
+       const capture = (utterance) => {
+         queueMicrotask(() => utterance.onend?.());
+       };
+       try {
+         speech.speak = capture;
+       } catch {
+         Object.defineProperty(speech, 'speak', { configurable: true, value: capture });
+       }
+       return speech.speak === capture;`,
+    );
+    assert.equal(audioHookInstalled, true, 'Unable to observe Japanese speech synthesis');
+    await driver.sleep(250);
+    await driver.findElement(By.xpath('//button[normalize-space()="Прослушать"]')).sendKeys(Key.ENTER);
+    await driver.wait(
+      async () => (await driver.executeScript('return window.__spokenTexts?.length ?? 0')) > 0,
+      timeoutMs,
+    );
+    const spokenJapanese = await driver.executeScript('return window.__spokenTexts[0]');
+    const expectedJapaneseReading = japaneseReading.replace(/^\[|]$/g, '').split('·')[0]?.trim();
+    assert.equal(spokenJapanese, expectedJapaneseReading, 'Japanese audio did not use the dictionary reading');
+    assert.ok(!/\p{Script=Han}/u.test(spokenJapanese), 'Japanese audio still receives kanji');
+    await driver.executeScript(
+      `if (window.__originalSpeechSpeak) window.speechSynthesis.speak = window.__originalSpeechSpeak;
+       if (window.__originalSpeechUtterance) window.SpeechSynthesisUtterance = window.__originalSpeechUtterance;
+       delete window.__spokenTexts;
+       delete window.__originalSpeechSpeak;
+       delete window.__originalSpeechUtterance;`,
+    );
+    console.log('Japanese speech reading verified.');
 
     for (let index = 0; index < 20; index += 1) {
       const previewButtons = await driver.findElements(By.xpath('//button[normalize-space()="Понял, дальше"]'));
