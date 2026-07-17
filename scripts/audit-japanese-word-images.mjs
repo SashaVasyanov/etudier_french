@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
@@ -28,6 +29,7 @@ async function main() {
   const invalid = [];
   const paths = new Set();
   const providers = new Map();
+  const hashes = new Map();
   let totalBytes = 0;
 
   for (const word of words) {
@@ -73,6 +75,14 @@ async function main() {
     try {
       const file = await fs.readFile(absolutePath);
       totalBytes += file.byteLength;
+      const hash = createHash('sha256').update(file).digest('hex');
+      const existingWordId = hashes.get(hash);
+
+      if (existingWordId) {
+        invalid.push(`${word.id}: duplicates the image content used by ${existingWordId}`);
+      } else {
+        hashes.set(hash, word.id);
+      }
 
       if (file.byteLength < 4_000) invalid.push(`${word.id}: suspiciously small file (${file.byteLength} bytes)`);
       if (!isRasterHeader(file)) invalid.push(`${word.id}: file signature is not JPEG, PNG or WebP`);
@@ -83,7 +93,8 @@ async function main() {
 
   assert.deepEqual(missing, [], `Missing Japanese images: ${missing.slice(0, 20).join(', ')}`);
   assert.deepEqual(invalid, [], `Invalid Japanese images:\n${invalid.slice(0, 30).join('\n')}`);
-  assert.ok(paths.size >= 200, `Only ${paths.size} distinct images for ${words.length} words`);
+  assert.equal(paths.size, words.length, `Expected a unique image path for every word, got ${paths.size}/${words.length}`);
+  assert.equal(hashes.size, words.length, `Expected unique image content for every word, got ${hashes.size}/${words.length}`);
 
   console.log(
     JSON.stringify(

@@ -190,7 +190,11 @@ async function main() {
     assert.equal(japaneseImageMetrics.svgCount, 0, 'Japanese dictionary still displays SVG placeholders');
     assert.equal(japaneseImageMetrics.sourcedCount, 80, 'Japanese raster images are missing provenance');
     assert.equal(japaneseImageMetrics.emptyAltCount, 0, 'Japanese images have missing alternative text');
-    assert.ok(japaneseImageMetrics.distinctPaths >= 20, 'Japanese associative images are not diverse enough');
+    assert.equal(
+      japaneseImageMetrics.distinctPaths,
+      japaneseImageMetrics.count,
+      'Every visible Japanese word must have its own image',
+    );
     if (process.env.UI_SCREENSHOT_PATH) {
       await fs.writeFile(process.env.UI_SCREENSHOT_PATH, await driver.takeScreenshot(), 'base64');
       console.log(`Japanese dictionary screenshot: ${process.env.UI_SCREENSHOT_PATH}`);
@@ -294,6 +298,12 @@ async function main() {
             scrollHeight: button.scrollHeight,
           }));`,
         );
+        const overflowingKanjiChoices = typographyMetrics
+          .filter((item) => item.hasKanji)
+          .filter((item) => item.scrollWidth > item.width || item.scrollHeight > item.height);
+        if (overflowingKanjiChoices.length > 0) {
+          console.log(`Overflowing kanji choices: ${JSON.stringify(overflowingKanjiChoices)}`);
+        }
         assert.ok(
           typographyMetrics
             .filter((item) => item.hasKanji)

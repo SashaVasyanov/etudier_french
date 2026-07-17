@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { createHash } from 'node:crypto';
 import ts from 'typescript';
 
 const DATASET_FILES = ['public/data/words_a1.json', 'public/data/words_a2.json', 'public/data/words_b1.json'];
@@ -8,8 +9,9 @@ const JAPANESE_WORDS_SOURCE = 'src/data/japaneseWords.ts';
 const JAPANESE_CORRECTIONS_SOURCE = 'src/data/japaneseWordCorrections.ts';
 const MANIFEST_PATH = 'public/data/word_images.json';
 const OUTPUT_DIR = 'public/generated-word-images';
-const REQUEST_DELAY_MS = Number(process.env.IMAGE_FETCH_DELAY_MS ?? 900);
-const RATE_LIMIT_DELAY_MS = Number(process.env.IMAGE_RATE_LIMIT_DELAY_MS ?? 30000);
+const REQUEST_DELAY_MS = Number(process.env.IMAGE_FETCH_DELAY_MS ?? 400);
+const RATE_LIMIT_DELAY_MS = Number(process.env.IMAGE_RATE_LIMIT_DELAY_MS ?? 5000);
+const REQUEST_TIMEOUT_MS = Number(process.env.IMAGE_REQUEST_TIMEOUT_MS ?? 15000);
 const USER_AGENT = 'EtudierImageFetcher/2.0 (educational vocabulary app)';
 
 const COMMONS_API_URL = 'https://commons.wikimedia.org/w/api.php';
@@ -124,6 +126,8 @@ function parseArgs(argv) {
     reuseExisting: false,
     reuseOnly: false,
     completeAssociations: false,
+    unique: false,
+    keepWeak: false,
   };
 
   argv.forEach((arg) => {
@@ -156,6 +160,16 @@ function parseArgs(argv) {
     if (arg === '--complete-associations') {
       options.reuseExisting = true;
       options.completeAssociations = true;
+      return;
+    }
+
+    if (arg === '--unique') {
+      options.unique = true;
+      return;
+    }
+
+    if (arg === '--keep-weak') {
+      options.keepWeak = true;
       return;
     }
 
@@ -214,6 +228,25 @@ function slugify(value) {
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function contentHash(buffer) {
+  return createHash('sha256').update(buffer).digest('hex');
+}
+
+function isRasterBuffer(buffer) {
+  const isJpeg = buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+  const isPng = buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+  const isWebp = buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP';
+  return isJpeg || isPng || isWebp;
+}
+
+function stableNumber(value) {
+  return Number.parseInt(createHash('sha1').update(String(value)).digest('hex').slice(0, 8), 16);
+}
+
+function sourceKey(value) {
+  return normalize(String(value ?? '')).replace(/[?#].*$/, '');
 }
 
 function hasAny(haystack, needles) {
@@ -320,13 +353,14 @@ function inferExtension(contentType, url) {
 async function fetchJson(url) {
   let response;
 
-  for (let attempt = 0; attempt < 3; attempt += 1) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
     await sleep(REQUEST_DELAY_MS);
     response = await fetch(url, {
       headers: {
         accept: 'application/json',
         'user-agent': USER_AGENT,
       },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
 
     if (response.status !== 429) {
@@ -346,13 +380,14 @@ async function fetchJson(url) {
 async function downloadBinary(url) {
   let response;
 
-  for (let attempt = 0; attempt < 3; attempt += 1) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
     await sleep(REQUEST_DELAY_MS);
     response = await fetch(url, {
       headers: {
         accept: 'image/avif,image/webp,image/png,image/jpeg,*/*;q=0.5',
         'user-agent': USER_AGENT,
       },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
 
     if (response.status !== 429) break;
@@ -524,50 +559,60 @@ function scoreSearchResult(result, query) {
   return score;
 }
 
-async function searchOpenverseImage(word) {
+async function searchOpenverseImage(word, excludedSourceKeys = new Set()) {
   const queries = buildAssociativeQueries(word);
   const errors = [];
 
   for (const query of queries) {
-    try {
-      const url = new URL(OPENVERSE_SEARCH_URL);
-      url.searchParams.set('q', query);
-      url.searchParams.set('page_size', '8');
-      url.searchParams.set('mature', 'false');
-      const payload = await fetchJson(url);
-      const candidates = (payload.results ?? [])
-        .filter((item) => item.thumbnail || item.url)
-        .filter((item) => !item.mature)
-        .filter((item) => /^(?:cc0|pdm|by|by-sa)$/i.test(String(item.license ?? '')))
-        .filter((item) => {
-          const searchableText = normalize(
-            `${item.title ?? ''} ${item.description ?? ''} ${item.tags?.map?.((tag) => tag.name).join(' ') ?? ''}`,
-          );
-          return !hasAny(searchableText, UNSAFE_IMAGE_TERMS);
-        })
-        .filter((item) => !/\.(svg|gif|tif|tiff|pdf|webm|ogv)$/i.test(String(item.url ?? item.thumbnail ?? '')))
-        .map((item) => ({ ...item, score: scoreSearchResult(item, query) }))
-        .sort((left, right) => right.score - left.score);
+    const seededPage = 1 + (stableNumber(`${word.id}:${query}`) % 30);
+    const pages = [...new Set([seededPage, 1])];
 
-      const best = candidates[0];
+    for (const page of pages) {
+      try {
+        const url = new URL(OPENVERSE_SEARCH_URL);
+        url.searchParams.set('q', query);
+        url.searchParams.set('page_size', '20');
+        url.searchParams.set('page', String(page));
+        url.searchParams.set('mature', 'false');
+        const payload = await fetchJson(url);
+        const candidates = (payload.results ?? [])
+          .filter((item) => item.thumbnail || item.url)
+          .filter((item) => !item.mature)
+          .filter((item) => /^(?:cc0|pdm|by|by-sa)$/i.test(String(item.license ?? '')))
+          .filter((item) => {
+            const searchableText = normalize(
+              `${item.title ?? ''} ${item.description ?? ''} ${item.tags?.map?.((tag) => tag.name).join(' ') ?? ''}`,
+            );
+            return !hasAny(searchableText, UNSAFE_IMAGE_TERMS);
+          })
+          .filter((item) => !/\.(svg|gif|tif|tiff|pdf|webm|ogv)$/i.test(String(item.url ?? item.thumbnail ?? '')))
+          .map((item) => ({
+            ...item,
+            uniqueKey: sourceKey(item.foreign_landing_url ?? item.detail_url ?? item.id ?? item.url ?? item.thumbnail),
+            score: scoreSearchResult(item, query),
+          }))
+          .filter((item) => item.uniqueKey && !excludedSourceKeys.has(item.uniqueKey))
+          .sort((left, right) => right.score - left.score);
 
-      if (!best) {
-        continue;
+        const best = candidates[0];
+        if (!best) continue;
+
+        excludedSourceKeys.add(best.uniqueKey);
+        return {
+          imageUrl: best.thumbnail ?? best.url,
+          fullImageUrl: best.url ?? best.thumbnail,
+          sourceUrl: best.foreign_landing_url ?? best.detail_url ?? best.url,
+          uniqueKey: best.uniqueKey,
+          query,
+          title: best.title ?? query,
+          provider: best.provider ?? best.source ?? 'openverse',
+          license: [best.license, best.license_version].filter(Boolean).join('-') || undefined,
+          licenseUrl: best.license_url ?? undefined,
+          attribution: best.attribution ?? undefined,
+        };
+      } catch (error) {
+        errors.push(error instanceof Error ? error.message : String(error));
       }
-
-      return {
-        imageUrl: best.thumbnail ?? best.url,
-        fullImageUrl: best.url ?? best.thumbnail,
-        sourceUrl: best.foreign_landing_url ?? best.detail_url ?? best.url,
-        query,
-        title: best.title ?? query,
-        provider: best.provider ?? best.source ?? 'openverse',
-        license: [best.license, best.license_version].filter(Boolean).join('-') || undefined,
-        licenseUrl: best.license_url ?? undefined,
-        attribution: best.attribution ?? undefined,
-      };
-    } catch (error) {
-      errors.push(error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -609,57 +654,68 @@ function isSafeCommonsCandidate(page) {
   return true;
 }
 
-async function searchCommonsImage(word) {
+async function searchCommonsImage(word, excludedSourceKeys = new Set()) {
   const queries = buildAssociativeQueries(word);
   const errors = [];
 
   for (const query of queries) {
-    try {
-      const url = new URL(COMMONS_API_URL);
-      url.searchParams.set('action', 'query');
-      url.searchParams.set('format', 'json');
-      url.searchParams.set('generator', 'search');
-      url.searchParams.set('gsrsearch', query);
-      url.searchParams.set('gsrnamespace', '6');
-      url.searchParams.set('gsrlimit', '12');
-      url.searchParams.set('prop', 'imageinfo');
-      url.searchParams.set('iiprop', 'url|mime|extmetadata');
-      url.searchParams.set('iiurlwidth', '640');
-      const payload = await fetchJson(url);
-      const candidates = Object.values(payload.query?.pages ?? {})
-        .filter(isSafeCommonsCandidate)
-        .map((page) => {
-          const metadata = page.imageinfo[0].extmetadata;
-          const candidate = {
-            ...page,
-            description: `${metadataValue(metadata, 'ObjectName')} ${metadataValue(metadata, 'ImageDescription')} ${metadataValue(metadata, 'Categories')}`,
-          };
-          return { ...candidate, score: scoreSearchResult(candidate, query) };
-        })
-        .sort((left, right) => right.score - left.score);
+    const seededOffset = (stableNumber(`${word.id}:${query}`) % 20) * 20;
+    const offsets = [...new Set([seededOffset, 0])];
 
-      const best = candidates[0];
+    for (const offset of offsets) {
+      try {
+        const url = new URL(COMMONS_API_URL);
+        url.searchParams.set('action', 'query');
+        url.searchParams.set('format', 'json');
+        url.searchParams.set('generator', 'search');
+        url.searchParams.set('gsrsearch', query);
+        url.searchParams.set('gsrnamespace', '6');
+        url.searchParams.set('gsrlimit', '20');
+        url.searchParams.set('gsroffset', String(offset));
+        url.searchParams.set('prop', 'imageinfo');
+        url.searchParams.set('iiprop', 'url|mime|extmetadata');
+        url.searchParams.set('iiurlwidth', '640');
+        const payload = await fetchJson(url);
+        const candidates = Object.values(payload.query?.pages ?? {})
+          .filter(isSafeCommonsCandidate)
+          .map((page) => {
+            const metadata = page.imageinfo[0].extmetadata;
+            const candidate = {
+              ...page,
+              uniqueKey: sourceKey(
+                page.imageinfo[0].descriptionurl
+                ?? page.imageinfo[0].descriptionshorturl
+                ?? `https://commons.wikimedia.org/wiki/${encodeURIComponent(page.title)}`,
+              ),
+              description: `${metadataValue(metadata, 'ObjectName')} ${metadataValue(metadata, 'ImageDescription')} ${metadataValue(metadata, 'Categories')}`,
+            };
+            return { ...candidate, score: scoreSearchResult(candidate, query) };
+          })
+          .filter((candidate) => candidate.uniqueKey && !excludedSourceKeys.has(candidate.uniqueKey))
+          .sort((left, right) => right.score - left.score);
 
-      if (!best) {
-        continue;
+        const best = candidates[0];
+        if (!best) continue;
+
+        const info = best.imageinfo[0];
+        const metadata = info.extmetadata;
+        const artist = metadataValue(metadata, 'Attribution') || metadataValue(metadata, 'Artist') || 'Wikimedia Commons contributor';
+        excludedSourceKeys.add(best.uniqueKey);
+
+        return {
+          imageUrl: info.thumburl,
+          sourceUrl: info.descriptionurl ?? info.descriptionshorturl ?? `https://commons.wikimedia.org/wiki/${encodeURIComponent(best.title)}`,
+          uniqueKey: best.uniqueKey,
+          query,
+          title: best.title,
+          provider: 'wikimedia-commons',
+          license: metadataValue(metadata, 'LicenseShortName'),
+          licenseUrl: metadataValue(metadata, 'LicenseUrl'),
+          attribution: artist,
+        };
+      } catch (error) {
+        errors.push(error instanceof Error ? error.message : String(error));
       }
-
-      const info = best.imageinfo[0];
-      const metadata = info.extmetadata;
-      const artist = metadataValue(metadata, 'Attribution') || metadataValue(metadata, 'Artist') || 'Wikimedia Commons contributor';
-
-      return {
-        imageUrl: info.thumburl,
-        sourceUrl: info.descriptionurl ?? info.descriptionshorturl ?? `https://commons.wikimedia.org/wiki/${encodeURIComponent(best.title)}`,
-        query,
-        title: best.title,
-        provider: 'wikimedia-commons',
-        license: metadataValue(metadata, 'LicenseShortName'),
-        licenseUrl: metadataValue(metadata, 'LicenseUrl'),
-        attribution: artist,
-      };
-    } catch (error) {
-      errors.push(error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -994,12 +1050,248 @@ async function localizeManifestEntry(word, entry) {
   };
 }
 
+async function buildUniqueImageState(words, manifest) {
+  const replacementIds = new Set();
+  const usedContentHashes = new Set();
+  const usedSourceKeys = new Set();
+  const hashByPath = new Map();
+  const hashByWordId = new Map();
+
+  for (const word of words) {
+    const entry = manifest[word.id];
+    const imagePath = String(entry?.imagePath ?? '');
+    if (!isRealManifestEntry(entry) || !imagePath.startsWith('/generated-word-images/')) {
+      replacementIds.add(word.id);
+      continue;
+    }
+
+    const absolutePath = path.resolve('public', imagePath.replace(/^\//, ''));
+    let hash = hashByPath.get(absolutePath);
+
+    try {
+      if (!hash) {
+        const buffer = await fs.readFile(absolutePath);
+        if (!isRasterBuffer(buffer)) {
+          replacementIds.add(word.id);
+          continue;
+        }
+        hash = contentHash(buffer);
+        hashByPath.set(absolutePath, hash);
+      }
+    } catch {
+      replacementIds.add(word.id);
+      continue;
+    }
+
+    if (usedContentHashes.has(hash)) {
+      replacementIds.add(word.id);
+      continue;
+    }
+
+    usedContentHashes.add(hash);
+    hashByWordId.set(word.id, hash);
+    const key = sourceKey(entry.imageSource);
+    if (key && /^https?:\/\//.test(key)) usedSourceKeys.add(key);
+  }
+
+  return { replacementIds, usedContentHashes, usedSourceKeys, hashByWordId };
+}
+
+function uniqueAssociationScore(word, candidate, entry) {
+  const primary = primaryTranslation(word.translation);
+  const candidatePrimary = primaryTranslation(candidate.translation);
+  const wordTokens = new Set(translationTokens(word.translation));
+  const candidateTokens = translationTokens(candidate.translation);
+  const sharedTranslationTokens = candidateTokens.filter((token) => wordTokens.has(token));
+  const wordAssociationTokens = new Set(associationTokens(buildAssociativeQueries(word).join(' ')));
+  const candidateAssociations = associationTokens(
+    `${buildAssociativeQueries(candidate).join(' ')} ${entry.imagePrompt ?? ''}`,
+  );
+  const sharedAssociationTokens = candidateAssociations.filter((token) => wordAssociationTokens.has(token));
+  const wordTags = new Set((word.tags ?? []).map(normalize));
+  const sharedTags = (candidate.tags ?? []).map(normalize).filter((tag) => wordTags.has(tag));
+  const wordCategories = visualCategories(word);
+  const candidateCategories = visualCategories(candidate, entry);
+  const sharedCategories = [...candidateCategories].filter((category) => wordCategories.has(category));
+  let score = 0;
+
+  if (primary && primary === candidatePrimary) score += 1_000;
+  if (primary && candidatePrimary && (primary.includes(candidatePrimary) || candidatePrimary.includes(primary))) score += 120;
+  score += sharedTranslationTokens.reduce((total, token) => total + token.length * 15, 0);
+  score += sharedAssociationTokens.length * 30;
+  score += sharedCategories.length * 90;
+  score += sharedTags.length * 12;
+  if (word.part_of_speech === candidate.part_of_speech) score += 8;
+
+  return score;
+}
+
+const VISUAL_CATEGORY_RULES = [
+  ['family', ['family', 'famil', 'parent', 'mother', 'father', 'children', 'child', 'woman', 'man', 'friend', 'people', 'женщ', 'мужчин', 'семь', 'родител', 'ребён', 'друг']],
+  ['communication', ['talk', 'listen', 'read', 'write', 'telephone', 'smartphone', 'voice', 'question', 'story', 'notice', 'program', 'visit', 'говор', 'слуш', 'чита', 'писа', 'телефон', 'вопрос', 'сказк', 'рассказ', 'извещ', 'программ', 'посещ', 'визит']],
+  ['learning', ['student', 'teacher', 'study', 'school', 'book', 'knowledge', 'memory', 'учеб', 'учит', 'школ', 'книг', 'знан', 'памят']],
+  ['work', ['work', 'office', 'desk', 'company', 'job', 'работ', 'офис', 'компан', 'дело']],
+  ['commerce', ['money', 'shop', 'store', 'pay', 'buy', 'price', 'ден', 'магаз', 'плат', 'покуп', 'цен']],
+  ['food', ['meal', 'food', 'drink', 'water', 'eat', 'еда', 'напит', 'вод', 'есть', 'пить', 'обед', 'ужин', 'завтрак']],
+  ['home', ['home', 'house', 'room', 'door', 'interior', 'дом', 'комнат', 'двер', 'жилищ']],
+  ['travel', ['car', 'train', 'station', 'street', 'road', 'walk', 'run', 'travel', 'машин', 'поезд', 'станц', 'улиц', 'дорог', 'идти', 'бежать', 'путеш']],
+  ['time', ['clock', 'calendar', 'schedule', 'night', 'day', 'month', 'year', 'time', 'час', 'календар', 'расписан', 'ноч', 'день', 'месяц', 'год', 'врем']],
+  ['place', ['place', 'direction', 'spatial', 'inside', 'outside', 'above', 'below', 'мест', 'направ', 'внутр', 'снаруж', 'сверху', 'внизу']],
+  ['thinking', ['think', 'idea', 'plan', 'puzzle', 'problem', 'solution', 'search', 'detective', 'дум', 'иде', 'план', 'задач', 'проблем', 'решен', 'искать']],
+  ['safety', ['safe', 'safety', 'danger', 'warning', 'help', 'protect', 'безопас', 'опас', 'помощ', 'защит']],
+  ['emotion', ['love', 'happy', 'sad', 'angry', 'worried', 'laugh', 'smile', 'sleep', 'fear', 'emotion', 'hope', 'calm', 'regret', 'charm', 'interest', 'confidence', 'coward', 'dissatisfaction', 'tragedy', 'люб', 'счаст', 'груст', 'злост', 'страх', 'смех', 'улыб', 'спать', 'эмоц', 'чувств', 'надежд', 'спокой', 'сожал', 'очарован', 'интерес', 'уверен', 'трус', 'недоволь', 'трагед']],
+  ['social', ['agreement', 'refusing', 'thanks', 'apology', 'promise', 'wedding', 'соглас', 'отказ', 'благодар', 'извин', 'обещ', 'свад']],
+  ['quantity', ['large', 'small', 'many', 'one person', 'two people', 'matching', 'different', 'big', 'больш', 'малень', 'много', 'один', 'два', 'одинак', 'разн']],
+  ['quality', ['beautiful', 'broken', 'new gift', 'old weathered', 'strong', 'fast', 'unique', 'complete', 'perfect', 'serious', 'simple', 'special', 'best', 'impossible', 'important', 'stable', 'excellent', 'красив', 'слом', 'нов', 'стар', 'сильн', 'быстр', 'единствен', 'полн', 'совершен', 'серьёз', 'прост', 'особ', 'лучш', 'невозмож', 'важн', 'стабил', 'превосход']],
+  ['nature', ['nature', 'garden', 'mountain', 'sunlight', 'snow', 'flower', 'animal', 'earth', 'ground', 'horse', 'stream', 'wave', 'living creature', 'fire', 'природ', 'сад', 'гор', 'солн', 'снег', 'цвет', 'живот', 'земл', 'почв', 'лошад', 'конь', 'течен', 'поток', 'волн', 'существ', 'пожар']],
+  ['language', ['grammar', 'language learning', 'textbook', 'pronoun', 'conjunction', 'particle', 'граммат', 'язык', 'местоимен', 'союз', 'частиц']],
+  ['law', ['police', 'detective', 'court', 'trial', 'crime', 'arrest', 'inspector', 'law', 'robber', 'murder', 'hostage', 'warrant', 'execution', 'justice', 'полици', 'сыщик', 'суд', 'преступ', 'арест', 'инспектор', 'закон', 'грабител', 'убий', 'залож', 'приказ', 'казн', 'справедлив']],
+  ['military', ['military', 'war', 'weapon', 'troop', 'battle', 'explosion', 'invade', 'army', 'fleet', 'warrior', 'colonel', 'captain', 'lieutenant', 'major', 'военн', 'войн', 'оруж', 'отряд', 'взрыв', 'вторг', 'арми', 'флот', 'воин', 'полковник', 'капитан', 'лейтенант', 'майор']],
+  ['health', ['body', 'health', 'birth', 'corpse', 'medical', 'medicine', 'doctor', 'hospital', 'nerve', 'seizure', 'treatment', 'тело', 'здоров', 'рожд', 'труп', 'медицин', 'врач', 'больниц', 'нерв', 'приступ', 'лечен']],
+  ['technology', ['equipment', 'device', 'technology', 'science', 'research', 'technical', 'machine', 'computer', 'electricity', 'satellite', 'metal', 'power source', 'code', 'tool', 'оборуд', 'устройств', 'техник', 'наук', 'исслед', 'машин', 'компьютер', 'электр', 'спутник', 'металл', 'питание', 'шифр', 'инструмент']],
+  ['society', ['president', 'organization', 'humanity', 'member', 'government', 'management', 'control', 'federation', 'nation', 'enterprise', 'authority', 'revolution', 'candidate', 'ideology', 'representation', 'social position', 'group', 'collective', 'civilian', 'президент', 'организац', 'человечеств', 'член', 'правительств', 'управл', 'контрол', 'федерац', 'народ', 'предприят', 'полномоч', 'революц', 'кандидат', 'идеолог', 'представитель', 'положен', 'групп', 'коллектив', '民間']],
+  ['music', ['song', 'music', 'tone', 'melody', 'песн', 'музык', 'тон', 'мелод']],
+  ['measure', ['half', 'limit', 'boundary', 'number', 'first', 'last', 'pair', 'four', 'hundred', 'share', 'length', 'половин', 'предел', 'границ', 'номер', 'перв', 'послед', 'пара', 'четыр', 'сот', 'доля', 'длин', '四', '何百']],
+  ['truth', ['truth', 'reality', 'real', 'honest', 'trust', 'correct', 'accuracy', 'правд', 'реальн', 'настоящ', 'честн', 'довер', 'правильн', 'точн']],
+  ['state', ['state', 'condition', 'situation', 'ability', 'activity', 'action', 'result', 'cause', 'circumstance', 'acceptance', 'appearance', 'expression', 'состоян', 'услов', 'способност', 'деятельност', 'действ', 'результ', 'причин', 'обстоятельств', 'принят', 'проявлен', 'выражен']],
+  ['event', ['start', 'finish', 'prepare', 'arrival', 'departure', 'change', 'replacement', 'recent', 'conclusion', 'century', 'friday', 'beginning', 'начин', 'заканч', 'готов', 'прибы', 'уезж', 'смен', 'замен', 'ближай', 'заключен', 'окончан', 'век', 'столет', 'пятниц']],
+  ['geography', ['russia', 'california', 'tokyo', 'italy', 'england', 'country', 'border', 'east', 'west', 'south', 'north', 'outskirts', 'surroundings', 'росси', 'калифорни', 'токио', 'итали', 'англи', 'стран', 'границ', 'восток', 'запад', 'юг', 'север', 'окраин', 'окрестност', '西', '東', '南', '国境']],
+  ['fantasy', ['queen', 'prince', 'kingdom', 'witch', 'angel', 'hero', 'castle', 'heaven', 'priest', 'empire', 'giant', 'королев', 'принц', 'царств', 'ведьм', 'ангел', 'геро', 'замок', 'рай', 'патер', 'импери', 'великан', 'гигант', '王子']],
+  ['object', ['pin', 'stamp', 'goods', 'fingerprint', 'target', 'doll', 'wallet', 'material', 'letter', 'content', 'закреп', 'стерж', 'печат', 'товар', 'отпечат', 'мишень', 'кукл', 'кошел', 'матери', 'букв', 'содержим']],
+  ['body', ['face', 'hand', 'finger', 'side', 'body', 'adult', 'boy', 'beauty', 'aunt', 'лицо', 'рук', 'палец', 'бок', 'тело', 'взросл', 'мальчик', 'красавиц', 'тёт']],
+  ['sport', ['sport', 'player', 'racecourse', 'athlete', 'спорт', 'игрок', 'манеж', 'скаков', 'атлет']],
+  ['education', ['high school', 'mathematics', 'chemistry', 'theory', 'knowledge', 'art', 'specialty', 'wisdom', 'школ', 'математ', 'хими', 'теори', 'знан', 'мудрост', 'искусств', 'специальност']],
+  ['ownership', ['possession', 'owner', 'rich', 'property', 'receive', 'accept', 'обладан', 'хозяин', 'богач', 'получен', 'принят']],
+  ['rules', ['rule', 'regulation', 'duty', 'obligation', 'requirement', 'denial', 'countermeasure', 'правил', 'устав', 'обязанност', 'требован', 'отрицан', 'контрмер']],
+  ['aviation', ['aviation', 'aircraft', 'flight', 'air travel', 'авиац', 'воздухоплав', 'полёт']],
+];
+
+function visualCategories(word, entry) {
+  const text = normalize(
+    `${word.translation ?? ''} ${(word.tags ?? []).join(' ')} ${buildAssociativeQueries(word).join(' ')} ${entry?.imagePrompt ?? ''}`,
+  );
+  const categories = new Set(
+    VISUAL_CATEGORY_RULES
+      .filter(([, terms]) => hasAny(text, terms))
+      .map(([category]) => category),
+  );
+
+  if (['particle', 'conjunction', 'determiner', 'pronoun'].includes(word.part_of_speech)) categories.add('language');
+  if (word.part_of_speech === 'interjection') categories.add('emotion');
+  return categories;
+}
+
+async function fillUniqueImagesFromExisting(words, frenchWords, manifest, uniqueState, minimumScore = 30) {
+  const candidates = [];
+  const poolHashes = new Set();
+
+  for (const candidate of frenchWords) {
+    const entry = manifest[candidate.id];
+    const imagePath = String(entry?.imagePath ?? '');
+    if (!isRealManifestEntry(entry) || !imagePath.startsWith('/generated-word-images/')) continue;
+
+    try {
+      const buffer = await fs.readFile(path.resolve('public', imagePath.replace(/^\//, '')));
+      if (!isRasterBuffer(buffer)) continue;
+      const hash = contentHash(buffer);
+      if (uniqueState.usedContentHashes.has(hash) || poolHashes.has(hash)) continue;
+      poolHashes.add(hash);
+      candidates.push({ candidate, entry, hash, used: false });
+    } catch {
+      // Ignore stale manifest entries. The image audit reports missing active files separately.
+    }
+  }
+
+  const scores = [];
+  let reused = 0;
+
+  for (const word of words) {
+    if (!uniqueState.replacementIds.has(word.id)) continue;
+
+    let best = null;
+    let bestScore = -1;
+
+    for (const item of candidates) {
+      if (item.used) continue;
+      const score = uniqueAssociationScore(word, item.candidate, item.entry);
+      const tieBreaker = stableNumber(`${word.id}:${item.candidate.id}`) / 0xffffffff;
+      const rankedScore = score + tieBreaker;
+
+      if (rankedScore > bestScore) {
+        best = item;
+        bestScore = rankedScore;
+      }
+    }
+
+    if (!best || Math.floor(bestScore) < minimumScore) continue;
+
+    best.used = true;
+    uniqueState.usedContentHashes.add(best.hash);
+    uniqueState.replacementIds.delete(word.id);
+    const key = sourceKey(best.entry.imageSource);
+    if (key && /^https?:\/\//.test(key)) uniqueState.usedSourceKeys.add(key);
+    manifest[word.id] = {
+      ...best.entry,
+      imageAlt: `${word.translation}: ${word.original}`,
+      imagePrompt: `Unique real associative image for "${word.original}" (${word.translation}) via "${best.candidate.original}".`,
+      imageAssociationWordId: best.candidate.id,
+      imageAssociationScore: Math.floor(bestScore),
+    };
+    scores.push(Math.floor(bestScore));
+    reused += 1;
+  }
+
+  return {
+    reused,
+    remaining: uniqueState.replacementIds.size,
+    exact: scores.filter((score) => score >= 1_000).length,
+    strong: scores.filter((score) => score >= 100 && score < 1_000).length,
+    associative: scores.filter((score) => score >= 30 && score < 100).length,
+  };
+}
+
+function releaseWeakUniqueAssociations(words, frenchWords, manifest, uniqueState) {
+  const frenchById = new Map(frenchWords.map((word) => [word.id, word]));
+  let released = 0;
+
+  for (const word of words) {
+    if (uniqueState.replacementIds.has(word.id)) continue;
+    const entry = manifest[word.id];
+    const candidate = frenchById.get(entry?.imageAssociationWordId);
+    if (!candidate || !String(entry?.imagePrompt ?? '').startsWith('Unique real associative image')) continue;
+
+    const score = uniqueAssociationScore(word, candidate, entry);
+    if (score >= 30) {
+      entry.imageAssociationScore = score;
+      continue;
+    }
+
+    const hash = uniqueState.hashByWordId.get(word.id);
+    if (hash) uniqueState.usedContentHashes.delete(hash);
+    uniqueState.hashByWordId.delete(word.id);
+    uniqueState.replacementIds.add(word.id);
+    released += 1;
+  }
+
+  return released;
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const words = await loadWords(options.language);
   const manifest = await loadJson(MANIFEST_PATH, {});
-  if (options.language === 'japanese') applyCuratedImageOverrides(words, manifest);
+  if (options.language === 'japanese' && !options.unique) applyCuratedImageOverrides(words, manifest);
   await fs.mkdir(OUTPUT_DIR, { recursive: true });
+
+  if (options.unique && options.language !== 'japanese') {
+    throw new Error('--unique requires --language=japanese');
+  }
+
+  if (options.unique && !options.download && !options.reuseOnly) {
+    throw new Error('--unique requires --download unless --reuse-only is used');
+  }
+
+  const uniqueState = options.unique ? await buildUniqueImageState(words, manifest) : null;
 
   let processed = 0;
   let saved = 0;
@@ -1010,7 +1302,23 @@ async function main() {
   if (options.reuseExisting && options.language === 'japanese') {
     const frenchWords = await loadWords('french');
 
-    for (const word of words) {
+    if (uniqueState) {
+      const released = options.keepWeak ? 0 : releaseWeakUniqueAssociations(words, frenchWords, manifest, uniqueState);
+      const result = await fillUniqueImagesFromExisting(
+        words,
+        frenchWords,
+        manifest,
+        uniqueState,
+        options.keepWeak ? 8 : 30,
+      );
+      reused += result.reused;
+      await fs.writeFile(MANIFEST_PATH, `${JSON.stringify(manifest, null, 2)}\n`);
+      console.log(JSON.stringify({ releasedWeakAssociations: released, uniqueReuse: result }, null, 2));
+
+      if (options.reuseOnly) return;
+    }
+
+    for (const word of uniqueState ? [] : words) {
       if (isRealManifestEntry(manifest[word.id])) continue;
       const reusable =
         findReusableImage(word, frenchWords, manifest)
@@ -1040,8 +1348,9 @@ async function main() {
     if (options.ids.size > 0 && !options.ids.has(word.id)) continue;
     const current = manifest[word.id];
     const needsLocalization = options.downloadLinked && isRealManifestEntry(current) && isRemoteImageEntry(current);
+    const needsUniqueImage = uniqueState?.replacementIds.has(word.id) ?? false;
 
-    if (!needsLocalization && !options.force && isRealManifestEntry(current)) {
+    if (!needsLocalization && !needsUniqueImage && !options.force && isRealManifestEntry(current)) {
       skipped += 1;
       continue;
     }
@@ -1055,7 +1364,7 @@ async function main() {
 
   const persistManifest = (force = false) => {
     const completed = saved + failed;
-    if (!force && completed % 20 !== 0) return persistPromise;
+    if (!force && completed % 5 !== 0) return persistPromise;
     persistPromise = persistPromise.then(() => fs.writeFile(MANIFEST_PATH, `${JSON.stringify(manifest, null, 2)}\n`));
     return persistPromise;
   };
@@ -1073,18 +1382,51 @@ async function main() {
         return;
       }
 
-      const found = options.provider === 'commons' ? await searchCommonsImage(word) : await searchOpenverseImage(word);
-      let publicPath = found.imageUrl;
+      let found;
+      let publicPath;
+      let downloaded;
+      const maxAttempts = options.unique ? 3 : 1;
 
-      if (options.download) {
+      for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+        const search = options.provider === 'commons' ? searchCommonsImage : searchOpenverseImage;
+        const fallbackSearch = options.provider === 'commons' ? searchOpenverseImage : searchCommonsImage;
+
+        try {
+          found = await search(word, uniqueState?.usedSourceKeys);
+        } catch (primaryError) {
+          if (!options.unique) throw primaryError;
+          found = await fallbackSearch(word, uniqueState?.usedSourceKeys);
+        }
+
+        publicPath = found.imageUrl;
+        if (!options.download) break;
+
         const downloadUrl = found.fullImageUrl ?? found.imageUrl;
-        const downloaded = await downloadBinaryWithFallback(found.imageUrl, downloadUrl);
+        downloaded = await downloadBinaryWithFallback(found.imageUrl, downloadUrl);
+        if (!isRasterBuffer(downloaded.buffer)) {
+          found = undefined;
+          downloaded = undefined;
+          continue;
+        }
+        const hash = contentHash(downloaded.buffer);
+
+        if (uniqueState?.usedContentHashes.has(hash)) {
+          found = undefined;
+          downloaded = undefined;
+          continue;
+        }
+
+        uniqueState?.usedContentHashes.add(hash);
         const extension = inferExtension(downloaded.contentType, downloadUrl);
         const filename = `${slugify(word.id || `${word.original}-${word.translation}`)}.${extension}`;
         const outputPath = path.join(OUTPUT_DIR, filename);
         publicPath = `/${path.relative('public', outputPath).replaceAll(path.sep, '/')}`;
-
         await fs.writeFile(outputPath, downloaded.buffer);
+        break;
+      }
+
+      if (!found || !publicPath || (options.download && !downloaded)) {
+        throw new Error(`no unique raster image found after ${maxAttempts} attempts`);
       }
 
       manifest[word.id] = {
