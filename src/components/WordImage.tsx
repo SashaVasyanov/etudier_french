@@ -9,7 +9,17 @@ interface WordImageProps {
 }
 
 export const WordImage = memo(function WordImage({ word, size = 'medium', className = '' }: WordImageProps) {
-  const fallback = useMemo(() => createFallbackWordImage(word), [word]);
+  const fallback = useMemo(() => {
+    const semanticFallback = createFallbackWordImage(word);
+
+    return word.language === 'japanese'
+      ? {
+          ...semanticFallback,
+          src: '/generated-word-images/ja-association-matter.jpg',
+          illustrationType: 'photo-association',
+        }
+      : semanticFallback;
+  }, [word]);
   const primarySrc = word.imagePath || word.imageUrl || fallback.src;
   const srcWithVersion =
     primarySrc.startsWith('/generated-word-images/')
@@ -29,7 +39,10 @@ export const WordImage = memo(function WordImage({ word, size = 'medium', classN
         src={src}
         alt={alt}
         data-illustration-type={word.illustrationType ?? fallback.illustrationType}
-        data-image-source={word.imageSource ?? 'generated:semantic-svg-v2'}
+        data-image-source={
+          word.imageSource
+          ?? (word.language === 'japanese' ? 'generated:openai-imagegen:fallback' : 'generated:semantic-svg-v2')
+        }
         loading="lazy"
         decoding="async"
         onError={() => {

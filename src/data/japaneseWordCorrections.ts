@@ -153,6 +153,7 @@ const JAPANESE_WORD_CORRECTIONS: Readonly<Record<string, JapaneseWordCorrection>
   '先': { translation: 'впереди / раньше', transcription: '[さき · saki]' },
   '可能': { translation: 'возможный / возможно' },
   'あいつ': { translation: 'он / она (грубо)' },
+  'なあ': { translation: 'ну / эй / ведь', part_of_speech: 'interjection' },
   'あと': { translation: 'после / сзади' },
   '明日': { translation: 'завтра' },
   '確認する': { translation: 'проверять / подтверждать' },

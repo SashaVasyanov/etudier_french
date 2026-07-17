@@ -94,7 +94,19 @@ type WordImageManifest = Record<
   string,
   Pick<
     Word,
-    'imagePath' | 'imageUrl' | 'imageAlt' | 'imagePackCategory' | 'illustrationType' | 'imagePrompt' | 'imageSource'
+    | 'imagePath'
+    | 'imageUrl'
+    | 'imageAlt'
+    | 'imagePackCategory'
+    | 'illustrationType'
+    | 'imagePrompt'
+    | 'imageSource'
+    | 'imageSourceTitle'
+    | 'imageProvider'
+    | 'imageLicense'
+    | 'imageLicenseUrl'
+    | 'imageAttribution'
+    | 'imageAssociationWordId'
   >
 >;
 
@@ -1369,7 +1381,14 @@ function normalizeWord(word: Word): Word {
   const fallbackImage =
     word.imagePath || word.imageUrl
       ? null
-      : createFallbackWordImage(word);
+      : word.language === 'japanese'
+        ? {
+            src: '/generated-word-images/ja-association-matter.jpg',
+            alt: `Ассоциативное изображение: ${word.translation}`,
+            category: 'japanese',
+            illustrationType: 'photo-association',
+          }
+        : createFallbackWordImage(word);
   const improvedExamples =
     word.language === 'french'
       ? improveWordExamples(word)
@@ -1398,7 +1417,13 @@ function normalizeWord(word: Word): Word {
     imagePackCategory: word.imagePackCategory ?? fallbackImage?.category,
     illustrationType: word.illustrationType ?? fallbackImage?.illustrationType,
     imagePrompt: word.imagePrompt ?? undefined,
-    imageSource: word.imageSource ?? (fallbackImage ? 'generated:semantic-svg-v2' : undefined),
+    imageSource:
+      word.imageSource
+      ?? (fallbackImage
+        ? word.language === 'japanese'
+          ? 'generated:openai-imagegen:fallback'
+          : 'generated:semantic-svg-v2'
+        : undefined),
   };
 }
 

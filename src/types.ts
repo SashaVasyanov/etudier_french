@@ -41,6 +41,12 @@ export interface Word {
   illustrationType?: string;
   imagePrompt?: string;
   imageSource?: string;
+  imageSourceTitle?: string;
+  imageProvider?: string;
+  imageLicense?: string;
+  imageLicenseUrl?: string;
+  imageAttribution?: string;
+  imageAssociationWordId?: string;
 }
 
 export interface WordProgress {

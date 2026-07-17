@@ -1276,6 +1276,26 @@
   text-wrap: pretty;
 }
 
+.image-credit-panel {
+  min-width: 0;
+}
+
+.image-credit-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.image-credit-links a {
+  color: var(--accent-strong);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  text-underline-offset: 3px;
+}
+
 .lesson-exercise-card .lesson-card-inner {
   width: 100%;
   max-width: 860px;

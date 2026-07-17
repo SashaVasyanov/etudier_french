@@ -1,5 +1,6 @@
 import { Builder, By, Key, until } from 'selenium-webdriver';
 import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
 
 const baseUrl = process.env.UI_BASE_URL ?? 'http://127.0.0.1:4173';
 const storageKey = 'anki-plus-storage';
@@ -123,26 +124,38 @@ async function main() {
     const japaneseDictionaryButton = await findNavigationButton(driver, 'Словарь');
     await japaneseDictionaryButton.sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.css('.dictionary-toolbar input')), timeoutMs);
-    const dictionarySearch = await driver.findElement(By.css('.dictionary-toolbar input'));
+    let dictionarySearch = await driver.findElement(By.css('.dictionary-toolbar input'));
     await dictionarySearch.sendKeys('разговор / история');
     await driver.wait(
-      async () => (await driver.findElements(By.css('.dictionary-grid > .word-card'))).length === 1,
+      async () => driver.executeScript(
+        `const cards = [...document.querySelectorAll('.dictionary-grid > .word-card')];
+         return cards.length === 1 && cards[0].textContent?.includes('話');`,
+      ),
       timeoutMs,
     );
     console.log('Corrected 話 translation verified.');
-    let correctedCardText = await driver.findElement(By.css('.dictionary-grid > .word-card')).getText();
+    let correctedCardText = await driver.executeScript(
+      `return document.querySelector('.dictionary-grid > .word-card')?.textContent ?? '';`,
+    );
     assert.ok(correctedCardText.includes('話'), 'Corrected 話 entry is missing');
     assert.ok(correctedCardText.includes('разговор / история'), '話 still displays the rare dictionary gloss');
+    dictionarySearch = await driver.findElement(By.css('.dictionary-toolbar input'));
     await dictionarySearch.clear();
     await dictionarySearch.sendKeys('господин / госпожа');
     await driver.wait(
-      async () => (await driver.findElements(By.css('.dictionary-grid > .word-card'))).length === 1,
+      async () => driver.executeScript(
+        `const cards = [...document.querySelectorAll('.dictionary-grid > .word-card')];
+         return cards.length === 1 && cards[0].textContent?.includes('様');`,
+      ),
       timeoutMs,
     );
     console.log('Corrected 様 translation verified.');
-    correctedCardText = await driver.findElement(By.css('.dictionary-grid > .word-card')).getText();
+    correctedCardText = await driver.executeScript(
+      `return document.querySelector('.dictionary-grid > .word-card')?.textContent ?? '';`,
+    );
     assert.ok(correctedCardText.includes('様'), 'Corrected 様 entry is missing');
     assert.ok(correctedCardText.includes('[さま · sama]'), '様 still uses the contextually incorrect reading');
+    dictionarySearch = await driver.findElement(By.css('.dictionary-toolbar input'));
     await dictionarySearch.clear();
     await dictionarySearch.sendKeys(' ');
     await driver.wait(
@@ -154,18 +167,34 @@ async function main() {
       `const images = [...document.querySelectorAll('.dictionary-grid > .word-card .word-image')];
        return {
          count: images.length,
-         localCount: images.filter((image) => image.getAttribute('src')?.startsWith('data:image/svg+xml')).length,
-         semanticCount: images.filter((image) => image.dataset.imageSource === 'generated:semantic-svg-v2').length,
+         localRasterCount: images.filter((image) => {
+           const sourcePath = (image.getAttribute('src') ?? '').split('?')[0].toLowerCase();
+           return sourcePath.includes('/generated-word-images/')
+             && ['.jpg', '.jpeg', '.png', '.webp'].some((extension) => sourcePath.endsWith(extension));
+         }).length,
+         svgCount: images.filter((image) => {
+           const sourcePath = (image.getAttribute('src') ?? '').split('?')[0].toLowerCase();
+           return sourcePath.startsWith('data:image/svg+xml') || sourcePath.endsWith('.svg');
+         }).length,
          emptyAltCount: images.filter((image) => !image.getAttribute('alt')?.trim()).length,
-         illustrationTypes: [...new Set(images.map((image) => image.dataset.illustrationType).filter(Boolean))],
+         distinctPaths: new Set(images.map((image) => image.getAttribute('src')).filter(Boolean)).size,
+         sourcedCount: images.filter((image) => {
+           const source = image.dataset.imageSource ?? '';
+           return source.startsWith('https://') || source.startsWith('generated:openai-imagegen');
+         }).length,
        };`,
     );
-    console.log(`Japanese image types: ${japaneseImageMetrics.illustrationTypes.join(', ')}`);
+    console.log(`Japanese raster image paths: ${japaneseImageMetrics.distinctPaths}`);
     assert.equal(japaneseImageMetrics.count, 80, 'Japanese dictionary image coverage is incomplete');
-    assert.equal(japaneseImageMetrics.localCount, 80, 'Japanese mnemonic images are not fully local');
-    assert.equal(japaneseImageMetrics.semanticCount, 80, 'Japanese words did not receive semantic illustrations');
+    assert.equal(japaneseImageMetrics.localRasterCount, 80, 'Japanese associative images are not fully local raster files');
+    assert.equal(japaneseImageMetrics.svgCount, 0, 'Japanese dictionary still displays SVG placeholders');
+    assert.equal(japaneseImageMetrics.sourcedCount, 80, 'Japanese raster images are missing provenance');
     assert.equal(japaneseImageMetrics.emptyAltCount, 0, 'Japanese images have missing alternative text');
-    assert.ok(japaneseImageMetrics.illustrationTypes.length >= 10, 'Japanese mnemonic illustrations are not diverse enough');
+    assert.ok(japaneseImageMetrics.distinctPaths >= 20, 'Japanese associative images are not diverse enough');
+    if (process.env.UI_SCREENSHOT_PATH) {
+      await fs.writeFile(process.env.UI_SCREENSHOT_PATH, await driver.takeScreenshot(), 'base64');
+      console.log(`Japanese dictionary screenshot: ${process.env.UI_SCREENSHOT_PATH}`);
+    }
     await (await findNavigationButton(driver, 'Главная')).sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
 

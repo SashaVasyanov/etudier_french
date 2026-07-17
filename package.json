@@ -1,7 +1,7 @@
 {
   "name": "etudier",
   "private": true,
-  "version": "0.1.5",
+  "version": "0.1.6",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,6 +9,9 @@
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint src vite.config.ts",
     "images:generate": "node scripts/generate-word-images.mjs",
+    "images:japanese": "node scripts/fetch-real-word-images.mjs --language=japanese --provider=commons --download --reuse-existing --concurrency=2",
+    "images:japanese:complete": "node scripts/fetch-real-word-images.mjs --language=japanese --reuse-only --complete-associations",
+    "images:audit:japanese": "node scripts/audit-japanese-word-images.mjs",
     "japanese:examples": "node scripts/build_japanese_examples.mjs",
     "preview": "vite preview",
     "preview:host": "vite preview --host 127.0.0.1 --port 4173",
