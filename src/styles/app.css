@@ -5521,6 +5521,15 @@ button:active:not(:disabled) {
   background: #cdd2de;
 }
 
+.radical-card-number {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  color: #9299aa;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
 .radical-status-dot.learning { background: #e7a53f; }
 .radical-status-dot.mastered { background: #35a879; }
 
@@ -5764,6 +5773,17 @@ button:active:not(:disabled) {
 
 .radical-example-grid small {
   color: #6f7890;
+}
+
+.radical-example-grid em {
+  width: fit-content;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #eeeff7;
+  color: #737b91;
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 800;
 }
 
 .radical-caveat {

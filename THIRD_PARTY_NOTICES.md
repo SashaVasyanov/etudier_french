@@ -1,5 +1,13 @@
 # Third-party data notices
 
+## Kanji alive radicals data
+
+The 214-radical catalog, Japanese radical names and reference examples are
+adapted from the open [Kanji alive data and media repository](https://github.com/kanjialive/kanji-data-media).
+The source data is distributed under the
+[Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/) license.
+Russian meanings, explanations and mnemonics were prepared for this project.
+
 ## Tatoeba sentence pairs
 
 Some Japanese example sentences and their Russian translations are sourced from

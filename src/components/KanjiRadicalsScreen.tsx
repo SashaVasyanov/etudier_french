@@ -15,7 +15,7 @@ interface KanjiRadicalsScreenProps {
 }
 
 type RadicalView = 'catalog' | 'detail' | 'study' | 'result';
-type RadicalFilter = 'all' | RadicalStatus;
+type RadicalFilter = 'all' | 'featured' | RadicalStatus;
 type RadicalQuestionType = 'meaning' | 'symbol' | 'example';
 
 interface RadicalQuestion {
@@ -31,6 +31,7 @@ interface RadicalQuestion {
 
 const FILTERS: Array<{ id: RadicalFilter; label: string }> = [
   { id: 'all', label: 'Все' },
+  { id: 'featured', label: 'Основные · 31' },
   { id: 'new', label: 'Новые' },
   { id: 'learning', label: 'В работе' },
   { id: 'mastered', label: 'Освоенные' },
@@ -72,8 +73,9 @@ function buildQuestions(radicals: KanjiRadical[]): RadicalQuestion[] {
   const symbolCandidates = KANJI_RADICALS.map((radical) => radical.symbol);
 
   return radicals.map((radical, index) => {
-    const type: RadicalQuestionType = index % 3 === 0 ? 'meaning' : index % 3 === 1 ? 'symbol' : 'example';
     const example = radical.examples[index % radical.examples.length];
+    const plannedType: RadicalQuestionType = index % 3 === 0 ? 'meaning' : index % 3 === 1 ? 'symbol' : 'example';
+    const type: RadicalQuestionType = plannedType === 'example' && example.isReference ? 'symbol' : plannedType;
 
     if (type === 'meaning') {
       return {
@@ -191,8 +193,10 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
 
     return KANJI_RADICALS.filter((radical) => {
       const progress = getRadicalProgress(storage, radical.id);
-      const matchesFilter = filter === 'all' || progress.status === filter;
+      const matchesFilter = filter === 'all'
+        || (filter === 'featured' ? radical.isFeatured : progress.status === filter);
       const haystack = [
+        String(radical.number),
         radical.symbol,
         ...radical.variants,
         radical.meaning,
@@ -361,7 +365,7 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
           <div className="radical-detail-copy">
             <div className="radical-detail-title-row">
               <div>
-                <span className="radical-question-kicker">Ключ кандзи</span>
+                <span className="radical-question-kicker">Ключ кандзи №{selectedRadical.number}</span>
                 <h1>{selectedRadical.meaning}</h1>
               </div>
               <span className={`radical-status ${progress.status}`}>{STATUS_LABELS[progress.status]}</span>
@@ -396,8 +400,10 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
         <section className="radical-examples-section">
           <div className="radical-section-heading">
             <div>
-              <span className="radical-question-kicker">В контексте</span>
-              <h2>Примеры кандзи с этим ключом</h2>
+              <span className="radical-question-kicker">{selectedRadical.isFeatured ? 'В контексте' : 'Справка'}</span>
+              <h2>{selectedRadical.examples.some((example) => example.isReference)
+                ? 'Каноническая форма редкого ключа'
+                : 'Примеры кандзи с этим ключом'}</h2>
             </div>
             <button type="button" className="radical-primary-button" onClick={() => startStudy(selectedRadical)}>
               Тренировать ключ <AppIcon name="play" size={18} />
@@ -410,12 +416,15 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
                 <div>
                   <strong>{example.meaning}</strong>
                   <small>{example.reading}</small>
+                  {example.isReference ? <em>Справочная форма</em> : null}
                 </div>
               </article>
             ))}
           </div>
           <p className="radical-caveat">
-            Ключ помогает найти кандзи в словаре и иногда намекает на область значения, но не гарантирует точный перевод или чтение.
+            {selectedRadical.examples.some((example) => example.isReference)
+              ? 'Этот ключ редко выступает самостоятельным знаком в современной японской письменности, поэтому показана его каноническая справочная форма.'
+              : 'Ключ помогает найти кандзи в словаре и иногда намекает на область значения, но не гарантирует точный перевод или чтение.'}
           </p>
         </section>
       </section>
@@ -428,7 +437,7 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
         <div>
           <span className="radical-question-kicker">Отдельный режим · 部首</span>
           <h1>Ключи кандзи</h1>
-          <p>Разбирай смысловые опоры, формы и примеры. Этот прогресс не смешивается с изучением слов.</p>
+          <p>Все 214 традиционных ключей Канси: значения, формы и примеры. Этот прогресс не смешивается с изучением слов.</p>
         </div>
         <button type="button" className="radical-primary-button" onClick={() => startStudy()}>
           Начать тренировку <AppIcon name="arrow-right" size={19} />
@@ -446,7 +455,7 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
         <div className="radical-catalog-head">
           <div>
             <h2>Каталог ключей</h2>
-            <p>{summary.newCount} новых · нажми на карточку, чтобы увидеть значение и примеры.</p>
+            <p>214 ключей · 31 основная карточка с расширенными примерами · {summary.newCount} новых.</p>
           </div>
           <label className="radical-search">
             <span className="sr-only">Поиск ключа</span>
@@ -479,6 +488,7 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
 
               return (
                 <button key={radical.id} type="button" className="radical-card" onClick={() => openDetail(radical.id)}>
+                  <span className="radical-card-number">№ {radical.number}</span>
                   <span className={`radical-status-dot ${progress.status}`} aria-label={STATUS_LABELS[progress.status]} />
                   <span className="radical-card-glyph">{radical.symbol}</span>
                   <strong>{radical.meaning}</strong>

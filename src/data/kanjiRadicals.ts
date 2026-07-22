@@ -1,8 +1,9 @@
 import type { KanjiRadical } from '../types';
+import { KANGXI_RADICAL_SEEDS } from './kangxiRadicalSeeds';
 
-// A focused starter set of high-frequency Japanese radicals. The descriptions
-// deliberately present meaning as a hint, not a guaranteed translation.
-export const KANJI_RADICALS: KanjiRadical[] = [
+// These common radicals keep richer explanations and several examples. They
+// override the compact reference entries in the complete 214-radical catalog.
+const FEATURED_KANJI_RADICALS: Array<Omit<KanjiRadical, 'number' | 'isFeatured'>> = [
   {
     id: 'person',
     symbol: '亻',
@@ -531,6 +532,86 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     ],
   },
 ];
+
+const FEATURED_NUMBER_BY_ID: Record<string, number> = {
+  person: 9,
+  water: 85,
+  hand: 64,
+  heart: 61,
+  fire: 86,
+  grass: 140,
+  roof: 40,
+  walk: 162,
+  speech: 149,
+  thread: 120,
+  metal: 167,
+  earth: 32,
+  tree: 75,
+  sun: 72,
+  moon: 74,
+  mountain: 46,
+  mouth: 30,
+  woman: 38,
+  child: 39,
+  stone: 112,
+  food: 184,
+  eye: 109,
+  ear: 128,
+  power: 19,
+  sickness: 104,
+  enclosure: 31,
+  rain: 173,
+  gate: 169,
+  insect: 142,
+  shell: 154,
+  vehicle: 159,
+};
+
+const featuredByNumber = new Map<number, KanjiRadical>();
+
+for (const radical of FEATURED_KANJI_RADICALS) {
+  const number = FEATURED_NUMBER_BY_ID[radical.id];
+  const seed = KANGXI_RADICAL_SEEDS[number - 1];
+
+  if (!seed) {
+    throw new Error(`Не найден ключ Канси для расширенной карточки ${radical.id}`);
+  }
+
+  featuredByNumber.set(number, {
+    ...radical,
+    number,
+    isFeatured: true,
+    variants: Array.from(new Set([
+      ...radical.variants,
+      seed.symbol,
+      ...seed.variants,
+    ])).filter((variant) => variant !== radical.symbol),
+  });
+}
+
+export const KANJI_RADICALS: KanjiRadical[] = KANGXI_RADICAL_SEEDS.map((seed) => {
+  const featured = featuredByNumber.get(seed.number);
+
+  if (featured) {
+    return featured;
+  }
+
+  return {
+    id: `kangxi-${String(seed.number).padStart(3, '0')}`,
+    number: seed.number,
+    isFeatured: false,
+    symbol: seed.symbol,
+    variants: seed.variants,
+    meaning: seed.meaning,
+    japaneseName: '部首',
+    japaneseReading: seed.japaneseReading,
+    strokes: seed.strokes,
+    position: seed.variants.length > 0 ? 'самостоятельно или в вариантной форме' : 'самостоятельно или в составе',
+    description: `Ключ №${seed.number} традиционной системы Канси. Обычно связан со значением «${seed.meaning}».`,
+    mnemonic: `Свяжи форму ${seed.symbol} со значением «${seed.meaning}» и японским названием ${seed.japaneseReading}.`,
+    examples: [seed.example],
+  };
+});
 
 export function getKanjiRadical(radicalId: string): KanjiRadical | null {
   return KANJI_RADICALS.find((radical) => radical.id === radicalId) ?? null;

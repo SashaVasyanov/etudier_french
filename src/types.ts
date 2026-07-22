@@ -169,10 +169,13 @@ export interface KanjiExample {
   character: string;
   reading: string;
   meaning: string;
+  isReference?: boolean;
 }
 
 export interface KanjiRadical {
   id: string;
+  number: number;
+  isFeatured: boolean;
   symbol: string;
   variants: string[];
   meaning: string;
