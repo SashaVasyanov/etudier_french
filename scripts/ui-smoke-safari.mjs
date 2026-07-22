@@ -127,11 +127,20 @@ async function main() {
     await driver.wait(until.elementLocated(By.css('.radical-card-grid')), timeoutMs);
     console.log('Checking all 214 radical cards...');
     assert.equal((await driver.findElements(By.css('.radical-card'))).length, 214, 'The full Kangxi radicals catalog is incomplete');
-    const radicalSearch = await driver.findElement(By.css('.radical-search input'));
+    let radicalSearch = await driver.findElement(By.css('.radical-search input'));
     await radicalSearch.sendKeys('龠');
     await driver.wait(async () => (await driver.findElements(By.css('.radical-card'))).length === 1, timeoutMs);
     console.log('Checking search for radical 214...');
     assert.ok((await driver.findElement(By.css('.radical-card')).getText()).includes('№ 214'), 'Radical 214 is not searchable');
+    await driver.findElement(By.css('.radical-card')).sendKeys(Key.ENTER);
+    await driver.wait(until.elementLocated(By.css('.radical-detail-page')), timeoutMs);
+    assert.ok(
+      (await driver.findElement(By.css('.radical-detail-page')).getText()).includes('Несколько трубок флейты'),
+      'A unique mnemonic is missing from radical 214',
+    );
+    await driver.findElement(By.xpath('//button[contains(., "Все ключи")]')).sendKeys(Key.ENTER);
+    await driver.wait(until.elementLocated(By.css('.radical-card-grid')), timeoutMs);
+    radicalSearch = await driver.findElement(By.css('.radical-search input'));
     await radicalSearch.sendKeys(Key.BACK_SPACE);
     await driver.wait(async () => (await driver.findElements(By.css('.radical-card'))).length === 214, timeoutMs);
     console.log('Checking the 31 featured radical cards...');

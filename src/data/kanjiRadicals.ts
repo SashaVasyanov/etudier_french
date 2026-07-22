@@ -608,10 +608,14 @@ export const KANJI_RADICALS: KanjiRadical[] = KANGXI_RADICAL_SEEDS.map((seed) =>
     strokes: seed.strokes,
     position: seed.variants.length > 0 ? 'самостоятельно или в вариантной форме' : 'самостоятельно или в составе',
     description: `Ключ №${seed.number} традиционной системы Канси. Обычно связан со значением «${seed.meaning}».`,
-    mnemonic: `Свяжи форму ${seed.symbol} со значением «${seed.meaning}» и японским названием ${seed.japaneseReading}.`,
+    mnemonic: seed.mnemonic,
     examples: [seed.example],
   };
 });
+
+if (new Set(KANJI_RADICALS.map((radical) => radical.mnemonic)).size !== KANJI_RADICALS.length) {
+  throw new Error('Каждый ключ кандзи должен иметь уникальную мнемонику');
+}
 
 export function getKanjiRadical(radicalId: string): KanjiRadical | null {
   return KANJI_RADICALS.find((radical) => radical.id === radicalId) ?? null;

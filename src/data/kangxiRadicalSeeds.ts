@@ -1,4 +1,5 @@
 import type { KanjiExample } from '../types';
+import { KANGXI_RADICAL_MNEMONICS } from './kangxiRadicalMnemonics';
 
 type RawRadicalSeed = readonly [
   number: number,
@@ -16,6 +17,7 @@ export interface KangxiRadicalSeed {
   strokes: number;
   meaning: string;
   japaneseReading: string;
+  mnemonic: string;
   variants: string[];
   example: KanjiExample;
 }
@@ -302,6 +304,7 @@ export const KANGXI_RADICAL_SEEDS: KangxiRadicalSeed[] = RAW_RADICAL_SEEDS.map((
     strokes,
     meaning,
     japaneseReading,
+    mnemonic: KANGXI_RADICAL_MNEMONICS[index],
     variants: VARIANTS_BY_NUMBER[number] ?? [],
     example: {
       character,
@@ -314,4 +317,12 @@ export const KANGXI_RADICAL_SEEDS: KangxiRadicalSeed[] = RAW_RADICAL_SEEDS.map((
 
 if (KANGXI_RADICAL_SEEDS.length !== 214) {
   throw new Error(`Ожидалось 214 ключей Канси, получено ${KANGXI_RADICAL_SEEDS.length}`);
+}
+
+if (KANGXI_RADICAL_MNEMONICS.length !== KANGXI_RADICAL_SEEDS.length) {
+  throw new Error('Количество мнемоник не совпадает с количеством ключей Канси');
+}
+
+if (new Set(KANGXI_RADICAL_MNEMONICS).size !== KANGXI_RADICAL_MNEMONICS.length) {
+  throw new Error('Мнемоники ключей Канси должны быть уникальными');
 }
