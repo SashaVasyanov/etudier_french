@@ -120,6 +120,51 @@ async function main() {
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
     assert.ok((await driver.findElement(By.css('.home-language-chip')).getText()).includes('JP'), 'Japanese home label is incorrect');
 
+    console.log('Checking the separate kanji radicals learning flow...');
+    assert.equal((await driver.findElements(By.css('.nav-icon svg'))).length, 7, 'Japanese navigation is missing the radicals route');
+    const radicalsButton = await findNavigationButton(driver, 'Ключи');
+    await radicalsButton.sendKeys(Key.ENTER);
+    await driver.wait(until.elementLocated(By.css('.radical-card-grid')), timeoutMs);
+    assert.equal((await driver.findElements(By.css('.radical-card'))).length, 31, 'The radicals catalog is incomplete');
+    const firstRadicalCard = await driver.findElement(By.css('.radical-card'));
+    await firstRadicalCard.sendKeys(Key.ENTER);
+    await driver.wait(until.elementLocated(By.css('.radical-detail-page')), timeoutMs);
+    assert.equal((await driver.findElements(By.css('.radical-example-grid article'))).length, 3, 'Radical detail examples are incomplete');
+    await driver.findElement(By.xpath('//button[contains(., "Все ключи")]')).sendKeys(Key.ENTER);
+    await driver.wait(until.elementLocated(By.css('.radical-card-grid')), timeoutMs);
+    await driver.findElement(By.xpath('//button[contains(., "Начать тренировку")]')).sendKeys(Key.ENTER);
+    await driver.wait(until.elementLocated(By.css('.radical-options')), timeoutMs);
+
+    for (let index = 0; index < 10; index += 1) {
+      const radicalOptions = await driver.findElements(By.css('.radical-option'));
+      assert.equal(radicalOptions.length, 4, 'A radical exercise does not have four answer options');
+      await radicalOptions[0].sendKeys(Key.ENTER);
+      const nextRadicalButton = await driver.wait(until.elementLocated(By.css('.radical-feedback button')), timeoutMs);
+      await nextRadicalButton.sendKeys(Key.ENTER);
+    }
+
+    await driver.wait(until.elementLocated(By.css('.radical-result-page')), timeoutMs);
+    await driver.wait(
+      async () => driver.executeScript(
+        `const data = JSON.parse(window.localStorage.getItem("${storageKey}") ?? '{}');
+         return (data.radicalStudyHistory?.length ?? 0) === 1;`,
+      ),
+      timeoutMs,
+    );
+    const radicalStorageMetrics = await driver.executeScript(
+      `const data = JSON.parse(window.localStorage.getItem("${storageKey}") ?? '{}');
+       return {
+         history: data.radicalStudyHistory?.length ?? 0,
+         progress: Object.keys(data.radicalProgressById ?? {}).length,
+         wordHistory: data.studyHistory?.length ?? 0,
+       };`,
+    );
+    assert.equal(radicalStorageMetrics.history, 1, 'Radical study history was not saved');
+    assert.ok(radicalStorageMetrics.progress > 0, 'Radical progress was not saved');
+    assert.equal(radicalStorageMetrics.wordHistory, 0, 'Radical training leaked into word lesson history');
+    await (await findNavigationButton(driver, 'Главная')).sendKeys(Key.ENTER);
+    await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
+
     console.log('Checking corrected Japanese translations...');
     const japaneseDictionaryButton = await findNavigationButton(driver, 'Словарь');
     await japaneseDictionaryButton.sendKeys(Key.ENTER);

@@ -2,6 +2,7 @@ import type { ReactNode, SVGProps } from 'react';
 
 export type AppIconName =
   | 'arrow-right'
+  | 'arrow-left'
   | 'book-open'
   | 'calendar'
   | 'cards'
@@ -14,6 +15,7 @@ export type AppIconName =
   | 'grid'
   | 'headphones'
   | 'home'
+  | 'kanji'
   | 'layers'
   | 'leaf'
   | 'play'
@@ -31,6 +33,7 @@ interface AppIconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
 
 const ICON_PATHS: Record<AppIconName, ReactNode> = {
   'arrow-right': <><path d="M5 12h14" /><path d="m14 7 5 5-5 5" /></>,
+  'arrow-left': <><path d="M19 12H5" /><path d="m10 7-5 5 5 5" /></>,
   'book-open': <><path d="M3.5 5.5A3.5 3.5 0 0 1 7 3h4v16H7a3.5 3.5 0 0 0-3.5 2V5.5Z" /><path d="M20.5 5.5A3.5 3.5 0 0 0 17 3h-4v16h4a3.5 3.5 0 0 1 3.5 2V5.5Z" /></>,
   calendar: <><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M8 3v4M16 3v4M3 10h18" /><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" /></>,
   cards: <><rect x="5" y="4" width="14" height="16" rx="3" /><path d="M9 8h6M9 12h4" /><path d="M3.5 7.5 2.7 17a3 3 0 0 0 2.7 3.3" /><path d="m20.5 7.5.8 9.5a3 3 0 0 1-2.7 3.3" /></>,
@@ -43,6 +46,7 @@ const ICON_PATHS: Record<AppIconName, ReactNode> = {
   grid: <><rect x="3" y="3" width="7" height="7" rx="2" /><rect x="14" y="3" width="7" height="7" rx="2" /><rect x="3" y="14" width="7" height="7" rx="2" /><rect x="14" y="14" width="7" height="7" rx="2" /></>,
   headphones: <><path d="M4 14v-2a8 8 0 0 1 16 0v2" /><path d="M6 13H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v-7ZM18 13h1a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2v-7Z" /></>,
   home: <><path d="m3 11 9-8 9 8" /><path d="M5 10v10h14V10M9 20v-6h6v6" /></>,
+  kanji: <text x="12" y="17" fill="currentColor" stroke="none" textAnchor="middle" fontSize="15" fontWeight="800">部</text>,
   layers: <><path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="m3 12 9 5 9-5M3 16l9 5 9-5" /></>,
   leaf: <><path d="M20.5 3.5C12 3.7 6.2 7.1 5.2 13.1c-.7 4.1 2.4 7.2 6.2 6.4 5.7-1.2 8.6-7.3 9.1-16Z" /><path d="M4 21c2.7-5.5 6.6-9.2 12-12" /></>,
   play: <><circle cx="12" cy="12" r="9" /><path d="m10 8 6 4-6 4V8Z" /></>,

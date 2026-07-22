@@ -8,6 +8,7 @@ export type LessonModuleTheme = 'new' | 'practice' | 'review' | 'reinforcement' 
 export type PackStatus = 'not_added' | 'added' | 'in_progress' | 'completed';
 export type WordSource = 'core' | 'pack' | 'custom';
 export type LearningLanguage = 'french' | 'japanese';
+export type RadicalStatus = 'new' | 'learning' | 'mastered';
 
 export type ExerciseType =
   | 'audio_to_translation_choice'
@@ -164,6 +165,50 @@ export interface UserPackState {
   completedAt: string | null;
 }
 
+export interface KanjiExample {
+  character: string;
+  reading: string;
+  meaning: string;
+}
+
+export interface KanjiRadical {
+  id: string;
+  symbol: string;
+  variants: string[];
+  meaning: string;
+  japaneseName: string;
+  japaneseReading: string;
+  strokes: number;
+  position: string;
+  description: string;
+  mnemonic: string;
+  examples: KanjiExample[];
+}
+
+export interface RadicalProgress {
+  radicalId: string;
+  attempts: number;
+  correctAnswers: number;
+  wrongAnswers: number;
+  status: RadicalStatus;
+  lastStudiedAt: string | null;
+  masteredAt: string | null;
+}
+
+export interface RadicalExerciseOutcome {
+  radicalId: string;
+  isCorrect: boolean;
+}
+
+export interface RadicalStudyHistoryEntry {
+  id: string;
+  date: string;
+  completedAt: string;
+  radicalIds: string[];
+  correctAnswers: number;
+  totalAnswers: number;
+}
+
 export interface AppStorage {
   learningLanguage: LearningLanguage;
   progressByWordId: Record<string, WordProgress>;
@@ -180,6 +225,8 @@ export interface AppStorage {
   packStates: Record<string, UserPackState>;
   customWords: Word[];
   customPacks: WordPack[];
+  radicalProgressById: Record<string, RadicalProgress>;
+  radicalStudyHistory: RadicalStudyHistoryEntry[];
 }
 
 export interface DailyLessonCompletionPayload {

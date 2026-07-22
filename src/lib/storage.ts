@@ -6,6 +6,10 @@ import type {
   LearningLanguage,
   LessonDurationMinutes,
   LessonWordTarget,
+  RadicalExerciseOutcome,
+  RadicalProgress,
+  RadicalStatus,
+  RadicalStudyHistoryEntry,
   StudyHistoryEntry,
   UserPackState,
   UserProfile,
@@ -62,6 +66,8 @@ function createDefaultStorage(): AppStorage {
     packStates: {},
     customWords: [],
     customPacks: [],
+    radicalProgressById: {},
+    radicalStudyHistory: [],
   };
 }
 
@@ -115,6 +121,40 @@ function createInitialProgress(wordId: string): WordProgress {
     repetition_step: 0,
     status: 'new',
     learned_at: null,
+  };
+}
+
+function createInitialRadicalProgress(radicalId: string): RadicalProgress {
+  return {
+    radicalId,
+    attempts: 0,
+    correctAnswers: 0,
+    wrongAnswers: 0,
+    status: 'new',
+    lastStudiedAt: null,
+    masteredAt: null,
+  };
+}
+
+function normalizeRadicalProgress(progress: Partial<RadicalProgress>, radicalId: string): RadicalProgress {
+  const correctAnswers = Math.floor(finiteNumber(progress.correctAnswers, 0));
+  const wrongAnswers = Math.floor(finiteNumber(progress.wrongAnswers, 0));
+  const attempts = correctAnswers + wrongAnswers;
+  const accuracy = correctAnswers / Math.max(1, attempts);
+  const status: RadicalStatus = attempts === 0
+    ? 'new'
+    : attempts >= 6 && accuracy >= 0.8
+      ? 'mastered'
+      : 'learning';
+
+  return {
+    radicalId,
+    attempts,
+    correctAnswers,
+    wrongAnswers,
+    status,
+    lastStudiedAt: typeof progress.lastStudiedAt === 'string' ? progress.lastStudiedAt : null,
+    masteredAt: typeof progress.masteredAt === 'string' ? progress.masteredAt : null,
   };
 }
 
@@ -204,6 +244,27 @@ function normalizeHistoryEntry(value: unknown): StudyHistoryEntry | null {
   };
 }
 
+function normalizeRadicalHistoryEntry(value: unknown): RadicalStudyHistoryEntry | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const entry = value as Partial<RadicalStudyHistoryEntry>;
+
+  if (!entry.id || !entry.date || !entry.completedAt || !Array.isArray(entry.radicalIds)) {
+    return null;
+  }
+
+  return {
+    id: entry.id,
+    date: entry.date,
+    completedAt: entry.completedAt,
+    radicalIds: entry.radicalIds.filter((id): id is string => typeof id === 'string').slice(0, 50),
+    correctAnswers: Math.floor(finiteNumber(entry.correctAnswers, 0)),
+    totalAnswers: Math.floor(finiteNumber(entry.totalAnswers, 0)),
+  };
+}
+
 function normalizePackState(packState: Partial<UserPackState> | undefined, packId: string): UserPackState {
   return {
     packId,
@@ -238,6 +299,10 @@ export function loadStorage(): AppStorage {
     const packStateEntries = isRecord(parsed.packStates) ? Object.entries(parsed.packStates) : [];
     const customWords: unknown[] = Array.isArray(parsed.customWords) ? parsed.customWords : [];
     const customPacks: unknown[] = Array.isArray(parsed.customPacks) ? parsed.customPacks : [];
+    const radicalProgressEntries: Array<[string, unknown]> = isRecord(parsed.radicalProgressById)
+      ? Object.entries(parsed.radicalProgressById)
+      : [];
+    const radicalStudyHistory: unknown[] = Array.isArray(parsed.radicalStudyHistory) ? parsed.radicalStudyHistory : [];
 
     return {
       ...defaults,
@@ -307,6 +372,15 @@ export function loadStorage(): AppStorage {
         .filter(isRecord)
         .map((pack) => normalizeCustomPack(pack))
         .filter((pack): pack is import('../types').WordPack => pack !== null),
+      radicalProgressById: Object.fromEntries(
+        radicalProgressEntries
+          .filter((entry): entry is [string, Partial<RadicalProgress>] => isRecord(entry[1]))
+          .map(([radicalId, progress]) => [radicalId, normalizeRadicalProgress(progress, radicalId)]),
+      ),
+      radicalStudyHistory: radicalStudyHistory
+        .map((entry) => normalizeRadicalHistoryEntry(entry))
+        .filter((entry): entry is RadicalStudyHistoryEntry => entry !== null)
+        .slice(-120),
     };
   } catch {
     return createDefaultStorage();
@@ -881,6 +955,61 @@ export function setWordPackStatus(
 
 export function getWordProgress(storage: AppStorage, wordId: string): WordProgress {
   return storage.progressByWordId[wordId] ?? createInitialProgress(wordId);
+}
+
+export function getRadicalProgress(storage: AppStorage, radicalId: string): RadicalProgress {
+  return storage.radicalProgressById[radicalId] ?? createInitialRadicalProgress(radicalId);
+}
+
+export function recordRadicalStudySession(
+  currentStorage: AppStorage,
+  outcomes: RadicalExerciseOutcome[],
+): AppStorage {
+  if (outcomes.length === 0) {
+    return currentStorage;
+  }
+
+  const completedAt = new Date().toISOString();
+  const radicalProgressById = { ...currentStorage.radicalProgressById };
+
+  outcomes.forEach((outcome) => {
+    const existing = radicalProgressById[outcome.radicalId]
+      ?? createInitialRadicalProgress(outcome.radicalId);
+    const correctAnswers = existing.correctAnswers + (outcome.isCorrect ? 1 : 0);
+    const wrongAnswers = existing.wrongAnswers + (outcome.isCorrect ? 0 : 1);
+    const attempts = correctAnswers + wrongAnswers;
+    const accuracy = correctAnswers / Math.max(1, attempts);
+    const status: RadicalStatus = attempts >= 6 && accuracy >= 0.8 ? 'mastered' : 'learning';
+
+    radicalProgressById[outcome.radicalId] = {
+      ...existing,
+      attempts,
+      correctAnswers,
+      wrongAnswers,
+      status,
+      lastStudiedAt: completedAt,
+      masteredAt: status === 'mastered' ? existing.masteredAt ?? completedAt : null,
+    };
+  });
+
+  const radicalIds = Array.from(new Set(outcomes.map((outcome) => outcome.radicalId)));
+  const historyEntry: RadicalStudyHistoryEntry = {
+    id: `radicals-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    date: getTodayDateKey(),
+    completedAt,
+    radicalIds,
+    correctAnswers: outcomes.filter((outcome) => outcome.isCorrect).length,
+    totalAnswers: outcomes.length,
+  };
+
+  return {
+    ...currentStorage,
+    radicalProgressById,
+    radicalStudyHistory: currentStorage.radicalStudyHistory
+      .concat(historyEntry)
+      .sort((left, right) => left.completedAt.localeCompare(right.completedAt))
+      .slice(-120),
+  };
 }
 
 export function addCustomWord(currentStorage: AppStorage, word: Word): AppStorage {

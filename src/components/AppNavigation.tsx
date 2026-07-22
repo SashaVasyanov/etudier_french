@@ -1,22 +1,26 @@
 import { AppIcon, type AppIconName } from './AppIcon';
 
 interface AppNavigationProps {
-  activeScreen: 'home' | 'lesson' | 'dictionary' | 'statistics' | 'profile' | 'packs';
+  activeScreen: 'home' | 'lesson' | 'dictionary' | 'radicals' | 'statistics' | 'profile' | 'packs';
   lessonAvailable: boolean;
+  showKanjiRadicals: boolean;
   streakDays: number;
-  onNavigate: (screen: 'home' | 'lesson' | 'dictionary' | 'statistics' | 'profile' | 'packs') => void;
+  onNavigate: (screen: AppNavigationProps['activeScreen']) => void;
 }
 
 const NAV_ITEMS: Array<{ id: AppNavigationProps['activeScreen']; label: string; icon: AppIconName }> = [
   { id: 'home', label: 'Главная', icon: 'home' },
   { id: 'lesson', label: 'Учиться', icon: 'play' },
   { id: 'dictionary', label: 'Словарь', icon: 'book-open' },
+  { id: 'radicals', label: 'Ключи', icon: 'kanji' },
   { id: 'statistics', label: 'Прогресс', icon: 'chart' },
   { id: 'packs', label: 'Темы', icon: 'grid' },
   { id: 'profile', label: 'Профиль', icon: 'user' },
 ];
 
-export function AppNavigation({ activeScreen, lessonAvailable, streakDays, onNavigate }: AppNavigationProps) {
+export function AppNavigation({ activeScreen, lessonAvailable, showKanjiRadicals, streakDays, onNavigate }: AppNavigationProps) {
+  const visibleItems = NAV_ITEMS.filter((item) => item.id !== 'radicals' || showKanjiRadicals);
+
   return (
     <aside className="app-sidebar" aria-label="Основная навигация">
       <div className="sidebar-logo">
@@ -24,8 +28,8 @@ export function AppNavigation({ activeScreen, lessonAvailable, streakDays, onNav
         <strong>étudier</strong>
       </div>
 
-      <nav className="app-nav" aria-label="Разделы приложения">
-        {NAV_ITEMS.map((item) => {
+      <nav className={showKanjiRadicals ? 'app-nav has-radicals' : 'app-nav'} aria-label="Разделы приложения">
+        {visibleItems.map((item) => {
           const isActive = item.id === activeScreen;
 
           return (

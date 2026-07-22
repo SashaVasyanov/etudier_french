@@ -31,6 +31,7 @@ interface HomeDashboardProps {
   onOpenStatistics: () => void;
   onOpenProfile: () => void;
   onOpenPacks: () => void;
+  onOpenRadicals: () => void;
 }
 
 const DAILY_MODULES = [
@@ -71,6 +72,7 @@ export function HomeDashboard({
   onOpenStatistics,
   onOpenProfile,
   onOpenPacks,
+  onOpenRadicals,
 }: HomeDashboardProps) {
   const today = storage.dailyStats.find(
     (item) => item.date === getTodayDateKey() && item.language === learningLanguage,
@@ -102,6 +104,9 @@ export function HomeDashboard({
   const difficultCount = progressList.filter((progress) => progress.status === 'difficult').length;
   const learningLanguageLabel = learningLanguage === 'japanese' ? 'Японский' : 'Французский';
   const learningLanguageChip = learningLanguage === 'japanese' ? 'JP · японский' : 'FR · французский';
+  const radicalProgress = Object.values(storage.radicalProgressById);
+  const masteredRadicals = radicalProgress.filter((progress) => progress.status === 'mastered').length;
+  const learningRadicals = radicalProgress.filter((progress) => progress.status === 'learning').length;
 
   return (
     <section className="learning-home">
@@ -225,6 +230,22 @@ export function HomeDashboard({
             <p>{today ? `${today.wordsLearned} слов в активном повторении` : 'Начни короткий урок — и появится твоя статистика.'}</p>
           </div>
         </section>
+
+        {learningLanguage === 'japanese' ? (
+          <section className="home-bento-card radicals-bento-card">
+            <span className="radicals-bento-glyph" aria-hidden="true">部</span>
+            <div>
+              <span>Отдельно от слов</span>
+              <h2>Ключи кандзи</h2>
+              <p>{masteredRadicals > 0 || learningRadicals > 0
+                ? `${masteredRadicals} освоено · ${learningRadicals} в работе`
+                : 'Значения, формы и примеры в коротких тренировках.'}</p>
+            </div>
+            <button type="button" className="text-action-button" onClick={onOpenRadicals}>
+              Открыть ключи <AppIcon name="arrow-right" size={17} />
+            </button>
+          </section>
+        ) : null}
       </div>
     </section>
   );

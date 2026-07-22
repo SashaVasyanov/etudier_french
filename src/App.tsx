@@ -27,6 +27,7 @@ import {
   loadStorage,
   markWordAsIgnored,
   markWordAsKnown,
+  recordRadicalStudySession,
   recordStudyHistory,
   saveStorage,
   setLearningLanguagePreference,
@@ -60,6 +61,7 @@ const PackDetailScreen = lazy(() =>
 const PacksScreen = lazy(() => import('./components/PacksScreen'));
 const ProfileScreen = lazy(() => import('./components/ProfileScreen'));
 const StatisticsScreen = lazy(() => import('./components/StatisticsScreen'));
+const KanjiRadicalsScreen = lazy(() => import('./components/KanjiRadicalsScreen'));
 
 type Screen =
   | 'home'
@@ -67,6 +69,7 @@ type Screen =
   | 'result'
   | 'dailyComplete'
   | 'dictionary'
+  | 'radicals'
   | 'statistics'
   | 'profile'
   | 'packs'
@@ -626,7 +629,7 @@ function App() {
     setStepIndex((current) => Math.min(current, nextSession.steps.length - 1));
   }
 
-  function handleNavigate(target: 'home' | 'lesson' | 'dictionary' | 'statistics' | 'profile' | 'packs') {
+  function handleNavigate(target: 'home' | 'lesson' | 'dictionary' | 'radicals' | 'statistics' | 'profile' | 'packs') {
     if (target === 'lesson') {
       if (session) {
         setScreen('lesson');
@@ -682,7 +685,7 @@ function App() {
     );
   }
 
-  const navScreen = screen === 'dictionary' || screen === 'statistics' || screen === 'profile' || screen === 'packs' || screen === 'lesson'
+  const navScreen = screen === 'dictionary' || screen === 'radicals' || screen === 'statistics' || screen === 'profile' || screen === 'packs' || screen === 'lesson'
     ? screen
     : screen === 'packDetail'
       ? 'packs'
@@ -694,6 +697,7 @@ function App() {
         <AppNavigation
           activeScreen={navScreen}
           lessonAvailable={lessonPoolWords.length > 0 || Boolean(session)}
+          showKanjiRadicals={storage.learningLanguage === 'japanese'}
           streakDays={storage.streakDays}
           onNavigate={handleNavigate}
         />
@@ -724,6 +728,7 @@ function App() {
               setSelectedPackId(null);
               setScreen('packs');
             }}
+            onOpenRadicals={() => setScreen('radicals')}
           />
         ) : null}
 
@@ -979,6 +984,14 @@ function App() {
           ) : null}
           {screen === 'statistics' ? (
             <StatisticsScreen learningLanguage={storage.learningLanguage} storage={storage} words={availableWords} />
+          ) : null}
+          {screen === 'radicals' && storage.learningLanguage === 'japanese' ? (
+            <KanjiRadicalsScreen
+              storage={storage}
+              onCompleteSession={(radicalOutcomes) => {
+                setStorage((currentStorage) => recordRadicalStudySession(currentStorage, radicalOutcomes));
+              }}
+            />
           ) : null}
         </Suspense>
         </main>
