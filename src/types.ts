@@ -1,4 +1,4 @@
-export type WordStatus = 'new' | 'learning' | 'review' | 'mastered' | 'difficult' | 'ignored';
+export type WordStatus = 'new' | 'learning' | 'review' | 'known' | 'mastered' | 'difficult' | 'ignored';
 export type WordLevel = 'A1' | 'A2' | 'B1';
 export type LessonMode = 'default' | 'extra' | 'mistakes' | 'pack';
 export type LessonDurationMinutes = 10 | 20 | 30;
@@ -62,7 +62,27 @@ export interface WordProgress {
   repetition_step: number;
   status: WordStatus;
   learned_at: string | null;
+  /** Distinct local calendar days on which a due review was passed. */
+  successful_review_dates: string[];
 }
+
+export type StorageErrorKind = 'read' | 'corrupt' | 'unsupported_version' | 'write';
+
+export interface StorageError {
+  kind: StorageErrorKind;
+  message: string;
+  /** When true, automatic writes must pause until the learner explicitly continues. */
+  blocksSave: boolean;
+}
+
+export interface StorageLoadResult {
+  storage: AppStorage;
+  error: StorageError | null;
+}
+
+export type StorageSaveResult =
+  | { ok: true }
+  | { ok: false; error: StorageError };
 
 export interface ExerciseOption {
   id: string;

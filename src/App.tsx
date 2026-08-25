@@ -38,17 +38,18 @@ import {
   setWordPackStatus,
   getWordProgress,
   getCompletedDailyLesson,
+  getCurrentStreakDays,
   updateProfileName,
 } from './lib/storage';
 import { parseImportedPack } from './lib/importPacks';
 import { getTodayDateKey, isAnswerMatch, isJapaneseReadingMatch } from './lib/utils';
 import type {
   AppStorage,
-  DailyLessonCompletionPayload,
   DailyLessonRecord,
   ExerciseOutcome,
   LessonMode,
   LessonSession,
+  StorageError,
   StudyHistoryEntry,
   Word,
 } from './types';
@@ -94,55 +95,11 @@ function removeWordFromSession(session: LessonSession, wordId: string): LessonSe
   };
 }
 
-function buildEmptyCompletionPayload(
-  sessionId: string,
-  durationMinutes: AppStorage['lessonDurationMinutes'],
-  language: AppStorage['learningLanguage'],
-): DailyLessonCompletionPayload {
-  const date = getTodayDateKey();
-  const completedAt = new Date().toISOString();
-  const record: DailyLessonRecord = {
-    date,
-    language,
-    completedAt,
-    sessionId,
-    totalModules: 0,
-    completedModules: 0,
-    totalSteps: 0,
-    completedSteps: 0,
-    correctAnswers: 0,
-    totalAnswers: 0,
-    newWords: 0,
-    reviewWords: 0,
-    reinforcementWords: 0,
-    knownWords: 0,
-    difficultWordIds: [],
-    timeSpentSeconds: 0,
-  };
-  const historyEntry: StudyHistoryEntry = {
-    id: `${sessionId}-history`,
-    date,
-    language,
-    completedAt,
-    sessionId,
-    mode: 'default',
-    durationMinutes,
-    moduleTitles: [],
-    modulesCompleted: 0,
-    wordsLearned: 0,
-    mistakesMade: 0,
-    correctAnswers: 0,
-    totalAnswers: 0,
-    timeSpentSeconds: 0,
-    activePackIds: [],
-  };
-
-  return { record, historyEntry };
-}
-
 function App() {
+  const [initialStorageLoad] = useState(() => loadStorage());
   const [screen, setScreen] = useState<Screen>('home');
-  const [storage, setStorage] = useState<AppStorage>(() => loadStorage());
+  const [storage, setStorage] = useState<AppStorage>(initialStorageLoad.storage);
+  const [storageError, setStorageError] = useState<StorageError | null>(initialStorageLoad.error);
   const [baseWords, setBaseWords] = useState<Word[]>([]);
   const [session, setSession] = useState<LessonSession | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
@@ -156,6 +113,7 @@ function App() {
   const [wordsReloadKey, setWordsReloadKey] = useState(0);
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
   const storageRef = useRef(storage);
+  const storageErrorRef = useRef(storageError);
 
   const starterPacks = useMemo(() => getStarterPacks(storage.learningLanguage), [storage.learningLanguage]);
   const importedPacks = useMemo(
@@ -230,21 +188,31 @@ function App() {
 
   useEffect(() => {
     storageRef.current = storage;
-  }, [storage]);
+    storageErrorRef.current = storageError;
+  }, [storage, storageError]);
 
   useEffect(() => {
+    if (storageError?.blocksSave) {
+      return undefined;
+    }
+
     const timeoutId = window.setTimeout(() => {
-      saveStorage(storage);
+      const result = saveStorage(storage);
+      if (!result.ok) {
+        setStorageError(result.error);
+      }
     }, 180);
 
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [storage]);
+  }, [storage, storageError?.blocksSave]);
 
   useEffect(() => {
     const persistLatestStorage = () => {
-      saveStorage(storageRef.current);
+      if (!storageErrorRef.current?.blocksSave) {
+        void saveStorage(storageRef.current);
+      }
     };
 
     window.addEventListener('pagehide', persistLatestStorage);
@@ -323,6 +291,14 @@ function App() {
     setIsSubmitted(false);
   }
 
+  function reportStorageMutationError(error: unknown) {
+    setStorageError({
+      kind: 'write',
+      message: error instanceof Error ? error.message : 'Не удалось изменить локальные данные.',
+      blocksSave: false,
+    });
+  }
+
   function clearSessionState(nextScreen: Screen = 'home', options?: { preserveOutcomes?: boolean }) {
     setSession(null);
     if (!options?.preserveOutcomes) {
@@ -357,7 +333,10 @@ function App() {
           : mode === 'pack' && options?.packId
             ? words.filter((word) => word.packIds.includes(options.packId!))
             : lessonPoolWords;
-    const lessonWords = lessonWordsBase.filter((word) => getWordProgress(storage, word.id).status !== 'ignored');
+    const lessonWords = lessonWordsBase.filter((word) => {
+      const status = getWordProgress(storage, word.id).status;
+      return status !== 'ignored' && status !== 'known';
+    });
     const activePackIds =
       mode === 'pack' && options?.packId
         ? Array.from(new Set([...enabledPackIds, options.packId]))
@@ -379,17 +358,8 @@ function App() {
 
     if (!nextSession) {
       if (mode === 'default') {
-        const sessionId = `default-empty-${Date.now()}`;
-        setStorage((currentStorage) =>
-          completeDailyLesson(
-            currentStorage,
-            buildEmptyCompletionPayload(
-              sessionId,
-              currentStorage.lessonDurationMinutes,
-              currentStorage.learningLanguage,
-            ),
-          ),
-        );
+        // No new quota and no scheduled reviews: show an honest no-due state,
+        // but do not create a completion/history/streak record.
         setScreen('dailyComplete');
       }
       return;
@@ -418,7 +388,10 @@ function App() {
       mode === 'pack' && options?.packId
         ? words.filter((word) => word.packIds.includes(options.packId!))
         : lessonPoolWords;
-    const flashcardWords = flashcardWordsBase.filter((word) => getWordProgress(storage, word.id).status !== 'ignored');
+    const flashcardWords = flashcardWordsBase.filter((word) => {
+      const status = getWordProgress(storage, word.id).status;
+      return status !== 'ignored' && status !== 'known';
+    });
     const flashcardWordTarget = storage.lessonDurationEnabled ? storage.lessonWordTarget : Math.max(flashcardWords.length, 10);
     const nextSession = createFlashcardSession({
       mode,
@@ -502,6 +475,13 @@ function App() {
   ) {
     setStorage((currentStorage) => {
       const storageWithOutcomes = applyOutcomes(currentStorage, lessonOutcomes);
+      if (activeSession.presentation === 'flashcards' && lessonOutcomes.length === 0) {
+        return storageWithOutcomes;
+      }
+
+      const completedModules = activeSession.modules.filter((module) =>
+        activeSession.steps.some((step) => step.moduleId === module.id),
+      );
       const difficultWordIds = Array.from(
         new Set(
           activeSession.sourceWordIds.filter(
@@ -514,10 +494,20 @@ function App() {
         0,
         Math.round((new Date(completedAt).getTime() - new Date(activeSession.startedAt).getTime()) / 1000),
       );
-      const wordsLearned = activeSession.sourceWordIds.filter((wordId) => {
-        const status = storageWithOutcomes.progressByWordId[wordId]?.status;
-        return status === 'learning' || status === 'review' || status === 'mastered';
-      }).length;
+      const transitionedWordIds = activeSession.sourceWordIds.filter((wordId) => {
+        const before = getWordProgress(currentStorage, wordId).status;
+        const after = getWordProgress(storageWithOutcomes, wordId).status;
+        return before !== 'mastered' && before !== 'known' && (after === 'mastered' || after === 'known');
+      });
+      const wordsLearned = new Set([...transitionedWordIds, ...manuallyKnownWordIds]).size;
+      const newWords = new Set(
+        lessonOutcomes
+          .map((outcome) => outcome.wordId)
+          .filter((wordId) =>
+            getWordProgress(currentStorage, wordId).status === 'new' &&
+            getWordProgress(storageWithOutcomes, wordId).status !== 'new',
+          ),
+      ).size;
       const historyEntry: StudyHistoryEntry = {
         id: `${activeSession.id}-history`,
         date: getTodayDateKey(),
@@ -526,11 +516,8 @@ function App() {
         sessionId: activeSession.id,
         mode: activeSession.mode,
         durationMinutes: activeSession.durationMinutes,
-        moduleTitles: activeSession.modules.map((module) => module.title),
-        modulesCompleted:
-          activeSession.mode === 'default'
-            ? activeSession.modules.length
-            : activeSession.modules.filter((module) => module.wordIds.length > 0).length,
+        moduleTitles: completedModules.map((module) => module.title),
+        modulesCompleted: completedModules.length,
         wordsLearned,
         mistakesMade: lessonOutcomes.filter((outcome) => !outcome.isCorrect).length,
         correctAnswers: lessonOutcomes.filter((outcome) => outcome.isCorrect).length,
@@ -548,13 +535,13 @@ function App() {
         language: currentStorage.learningLanguage,
         completedAt,
         sessionId: activeSession.id,
-        totalModules: activeSession.modules.length,
-        completedModules: activeSession.modules.length,
+        totalModules: completedModules.length,
+        completedModules: completedModules.length,
         totalSteps: activeSession.steps.length,
         completedSteps: activeSession.steps.length,
         correctAnswers: historyEntry.correctAnswers,
         totalAnswers: historyEntry.totalAnswers,
-        newWords: activeSession.modules.find((module) => module.id === 'module-new-words')?.wordIds.length ?? 0,
+        newWords,
         reviewWords: activeSession.modules.find((module) => module.id === 'module-review-learning')?.wordIds.length ?? 0,
         reinforcementWords: activeSession.modules.find((module) => module.id === 'module-reinforcement')?.wordIds.length ?? 0,
         knownWords: Array.from(new Set(manuallyKnownWordIds)).length,
@@ -589,15 +576,27 @@ function App() {
       ? [...outcomes].reverse().find((outcome) => outcome.exerciseId === currentExercise.id) ?? null
       : null;
 
+  function markWordKnown(wordId: string): boolean {
+    try {
+      setStorage((currentStorage) => markWordAsKnown(currentStorage, wordId));
+      return true;
+    } catch (error) {
+      reportStorageMutationError(error);
+      return false;
+    }
+  }
+
   function handleMarkKnown() {
     if (!session || !currentWord || !currentStep?.allowMarkKnown) {
       return;
     }
 
-    const nextKnownWordIds = Array.from(new Set([...knownWordIds, currentWord.id]));
     const nextSession = removeWordFromSession(session, currentWord.id);
+    const nextKnownWordIds = Array.from(new Set([...knownWordIds, currentWord.id]));
 
-    setStorage((currentStorage) => markWordAsKnown(currentStorage, currentWord.id));
+    if (!markWordKnown(currentWord.id)) {
+      return;
+    }
     setKnownWordIds(nextKnownWordIds);
     resetExerciseState();
 
@@ -698,11 +697,22 @@ function App() {
           activeScreen={navScreen}
           lessonAvailable={lessonPoolWords.length > 0 || Boolean(session)}
           showKanjiRadicals={storage.learningLanguage === 'japanese'}
-          streakDays={storage.streakDays}
+          streakDays={getCurrentStreakDays(storage)}
           onNavigate={handleNavigate}
         />
 
         <main className="desktop-app-content" aria-label={getLearningLanguageProductTitle(storage.learningLanguage)}>
+        {storageError ? (
+          <section className="app-error-state" role="status" aria-live="polite">
+            <strong>Проблема с локальным прогрессом</strong>
+            <p>{storageError.message}</p>
+            {!storageError.blocksSave || storageError.kind === 'corrupt' ? (
+              <button type="button" className="ghost-button" onClick={() => setStorageError(null)}>
+                {storageError.blocksSave ? 'Продолжить с текущим состоянием' : 'Понятно'}
+              </button>
+            ) : null}
+          </section>
+        ) : null}
         {screen === 'home' ? (
           <HomeDashboard
             totalWords={words}
@@ -876,6 +886,7 @@ function App() {
               words={availableWords}
               storage={storage}
               packs={packs}
+              onMarkWordKnown={(wordId) => markWordKnown(wordId)}
               onAddWord={(word) => {
                 const customWord: Word = {
                   ...word,
@@ -886,7 +897,11 @@ function App() {
                   source: 'custom',
                 };
 
-                setStorage((currentStorage) => addCustomWord(currentStorage, customWord));
+                try {
+                  setStorage(addCustomWord(storageRef.current, customWord));
+                } catch (error) {
+                  reportStorageMutationError(error);
+                }
               }}
             />
           ) : null}
@@ -902,10 +917,24 @@ function App() {
                 const importedPack = parseImportedPack({ title, rawText, language: storage.learningLanguage });
 
                 if (!importedPack) {
-                  return;
+                  return {
+                    ok: false,
+                    reason: 'Не удалось распознать ни одной пары «слово — перевод». Проверьте разделители TAB, «;», «,» или « - ».',
+                  };
                 }
 
-                setStorage((currentStorage) => addCustomPack(currentStorage, importedPack));
+                try {
+                  // Validate against the rendered state first; the update itself stays functional to avoid stale writes.
+                  addCustomPack(storage, importedPack);
+                  setStorage((currentStorage) => addCustomPack(currentStorage, importedPack));
+                  return { ok: true, importedWords: importedPack.words.length };
+                } catch (error) {
+                  reportStorageMutationError(error);
+                  return {
+                    ok: false,
+                    reason: error instanceof Error ? error.message : 'Не удалось сохранить пак в локальном хранилище. Данные формы сохранены.',
+                  };
+                }
               }}
               onOpenPack={(packId) => {
                 setSelectedPackId(packId);

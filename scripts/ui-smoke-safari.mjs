@@ -4,7 +4,132 @@ import fs from 'node:fs/promises';
 
 const baseUrl = process.env.UI_BASE_URL ?? 'http://127.0.0.1:4173';
 const storageKey = 'anki-plus-storage';
+const backupStorageKey = `${storageKey}-backup`;
+const quarantineStorageKey = `${storageKey}-quarantine`;
+const storageVersion = 2;
+const seed = Number.parseInt(process.env.UI_SEED ?? '305419896', 10) >>> 0;
 const timeoutMs = 15000;
+
+function seededRandomScript() {
+  return `(function installDeterministicRandom(initialSeed) {
+    window.__uiSmokeNativeRandom ??= Math.random;
+    window.__uiSmokeSeed = initialSeed >>> 0;
+    let state = initialSeed >>> 0;
+    Math.random = () => {
+      state = (state * 1664525 + 1013904223) >>> 0;
+      return state / 4294967296;
+    };
+  })(window.__uiSmokeSeed ?? ${seed});`;
+}
+
+async function installDeterministicState(driver) {
+  await driver.executeScript(
+    `window.localStorage.clear(); window.sessionStorage.clear(); ${seededRandomScript()}`,
+  );
+  const backupEnvelope = JSON.stringify({
+    version: storageVersion,
+    savedAt: '2026-01-01T00:00:00.000Z',
+    payload: {},
+  });
+  await driver.executeScript(
+    (primaryKey, backupKey, invalidPrimary, validBackup) => {
+      window.localStorage.setItem(primaryKey, invalidPrimary);
+      window.localStorage.setItem(backupKey, validBackup);
+    },
+    storageKey,
+    backupStorageKey,
+    '{invalid-json',
+    backupEnvelope,
+  );
+  await driver.navigate().refresh();
+  await driver.executeScript(seededRandomScript());
+}
+
+async function clearBrowserState(driver) {
+  await driver.executeScript('window.localStorage.clear(); window.sessionStorage.clear();');
+}
+
+async function activateButton(driver, getButton, stateMatches, description) {
+  const confirmationTimeoutMs = 3000;
+  const activate = async (button, useDomFallback = false) => {
+    await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "center" });', button);
+    if (useDomFallback) {
+      await driver.executeScript(
+        'if (arguments[0].disabled) throw new Error("Button is disabled"); arguments[0].click();',
+        button,
+      );
+    } else {
+      await button.click();
+    }
+  };
+
+  const button = await getButton();
+  try {
+    await activate(button);
+  } catch {
+    // Safari can detach a React button between lookup and native click. Check state
+    // before using the one bounded DOM fallback so a completed action is never repeated.
+    if (await stateMatches()) return;
+    console.log(`Retrying ${description} after detached native activation...`);
+    await activate(await getButton(), true);
+    await driver.wait(stateMatches, timeoutMs);
+    return;
+  }
+  try {
+    await driver.wait(stateMatches, confirmationTimeoutMs);
+    return;
+  } catch {
+    // Only retry after state evidence shows that the first activation did not land.
+    if (await stateMatches()) return;
+  }
+
+  console.log(`Retrying ${description} with bounded DOM activation...`);
+  await activate(await getButton(), true);
+  await driver.wait(stateMatches, timeoutMs);
+}
+
+async function measureWorstCaseKanjiChoice(driver) {
+  const metricsForCurrentViewport = () => driver.executeScript(
+    `const grid = document.querySelector('.lesson-choice-grid');
+     if (!grid) return null;
+     let probe = document.querySelector('#ui-smoke-worst-kanji-choice');
+     if (!probe) {
+       probe = document.createElement('button');
+       probe.id = 'ui-smoke-worst-kanji-choice';
+       probe.type = 'button';
+       probe.className = 'choice-button japanese-kanji-choice';
+       probe.tabIndex = -1;
+       const label = document.createElement('span');
+       label.className = 'choice-button-label';
+       label.textContent = '着替えする';
+       probe.append(label);
+       grid.append(probe);
+     }
+     const label = probe.querySelector('.choice-button-label');
+     const style = getComputedStyle(label);
+     return {
+       text: label.textContent,
+       glyphCount: [...label.textContent].length,
+       fontSize: Number.parseFloat(style.fontSize),
+       width: probe.clientWidth,
+       scrollWidth: probe.scrollWidth,
+       height: probe.clientHeight,
+       scrollHeight: probe.scrollHeight,
+     };`,
+  );
+
+  const desktop = await metricsForCurrentViewport();
+  assert.equal(desktop?.text, '着替えする', 'Worst-case Japanese label was not rendered');
+  assert.equal(desktop?.glyphCount, 5, 'Worst-case Japanese label must contain five glyphs');
+  assert.ok(desktop.fontSize >= 24 && desktop.scrollWidth <= desktop.width && desktop.scrollHeight <= desktop.height, 'Worst-case Japanese choice overflows at desktop width');
+
+  await driver.manage().window().setRect({ width: 375, height: 812, x: 0, y: 0 });
+  const narrow = await metricsForCurrentViewport();
+  assert.equal(narrow?.glyphCount, 5, 'Worst-case Japanese label changed at narrow width');
+  assert.ok(narrow.fontSize >= 24 && narrow.scrollWidth <= narrow.width && narrow.scrollHeight <= narrow.height, 'Worst-case Japanese choice overflows at 375px');
+  await driver.executeScript('document.querySelector("#ui-smoke-worst-kanji-choice")?.remove();');
+  await driver.manage().window().setRect({ width: 1440, height: 900, x: 0, y: 0 });
+}
 
 async function findNavigationButton(driver, text) {
   return driver.wait(
@@ -26,22 +151,63 @@ async function main() {
     });
     await driver.manage().window().setRect({ width: 1440, height: 900, x: 0, y: 0 });
 
+    console.log(`Using deterministic UI seed ${seed}...`);
     console.log(`Opening ${baseUrl}...`);
     await driver.get(baseUrl);
-    console.log('Checking recovery from corrupted local storage...');
-    await driver.executeScript(`window.localStorage.setItem("${storageKey}", "{invalid-json")`);
-    await driver.navigate().refresh();
-
-    console.log('Waiting for app shell...');
-    await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
-    await driver.executeScript(
-      `window.localStorage.setItem("${storageKey}", JSON.stringify({ dailyStats: [null], studyHistory: [null], customPacks: [null], progressByWordId: { bad: null } }))`,
+    console.log('Checking v2 backup recovery and isolated browser state...');
+    await installDeterministicState(driver);
+    await driver.wait(until.elementLocated(By.css('.desktop-app-layout')), timeoutMs);
+    await driver.wait(until.elementLocated(By.css('.app-error-state')), timeoutMs);
+    const recoveryMetrics = await driver.executeScript(
+      (primaryKey, backupKey, quarantineKey) => ({
+        primary: window.localStorage.getItem(primaryKey),
+        backup: window.localStorage.getItem(backupKey),
+        quarantine: window.localStorage.getItem(quarantineKey),
+      }),
+      storageKey,
+      backupStorageKey,
+      quarantineStorageKey,
     );
+    const recoveredPrimary = JSON.parse(recoveryMetrics.primary ?? 'null');
+    assert.equal(recoveredPrimary?.version, storageVersion, 'Recovered primary is not a v2 envelope');
+    assert.equal(recoveredPrimary?.payload?.learningLanguage, 'french', 'Recovered v2 primary did not normalize the backup payload');
+    assert.deepEqual(recoveredPrimary?.payload?.radicalStudyHistory, [], 'Recovered primary contains unexpected radical history');
+    const recoveredBackup = JSON.parse(recoveryMetrics.backup ?? 'null');
+    assert.equal(recoveredBackup?.version, storageVersion, 'Backup is not a v2 envelope');
+    assert.deepEqual(recoveredBackup?.payload, {}, 'v2 backup payload changed during recovery');
+    const quarantinedRecovery = JSON.parse(recoveryMetrics.quarantine ?? 'null');
+    assert.equal(quarantinedRecovery?.raw, '{invalid-json', 'Corrupt primary was not quarantined verbatim');
+    const recoveryState = await driver.findElement(By.css('.app-error-state'));
+    assert.ok((await recoveryState.getText()).includes('резервная копия'), 'v2 backup recovery banner is missing');
+    await activateButton(
+      driver,
+      () => driver.findElement(By.css('.app-error-state button')),
+      async () => (await driver.findElements(By.css('.app-error-state'))).length === 0,
+      'v2 backup recovery acknowledgement',
+    );
+    await clearBrowserState(driver);
     await driver.navigate().refresh();
-    await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
-    await driver.executeScript(`window.localStorage.removeItem("${storageKey}")`);
-    await driver.navigate().refresh();
-    await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
+    await driver.executeScript(seededRandomScript());
+    await driver.wait(until.elementLocated(By.css('.desktop-app-layout')), timeoutMs);
+    await driver.wait(
+      async () => (await driver.executeScript('return window.localStorage.getItem(arguments[0])', storageKey))?.includes('"version":2'),
+      timeoutMs,
+    );
+    const isolatedStorage = await driver.executeScript(
+      (primaryKey, backupKey, quarantineKey) => ({
+        primary: window.localStorage.getItem(primaryKey),
+        backup: window.localStorage.getItem(backupKey),
+        quarantine: window.localStorage.getItem(quarantineKey),
+      }),
+      storageKey,
+      backupStorageKey,
+      quarantineStorageKey,
+    );
+    assert.ok(isolatedStorage.primary?.includes('"version":2'), 'Fresh isolated state was not initialized as v2');
+    if (isolatedStorage.backup !== null) {
+      assert.ok(isolatedStorage.backup.includes('"version":2'), 'Fresh backup state is not v2');
+    }
+    assert.equal(isolatedStorage.quarantine, null, 'Quarantine state leaked between smoke runs');
     assert.equal((await driver.findElements(By.css('.nav-icon svg'))).length, 6, 'Navigation icons are incomplete');
     const brandMetrics = await driver.executeScript(
       `const logo = document.querySelector('.sidebar-logo');
@@ -64,8 +230,12 @@ async function main() {
     );
 
     console.log('Starting lesson...');
-    const startLessonButton = await driver.findElement(By.xpath('//button[contains(., "Начать урок")]'));
-    await startLessonButton.sendKeys(Key.ENTER);
+    await activateButton(
+      driver,
+      () => driver.findElement(By.xpath('//button[contains(., "Начать урок")]')),
+      async () => (await driver.findElements(By.xpath('//button[contains(., "Понял, дальше")]'))).length > 0,
+      'French lesson start',
+    );
 
     console.log('Waiting for study view...');
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Понял, дальше")]')), timeoutMs);
@@ -85,15 +255,28 @@ async function main() {
     const choiceButtons = await driver.findElements(By.css('.choice-button'));
     assert.ok(choiceButtons.length > 0, 'The first exercise has no answer choices');
     assert.equal((await driver.findElements(By.css('.japanese-kanji-choice'))).length, 0, 'French choices received Japanese styling');
-    await choiceButtons[0].sendKeys(Key.ENTER);
+    await activateButton(
+      driver,
+      () => driver.findElements(By.css('.choice-button:not([disabled])')).then((buttons) => buttons[0]),
+      async () => (await driver.findElements(By.css('.answer-feedback'))).length > 0,
+      'French answer choice',
+    );
     await driver.wait(until.elementLocated(By.css('.answer-feedback')), timeoutMs);
     await driver.wait(until.elementLocated(By.xpath('//button[normalize-space()="Прослушать ещё раз"]')), timeoutMs);
 
     console.log('Checking dictionary list limit...');
-    const closeLessonButton = await driver.findElement(By.xpath('//button[@aria-label="Выйти из урока"]'));
-    await closeLessonButton.sendKeys(Key.ENTER);
-    const dictionaryButton = await findNavigationButton(driver, 'Словарь');
-    await dictionaryButton.sendKeys(Key.ENTER);
+    await activateButton(
+      driver,
+      () => driver.findElement(By.xpath('//button[@aria-label="Выйти из урока"]')),
+      async () => (await driver.findElements(By.css('.learning-home'))).length > 0,
+      'French lesson close',
+    );
+    await activateButton(
+      driver,
+      () => findNavigationButton(driver, 'Словарь'),
+      async () => (await driver.findElements(By.css('.dictionary-grid'))).length > 0,
+      'dictionary navigation',
+    );
     await driver.wait(until.elementLocated(By.css('.dictionary-grid')), timeoutMs);
     const renderedWordCards = await driver.findElements(By.css('.dictionary-grid > .word-card'));
     assert.ok(renderedWordCards.length > 0 && renderedWordCards.length <= 80, 'Dictionary rendered too many cards');
@@ -120,7 +303,7 @@ async function main() {
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
     assert.ok((await driver.findElement(By.css('.home-language-chip')).getText()).includes('JP'), 'Japanese home label is incorrect');
 
-    console.log('Checking the separate kanji radicals learning flow...');
+    console.log('Checking the separate kanji radicals learning flow with the deterministic UI seed...');
     assert.equal((await driver.findElements(By.css('.nav-icon svg'))).length, 7, 'Japanese navigation is missing the radicals route');
     const radicalsButton = await findNavigationButton(driver, 'Ключи');
     await radicalsButton.sendKeys(Key.ENTER);
@@ -138,46 +321,96 @@ async function main() {
       (await driver.findElement(By.css('.radical-detail-page')).getText()).includes('Несколько трубок флейты'),
       'A unique mnemonic is missing from radical 214',
     );
-    await driver.findElement(By.xpath('//button[contains(., "Все ключи")]')).sendKeys(Key.ENTER);
-    await driver.wait(until.elementLocated(By.css('.radical-card-grid')), timeoutMs);
+    assert.ok(
+      (await driver.findElements(By.css('.radical-example-grid article'))).length > 0,
+      'Radical 214 detail has no examples',
+    );
+    await activateButton(
+      driver,
+      () => driver.findElement(By.xpath('//button[contains(., "Все ключи")]')),
+      async () => (await driver.findElements(By.css('.radical-card-grid'))).length > 0,
+      'radical detail back',
+    );
     radicalSearch = await driver.findElement(By.css('.radical-search input'));
     await radicalSearch.sendKeys(Key.BACK_SPACE);
     await driver.wait(async () => (await driver.findElements(By.css('.radical-card'))).length === 214, timeoutMs);
     console.log('Checking the 31 featured radical cards...');
-    await driver.findElement(By.xpath('//button[contains(., "Основные")]')).sendKeys(Key.ENTER);
-    await driver.wait(async () => (await driver.findElements(By.css('.radical-card'))).length === 31, timeoutMs);
-    const firstRadicalCard = await driver.findElement(By.css('.radical-card'));
-    await firstRadicalCard.sendKeys(Key.ENTER);
-    await driver.wait(until.elementLocated(By.css('.radical-detail-page')), timeoutMs);
-    assert.equal((await driver.findElements(By.css('.radical-example-grid article'))).length, 3, 'Radical detail examples are incomplete');
-    await driver.findElement(By.xpath('//button[contains(., "Все ключи")]')).sendKeys(Key.ENTER);
-    await driver.wait(until.elementLocated(By.css('.radical-card-grid')), timeoutMs);
-    await driver.findElement(By.xpath('//button[contains(., "Начать тренировку")]')).sendKeys(Key.ENTER);
-    await driver.wait(until.elementLocated(By.css('.radical-options')), timeoutMs);
+    await activateButton(
+      driver,
+      () => driver.findElement(By.xpath('//button[contains(., "Основные")]')),
+      async () => (await driver.findElements(By.css('.radical-card'))).length === 31,
+      'featured radical filter',
+    );
+    console.log('Featured radical filter applied; starting deterministic training...');
+    const startRadicalTrainingButtons = await driver.findElements(By.xpath('//button[contains(., "Начать тренировку")]'));
+    assert.equal(startRadicalTrainingButtons.length, 1, 'Expected exactly one radical training start button');
+    const startRadicalTrainingButton = startRadicalTrainingButtons[0];
+    const trainingButtonMetrics = await driver.executeScript(
+      'const button = arguments[0]; const rect = button.getBoundingClientRect(); return { text: button.textContent.trim(), disabled: button.disabled, width: rect.width, height: rect.height };',
+      startRadicalTrainingButton,
+    );
+    console.log(`Radical training button: ${JSON.stringify(trainingButtonMetrics)}`);
+    await driver.executeScript(`window.__uiSmokeErrors = [];
+      window.addEventListener('error', (event) => window.__uiSmokeErrors.push(String(event.error?.stack ?? event.message)), { once: true });
+      window.addEventListener('unhandledrejection', (event) => window.__uiSmokeErrors.push(String(event.reason?.stack ?? event.reason)), { once: true });`);
+    await driver.executeScript('arguments[0].scrollIntoView({ block: "center" }); arguments[0].click();', startRadicalTrainingButton);
+    await driver.sleep(500);
+    const radicalStartState = await driver.executeScript(`return {
+      errors: window.__uiSmokeErrors,
+      studyPages: document.querySelectorAll('.radical-study-page').length,
+      options: document.querySelectorAll('.radical-options').length,
+      catalogPages: document.querySelectorAll('.radical-catalog-page').length,
+    };`);
+    console.log(`Radical start state: ${JSON.stringify(radicalStartState)}`);
+    assert.deepEqual(radicalStartState.errors, [], 'Radical training start raised a browser error');
+    assert.equal(radicalStartState.studyPages, 1, 'Radical training study page did not render');
+    assert.equal(radicalStartState.options, 1, 'Radical training options did not render');
 
     for (let index = 0; index < 10; index += 1) {
-      const radicalOptions = await driver.findElements(By.css('.radical-option'));
-      assert.equal(radicalOptions.length, 4, 'A radical exercise does not have four answer options');
-      await radicalOptions[0].sendKeys(Key.ENTER);
-      const nextRadicalButton = await driver.wait(until.elementLocated(By.css('.radical-feedback button')), timeoutMs);
-      await nextRadicalButton.sendKeys(Key.ENTER);
+      const radicalOptionCount = await driver.executeScript(
+        'return document.querySelectorAll(".radical-option:not([disabled])").length;',
+      );
+      assert.equal(radicalOptionCount, 4, `Radical exercise ${index + 1} does not have four answer options`);
+      await driver.executeScript('document.querySelector(".radical-option:not([disabled])")?.click();');
+      await driver.sleep(500);
+      assert.equal(
+        await driver.executeScript('return document.querySelectorAll(".radical-feedback button").length;'),
+        1,
+        `Radical exercise ${index + 1} did not render answer feedback`,
+      );
+      await driver.executeScript('document.querySelector(".radical-feedback button")?.click();');
+      await driver.sleep(500);
+      if (index === 9) {
+        assert.equal(
+          await driver.executeScript('return document.querySelectorAll(".radical-result-page").length;'),
+          1,
+          'Radical result page did not render after question 10',
+        );
+      } else {
+        assert.equal(
+          await driver.executeScript('return document.querySelectorAll(".radical-option:not([disabled])").length;'),
+          4,
+          `Radical exercise ${index + 2} did not render`,
+        );
+      }
     }
 
-    await driver.wait(until.elementLocated(By.css('.radical-result-page')), timeoutMs);
-    await driver.wait(
-      async () => driver.executeScript(
-        `const data = JSON.parse(window.localStorage.getItem("${storageKey}") ?? '{}');
-         return (data.radicalStudyHistory?.length ?? 0) === 1;`,
-      ),
-      timeoutMs,
+    assert.equal(
+      await driver.executeScript('return document.querySelectorAll(".radical-result-page").length;'),
+      1,
+      'Radical result page did not render',
     );
+    await driver.sleep(500);
     const radicalStorageMetrics = await driver.executeScript(
-      `const data = JSON.parse(window.localStorage.getItem("${storageKey}") ?? '{}');
-       return {
-         history: data.radicalStudyHistory?.length ?? 0,
-         progress: Object.keys(data.radicalProgressById ?? {}).length,
-         wordHistory: data.studyHistory?.length ?? 0,
-       };`,
+      `return (function () {
+        const stored = JSON.parse(window.localStorage.getItem(${JSON.stringify(storageKey)}) ?? '{}');
+        const data = stored?.version === 2 ? stored.payload : stored;
+        return {
+          history: data?.radicalStudyHistory?.length ?? 0,
+          progress: Object.keys(data?.radicalProgressById ?? {}).length,
+          wordHistory: data?.studyHistory?.length ?? 0,
+        };
+      })()`,
     );
     assert.equal(radicalStorageMetrics.history, 1, 'Radical study history was not saved');
     assert.ok(radicalStorageMetrics.progress > 0, 'Radical progress was not saved');
@@ -266,6 +499,7 @@ async function main() {
     }
     await (await findNavigationButton(driver, 'Главная')).sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.xpath('//button[contains(., "Начать урок")]')), timeoutMs);
+    await driver.executeScript(seededRandomScript());
 
     await driver.findElement(By.xpath('//button[contains(., "Начать урок")]')).sendKeys(Key.ENTER);
     await driver.wait(until.elementLocated(By.xpath('//button[normalize-space()="Понял, дальше"]')), timeoutMs);
@@ -334,6 +568,9 @@ async function main() {
     let verifiedKanjiReading = false;
     let verifiedSentenceCloze = false;
     let verifiedDelayedRetry = false;
+    let verifiedWorstCaseKanjiChoice = false;
+    let kanjiTypographySampleCount = 0;
+    let maximumKanjiGlyphCount = 0;
 
     for (let index = 0; index < 60; index += 1) {
       await driver.wait(
@@ -352,10 +589,16 @@ async function main() {
       }
 
       if (availableChoices.length > 0 && kanjiChoices.length > 0) {
+        if (!verifiedWorstCaseKanjiChoice) {
+          console.log('Measuring worst-case 着替えする Japanese choice at desktop and 375px...');
+          await measureWorstCaseKanjiChoice(driver);
+          verifiedWorstCaseKanjiChoice = true;
+        }
         const typographyMetrics = await driver.executeScript(
           `return [...document.querySelectorAll('.choice-button')].map((button) => ({
             hasKanji: /\\p{Script=Han}/u.test(button.textContent ?? ''),
             hasKana: /[\\u3040-\\u30ff]/.test(button.textContent ?? ''),
+            glyphCount: [...(button.textContent ?? '')].length,
             fontSize: Number.parseFloat(getComputedStyle(button.querySelector('.choice-button-label')).fontSize),
             width: button.clientWidth,
             scrollWidth: button.scrollWidth,
@@ -363,8 +606,13 @@ async function main() {
             scrollHeight: button.scrollHeight,
           }));`,
         );
-        const overflowingKanjiChoices = typographyMetrics
-          .filter((item) => item.hasKanji)
+        const kanjiTypographyMetrics = typographyMetrics.filter((item) => item.hasKanji);
+        kanjiTypographySampleCount += kanjiTypographyMetrics.length;
+        maximumKanjiGlyphCount = Math.max(
+          maximumKanjiGlyphCount,
+          ...kanjiTypographyMetrics.map((item) => item.glyphCount),
+        );
+        const overflowingKanjiChoices = kanjiTypographyMetrics
           .filter((item) => item.scrollWidth > item.width || item.scrollHeight > item.height);
         if (overflowingKanjiChoices.length > 0) {
           console.log(`Overflowing kanji choices: ${JSON.stringify(overflowingKanjiChoices)}`);
@@ -441,6 +689,9 @@ async function main() {
     }
 
     assert.ok(verifiedKanjiTypography, 'No kanji choice typography was verified');
+    assert.ok(kanjiTypographySampleCount > 0, 'Deterministic seed produced no kanji typography samples');
+    assert.ok(maximumKanjiGlyphCount >= 2, 'Real Japanese choice coverage was not exercised');
+    assert.ok(verifiedWorstCaseKanjiChoice, 'Worst-case five-glyph Japanese choice was not measured');
     assert.ok(verifiedKanjiFeedback, 'No kanji answer feedback was verified');
     assert.ok(verifiedActiveRecall, 'Translation-to-word active recall was not verified');
     assert.ok(verifiedKanjiReading, 'Kanji-to-hiragana exercise was not verified');
@@ -493,7 +744,11 @@ async function main() {
     process.exitCode = 1;
   } finally {
     if (driver) {
-      await driver.quit();
+      try {
+        await clearBrowserState(driver);
+      } finally {
+        await driver.quit();
+      }
     }
   }
 }

@@ -16,20 +16,24 @@ interface DictionaryScreenProps {
   words: Word[];
   storage: AppStorage;
   packs: WordPack[];
+  onMarkWordKnown: (wordId: string) => boolean;
   onAddWord: (word: Omit<Word, 'id' | 'language' | 'audio_original' | 'packIds' | 'source'>) => void;
 }
 
-const TABS: Array<{ id: DictionaryTab; label: string }> = [
+type DictionaryFilterTab = DictionaryTab | 'known';
+
+const TABS: Array<{ id: DictionaryFilterTab; label: string }> = [
   { id: 'all', label: 'Все слова' },
   { id: 'learning', label: 'Изучаемые' },
+  { id: 'known', label: 'Известные' },
   { id: 'mastered', label: 'Выученные' },
   { id: 'difficult', label: 'Сложные' },
 ];
 const INITIAL_VISIBLE_WORDS = 80;
 const VISIBLE_WORDS_STEP = 80;
 
-export default function DictionaryScreen({ learningLanguage, words, storage, packs, onAddWord }: DictionaryScreenProps) {
-  const [tab, setTab] = useState<DictionaryTab>('all');
+export default function DictionaryScreen({ learningLanguage, words, storage, packs, onMarkWordKnown, onAddWord }: DictionaryScreenProps) {
+  const [tab, setTab] = useState<DictionaryFilterTab>('all');
   const [query, setQuery] = useState('');
   const [level, setLevel] = useState<'all' | WordLevel>('all');
   const [packFilter, setPackFilter] = useState<'all' | 'core' | string>('all');
@@ -73,9 +77,11 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
           ? true
           : tab === 'learning'
             ? status === 'learning' || status === 'review'
-            : tab === 'mastered'
-              ? status === 'mastered'
-              : status === 'difficult';
+            : tab === 'known'
+              ? status === 'known'
+              : tab === 'mastered'
+                ? status === 'mastered'
+                : status === 'difficult';
       const matchesLevel = level === 'all' ? true : word.level === level;
       const matchesPack =
         packFilter === 'all' ? true : packFilter === 'core' ? word.source === 'core' : word.packIds.includes(packFilter);
@@ -95,6 +101,13 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
   useEffect(() => {
     setVisibleWordCount(INITIAL_VISIBLE_WORDS);
   }, [deferredQuery, level, packFilter, tab]);
+
+  function resetFilters() {
+    setQuery('');
+    setLevel('all');
+    setPackFilter('all');
+    setTab('all');
+  }
 
   function resetNewWordForm() {
     setNewWord({
@@ -156,7 +169,8 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
               className="text-input"
               value={newWord.original}
               maxLength={240}
-              placeholder={learningLanguage === 'french' ? 'Французское слово' : 'Японское слово'}
+              placeholder={learningLanguage === 'french' ? 'Например, bonjour' : 'Например, こんにちは'}
+              aria-label={learningLanguage === 'french' ? 'Французское слово' : 'Японское слово'}
               required
               onChange={(event) => setNewWord((current) => ({ ...current, original: event.target.value }))}
             />
@@ -164,7 +178,8 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
               className="text-input"
               value={newWord.translation}
               maxLength={400}
-              placeholder="Перевод"
+              placeholder="Например, привет"
+              aria-label="Перевод"
               required
               onChange={(event) => setNewWord((current) => ({ ...current, translation: event.target.value }))}
             />
@@ -172,32 +187,37 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
               className="text-input"
               value={newWord.transcription}
               maxLength={240}
-              placeholder="Транскрипция"
+              placeholder="Например, [bɔ̃ʒuʁ]"
+              aria-label="Транскрипция"
               onChange={(event) => setNewWord((current) => ({ ...current, transcription: event.target.value }))}
             />
             <input
               className="text-input"
               value={newWord.example_original}
               maxLength={1000}
-              placeholder={learningLanguage === 'french' ? 'Пример на французском' : 'Пример на японском'}
+              placeholder={learningLanguage === 'french' ? 'Например, Bonjour !' : 'Например, こんにちは。'}
+              aria-label={learningLanguage === 'french' ? 'Пример на французском' : 'Пример на японском'}
               onChange={(event) => setNewWord((current) => ({ ...current, example_original: event.target.value }))}
             />
             <input
               className="text-input"
               value={newWord.example_translation}
               maxLength={1000}
-              placeholder="Перевод примера"
+              placeholder="Например, приветствие"
+              aria-label="Перевод примера"
               onChange={(event) => setNewWord((current) => ({ ...current, example_translation: event.target.value }))}
             />
             <input
               className="text-input"
               value={newWord.part_of_speech}
               maxLength={80}
-              placeholder="Часть речи"
+              placeholder="Например, существительное"
+              aria-label="Часть речи"
               onChange={(event) => setNewWord((current) => ({ ...current, part_of_speech: event.target.value }))}
             />
             <select
               className="level-select"
+              aria-label="Уровень слова"
               value={newWord.level}
               onChange={(event) => setNewWord((current) => ({ ...current, level: event.target.value as WordLevel }))}
             >
@@ -234,16 +254,17 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
           <input
             className="text-input"
             value={query}
-            placeholder={`Поиск по слову на ${languageTitle}, переводу или тегам`}
+            placeholder={`Например, bonjour или перевод`}
+            aria-label={`Поиск по слову на ${languageTitle}, переводу или тегам`}
             onChange={(event) => setQuery(event.target.value)}
           />
-          <select className="level-select" value={level} onChange={(event) => setLevel(event.target.value as 'all' | WordLevel)}>
+          <select className="level-select" aria-label="Уровень слов" value={level} onChange={(event) => setLevel(event.target.value as 'all' | WordLevel)}>
             <option value="all">Все уровни</option>
             <option value="A1">A1</option>
             <option value="A2">A2</option>
             <option value="B1">B1</option>
           </select>
-          <select className="level-select" value={packFilter} onChange={(event) => setPackFilter(event.target.value)}>
+          <select className="level-select" aria-label="Источник слов" value={packFilter} onChange={(event) => setPackFilter(event.target.value)}>
             <option value="all">Все активные паки</option>
             <option value="core">Базовый курс</option>
             {activePackOptions.map((pack) => (
@@ -273,8 +294,17 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
         </div>
       </AppCard>
 
-      <section className="dictionary-grid">
-        {visibleWords.map((word) => {
+      <section className="dictionary-grid" aria-live="polite">
+        {filteredWords.length === 0 ? (
+          <div className="contextual-empty-state">
+            <h2>Ничего не найдено</h2>
+            <p>По текущему поиску и фильтрам нет карточек. Найдено: 0.</p>
+            <div className="contextual-empty-actions">
+              {query ? <button type="button" className="ghost-button" onClick={() => setQuery('')}>Очистить поиск</button> : null}
+              <button type="button" className="secondary-button" onClick={resetFilters}>Сбросить фильтры</button>
+            </div>
+          </div>
+        ) : visibleWords.map((word) => {
           const progress = getWordProgress(storage, word.id);
           const wordPacks = getPackByWord(word, packs);
 
@@ -285,15 +315,27 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                 title={getDisplayWord(word)}
                 subtitle={`${word.translation} · ${word.transcription || 'транскрипция не указана'} · ${getPartOfSpeechLabel(word.part_of_speech)}`}
                 action={
-                  <button
-                    type="button"
-                    className="audio-button"
-                    onClick={() => {
-                      void playWordAudio(word);
-                    }}
-                  >
-                    Аудио
-                  </button>
+                  <div className="word-card-actions">
+                    <button
+                      type="button"
+                      className="audio-button"
+                      aria-label={`Прослушать слово ${getDisplayWord(word)}`}
+                      onClick={() => {
+                        void playWordAudio(word);
+                      }}
+                    >
+                      Аудио
+                    </button>
+                    <button
+                      type="button"
+                      className="secondary-button word-known-button"
+                      disabled={progress.status === 'known'}
+                      aria-label={progress.status === 'known' ? `${getDisplayWord(word)} уже отмечено как известное` : `Отметить ${getDisplayWord(word)} как уже известное`}
+                      onClick={() => onMarkWordKnown(word.id)}
+                    >
+                      {progress.status === 'known' ? 'Уже известно' : 'Уже знаю'}
+                    </button>
+                  </div>
                 }
                 badges={
                   <>

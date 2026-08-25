@@ -33,12 +33,12 @@ export function DailyCompletionScreen({
     <section className="result-card">
       <AppCard as="section" tone="hero" className="completion-hero">
         <div className="result-hero">
-          <span className="eyebrow">День завершён</span>
-          <h1 className="result-title">На сегодня заданий нет</h1>
+          <span className="eyebrow">{completion ? 'День завершён' : 'Расписание свободно'}</span>
+          <h1 className="result-title">{completion ? 'Урок завершён' : 'Сейчас нет новых или просроченных слов'}</h1>
           <p className="result-message">
             {completion
-              ? 'Все 5 модулей на сегодня завершены. Ежедневный урок закрыт, но приложение не заканчивается: продолжайте практику, повторяйте сложные слова и открывайте словарь.'
-              : 'Сегодняшний набор уже завершен или для него сейчас нет новых задач.'}
+              ? `Завершено содержательных модулей: ${completion.completedModules}. Можно продолжить практику, повторить сложные слова или открыть словарь.`
+              : 'Ежедневный урок не отмечен завершённым: новых слов по квоте и запланированных повторений сейчас нет.'}
           </p>
         </div>
 

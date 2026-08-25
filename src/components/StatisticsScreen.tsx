@@ -153,7 +153,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
     () =>
       words.filter((word) => {
         const status = storage.progressByWordId[word.id]?.status;
-        return status === 'mastered';
+        return status === 'mastered' || status === 'known';
       }),
     [storage.progressByWordId, words],
   );

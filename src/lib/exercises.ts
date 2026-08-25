@@ -12,7 +12,7 @@ import type {
   Word,
   WordProgress,
 } from '../types';
-import { getWordProgress } from './storage';
+import { getWordProgress, isWordDueForReview } from './storage';
 import { isReviewDue, shuffleArray } from './utils';
 import { containsJapaneseKanji, getJapaneseHiraganaReading } from './wordPresentation';
 
@@ -192,32 +192,59 @@ function getAvailableExerciseTypes(word: Word, exerciseTypes: ExerciseType[]): E
 function createExercise(word: Word, optionPool: Word[], type: ExerciseType, index: number): Exercise {
   switch (type) {
     case 'audio_to_translation_choice':
+      {
+        const options = buildChoiceOptions(word, optionPool, 'translation');
+
+        // A one-word custom pack has no plausible distractor. Rendering its
+        // only answer as a choice turns the exercise into a free pass, so use
+        // audio recall instead.
+        if (options.length < 2) {
+          return createExercise(word, optionPool, 'audio_to_original_input', index);
+        }
+
       return {
         id: `${word.id}-${type}-${index}`,
         type,
         wordId: word.id,
         prompt: 'Прослушайте слово и выберите перевод',
         correctAnswer: word.translation,
-        options: buildChoiceOptions(word, optionPool, 'translation'),
+        options,
       };
+      }
     case 'translation_to_original_choice':
+      {
+        const options = buildChoiceOptions(word, optionPool, 'original');
+
+        if (options.length < 2) {
+          return createExercise(word, optionPool, 'translation_to_original_input', index);
+        }
+
       return {
         id: `${word.id}-${type}-${index}`,
         type,
         wordId: word.id,
         prompt: word.translation,
         correctAnswer: word.original,
-        options: buildChoiceOptions(word, optionPool, 'original'),
+        options,
       };
+      }
     case 'original_to_translation_choice':
+      {
+        const options = buildChoiceOptions(word, optionPool, 'translation');
+
+        if (options.length < 2) {
+          return createExercise(word, optionPool, 'translation_to_original_input', index);
+        }
+
       return {
         id: `${word.id}-${type}-${index}`,
         type,
         wordId: word.id,
         prompt: word.original,
         correctAnswer: word.translation,
-        options: buildChoiceOptions(word, optionPool, 'translation'),
+        options,
       };
+      }
     case 'audio_to_original_input':
       return {
         id: `${word.id}-${type}-${index}`,
@@ -360,7 +387,7 @@ function getProgressAgeInDays(progress: WordProgress): number {
 function isLongTermMemoryCandidate(progress: WordProgress): boolean {
   const ageInDays = getProgressAgeInDays(progress);
 
-  if (progress.status === 'ignored') {
+  if (!isWordDueForReview(progress)) {
     return false;
   }
 
@@ -533,35 +560,8 @@ function pickNewWords(words: Word[], storage: AppStorage, limit: number): Word[]
 }
 
 function pickLearningWords(words: Word[], storage: AppStorage, limit: number): Word[] {
-  const difficultWords = words.filter((word) => getWordProgress(storage, word.id).status === 'difficult');
-  const dueReview = words.filter((word) => {
-    const progress = getWordProgress(storage, word.id);
-    return progress.status === 'review' && isReviewDue(progress.next_review_at);
-  });
-  const activeLearning = words.filter((word) => {
-    const progress = getWordProgress(storage, word.id);
-    return progress.status === 'learning';
-  });
-
-  return uniqueWords([
-    ...difficultWords.sort(
-      (left, right) => getWordProgress(storage, right.id).wrong_count - getWordProgress(storage, left.id).wrong_count,
-    ),
-    ...dueReview.sort((left, right) => {
-      const leftProgress = getWordProgress(storage, left.id);
-      const rightProgress = getWordProgress(storage, right.id);
-      return new Date(leftProgress.next_review_at ?? 0).getTime() - new Date(rightProgress.next_review_at ?? 0).getTime();
-    }),
-    ...activeLearning.sort((left, right) => {
-      const leftProgress = getWordProgress(storage, left.id);
-      const rightProgress = getWordProgress(storage, right.id);
-      if (leftProgress.shown_count !== rightProgress.shown_count) {
-        return leftProgress.shown_count - rightProgress.shown_count;
-      }
-
-      return rightProgress.wrong_count - leftProgress.wrong_count;
-    }),
-  ])
+  return words
+    .filter((word) => isWordDueForReview(getWordProgress(storage, word.id)))
     .sort((left, right) => getStudyUrgency(getWordProgress(storage, right.id)) - getStudyUrgency(getWordProgress(storage, left.id)))
     .slice(0, limit);
 }
@@ -610,20 +610,8 @@ function uniqueWords(words: Word[]): Word[] {
 }
 
 function pickExtraFocusWords(words: Word[], storage: AppStorage, limit: number): Word[] {
-  const difficultWords = words.filter((word) => getWordProgress(storage, word.id).status === 'difficult');
-  const reviewWords = words.filter((word) => {
-    const progress = getWordProgress(storage, word.id);
-    return progress.status === 'review' && isReviewDue(progress.next_review_at);
-  });
-  const learningWords = words.filter((word) => getWordProgress(storage, word.id).status === 'learning');
-  const untouchedWords = words.filter((word) => getWordProgress(storage, word.id).status === 'new');
-
-  return uniqueWords([
-    ...difficultWords.sort((left, right) => getWordProgress(storage, right.id).wrong_count - getWordProgress(storage, left.id).wrong_count),
-    ...reviewWords,
-    ...learningWords,
-    ...untouchedWords.sort(sortByCurriculum),
-  ])
+  return words
+    .filter((word) => isWordDueForReview(getWordProgress(storage, word.id)))
     .sort((left, right) => getStudyUrgency(getWordProgress(storage, right.id)) - getStudyUrgency(getWordProgress(storage, left.id)))
     .slice(0, limit);
 }
@@ -754,10 +742,7 @@ function createDailySession(
   const newWords = pickNewWords(words, storage, limits.newWords);
   const learningWords = pickLearningWords(words, storage, limits.activeWords);
   const introductionWords = newWords.length > 0 ? newWords : learningWords.slice(0, Math.max(1, limits.newWords));
-  const scheduledReviewWords = learningWords.filter((word) => {
-    const progress = getWordProgress(storage, word.id);
-    return progress.status === 'review' || progress.status === 'difficult' || progress.status === 'learning';
-  });
+  const scheduledReviewWords = learningWords;
   // A daily lesson always has five meaningful modules. On a learner's first
   // day there are no previously scheduled reviews, so the same new words are
   // deliberately revisited in module 3 instead of dropping that module.
@@ -796,11 +781,22 @@ function createDailySession(
     return null;
   }
 
-  const module1 = createPreviewModule(introductionWords);
+  const module1 = createPreviewModule(
+    introductionWords,
+    newWords.length > 0
+      ? undefined
+      : {
+          title: 'Слова к повторению',
+          description: 'Короткая подготовка перед запланированным повторением.',
+          theme: 'review',
+        },
+  );
   const module2 = createExerciseModule(
     'module-training-new',
-    'Тренировка новых слов',
-    'Быстрое закрепление слов, которые вы только что увидели.',
+    newWords.length > 0 ? 'Тренировка новых слов' : 'Разминка перед повторением',
+    newWords.length > 0
+      ? 'Быстрое закрепление слов, которые вы только что увидели.'
+      : 'Проверка узнавания перед основным запланированным повторением.',
     introductionWords,
     ['original_to_translation_choice', 'translation_to_original_input'],
     uniqueWords(words),
@@ -838,7 +834,10 @@ function createDailySession(
     uniqueWords(words),
   );
 
-  const modules = renumberModules([module1, module2.module, module3.module, module4.module, module5.module]);
+  const modules = renumberModules(
+    [module1, module2.module, module3.module, module4.module, module5.module]
+      .filter((module) => module.wordIds.length > 0 && module.stepIds.length > 0),
+  );
   const exercises = [...module2.exercises, ...module3.exercises, ...module4.exercises, ...module5.exercises];
   const steps = buildSteps(modules, {
     [module2.module.id]: module2.exercises,
@@ -1019,12 +1018,15 @@ function renumberModules(modules: LessonModule[]): LessonModule[] {
   }));
 }
 
-function createPreviewModule(words: Word[]): LessonModule {
+function createPreviewModule(
+  words: Word[],
+  copy?: { title: string; description: string; theme: LessonModule['theme'] },
+): LessonModule {
   return {
     id: 'module-new-words',
-    title: 'Новые слова',
-    description: 'Знакомство с новой лексикой на сегодня.',
-    theme: 'new',
+    title: copy?.title ?? 'Новые слова',
+    description: copy?.description ?? 'Знакомство с новой лексикой на сегодня.',
+    theme: copy?.theme ?? 'new',
     position: 1,
     kind: 'preview',
     wordIds: words.map((word) => word.id),
@@ -1244,7 +1246,10 @@ export function createLessonSession({
   title,
 }: CreateLessonSessionInput): LessonSession | null {
   if (mode === 'mistakes' && wordIds?.length) {
-    return createMistakesSession(getPoolFromIds(words, wordIds), activePackIds, durationMinutes, wordTarget, useFullPool);
+    const dueMistakes = getPoolFromIds(words, wordIds).filter((word) =>
+      isWordDueForReview(getWordProgress(storage, word.id)),
+    );
+    return createMistakesSession(dueMistakes, activePackIds, durationMinutes, wordTarget, useFullPool);
   }
 
   if (mode === 'default') {

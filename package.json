@@ -12,13 +12,16 @@
     "images:japanese": "node scripts/fetch-real-word-images.mjs --language=japanese --provider=openverse --download --unique --reuse-existing --concurrency=2",
     "images:japanese:complete": "node scripts/fetch-real-word-images.mjs --language=japanese --reuse-only --complete-associations",
     "images:audit:japanese": "node scripts/audit-japanese-word-images.mjs",
+    "images:audit": "node scripts/audit-generated-word-images.mjs --check",
+    "images:cleanup": "node scripts/audit-generated-word-images.mjs --delete --check",
     "japanese:examples": "node scripts/build_japanese_examples.mjs",
     "preview": "vite preview",
     "preview:host": "vite preview --host 127.0.0.1 --port 4173",
     "tauri": "tauri",
     "tauri:dev": "npm run tauri -- dev",
     "tauri:build": "npm run tauri -- build",
-    "ui:test:safari": "node scripts/ui-smoke-safari.mjs"
+    "ui:test:safari": "node scripts/ui-smoke-safari.mjs",
+    "test": "vitest run"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -38,6 +41,7 @@
     "selenium-webdriver": "^4.41.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.63.0",
-    "vite": "^7.3.6"
+    "vite": "^7.3.6",
+    "vitest": "^4.1.11"
   }
 }

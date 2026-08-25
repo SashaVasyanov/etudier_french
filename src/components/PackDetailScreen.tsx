@@ -68,6 +68,11 @@ export function PackDetailScreen({
     });
   }, [deferredQuery, filter, pack.words, storage]);
 
+  function resetFilters() {
+    setQuery('');
+    setFilter('all');
+  }
+
   return (
     <section className="dashboard-shell">
       <AppCard as="header" tone="hero" className="pack-detail-hero">
@@ -124,8 +129,10 @@ export function PackDetailScreen({
 
       <AppCard as="section" className="filter-card">
         <div className="dictionary-toolbar dictionary-toolbar-wide">
-          <input className="text-input" value={query} placeholder="Поиск внутри пака" onChange={(event) => setQuery(event.target.value)} />
-          <select className="level-select" value={filter} onChange={(event) => setFilter(event.target.value as PackStatusFilter)}>
+          <label className="sr-only" htmlFor="pack-word-search">Поиск внутри пака</label>
+          <input id="pack-word-search" className="text-input" value={query} placeholder="Например, bonjour" onChange={(event) => setQuery(event.target.value)} />
+          <label className="sr-only" htmlFor="pack-status-filter">Статус слов</label>
+          <select id="pack-status-filter" className="level-select" value={filter} onChange={(event) => setFilter(event.target.value as PackStatusFilter)}>
             {FILTERS.map((option) => (
               <option key={option.id} value={option.id}>
                 {option.label}
@@ -139,8 +146,17 @@ export function PackDetailScreen({
         </div>
       </AppCard>
 
-      <section className="dictionary-grid">
-        {filteredWords.map((word) => {
+      <section className="dictionary-grid" aria-live="polite">
+        {filteredWords.length === 0 ? (
+          <div className="contextual-empty-state">
+            <h2>В паке нет подходящих слов</h2>
+            <p>По текущему поиску и фильтру найдено: 0.</p>
+            <div className="contextual-empty-actions">
+              {query ? <button type="button" className="ghost-button" onClick={() => setQuery('')}>Очистить поиск</button> : null}
+              <button type="button" className="secondary-button" onClick={resetFilters}>Сбросить фильтры</button>
+            </div>
+          </div>
+        ) : filteredWords.map((word) => {
           const progress = getWordProgress(storage, word.id);
 
           return (

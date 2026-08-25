@@ -9,6 +9,8 @@ interface StatusBadgeProps {
 
 function getLabel(status: StatusBadgeValue): string {
   switch (status) {
+    case 'known':
+      return 'уже известно';
     case 'mastered':
       return 'выучено';
     case 'difficult':
@@ -33,7 +35,7 @@ function getLabel(status: StatusBadgeValue): string {
 
 export function StatusBadge({ status, label }: StatusBadgeProps) {
   const tone =
-    status === 'mastered' || status === 'completed'
+    status === 'known' || status === 'mastered' || status === 'completed'
       ? 'mastered'
       : status === 'learning' || status === 'review' || status === 'added' || status === 'in_progress'
         ? 'review'

@@ -10,6 +10,8 @@ import type {
   RadicalProgress,
   RadicalStatus,
   RadicalStudyHistoryEntry,
+  StorageLoadResult,
+  StorageSaveResult,
   StudyHistoryEntry,
   UserPackState,
   UserProfile,
@@ -17,14 +19,24 @@ import type {
   WordProgress,
   WordStatus,
 } from '../types';
-import { addDays, clamp, deriveFrenchLatinTranscription, getTodayDateKey, normalizeTranscription, isReviewDue, startOfDay } from './utils';
+import { addDays, clamp, deriveFrenchLatinTranscription, getTodayDateKey, normalizeTranscription, startOfDay } from './utils';
 
 const STORAGE_KEY = 'anki-plus-storage';
+const STORAGE_BACKUP_KEY = `${STORAGE_KEY}-backup`;
+const STORAGE_QUARANTINE_KEY = `${STORAGE_KEY}-quarantine`;
+const STORAGE_VERSION = 2;
 const MAX_PROFILE_NAME_LENGTH = 80;
 const MAX_CUSTOM_WORDS = 2_000;
 const MAX_CUSTOM_PACKS = 50;
 const MAX_WORDS_PER_PACK = 2_000;
-const VALID_WORD_STATUSES = new Set<WordStatus>(['new', 'learning', 'review', 'mastered', 'difficult', 'ignored']);
+const MAX_SUCCESSFUL_REVIEW_DATES = 32;
+const VALID_WORD_STATUSES = new Set<WordStatus>(['new', 'learning', 'review', 'known', 'mastered', 'difficult', 'ignored']);
+
+interface StorageEnvelope {
+  version: number;
+  savedAt: string;
+  payload: AppStorage;
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -36,6 +48,17 @@ function cleanText(value: unknown, fallback = '', maxLength = 1_000): string {
 
 function finiteNumber(value: unknown, fallback: number, minimum = 0): number {
   return typeof value === 'number' && Number.isFinite(value) ? Math.max(minimum, value) : fallback;
+}
+
+function toLocalDateKey(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function isValidDateString(value: unknown): value is string {
+  return typeof value === 'string' && Number.isFinite(new Date(value).getTime());
 }
 
 function createDefaultProfile(): UserProfile {
@@ -121,6 +144,7 @@ function createInitialProgress(wordId: string): WordProgress {
     repetition_step: 0,
     status: 'new',
     learned_at: null,
+    successful_review_dates: [],
   };
 }
 
@@ -159,8 +183,32 @@ function normalizeRadicalProgress(progress: Partial<RadicalProgress>, radicalId:
 }
 
 function normalizeProgress(progress: Partial<WordProgress>, wordId: string): WordProgress {
-  const normalizedStatus = (progress.status as string) === 'known' ? 'mastered' : progress.status;
   const base = createInitialProgress(wordId);
+  const rawStatus = progress.status as string | undefined;
+  // v1 merged `known` into `mastered`. The previous manual action has a
+  // deterministic low-attempt/high-step/null-due shape. Other mastered records
+  // remain algorithmic mastered because guessing would destroy review history.
+  const isLegacyManualKnown =
+    rawStatus === 'mastered' &&
+    progress.next_review_at == null &&
+    finiteNumber(progress.shown_count, 0) <= 1 &&
+    finiteNumber(progress.correct_count, 0) <= 1 &&
+    finiteNumber(progress.wrong_count, 0) === 0 &&
+    finiteNumber(progress.repetition_step, 0) >= 6 &&
+    finiteNumber(progress.interval_days, 0) >= 14 &&
+    typeof progress.learned_at === 'string';
+  const normalizedStatus: WordStatus | undefined = rawStatus === 'known' || isLegacyManualKnown
+    ? 'known'
+    : progress.status;
+  const successfulReviewDates = Array.isArray(progress.successful_review_dates)
+    ? Array.from(
+        new Set(
+          progress.successful_review_dates.filter(
+            (date): date is string => typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date),
+          ),
+        ),
+      ).sort().slice(-MAX_SUCCESSFUL_REVIEW_DATES)
+    : [];
 
   return {
     ...base,
@@ -171,10 +219,11 @@ function normalizeProgress(progress: Partial<WordProgress>, wordId: string): Wor
     ease_factor: clamp(finiteNumber(progress.ease_factor, base.ease_factor), 1.3, 3.4),
     interval_days: Math.floor(finiteNumber(progress.interval_days, base.interval_days)),
     repetition_step: Math.floor(finiteNumber(progress.repetition_step, base.repetition_step)),
-    last_seen_at: typeof progress.last_seen_at === 'string' ? progress.last_seen_at : null,
-    next_review_at: typeof progress.next_review_at === 'string' ? progress.next_review_at : null,
-    learned_at: typeof progress.learned_at === 'string' ? progress.learned_at : null,
+    last_seen_at: isValidDateString(progress.last_seen_at) ? progress.last_seen_at : null,
+    next_review_at: isValidDateString(progress.next_review_at) ? progress.next_review_at : null,
+    learned_at: isValidDateString(progress.learned_at) ? progress.learned_at : null,
     status: normalizedStatus && VALID_WORD_STATUSES.has(normalizedStatus) ? normalizedStatus : base.status,
+    successful_review_dates: successfulReviewDates,
   };
 }
 
@@ -198,7 +247,6 @@ function normalizeCustomPack(value: unknown): import('../types').WordPack | null
     coverImageUrl: pack.coverImageUrl,
     coverImageAlt: pack.coverImageAlt,
     words: pack.words
-      .slice(0, MAX_WORDS_PER_PACK)
       .filter((word): word is Word => Boolean(word?.id && word?.original && word?.translation))
       .map((word) => normalizeWord({ ...word, source: 'pack', packIds: [pack.id!] })),
   };
@@ -274,22 +322,9 @@ function normalizePackState(packState: Partial<UserPackState> | undefined, packI
   };
 }
 
-export function loadStorage(): AppStorage {
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-
-    if (!raw) {
-      return createDefaultStorage();
-    }
-
-    const parsedValue: unknown = JSON.parse(raw);
-
-    if (!isRecord(parsedValue)) {
-      return createDefaultStorage();
-    }
-
-    const parsed = parsedValue as Partial<AppStorage>;
-    const defaults = createDefaultStorage();
+function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
+  const parsed = parsedValue as Partial<AppStorage>;
+  const defaults = createDefaultStorage();
     const progressEntries: Array<[string, unknown]> = isRecord(parsed.progressByWordId)
       ? Object.entries(parsed.progressByWordId)
       : [];
@@ -362,13 +397,11 @@ export function loadStorage(): AppStorage {
         ]),
       ),
       customWords: customWords
-        .slice(-MAX_CUSTOM_WORDS)
         .filter((word): word is Word =>
           isRecord(word) && typeof word.id === 'string' && typeof word.original === 'string' && typeof word.translation === 'string',
         )
         .map((word) => normalizeWord(word)),
       customPacks: customPacks
-        .slice(-MAX_CUSTOM_PACKS)
         .filter(isRecord)
         .map((pack) => normalizeCustomPack(pack))
         .filter((pack): pack is import('../types').WordPack => pack !== null),
@@ -382,93 +415,138 @@ export function loadStorage(): AppStorage {
         .filter((entry): entry is RadicalStudyHistoryEntry => entry !== null)
         .slice(-120),
     };
-  } catch {
-    return createDefaultStorage();
-  }
 }
 
-export function saveStorage(storage: AppStorage): void {
+function parseStoredStorage(raw: string): AppStorage {
+  const parsedValue: unknown = JSON.parse(raw);
+
+  if (!isRecord(parsedValue)) {
+    throw new Error('Хранилище не является объектом.');
+  }
+
+  if ('version' in parsedValue) {
+    if (parsedValue.version !== STORAGE_VERSION) {
+      throw new RangeError(`Неподдерживаемая версия хранилища: ${String(parsedValue.version)}.`);
+    }
+
+    if (!isRecord(parsedValue.payload)) {
+      throw new Error('В хранилище отсутствуют данные приложения.');
+    }
+
+    return normalizeStorage(parsedValue.payload);
+  }
+
+  // Legacy v1 stored AppStorage directly, without an envelope.
+  return normalizeStorage(parsedValue);
+}
+
+function quarantineCorruptStorage(raw: string): boolean {
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(storage));
+    window.localStorage.setItem(
+      STORAGE_QUARANTINE_KEY,
+      JSON.stringify({ capturedAt: new Date().toISOString(), raw }),
+    );
+    return true;
   } catch {
-    // Storage can be unavailable or full. The in-memory session remains usable.
+    return false;
   }
 }
 
-function resolveStatus(progress: WordProgress): WordStatus {
-  if (progress.status === 'ignored') {
-    return 'ignored';
+export function loadStorage(): StorageLoadResult {
+  let raw: string | null;
+
+  try {
+    raw = window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return {
+      storage: createDefaultStorage(),
+      error: {
+        kind: 'read',
+        message: 'Локальное хранилище недоступно. Изменения пока не будут сохранены.',
+        blocksSave: true,
+      },
+    };
   }
 
-  const accuracy = progress.shown_count > 0 ? progress.correct_count / progress.shown_count : 0;
-  const errorRate = progress.shown_count > 0 ? progress.wrong_count / progress.shown_count : 0;
-
-  if (
-    progress.shown_count >= 8 &&
-    progress.correct_count >= 6 &&
-    progress.repetition_step >= 6 &&
-    progress.interval_days >= 10 &&
-    accuracy >= 0.82
-  ) {
-    return 'mastered';
+  if (!raw) {
+    return { storage: createDefaultStorage(), error: null };
   }
 
-  if (
-    progress.shown_count >= 3 &&
-    progress.wrong_count >= 3 &&
-    (accuracy < 0.68 || errorRate >= 0.35) &&
-    progress.repetition_step < 5
-  ) {
-    return 'difficult';
-  }
+  try {
+    return { storage: parseStoredStorage(raw), error: null };
+  } catch (primaryError) {
+    const unsupportedVersion = primaryError instanceof RangeError;
+    const quarantined = unsupportedVersion ? false : quarantineCorruptStorage(raw);
+    let backupRaw: string | null = null;
 
-  if (
-    progress.repetition_step >= 4 ||
-    (progress.shown_count >= 4 && accuracy >= 0.8) ||
-    (progress.status === 'mastered' && !isReviewDue(progress.next_review_at))
-  ) {
-    return 'review';
-  }
+    try {
+      backupRaw = window.localStorage.getItem(STORAGE_BACKUP_KEY);
+      if (backupRaw) {
+        const recovered = parseStoredStorage(backupRaw);
+        return {
+          storage: recovered,
+          error: {
+            kind: unsupportedVersion ? 'unsupported_version' : 'corrupt',
+            message: unsupportedVersion
+              ? 'Версия локальных данных новее приложения. Загружена резервная копия.'
+              : 'Повреждённые локальные данные изолированы. Загружена резервная копия.',
+            blocksSave: unsupportedVersion,
+          },
+        };
+      }
+    } catch {
+      // An invalid backup must never replace the primary failure details.
+    }
 
-  if (progress.shown_count > 0) {
-    return 'learning';
+    return {
+      storage: createDefaultStorage(),
+      error: {
+        kind: unsupportedVersion ? 'unsupported_version' : 'corrupt',
+        message: unsupportedVersion
+          ? 'Версия локальных данных новее приложения. Автосохранение приостановлено.'
+          : quarantined
+            ? 'Локальные данные повреждены и сохранены в карантине. Автосохранение приостановлено.'
+            : 'Локальные данные повреждены, а создать карантин не удалось. Автосохранение приостановлено.',
+        blocksSave: true,
+      },
+    };
   }
-
-  return 'new';
 }
 
-function getAnswerAccuracy(correctCount: number, shownCount: number): number {
-  return shownCount > 0 ? correctCount / shownCount : 0;
-}
-
-function getErrorPressure(correctCount: number, wrongCount: number): number {
-  const attempts = correctCount + wrongCount;
-
-  if (attempts === 0) {
-    return 0;
-  }
-
-  const errorRate = wrongCount / attempts;
-  const wrongToCorrectRatio = wrongCount / Math.max(1, correctCount);
-
-  return clamp(errorRate * 0.75 + wrongToCorrectRatio * 0.18, 0, 1);
-}
-
-function getProjectedAnswerStats(
-  progress: WordProgress,
-  outcome: ExerciseOutcome,
-): { correctCount: number; wrongCount: number; shownCount: number; accuracy: number; errorPressure: number } {
-  const correctCount = progress.correct_count + (outcome.isCorrect ? 1 : 0);
-  const wrongCount = progress.wrong_count + (outcome.isCorrect ? 0 : 1);
-  const shownCount = progress.shown_count + 1;
-
-  return {
-    correctCount,
-    wrongCount,
-    shownCount,
-    accuracy: getAnswerAccuracy(correctCount, shownCount),
-    errorPressure: getErrorPressure(correctCount, wrongCount),
+export function saveStorage(storage: AppStorage): StorageSaveResult {
+  const envelope: StorageEnvelope = {
+    version: STORAGE_VERSION,
+    savedAt: new Date().toISOString(),
+    payload: storage,
   };
+  let currentRaw: string | null;
+
+  try {
+    currentRaw = window.localStorage.getItem(STORAGE_KEY);
+    if (currentRaw) {
+      try {
+        parseStoredStorage(currentRaw);
+        window.localStorage.setItem(STORAGE_BACKUP_KEY, currentRaw);
+      } catch {
+        const quarantineRaw = window.localStorage.getItem(STORAGE_QUARANTINE_KEY);
+        const quarantineValue: unknown = quarantineRaw ? JSON.parse(quarantineRaw) : null;
+        if (!isRecord(quarantineValue) || quarantineValue.raw !== currentRaw) {
+          throw new Error('Primary storage was not safely quarantined.');
+        }
+      }
+    }
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(envelope));
+    return { ok: true };
+  } catch {
+    return {
+      ok: false,
+      error: {
+        kind: 'write',
+        message: 'Не удалось сохранить прогресс: хранилище недоступно или переполнено.',
+        blocksSave: false,
+      },
+    };
+  }
 }
 
 function getBaseExerciseEaseDelta(outcome: ExerciseOutcome): number {
@@ -513,219 +591,186 @@ function getBaseExerciseEaseDelta(outcome: ExerciseOutcome): number {
   }
 }
 
-function getExerciseEaseDelta(progress: WordProgress, outcome: ExerciseOutcome): number {
-  const baseDelta = getBaseExerciseEaseDelta(outcome);
-  const stats = getProjectedAnswerStats(progress, outcome);
+const SCHEDULED_WORD_STATUSES = new Set<WordStatus>(['learning', 'difficult', 'review', 'mastered']);
+const MASTERY_REVIEW_DAYS = 3;
 
-  if (!outcome.isCorrect) {
-    return baseDelta - stats.errorPressure * 0.22;
+export function isWordDueForReview(progress: WordProgress, now = new Date()): boolean {
+  if (!SCHEDULED_WORD_STATUSES.has(progress.status)) {
+    return false;
   }
 
-  const accuracyBonus = stats.shownCount >= 4 && stats.accuracy >= 0.86 ? 0.06 : 0;
-  const errorPenalty = stats.errorPressure * 0.14;
+  if (!progress.next_review_at) {
+    return true;
+  }
 
-  return baseDelta + accuracyBonus - errorPenalty;
+  const dueAt = new Date(progress.next_review_at).getTime();
+  return !Number.isFinite(dueAt) || dueAt <= now.getTime();
 }
 
-function getBaseExerciseIntervalMultiplier(type: ExerciseOutcome['type']): number {
-  switch (type) {
-    case 'translation_to_original_input':
-      return 1.18;
-    case 'audio_to_original_input':
-      return 1.18;
-    case 'kanji_to_hiragana_input':
-      return 1.15;
-    case 'sentence_cloze_input':
-      return 1.12;
-    case 'translation_to_original_choice':
-      return 1.08;
-    case 'memory_check':
-      return 1.05;
-    case 'audio_to_translation_choice':
-    case 'original_to_translation_choice':
-    default:
-      return 0.88;
-  }
+function getSessionEaseDelta(outcomes: ExerciseOutcome[]): number {
+  return outcomes.length > 0
+    ? outcomes.reduce((sum, outcome) => sum + getBaseExerciseEaseDelta(outcome), 0) / outcomes.length
+    : 0;
 }
 
-function getExerciseIntervalMultiplier(progress: WordProgress, outcome: ExerciseOutcome): number {
-  const stats = getProjectedAnswerStats(progress, outcome);
-  const accuracyAdjustment = clamp((stats.accuracy - 0.72) * 0.85, -0.28, 0.24);
-  const errorPenalty = stats.errorPressure * 0.45;
+function nextSuccessfulInterval(progress: WordProgress, successfulReviewDays: number, now: Date): number {
+  if (successfulReviewDays <= 1) return 2;
+  if (successfulReviewDays === 2) return 4;
+  if (successfulReviewDays === 3) return 10;
 
-  return clamp(getBaseExerciseIntervalMultiplier(outcome.type) + accuracyAdjustment - errorPenalty, 0.45, 1.35);
+  const overdueDays = progress.next_review_at
+    ? Math.max(0, Math.floor((now.getTime() - new Date(progress.next_review_at).getTime()) / (24 * 60 * 60 * 1000)))
+    : 0;
+  return clamp(Math.round((Math.max(10, progress.interval_days) + Math.min(overdueDays, 14)) * progress.ease_factor), 10, 60);
 }
 
-function getLateReviewBoost(progress: WordProgress): number {
-  if (!progress.next_review_at || !isReviewDue(progress.next_review_at)) {
-    return 0;
+function buildAggregatedProgress(
+  existing: WordProgress,
+  outcomes: ExerciseOutcome[],
+  now: Date,
+): { progress: WordProgress; completedDueReview: boolean; becameMastered: boolean } {
+  if (outcomes.length === 0 || existing.status === 'ignored' || existing.status === 'known') {
+    return { progress: existing, completedDueReview: false, becameMastered: false };
   }
 
-  const overdueDays = Math.floor((Date.now() - new Date(progress.next_review_at).getTime()) / (24 * 60 * 60 * 1000));
+  const correctAnswers = outcomes.filter((outcome) => outcome.isCorrect).length;
+  const wrongAnswers = outcomes.length - correctAnswers;
+  const isSuccessfulSession = correctAnswers > 0 && wrongAnswers === 0;
+  const wasDue = isWordDueForReview(existing, now);
+  const base: WordProgress = {
+    ...existing,
+    shown_count: existing.shown_count + outcomes.length,
+    correct_count: existing.correct_count + correctAnswers,
+    wrong_count: existing.wrong_count + wrongAnswers,
+    last_seen_at: now.toISOString(),
+  };
 
-  return clamp(Math.floor(overdueDays * 0.35), 0, 14);
-}
-
-function nextIntervalDays(progress: WordProgress, outcome: ExerciseOutcome): number {
-  if (!outcome.isCorrect) {
-    return 1;
-  }
-
-  const multiplier = getExerciseIntervalMultiplier(progress, outcome);
-  const lateBoost = getLateReviewBoost(progress);
-
-  if (progress.status === 'new') {
-    return clamp(Math.round(multiplier), 1, 2);
-  }
-
-  if (progress.status === 'learning') {
-    const base = progress.repetition_step >= 3 ? 4 : progress.repetition_step >= 1 ? 2 : 1;
-    return clamp(Math.round(base * multiplier), 1, 7);
-  }
-
-  if (progress.status === 'difficult') {
-    const base = progress.repetition_step >= 3 ? 3 : 1;
-    return clamp(Math.round(base * multiplier), 1, 5);
-  }
-
-  const base = progress.interval_days > 0 ? progress.interval_days : 3;
-  return clamp(Math.round((base + lateBoost) * progress.ease_factor * multiplier), 2, 60);
-}
-
-function buildUpdatedProgress(existing: WordProgress, outcome: ExerciseOutcome): WordProgress {
-  const now = new Date();
-
-  if (existing.status === 'ignored') {
+  if (existing.status === 'new') {
     return {
-      ...existing,
-      last_seen_at: now.toISOString(),
-      next_review_at: null,
+      progress: {
+        ...base,
+        status: base.wrong_count >= 3 ? 'difficult' : 'learning',
+        ease_factor: clamp(existing.ease_factor + getSessionEaseDelta(outcomes), 1.3, 3.4),
+        repetition_step: 1,
+        interval_days: 1,
+        next_review_at: addDays(startOfDay(now), 1).toISOString(),
+      },
+      completedDueReview: false,
+      becameMastered: false,
     };
   }
 
-  const easeFactor = clamp(existing.ease_factor + getExerciseEaseDelta(existing, outcome), 1.3, 3.4);
-  const intervalDays = nextIntervalDays(existing, outcome);
-  const repetitionStep = outcome.isCorrect
-    ? existing.repetition_step + 1
-    : Math.max(1, existing.repetition_step - 1);
-  const draft: WordProgress = {
-    ...existing,
-    shown_count: existing.shown_count + 1,
-    correct_count: existing.correct_count + (outcome.isCorrect ? 1 : 0),
-    wrong_count: existing.wrong_count + (outcome.isCorrect ? 0 : 1),
-    ease_factor: easeFactor,
-    repetition_step: repetitionStep,
-    interval_days: intervalDays,
-    last_seen_at: now.toISOString(),
-    next_review_at: addDays(startOfDay(now), outcome.isCorrect ? intervalDays : 1).toISOString(),
-    learned_at: existing.learned_at,
-    status: existing.status,
+  // Extra practice before the due date records answers, but never advances or
+  // resets the scheduler.
+  if (!wasDue) {
+    return { progress: base, completedDueReview: false, becameMastered: false };
+  }
+
+  if (!isSuccessfulSession) {
+    return {
+      progress: {
+        ...base,
+        status: base.wrong_count >= 3 || existing.status === 'mastered' ? 'difficult' : 'learning',
+        ease_factor: clamp(existing.ease_factor + getSessionEaseDelta(outcomes), 1.3, 3.4),
+        repetition_step: Math.max(1, existing.repetition_step - 1),
+        interval_days: 1,
+        next_review_at: addDays(startOfDay(now), 1).toISOString(),
+      },
+      completedDueReview: true,
+      becameMastered: false,
+    };
+  }
+
+  const reviewDate = toLocalDateKey(now);
+  const successfulReviewDates = existing.successful_review_dates.includes(reviewDate)
+    ? existing.successful_review_dates
+    : [...existing.successful_review_dates, reviewDate].sort().slice(-MAX_SUCCESSFUL_REVIEW_DATES);
+  const intervalDays = nextSuccessfulInterval(existing, successfulReviewDates.length, now);
+  const status: WordStatus =
+    existing.status === 'mastered' || successfulReviewDates.length >= MASTERY_REVIEW_DAYS
+      ? 'mastered'
+      : 'review';
+  const becameMastered = existing.status !== 'mastered' && status === 'mastered';
+
+  return {
+    progress: {
+      ...base,
+      status,
+      ease_factor: clamp(existing.ease_factor + getSessionEaseDelta(outcomes), 1.3, 3.4),
+      repetition_step: existing.repetition_step + 1,
+      interval_days: intervalDays,
+      next_review_at: addDays(startOfDay(now), intervalDays).toISOString(),
+      learned_at: becameMastered ? now.toISOString() : existing.learned_at,
+      successful_review_dates: successfulReviewDates,
+    },
+    completedDueReview: true,
+    becameMastered,
   };
-
-  if (!outcome.isCorrect) {
-    draft.status = draft.wrong_count >= 3 ? 'difficult' : 'learning';
-  } else {
-    draft.status = resolveStatus(draft);
-
-    if (draft.status === 'mastered' && !draft.learned_at) {
-      draft.learned_at = now.toISOString();
-    }
-  }
-
-  return draft;
 }
 
-function updateDailyStats(storage: AppStorage, outcomes: ExerciseOutcome[]): void {
-  const today = getTodayDateKey();
-  const language = storage.learningLanguage;
-  const correctAnswers = outcomes.filter((item) => item.isCorrect).length;
-  const masteredWordIds = new Set<string>();
-  const reviewWordIds = new Set<string>();
+function getUpdatedStreak(storage: AppStorage, now: Date): Pick<AppStorage, 'lastLessonDate' | 'streakDays'> {
+  const today = toLocalDateKey(now);
+  if (storage.lastLessonDate === today) return { lastLessonDate: today, streakDays: storage.streakDays };
+  if (!storage.lastLessonDate) return { lastLessonDate: today, streakDays: 1 };
 
-  outcomes.forEach((outcome) => {
-    const progress = storage.progressByWordId[outcome.wordId];
-
-    if (!progress) {
-      return;
-    }
-
-    if (progress.status === 'mastered') {
-      masteredWordIds.add(outcome.wordId);
-    }
-
-    if (progress.status === 'review' || progress.status === 'mastered') {
-      reviewWordIds.add(outcome.wordId);
-    }
-  });
-
-  const existingDailyStat = storage.dailyStats.find((item) => item.date === today && item.language === language);
-
-  if (existingDailyStat) {
-    existingDailyStat.completedLessons += 1;
-    existingDailyStat.correctAnswers += correctAnswers;
-    existingDailyStat.totalAnswers += outcomes.length;
-    existingDailyStat.wordsLearned += masteredWordIds.size;
-    existingDailyStat.reviewsCompleted += reviewWordIds.size;
-  } else {
-    storage.dailyStats.push({
-      date: today,
-      language,
-      completedLessons: 1,
-      correctAnswers,
-      totalAnswers: outcomes.length,
-      wordsLearned: masteredWordIds.size,
-      reviewsCompleted: reviewWordIds.size,
-    });
-  }
-
-  storage.dailyStats = storage.dailyStats
-    .sort((left, right) => left.date.localeCompare(right.date))
-    .slice(-180);
-}
-
-function updateStreak(storage: AppStorage): void {
-  const today = getTodayDateKey();
-  const lastLessonDate = storage.lastLessonDate;
-  storage.lastLessonDate = today;
-
-  if (lastLessonDate === today) {
-    return;
-  }
-
-  if (!lastLessonDate) {
-    storage.streakDays = 1;
-    return;
-  }
-
-  const previousDate = new Date(`${lastLessonDate}T00:00:00`);
+  const previousDate = new Date(`${storage.lastLessonDate}T00:00:00`);
   const currentDate = new Date(`${today}T00:00:00`);
-  const differenceInDays = Math.round(
-    (currentDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24),
-  );
-
-  storage.streakDays = differenceInDays === 1 ? storage.streakDays + 1 : 1;
+  const differenceInDays = Math.round((currentDate.getTime() - previousDate.getTime()) / (24 * 60 * 60 * 1000));
+  return { lastLessonDate: today, streakDays: differenceInDays === 1 ? storage.streakDays + 1 : 1 };
 }
 
-export function applyOutcomes(currentStorage: AppStorage, outcomes: ExerciseOutcome[]): AppStorage {
-  const storage: AppStorage = {
-    ...currentStorage,
-    progressByWordId: { ...currentStorage.progressByWordId },
-    dailyStats: [...currentStorage.dailyStats],
-    completedDailyLessons: [...currentStorage.completedDailyLessons],
-    studyHistory: [...currentStorage.studyHistory],
-    packStates: { ...currentStorage.packStates },
-    profile: { ...currentStorage.profile },
-  };
+export function getCurrentStreakDays(storage: AppStorage, now = new Date()): number {
+  if (!storage.lastLessonDate) return 0;
+  const today = toLocalDateKey(now);
+  if (storage.lastLessonDate === today) return storage.streakDays;
+  const yesterday = toLocalDateKey(addDays(startOfDay(now), -1));
+  return storage.lastLessonDate === yesterday ? storage.streakDays : 0;
+}
 
-  outcomes.forEach((outcome) => {
-    const existing = storage.progressByWordId[outcome.wordId] ?? createInitialProgress(outcome.wordId);
-    storage.progressByWordId[outcome.wordId] = buildUpdatedProgress(existing, outcome);
+export function applyOutcomes(currentStorage: AppStorage, outcomes: ExerciseOutcome[], now = new Date()): AppStorage {
+  if (outcomes.length === 0) {
+    return currentStorage;
+  }
+
+  const grouped = new Map<string, ExerciseOutcome[]>();
+  outcomes.forEach((outcome) => grouped.set(outcome.wordId, [...(grouped.get(outcome.wordId) ?? []), outcome]));
+
+  const progressByWordId = { ...currentStorage.progressByWordId };
+  let wordsLearned = 0;
+  let reviewsCompleted = 0;
+  grouped.forEach((wordOutcomes, wordId) => {
+    const existing = currentStorage.progressByWordId[wordId] ?? createInitialProgress(wordId);
+    const update = buildAggregatedProgress(existing, wordOutcomes, now);
+    progressByWordId[wordId] = update.progress;
+    wordsLearned += update.becameMastered ? 1 : 0;
+    reviewsCompleted += update.completedDueReview ? 1 : 0;
   });
 
-  updateDailyStats(storage, outcomes);
-  updateStreak(storage);
+  const today = toLocalDateKey(now);
+  const language = currentStorage.learningLanguage;
+  const existingStat = currentStorage.dailyStats.find((item) => item.date === today && item.language === language);
+  const correctAnswers = outcomes.filter((outcome) => outcome.isCorrect).length;
+  const nextStat = existingStat
+    ? {
+        ...existingStat,
+        completedLessons: existingStat.completedLessons + 1,
+        correctAnswers: existingStat.correctAnswers + correctAnswers,
+        totalAnswers: existingStat.totalAnswers + outcomes.length,
+        wordsLearned: existingStat.wordsLearned + wordsLearned,
+        reviewsCompleted: existingStat.reviewsCompleted + reviewsCompleted,
+      }
+    : { date: today, language, completedLessons: 1, correctAnswers, totalAnswers: outcomes.length, wordsLearned, reviewsCompleted };
 
-  return storage;
+  return {
+    ...currentStorage,
+    ...getUpdatedStreak(currentStorage, now),
+    progressByWordId,
+    dailyStats: [
+      ...currentStorage.dailyStats.filter((item) => !(item.date === today && item.language === language)),
+      nextStat,
+    ].sort((left, right) => left.date.localeCompare(right.date)).slice(-180),
+    profile: { ...currentStorage.profile, lastStudiedAt: now.toISOString(), updatedAt: now.toISOString() },
+  };
 }
 
 export function markWordAsKnown(currentStorage: AppStorage, wordId: string): AppStorage {
@@ -738,14 +783,15 @@ export function markWordAsKnown(currentStorage: AppStorage, wordId: string): App
       ...currentStorage.progressByWordId,
       [wordId]: {
         ...existing,
-        status: 'mastered',
+        status: 'known',
         shown_count: Math.max(existing.shown_count, 1),
         correct_count: Math.max(existing.correct_count, 1),
-        repetition_step: Math.max(existing.repetition_step, 6),
-        interval_days: Math.max(existing.interval_days, 14),
+        repetition_step: existing.repetition_step,
+        interval_days: 0,
         last_seen_at: now,
         next_review_at: null,
         learned_at: now,
+        successful_review_dates: existing.successful_review_dates,
       },
     },
   };
@@ -908,6 +954,13 @@ export function addWordPack(currentStorage: AppStorage, packId: string): AppStor
 }
 
 export function addCustomPack(currentStorage: AppStorage, pack: import('../types').WordPack): AppStorage {
+  const replacesExisting = currentStorage.customPacks.some((item) => item.id === pack.id);
+  if (!replacesExisting && currentStorage.customPacks.length >= MAX_CUSTOM_PACKS) {
+    throw new RangeError(`Нельзя добавить больше ${MAX_CUSTOM_PACKS} пользовательских паков.`);
+  }
+  if (pack.words.length > MAX_WORDS_PER_PACK) {
+    throw new RangeError(`Пак содержит больше ${MAX_WORDS_PER_PACK} слов.`);
+  }
   const now = new Date().toISOString();
   const normalizedPack = normalizeCustomPack(pack);
 
@@ -1013,6 +1066,10 @@ export function recordRadicalStudySession(
 }
 
 export function addCustomWord(currentStorage: AppStorage, word: Word): AppStorage {
+  const replacesExisting = currentStorage.customWords.some((item) => item.id === word.id);
+  if (!replacesExisting && currentStorage.customWords.length >= MAX_CUSTOM_WORDS) {
+    throw new RangeError(`Нельзя добавить больше ${MAX_CUSTOM_WORDS} пользовательских слов.`);
+  }
   const normalizedWord = normalizeWord(word);
   const customWords = currentStorage.customWords
     .filter((item) => item.id !== normalizedWord.id)
