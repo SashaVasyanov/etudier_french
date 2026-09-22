@@ -1,5 +1,9 @@
 import { useMemo } from 'react';
 import { getTodayDateKey, percentage } from '../lib/utils';
+import { getCurrentStreakDays } from '../lib/storage';
+import { getPackCompletionRatio } from '../lib/packs';
+import { getLessonProgress } from '../lib/lessonSession';
+import type { LessonDraft } from '../lib/lessonDraft';
 import type {
   AppStorage,
   DailyLessonRecord,
@@ -14,6 +18,7 @@ import { AppIcon } from './AppIcon';
 
 interface HomeDashboardProps {
   totalWords: Word[];
+  dailyDraft: LessonDraft | null;
   storage: AppStorage;
   progressList: WordProgress[];
   packs: WordPack[];
@@ -44,17 +49,9 @@ const DAILY_MODULES = [
 
 const DURATION_OPTIONS: LessonDurationMinutes[] = [10, 20, 30];
 
-function getPackCompletion(pack: WordPack, storage: AppStorage): number {
-  if (pack.words.length === 0) {
-    return 0;
-  }
-
-  const masteredWords = pack.words.filter((word) => storage.progressByWordId[word.id]?.status === 'mastered').length;
-  return Math.round((masteredWords / pack.words.length) * 100);
-}
-
 export function HomeDashboard({
   totalWords,
+  dailyDraft,
   storage,
   progressList,
   packs,
@@ -80,7 +77,7 @@ export function HomeDashboard({
   const todayAccuracy = today ? percentage(today.correctAnswers, today.totalAnswers) : 0;
   const learnedWordIds = new Set(
     progressList
-      .filter((progress) => progress.status === 'mastered')
+      .filter((progress) => progress.status === 'mastered' || progress.status === 'known')
       .map((progress) => progress.word_id),
   );
   const wordsInProcess = progressList.filter((progress) => progress.status === 'learning' || progress.status === 'review').length;
@@ -89,18 +86,20 @@ export function HomeDashboard({
   const displayName = storage.profile.displayName.trim() || 'Ученик';
   const activePack = useMemo(
     () =>
-      [...packs]
-        .sort((left, right) => getPackCompletion(right, storage) - getPackCompletion(left, storage))
-        .find((pack) => pack.id === selectedLessonPack?.id) ?? packs[0] ?? null,
-    [packs, selectedLessonPack?.id, storage],
+      selectedLessonPack ?? [...packs]
+        .filter((pack) => storage.packStates[pack.id]?.status && storage.packStates[pack.id].status !== 'not_added')
+        .sort((left, right) => getPackCompletionRatio(right, storage) - getPackCompletionRatio(left, storage))[0] ?? null,
+    [packs, selectedLessonPack, storage],
   );
   const overallProgress = percentage(learnedWordIds.size, Math.max(1, totalWords.length));
   const isDailyComplete = Boolean(dailyCompletion);
-  const completedModuleCount = dailyCompletion?.completedModules ?? 0;
+  const draftProgress = dailyDraft ? getLessonProgress(dailyDraft.session, dailyDraft.stepIndex) : null;
+  const completedModuleCount = dailyCompletion?.completedModules ?? draftProgress?.completedModules ?? 0;
+  const currentStreak = getCurrentStreakDays(storage);
   const durationMeta = lessonDurationEnabled
     ? `${lessonDurationMinutes} минут · до ${lessonWordTarget} слов`
     : 'В своём темпе · без лимита';
-  const packCompletion = activePack ? getPackCompletion(activePack, storage) : 0;
+  const packCompletion = activePack ? getPackCompletionRatio(activePack, storage) : 0;
   const difficultCount = progressList.filter((progress) => progress.status === 'difficult').length;
   const learningLanguageLabel = learningLanguage === 'japanese' ? 'Японский' : 'Французский';
   const learningLanguageChip = learningLanguage === 'japanese' ? 'JP · японский' : 'FR · французский';
@@ -117,7 +116,7 @@ export function HomeDashboard({
           <p>{isDailyComplete ? 'Дневная цель закрыта — можно закрепить результат в комфортном темпе.' : 'Сегодня достаточно одного короткого шага к уверенной речи.'}</p>
         </div>
         <div className="home-head-actions">
-          <span className="streak-chip" aria-label={`Серия: ${storage.streakDays} дней`}><AppIcon name="flame" size={18} /> {storage.streakDays || '—'} дн.</span>
+          <span className="streak-chip" aria-label={`Серия: ${currentStreak} дней`}><AppIcon name="flame" size={18} /> {currentStreak || '—'} дн.</span>
           <button type="button" className="home-avatar-button" aria-label="Открыть профиль" onClick={onOpenProfile}>
             {displayName.slice(0, 1).toUpperCase()}
           </button>
@@ -128,7 +127,7 @@ export function HomeDashboard({
         <div className="daily-journey-copy">
           <span className="daily-card-kicker">Твоя программа на сегодня</span>
           <h2>{isDailyComplete ? 'На сегодня заданий нет' : `${learningLanguageLabel} — по чуть-чуть, но каждый день`}</h2>
-          <p>{isDailyComplete ? 'Все 5 модулей завершены. Выбирай лёгкую дополнительную практику или возвращайся к словам.' : `${durationMeta} · тема: ${lessonPackLabel}`}</p>
+          <p>{isDailyComplete ? 'Все 5 модулей завершены. Выбирай лёгкую дополнительную практику или возвращайся к словам.' : dailyDraft ? `Урок сохранён · выполнено ${draftProgress?.completedSteps} из ${dailyDraft.session.steps.length} шагов · осталось модулей: ${draftProgress?.remainingModules}` : `${durationMeta} · тема: ${lessonPackLabel}`}</p>
         </div>
 
         <div className="daily-route" aria-label={`Прогресс дня: ${completedModuleCount} из 5 модулей`}>
@@ -146,9 +145,9 @@ export function HomeDashboard({
 
         {!isDailyComplete ? (
           <div className="daily-journey-footer">
-            <div className="duration-switch" role="radiogroup" aria-label="Выбор длительности урока">
+            <div className="duration-switch" role="group" aria-label="Выбор длительности урока">
               {DURATION_OPTIONS.map((duration) => {
-                const isActive = duration === lessonDurationMinutes;
+                const isActive = duration === (dailyDraft?.session.durationMinutes ?? lessonDurationMinutes);
 
                 return (
                   <button
@@ -156,6 +155,8 @@ export function HomeDashboard({
                     type="button"
                     className={isActive ? 'active' : ''}
                     aria-pressed={isActive}
+                    disabled={Boolean(dailyDraft)}
+                    title={dailyDraft ? 'Длительность текущего урока уже выбрана' : undefined}
                     onClick={() => onLessonDurationChange(duration)}
                   >
                     {duration} мин
@@ -164,7 +165,7 @@ export function HomeDashboard({
               })}
             </div>
             <button type="button" className="daily-start-button" onClick={onStartLesson}>
-              Начать урок <AppIcon name="arrow-right" size={19} />
+              {dailyDraft ? 'Продолжить урок' : 'Начать урок'} <AppIcon name="arrow-right" size={19} />
             </button>
           </div>
         ) : (
@@ -226,8 +227,8 @@ export function HomeDashboard({
           <span className="bento-icon green"><AppIcon name="leaf" size={23} /></span>
           <div>
             <span>Сегодняшний ритм</span>
-            <h2>{todayAccuracy > 0 ? `${todayAccuracy}% точность` : 'Первый шаг ждёт'}</h2>
-            <p>{today ? `${today.wordsLearned} слов в активном повторении` : 'Начни короткий урок — и появится твоя статистика.'}</p>
+            <h2>{today && today.totalAnswers > 0 ? `${todayAccuracy}% точность` : 'Первый шаг ждёт'}</h2>
+            <p>{today ? `${today.wordsLearned} слов освоено · ${today.totalAnswers} ответов` : 'Начни короткий урок — и появится твоя статистика.'}</p>
           </div>
         </section>
 

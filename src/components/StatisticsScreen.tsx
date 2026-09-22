@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import type { AppStorage, LearningLanguage, Word, WordLevel } from '../types';
 import { formatDurationLabel, getTodayDateKey, percentage } from '../lib/utils';
+import { getCurrentStreakDays } from '../lib/storage';
+import { getRecentWordCounts } from '../lib/studyMetrics';
 import { getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { AppIcon } from './AppIcon';
 
@@ -19,13 +21,12 @@ const LEVEL_COLORS: Record<WordLevel, string> = {
 };
 
 const LEVEL_LABELS: Record<WordLevel, string> = {
-  A1: 'Beginner · A1',
-  A2: 'Elementary · A2',
-  B1: 'Intermediate · B1',
+  A1: 'Начальный · A1',
+  A2: 'Базовый · A2',
+  B1: 'Средний · B1',
 };
 
 const SPEECH_COLORS = ['#049d41', '#1a8ce2', '#f97316', '#e11d48', '#7c3aed', '#0f766e', '#ca8a04', '#475569'];
-const WEEKDAY_LABELS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
 function polarToCartesian(center: number, radius: number, angleInDegrees: number): { x: number; y: number } {
   const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180;
@@ -74,27 +75,6 @@ function buildDiagramSegments(items: Array<{ value: number; color: string }>): A
 
     cursor += share;
     return segment;
-  });
-}
-
-function toDateKey(date: Date): string {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-}
-
-function getRecentWordCounts(storage: AppStorage, learningLanguage: LearningLanguage): Array<{ key: string; label: string; count: number }> {
-  const now = new Date();
-
-  return Array.from({ length: 7 }, (_, index) => {
-    const date = new Date(now);
-    date.setDate(now.getDate() - (6 - index));
-    const key = toDateKey(date);
-    const daily = storage.dailyStats.find((entry) => entry.language === learningLanguage && entry.date === key);
-
-    return {
-      key,
-      label: WEEKDAY_LABELS[index] ?? '',
-      count: daily?.wordsLearned ?? 0,
-    };
   });
 }
 
@@ -158,13 +138,16 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
     [storage.progressByWordId, words],
   );
   const learnedWords = learnedWordList.length;
-  const wordsInProcess = Math.max(0, words.length - learnedWords);
-  const currentStreak = storage.lastLessonDate === getTodayDateKey() ? storage.streakDays : 0;
+  const wordsInProcess = words.filter((word) => {
+    const status = storage.progressByWordId[word.id]?.status;
+    return status === 'learning' || status === 'review' || status === 'difficult';
+  }).length;
+  const currentStreak = getCurrentStreakDays(storage);
   const correctAnswers = languageHistory.reduce((sum, item) => sum + item.correctAnswers, 0);
   const totalAnswers = languageHistory.reduce((sum, item) => sum + item.totalAnswers, 0);
   const accuracy = percentage(correctAnswers, totalAnswers);
   const studyTimeSeconds = languageHistory.reduce((sum, item) => sum + item.timeSpentSeconds, 0);
-  const weeklyWords = useMemo(() => getRecentWordCounts(storage, learningLanguage), [learningLanguage, storage]);
+  const weeklyWords = getRecentWordCounts(storage.dailyStats, learningLanguage);
   const monthlyLessons = useMemo(() => getMonthlyLessonCounts(storage, learningLanguage), [learningLanguage, storage]);
   const diagramItems = useMemo(
     () => (diagramMode === 'levels' ? countLevels(learnedWordList) : countSpeechTypes(learnedWordList)),

@@ -21,6 +21,7 @@
     "tauri:dev": "npm run tauri -- dev",
     "tauri:build": "npm run tauri -- build",
     "ui:test:safari": "node scripts/ui-smoke-safari.mjs",
+    "ui:test": "node scripts/ui-smoke-playwright.mjs",
     "test": "vitest run"
   },
   "dependencies": {

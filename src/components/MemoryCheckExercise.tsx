@@ -38,7 +38,11 @@ export function MemoryCheckExercise({
     nextButtonRef.current?.focus();
 
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key !== 'Enter') {
+      if (event.key !== 'Enter' || event.defaultPrevented || event.isComposing || event.repeat) {
+        return;
+      }
+
+      if (event.target instanceof Element && event.target.closest('button, input, textarea, select, a, [contenteditable="true"]')) {
         return;
       }
 

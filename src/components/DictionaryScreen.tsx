@@ -17,7 +17,7 @@ interface DictionaryScreenProps {
   storage: AppStorage;
   packs: WordPack[];
   onMarkWordKnown: (wordId: string) => boolean;
-  onAddWord: (word: Omit<Word, 'id' | 'language' | 'audio_original' | 'packIds' | 'source'>) => void;
+  onAddWord: (word: Omit<Word, 'id' | 'language' | 'audio_original' | 'packIds' | 'source'>) => boolean;
 }
 
 type DictionaryFilterTab = DictionaryTab | 'known';
@@ -39,6 +39,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
   const [packFilter, setPackFilter] = useState<'all' | 'core' | string>('all');
   const [visibleWordCount, setVisibleWordCount] = useState(INITIAL_VISIBLE_WORDS);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [newWord, setNewWord] = useState({
     original: '',
     translation: '',
@@ -110,6 +111,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
   }
 
   function resetNewWordForm() {
+    setFormError(null);
     setNewWord({
       original: '',
       translation: '',
@@ -143,12 +145,16 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
             className="custom-word-form"
             onSubmit={(event) => {
               event.preventDefault();
-              onAddWord({
-                original: newWord.original,
-                translation: newWord.translation,
-                transcription: newWord.transcription,
-                example_original: newWord.example_original || newWord.original,
-                example_translation: newWord.example_translation || newWord.translation,
+              if (!newWord.original.trim() || !newWord.translation.trim()) {
+                setFormError('Введите слово и перевод: одних пробелов недостаточно.');
+                return;
+              }
+              const added = onAddWord({
+                original: newWord.original.trim(),
+                translation: newWord.translation.trim(),
+                transcription: newWord.transcription.trim(),
+                example_original: newWord.example_original.trim() || newWord.original.trim(),
+                example_translation: newWord.example_translation.trim() || newWord.translation.trim(),
                 part_of_speech: newWord.part_of_speech,
                 level: newWord.level,
                 tags: newWord.tags
@@ -161,10 +167,15 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                 imageUrl: undefined,
                 illustrationType: undefined,
               });
+              if (!added) {
+                setFormError('Не удалось добавить слово. Проверьте данные и попробуйте ещё раз.');
+                return;
+              }
               resetNewWordForm();
               setShowAddForm(false);
             }}
           >
+            {formError ? <p className="form-inline-message" role="alert">{formError}</p> : null}
             <input
               className="text-input"
               value={newWord.original}
@@ -254,7 +265,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
           <input
             className="text-input"
             value={query}
-            placeholder={`Например, bonjour или перевод`}
+            placeholder={learningLanguage === 'french' ? 'Например, bonjour или перевод' : 'Например, こんにちは или перевод'}
             aria-label={`Поиск по слову на ${languageTitle}, переводу или тегам`}
             onChange={(event) => setQuery(event.target.value)}
           />
@@ -275,12 +286,13 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
           </select>
         </div>
 
-        <div className="tab-row tab-row-wide">
+        <div className="tab-row tab-row-wide" role="group" aria-label="Статус слов">
           {TABS.map((item) => (
             <button
               key={item.id}
               type="button"
               className={item.id === tab ? 'tab-button active' : 'tab-button'}
+              aria-pressed={item.id === tab}
               onClick={() => setTab(item.id)}
             >
               {item.label}
@@ -341,7 +353,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                   <>
                     <StatusBadge status={progress.status} />
                     <span className="tag-badge">{word.level}</span>
-                    <span className="tag-badge">{word.part_of_speech}</span>
+                    <span className="tag-badge">{getPartOfSpeechLabel(word.part_of_speech)}</span>
                     {word.source === 'core' ? (
                       <span className="tag-badge">Базовый курс</span>
                     ) : word.source === 'custom' ? (

@@ -34,7 +34,7 @@ export function DailyCompletionScreen({
       <AppCard as="section" tone="hero" className="completion-hero">
         <div className="result-hero">
           <span className="eyebrow">{completion ? 'День завершён' : 'Расписание свободно'}</span>
-          <h1 className="result-title">{completion ? 'Урок завершён' : 'Сейчас нет новых или просроченных слов'}</h1>
+          <h1 className="result-title">{completion ? 'На сегодня заданий нет' : 'Сейчас нет новых или просроченных слов'}</h1>
           <p className="result-message">
             {completion
               ? `Завершено содержательных модулей: ${completion.completedModules}. Можно продолжить практику, повторить сложные слова или открыть словарь.`
@@ -47,14 +47,14 @@ export function DailyCompletionScreen({
           <StatCard label="Ответов" value={completion?.totalAnswers ?? 0} hint="Всего попыток" />
           <StatCard label="Точность" value={completion ? `${percentage(completion.correctAnswers, completion.totalAnswers)}%` : '0%'} hint="По всем упражнениям" />
           <StatCard label="Сложные слова" value={difficultCount} hint="Можно повторить отдельно" />
-          <StatCard label="Время" value={formatDurationLabel(completion?.timeSpentSeconds ?? 0)} hint="Чистое время сессии" />
+          <StatCard label="Время" value={formatDurationLabel(completion?.timeSpentSeconds ?? 0)} hint="С момента старта занятия" />
         </div>
       </AppCard>
 
       <AppCard as="section" className="mistake-card">
         <h3 className="mistake-title">Сводка по сегодняшнему уроку</h3>
         <p className="info-subtle">
-          Новых слов: {completion?.newWords ?? 0} · Сразу выученных: {completion?.knownWords ?? 0} · Повторение: {completion?.reviewWords ?? 0} · Закрепление: {completion?.reinforcementWords ?? 0}
+          Новых слов: {completion?.newWords ?? 0} · Отмечено знакомыми: {completion?.knownWords ?? 0} · Повторение: {completion?.reviewWords ?? 0} · Закрепление: {completion?.reinforcementWords ?? 0}
         </p>
         <p className="info-subtle">
           В активной базе сейчас {words.length} слов. Сегодня в поток попало {totalKnownOrLearned} новых или сразу отмеченных знакомыми слов.

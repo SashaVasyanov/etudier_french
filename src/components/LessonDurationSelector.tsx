@@ -30,7 +30,7 @@ export function LessonDurationSelector({
         <p className="hero-text">{description}</p>
       </div>
 
-      <div className="duration-grid" role="radiogroup" aria-label="Выбор длительности урока">
+      <div className="duration-grid" role="group" aria-label="Выбор длительности урока">
         {OPTIONS.map((option) => {
           const isActive = option.value === value;
 

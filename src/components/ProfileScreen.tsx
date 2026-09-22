@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { LEARNING_LANGUAGE_OPTIONS, getLearningLanguageMenuLabel } from '../lib/languages';
-import { formatDateTimeLabel, formatDurationLabel, formatLongDateLabel, percentage } from '../lib/utils';
+import { getCurrentStreakDays } from '../lib/storage';
+import { summarizeStudyHistory } from '../lib/studyMetrics';
+import { formatDateTimeLabel, formatDurationLabel, formatLongDateLabel } from '../lib/utils';
 import type {
   AppStorage,
   LearningLanguage,
@@ -43,26 +45,6 @@ function countStatuses(progressList: WordProgress[]) {
   };
 }
 
-function summarizeHistory(history: StudyHistoryEntry[]) {
-  const weekly = history.slice(-7);
-  const monthly = history.slice(-30);
-
-  return {
-    weeklyLessons: weekly.length,
-    monthlyLessons: monthly.length,
-    totalWeeklyWords: weekly.reduce((sum, item) => sum + item.wordsLearned, 0),
-    totalMonthlyWords: monthly.reduce((sum, item) => sum + item.wordsLearned, 0),
-    weeklyAccuracy: percentage(
-      weekly.reduce((sum, item) => sum + item.correctAnswers, 0),
-      weekly.reduce((sum, item) => sum + item.totalAnswers, 0),
-    ),
-    monthlyAccuracy: percentage(
-      monthly.reduce((sum, item) => sum + item.correctAnswers, 0),
-      monthly.reduce((sum, item) => sum + item.totalAnswers, 0),
-    ),
-  };
-}
-
 function getModeLabel(mode: StudyHistoryEntry['mode']): string {
   if (mode === 'default') {
     return 'ежедневный урок';
@@ -102,7 +84,7 @@ export default function ProfileScreen({
     [learningLanguage, storage.studyHistory],
   );
   const history = useMemo(() => [...languageHistory].reverse(), [languageHistory]);
-  const summary = useMemo(() => summarizeHistory(languageHistory), [languageHistory]);
+  const summary = summarizeStudyHistory(languageHistory);
   const selectedPack = packs.find((pack) => pack.id === lessonSourcePackId) ?? null;
   const displayName = profile.displayName.trim() || 'Ученик';
 
@@ -134,7 +116,7 @@ export default function ProfileScreen({
         </article>
         <article>
           <span className="settings-overview-icon orange"><AppIcon name="flame" size={22} /></span>
-          <div><strong>{storage.streakDays}</strong><small>дней в серии</small></div>
+          <div><strong>{getCurrentStreakDays(storage)}</strong><small>дней в серии</small></div>
         </article>
         <article>
           <span className="settings-overview-icon blue"><AppIcon name="calendar" size={22} /></span>

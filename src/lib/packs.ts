@@ -4,8 +4,7 @@ import { getWordProgress } from './storage';
 function normalizeWordKey(value: string): string {
   return value
     .toLowerCase()
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .normalize('NFKC')
     .replace(/[’']/g, "'")
     .replace(/\s+/g, ' ')
     .trim();
@@ -30,7 +29,7 @@ export function getActiveWords(words: Word[], enabledPackIds: string[]): Word[] 
   const bestByOriginal = new Map<string, Word>();
 
   availableWords.forEach((word) => {
-    const key = normalizeWordKey(word.original);
+    const key = `${word.language}:${normalizeWordKey(word.original)}`;
     const current = bestByOriginal.get(key);
 
     if (!current) {
@@ -41,9 +40,11 @@ export function getActiveWords(words: Word[], enabledPackIds: string[]): Word[] 
     const currentPriority = current.source === 'core' ? 0 : current.source === 'custom' ? 1 : 2;
     const nextPriority = word.source === 'core' ? 0 : word.source === 'custom' ? 1 : 2;
 
-    if (nextPriority < currentPriority) {
-      bestByOriginal.set(key, word);
-    }
+    const preferred = nextPriority < currentPriority ? word : current;
+    bestByOriginal.set(key, {
+      ...preferred,
+      packIds: [...new Set([...current.packIds, ...word.packIds])],
+    });
   });
 
   return Array.from(bestByOriginal.values());
@@ -60,13 +61,16 @@ export function derivePackStatus(pack: WordPack, storage: AppStorage): PackStatu
     return 'not_added';
   }
 
-  const wordsStarted = pack.words.filter((word) => getWordProgress(storage, word.id).shown_count > 0).length;
+  const wordsStarted = pack.words.filter((word) => {
+    const progress = getWordProgress(storage, word.id);
+    return progress.shown_count > 0 || progress.status === 'known' || progress.status === 'mastered';
+  }).length;
   const wordsCompleted = pack.words.filter((word) => {
     const status = getWordProgress(storage, word.id).status;
-    return status === 'mastered';
+    return status === 'mastered' || status === 'known';
   }).length;
 
-  if (wordsCompleted === pack.words.length) {
+  if (pack.words.length > 0 && wordsCompleted === pack.words.length) {
     return 'completed';
   }
 
@@ -84,7 +88,7 @@ export function getPackCompletionRatio(pack: WordPack, storage: AppStorage): num
 
   const completed = pack.words.filter((word) => {
     const status = getWordProgress(storage, word.id).status;
-    return status === 'mastered';
+    return status === 'mastered' || status === 'known';
   }).length;
 
   return Math.round((completed / pack.words.length) * 100);

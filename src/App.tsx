@@ -18,17 +18,16 @@ import {
   getLearningLanguageTitle,
 } from './lib/languages';
 import { derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
+import { finishLessonSession, getLessonProgress, removeUpcomingWord } from './lib/lessonSession';
+import { loadLessonDraft, saveLessonDraft, type LessonDraft } from './lib/lessonDraft';
 import {
   addCustomPack,
   addWordPack,
   addCustomWord,
-  applyOutcomes,
-  completeDailyLesson,
   loadStorage,
   markWordAsIgnored,
   markWordAsKnown,
   recordRadicalStudySession,
-  recordStudyHistory,
   saveStorage,
   setLearningLanguagePreference,
   setLessonDurationEnabledPreference,
@@ -45,12 +44,10 @@ import { parseImportedPack } from './lib/importPacks';
 import { getTodayDateKey, isAnswerMatch, isJapaneseReadingMatch } from './lib/utils';
 import type {
   AppStorage,
-  DailyLessonRecord,
   ExerciseOutcome,
   LessonMode,
   LessonSession,
   StorageError,
-  StudyHistoryEntry,
   Word,
 } from './types';
 import './styles/app.css';
@@ -76,38 +73,33 @@ type Screen =
   | 'packs'
   | 'packDetail';
 
-function removeWordFromSession(session: LessonSession, wordId: string): LessonSession {
-  const exercises = session.exercises.filter((exercise) => exercise.wordId !== wordId);
-  const steps = session.steps.filter((step) => step.wordId !== wordId);
-  const modules = session.modules.map((module) => ({
-    ...module,
-    wordIds: module.wordIds.filter((id) => id !== wordId),
-    stepIds: module.stepIds.filter((stepId) => !stepId.includes(wordId)),
-  }));
-
-  return {
-    ...session,
-    exercises,
-    steps,
-    modules,
-    exerciseIds: exercises.map((exercise) => exercise.id),
-    sourceWordIds: session.sourceWordIds.filter((id) => id !== wordId),
-  };
-}
-
 function App() {
   const [initialStorageLoad] = useState(() => loadStorage());
+  const [initialDraft] = useState(() => {
+    const draft = loadLessonDraft(initialStorageLoad.storage.learningLanguage);
+    return draft && !initialStorageLoad.storage.studyHistory.some((entry) => entry.sessionId === draft.session.id)
+      && !getCompletedDailyLesson(initialStorageLoad.storage) ? draft : null;
+  });
+  const dailyDraftRef = useRef<LessonDraft | null>(initialDraft);
+  const [lessonNotice, setLessonNotice] = useState<string | null>(null);
+  const [today, setToday] = useState(getTodayDateKey);
   const [screen, setScreen] = useState<Screen>('home');
+  useEffect(() => {
+    const refreshDay = () => setToday(getTodayDateKey());
+    const timer = window.setInterval(refreshDay, 60_000);
+    window.addEventListener('focus', refreshDay);
+    return () => { window.clearInterval(timer); window.removeEventListener('focus', refreshDay); };
+  }, []);
   const [storage, setStorage] = useState<AppStorage>(initialStorageLoad.storage);
   const [storageError, setStorageError] = useState<StorageError | null>(initialStorageLoad.error);
   const [baseWords, setBaseWords] = useState<Word[]>([]);
-  const [session, setSession] = useState<LessonSession | null>(null);
-  const [stepIndex, setStepIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [typedAnswer, setTypedAnswer] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [outcomes, setOutcomes] = useState<ExerciseOutcome[]>([]);
-  const [knownWordIds, setKnownWordIds] = useState<string[]>([]);
+  const [session, setSession] = useState<LessonSession | null>(initialDraft?.session ?? null);
+  const [stepIndex, setStepIndex] = useState(initialDraft?.stepIndex ?? 0);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(initialDraft?.selectedAnswer ?? null);
+  const [typedAnswer, setTypedAnswer] = useState(initialDraft?.typedAnswer ?? '');
+  const [isSubmitted, setIsSubmitted] = useState(initialDraft?.isSubmitted ?? false);
+  const [outcomes, setOutcomes] = useState<ExerciseOutcome[]>(initialDraft?.outcomes ?? []);
+  const [knownWordIds, setKnownWordIds] = useState<string[]>(initialDraft?.knownWordIds ?? []);
   const [isLoadingWords, setIsLoadingWords] = useState(true);
   const [wordsLoadError, setWordsLoadError] = useState<string | null>(null);
   const [wordsReloadKey, setWordsReloadKey] = useState(0);
@@ -129,7 +121,7 @@ function App() {
     () => (storage.lessonSourcePackId ? packs.find((pack) => pack.id === storage.lessonSourcePackId) ?? null : null),
     [packs, storage.lessonSourcePackId],
   );
-  const enabledPackIds = useMemo(() => getEnabledPackIds(storage), [storage]);
+  const enabledPackIds = useMemo(() => getEnabledPackIds(storage).filter((id) => packs.some((pack) => pack.id === id)), [storage, packs]);
   const customWords = useMemo(
     () => storage.customWords.filter((word) => word.language === storage.learningLanguage),
     [storage.customWords, storage.learningLanguage],
@@ -151,11 +143,23 @@ function App() {
     () => getLessonPoolWords(lessonSourceWords).filter((word) => getWordProgress(storage, word.id).status !== 'ignored'),
     [lessonSourceWords, storage],
   );
-  const progressList = useMemo(() => words.map((word) => getWordProgress(storage, word.id)), [storage, words]);
+  const progressList = useMemo(() => availableWords.map((word) => getWordProgress(storage, word.id)), [storage, availableWords]);
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
   const currentWord = currentStep ? wordsById.get(currentStep.wordId) ?? null : null;
-  const dailyCompletion = getCompletedDailyLesson(storage);
+  const dailyCompletion = getCompletedDailyLesson(storage, today);
+  const lessonProgress = session ? getLessonProgress(session, stepIndex) : null;
+  const currentLessonDraft = session ? { session, stepIndex, outcomes, knownWordIds, selectedAnswer, typedAnswer, isSubmitted } : null;
+  const pausedDailyDraft = session?.mode === 'default' ? currentLessonDraft : dailyDraftRef.current;
+
+  useEffect(() => {
+    if (session?.mode !== 'default') return;
+    const draft = { session, stepIndex, outcomes, knownWordIds, selectedAnswer, typedAnswer, isSubmitted };
+    dailyDraftRef.current = draft;
+    if (!storageError?.blocksSave && !saveLessonDraft(storage.learningLanguage, draft)) {
+      setLessonNotice('Не удалось сохранить незавершённый урок. Не закрывайте приложение до завершения занятия.');
+    }
+  }, [session, stepIndex, outcomes, knownWordIds, selectedAnswer, typedAnswer, isSubmitted, storage.learningLanguage, storageError?.blocksSave]);
   useEffect(() => {
     let isMounted = true;
     setIsLoadingWords(true);
@@ -252,10 +256,10 @@ function App() {
 
       return changed ? nextStorage : currentStorage;
     });
-  }, [packs, words.length]);
+  }, [packs, words.length, storage.progressByWordId, storage.packStates]);
 
   useEffect(() => {
-    if (!currentStep || !currentWord) {
+    if (screen !== 'lesson' || !currentStep || !currentWord) {
       return undefined;
     }
 
@@ -273,7 +277,7 @@ function App() {
     return () => {
       stopAudio();
     };
-  }, [currentStep, currentWord]);
+  }, [currentStep, currentWord, screen]);
 
   const mistakeWords = useMemo(() => {
     const incorrectWordIds = Array.from(
@@ -311,13 +315,53 @@ function App() {
     setScreen(nextScreen);
   }
 
+  function resumeDraft(draft: LessonDraft) {
+    if (draft.session.steps.some((step) => !wordsById.has(step.wordId))) {
+      setLessonNotice('Состав словаря изменился. Начните новый урок — сохранённые результаты остаются в профиле.');
+      if (draft.session.mode === 'default') {
+        dailyDraftRef.current = null;
+        saveLessonDraft(storage.learningLanguage, null);
+      }
+      setSession(null);
+      return false;
+    }
+    let nextSession = draft.session;
+    const nextIndex = draft.stepIndex + (draft.isSubmitted ? 1 : 0);
+    const removedIds = new Set(nextSession.steps.slice(nextIndex).filter((step) =>
+      ['known', 'ignored'].includes(getWordProgress(storage, step.wordId).status),
+    ).map((step) => step.wordId));
+    removedIds.forEach((id) => { nextSession = removeUpcomingWord(nextSession, nextIndex, id); });
+    if (nextIndex >= nextSession.steps.length && !draft.isSubmitted) {
+      finishLesson(nextSession, draft.outcomes, draft.knownWordIds);
+      return true;
+    }
+    setSession(nextSession);
+    setStepIndex(draft.stepIndex);
+    setOutcomes(draft.outcomes);
+    setKnownWordIds(draft.knownWordIds);
+    const sameStep = nextSession.steps[draft.stepIndex]?.id === draft.session.steps[draft.stepIndex]?.id;
+    setSelectedAnswer(sameStep ? draft.selectedAnswer : null);
+    setTypedAnswer(sameStep ? draft.typedAnswer : '');
+    setIsSubmitted(sameStep && draft.isSubmitted);
+    setLessonNotice(null);
+    setScreen('lesson');
+    return true;
+  }
+
   function startLesson(mode: LessonMode, options?: { wordIds?: string[]; title?: string; packId?: string }) {
     if (mode === 'default' && getCompletedDailyLesson(storage)) {
       setScreen('dailyComplete');
       return;
     }
 
-    if (mode !== 'pack' && lessonPoolWords.length === 0) {
+    if (mode === 'default' && dailyDraftRef.current && resumeDraft(dailyDraftRef.current)) return;
+    if (session?.mode === mode && session.presentation === 'standard' && mode !== 'pack' && mode !== 'default') {
+      if (currentLessonDraft && resumeDraft(currentLessonDraft)) return;
+    }
+    setLessonNotice(null);
+    if (mode !== 'pack' && lessonPoolWords.length === 0 && !options?.wordIds?.length) {
+      if (mode === 'default') setScreen('dailyComplete');
+      else setLessonNotice('Для практики пока нет слов. Добавьте слова или выберите другой пак.');
       return;
     }
 
@@ -361,10 +405,16 @@ function App() {
         // No new quota and no scheduled reviews: show an honest no-due state,
         // but do not create a completion/history/streak record.
         setScreen('dailyComplete');
+      } else {
+        setLessonNotice('Все слова в этой подборке уже известны или исключены. Выберите другую тему в разделе «Темы».');
       }
       return;
     }
 
+    const sourcePackId = options?.packId ?? selectedLessonSourcePack?.id;
+    if (sourcePackId) setStorage((current) => addWordPack(current, sourcePackId));
+    nextSession.activePackIds = [...new Set(nextSession.sourceWordIds.flatMap((id) => wordsById.get(id)?.packIds ?? []))]
+      .filter((id) => enabledPackIds.includes(id) || id === sourcePackId);
     setSession(nextSession);
     setOutcomes([]);
     setKnownWordIds([]);
@@ -376,7 +426,12 @@ function App() {
   }
 
   function startFlashcards(mode: 'extra' | 'pack', options?: { title?: string; packId?: string }) {
+    setLessonNotice(null);
+    if (session?.mode === mode && session.presentation === 'flashcards' && mode !== 'pack') {
+      if (currentLessonDraft && resumeDraft(currentLessonDraft)) return;
+    }
     if (mode !== 'pack' && lessonPoolWords.length === 0) {
+      setLessonNotice('Для карточек пока нет слов. Добавьте слова или выберите другой пак.');
       return;
     }
 
@@ -406,9 +461,13 @@ function App() {
     });
 
     if (!nextSession) {
+      setLessonNotice('В этой подборке нет слов для карточек. Выберите другой пак или добавьте новые слова.');
       return;
     }
-
+    const sourcePackId = options?.packId ?? selectedLessonSourcePack?.id;
+    if (sourcePackId) setStorage((current) => addWordPack(current, sourcePackId));
+    nextSession.activePackIds = [...new Set(nextSession.sourceWordIds.flatMap((id) => wordsById.get(id)?.packIds ?? []))]
+      .filter((id) => enabledPackIds.includes(id) || id === sourcePackId);
     setSession(nextSession);
     setOutcomes([]);
     setKnownWordIds([]);
@@ -473,90 +532,22 @@ function App() {
     lessonOutcomes = outcomes,
     manuallyKnownWordIds = knownWordIds,
   ) {
-    setStorage((currentStorage) => {
-      const storageWithOutcomes = applyOutcomes(currentStorage, lessonOutcomes);
-      if (activeSession.presentation === 'flashcards' && lessonOutcomes.length === 0) {
-        return storageWithOutcomes;
-      }
-
-      const completedModules = activeSession.modules.filter((module) =>
-        activeSession.steps.some((step) => step.moduleId === module.id),
-      );
-      const difficultWordIds = Array.from(
-        new Set(
-          activeSession.sourceWordIds.filter(
-            (wordId) => storageWithOutcomes.progressByWordId[wordId]?.status === 'difficult',
-          ),
-        ),
-      );
-      const completedAt = new Date().toISOString();
-      const timeSpentSeconds = Math.max(
-        0,
-        Math.round((new Date(completedAt).getTime() - new Date(activeSession.startedAt).getTime()) / 1000),
-      );
-      const transitionedWordIds = activeSession.sourceWordIds.filter((wordId) => {
-        const before = getWordProgress(currentStorage, wordId).status;
-        const after = getWordProgress(storageWithOutcomes, wordId).status;
-        return before !== 'mastered' && before !== 'known' && (after === 'mastered' || after === 'known');
-      });
-      const wordsLearned = new Set([...transitionedWordIds, ...manuallyKnownWordIds]).size;
-      const newWords = new Set(
-        lessonOutcomes
-          .map((outcome) => outcome.wordId)
-          .filter((wordId) =>
-            getWordProgress(currentStorage, wordId).status === 'new' &&
-            getWordProgress(storageWithOutcomes, wordId).status !== 'new',
-          ),
-      ).size;
-      const historyEntry: StudyHistoryEntry = {
-        id: `${activeSession.id}-history`,
-        date: getTodayDateKey(),
-        language: currentStorage.learningLanguage,
-        completedAt,
-        sessionId: activeSession.id,
-        mode: activeSession.mode,
-        durationMinutes: activeSession.durationMinutes,
-        moduleTitles: completedModules.map((module) => module.title),
-        modulesCompleted: completedModules.length,
-        wordsLearned,
-        mistakesMade: lessonOutcomes.filter((outcome) => !outcome.isCorrect).length,
-        correctAnswers: lessonOutcomes.filter((outcome) => outcome.isCorrect).length,
-        totalAnswers: lessonOutcomes.length,
-        timeSpentSeconds,
-        activePackIds: activeSession.activePackIds,
-      };
-
-      if (activeSession.mode !== 'default') {
-        return recordStudyHistory(storageWithOutcomes, historyEntry);
-      }
-
-      const record: DailyLessonRecord = {
-        date: getTodayDateKey(),
-        language: currentStorage.learningLanguage,
-        completedAt,
-        sessionId: activeSession.id,
-        totalModules: completedModules.length,
-        completedModules: completedModules.length,
-        totalSteps: activeSession.steps.length,
-        completedSteps: activeSession.steps.length,
-        correctAnswers: historyEntry.correctAnswers,
-        totalAnswers: historyEntry.totalAnswers,
-        newWords,
-        reviewWords: activeSession.modules.find((module) => module.id === 'module-review-learning')?.wordIds.length ?? 0,
-        reinforcementWords: activeSession.modules.find((module) => module.id === 'module-reinforcement')?.wordIds.length ?? 0,
-        knownWords: Array.from(new Set(manuallyKnownWordIds)).length,
-        difficultWordIds,
-        timeSpentSeconds,
-      };
-
-      return completeDailyLesson(storageWithOutcomes, { record, historyEntry });
-    });
+    const nextStorage = finishLessonSession(storageRef.current, activeSession, lessonOutcomes, manuallyKnownWordIds);
+    storageRef.current = nextStorage;
+    setStorage(nextStorage);
+    const saved = !storageErrorRef.current?.blocksSave ? saveStorage(nextStorage) : null;
+    if (saved && !saved.ok) setStorageError(saved.error);
+    if (activeSession.mode === 'default') {
+      dailyDraftRef.current = null;
+      // Persist the completion before removing its recovery checkpoint.
+      if (saved?.ok) saveLessonDraft(storage.learningLanguage, null);
+    }
 
     clearSessionState(activeSession.mode === 'default' ? 'dailyComplete' : 'result', { preserveOutcomes: true });
   }
 
   function goToNextStep() {
-    if (!session) {
+    if (!session || (currentStep?.kind === 'exercise' && !isSubmitted)) {
       return;
     }
 
@@ -578,7 +569,9 @@ function App() {
 
   function markWordKnown(wordId: string): boolean {
     try {
-      setStorage((currentStorage) => markWordAsKnown(currentStorage, wordId));
+      const updated = markWordAsKnown(storageRef.current, wordId);
+      storageRef.current = updated;
+      setStorage(updated);
       return true;
     } catch (error) {
       reportStorageMutationError(error);
@@ -591,7 +584,8 @@ function App() {
       return;
     }
 
-    const nextSession = removeWordFromSession(session, currentWord.id);
+    const nextIndex = stepIndex + (isSubmitted ? 1 : 0);
+    const nextSession = removeUpcomingWord(session, nextIndex, currentWord.id);
     const nextKnownWordIds = Array.from(new Set([...knownWordIds, currentWord.id]));
 
     if (!markWordKnown(currentWord.id)) {
@@ -600,13 +594,13 @@ function App() {
     setKnownWordIds(nextKnownWordIds);
     resetExerciseState();
 
-    if (nextSession.steps.length === 0) {
+    if (nextIndex >= nextSession.steps.length) {
       finishLesson(nextSession, outcomes, nextKnownWordIds);
       return;
     }
 
     setSession(nextSession);
-    setStepIndex((current) => Math.min(current, nextSession.steps.length - 1));
+    setStepIndex(nextIndex);
   }
 
   function handleIgnoreWord() {
@@ -614,31 +608,35 @@ function App() {
       return;
     }
 
-    const nextSession = removeWordFromSession(session, currentWord.id);
+    const nextIndex = stepIndex + (isSubmitted ? 1 : 0);
+    const nextSession = removeUpcomingWord(session, nextIndex, currentWord.id);
 
-    setStorage((currentStorage) => markWordAsIgnored(currentStorage, currentWord.id));
+    const updated = markWordAsIgnored(storageRef.current, currentWord.id);
+    storageRef.current = updated;
+    setStorage(updated);
     resetExerciseState();
 
-    if (nextSession.steps.length === 0) {
+    if (nextIndex >= nextSession.steps.length) {
       finishLesson(nextSession);
       return;
     }
 
     setSession(nextSession);
-    setStepIndex((current) => Math.min(current, nextSession.steps.length - 1));
+    setStepIndex(nextIndex);
   }
 
   function handleNavigate(target: 'home' | 'lesson' | 'dictionary' | 'radicals' | 'statistics' | 'profile' | 'packs') {
     if (target === 'lesson') {
-      if (session) {
-        setScreen('lesson');
-        return;
-      }
+      if (session?.mode === 'default' && dailyDraftRef.current && resumeDraft(dailyDraftRef.current)) return;
+      if (currentLessonDraft && resumeDraft(currentLessonDraft)) return;
 
+      if (dailyDraftRef.current && resumeDraft(dailyDraftRef.current)) return;
       setScreen(getCompletedDailyLesson(storage) ? 'dailyComplete' : 'home');
       return;
     }
 
+    stopAudio();
+    setLessonNotice(null);
     if (target === 'packs') {
       setSelectedPackId(null);
     }
@@ -713,9 +711,17 @@ function App() {
             ) : null}
           </section>
         ) : null}
+        {lessonNotice ? (
+          <section className="app-error-state" role="status">
+            <p>{lessonNotice}</p>
+            <button type="button" className="ghost-button" onClick={() => { setSelectedPackId(null); setScreen('packs'); setLessonNotice(null); }}>Открыть паки</button>
+            <button type="button" className="ghost-button" onClick={() => setLessonNotice(null)}>Понятно</button>
+          </section>
+        ) : null}
         {screen === 'home' ? (
           <HomeDashboard
-            totalWords={words}
+            totalWords={availableWords}
+            dailyDraft={pausedDailyDraft}
             storage={storage}
             progressList={progressList}
             addedPacksCount={enabledPackIds.length}
@@ -755,18 +761,20 @@ function App() {
                     <strong>{currentStep.moduleTitle}</strong>
                     <small>{currentStep.moduleDescription}</small>
                   </div>
-                  <span>{stepIndex + 1} / {session.steps.length}</span>
+                  <span>{lessonProgress?.completedSteps} / {session.steps.length} выполнено</span>
                 </div>
-                <div className="lesson-session-track" aria-hidden="true">
-                  <span style={{ width: `${((stepIndex + 1) / session.steps.length) * 100}%` }} />
+                <div className="lesson-session-track" role="progressbar" aria-label="Общий прогресс урока" aria-valuemin={0} aria-valuemax={100} aria-valuenow={lessonProgress?.percent ?? 0}>
+                  <span style={{ width: `${lessonProgress?.percent ?? 0}%` }} />
                 </div>
+                <small>Модулей завершено: {lessonProgress?.completedModules} · осталось: {lessonProgress?.remainingModules}</small>
               </header>
               <button
                 type="button"
                 className="lesson-close-button"
-                aria-label="Выйти из урока"
+                aria-label="Приостановить урок и вернуться на главную"
                 onClick={() => {
-                  clearSessionState('home');
+                  stopAudio();
+                  setScreen('home');
                 }}
               >
                 <AppIcon name="close" size={25} />
@@ -774,6 +782,7 @@ function App() {
               {currentStep.kind === 'exercise' ? (
                 currentExercise?.type === 'memory_check' ? (
                   <MemoryCheckExercise
+                    key={currentStep.id}
                     exercise={currentExercise}
                     word={currentWord}
                     isSubmitted={isSubmitted}
@@ -791,6 +800,7 @@ function App() {
                   />
                 ) : currentExercise?.options ? (
                   <MultipleChoiceExercise
+                    key={currentStep.id}
                     exercise={currentExercise}
                     word={currentWord}
                     selectedAnswer={selectedAnswer}
@@ -808,6 +818,7 @@ function App() {
                   />
                 ) : currentExercise ? (
                   <TextInputExercise
+                    key={currentStep.id}
                     exercise={currentExercise}
                     word={currentWord}
                     value={typedAnswer}
@@ -825,6 +836,7 @@ function App() {
                 ) : null
               ) : session.presentation === 'flashcards' ? (
                 <FlashcardView
+                  key={currentStep.id}
                   word={currentWord}
                   current={currentStep.indexInModule}
                   total={currentStep.totalInModule}
@@ -838,6 +850,7 @@ function App() {
                 />
               ) : (
                 <LessonWordPreview
+                  key={currentStep.id}
                   word={currentWord}
                   current={currentStep.indexInModule}
                   total={currentStep.totalInModule}
@@ -899,8 +912,10 @@ function App() {
 
                 try {
                   setStorage(addCustomWord(storageRef.current, customWord));
+                  return true;
                 } catch (error) {
                   reportStorageMutationError(error);
+                  return false;
                 }
               }}
             />
@@ -992,6 +1007,7 @@ function App() {
               }}
               onLearningLanguageChange={(value) => {
                 clearSessionState('profile');
+                dailyDraftRef.current = loadLessonDraft(value);
                 setSelectedPackId(null);
                 setBaseWords([]);
                 setIsLoadingWords(true);

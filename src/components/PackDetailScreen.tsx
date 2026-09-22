@@ -22,12 +22,13 @@ interface PackDetailScreenProps {
   onStartPackFlashcards: (packId: string) => void;
 }
 
-type PackStatusFilter = 'all' | 'new' | 'learning' | 'mastered' | 'difficult';
+type PackStatusFilter = 'all' | 'new' | 'learning' | 'known' | 'mastered' | 'difficult';
 
 const FILTERS: Array<{ id: PackStatusFilter; label: string }> = [
   { id: 'all', label: 'Все слова' },
   { id: 'new', label: 'Новые' },
   { id: 'learning', label: 'Изучаемые' },
+  { id: 'known', label: 'Известные' },
   { id: 'mastered', label: 'Выученные' },
   { id: 'difficult', label: 'Сложные' },
 ];
@@ -140,7 +141,7 @@ export function PackDetailScreen({
             ))}
           </select>
           <div className="pack-detail-summary">
-            <span>Статус: {status}</span>
+            <span>Статус: {{ not_added: 'не добавлен', added: 'добавлен', in_progress: 'в процессе', completed: 'завершён' }[status]}</span>
             <span>Фильтр: {FILTERS.find((item) => item.id === filter)?.label}</span>
           </div>
         </div>
@@ -169,18 +170,18 @@ export function PackDetailScreen({
                   <button
                     type="button"
                     className="audio-button"
-                    disabled={!word.audio_original}
+                    aria-label={`Прослушать слово ${getDisplayWord(word)}`}
                     onClick={() => {
                       void playWordAudio(word);
                     }}
                   >
-                    {word.audio_original ? 'Аудио' : 'Нет аудио'}
+                    Аудио
                   </button>
                 }
                 badges={
                   <>
                     <StatusBadge status={progress.status} />
-                    <span className="tag-badge">{word.part_of_speech}</span>
+                    <span className="tag-badge">{getPartOfSpeechLabel(word.part_of_speech)}</span>
                     <span className="tag-badge">{word.level}</span>
                   </>
                 }
