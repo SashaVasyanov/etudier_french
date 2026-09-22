@@ -6,7 +6,7 @@ import { localDateKey, now, outcome, progress, storage, word } from './fixtures'
 const pool = Array.from({ length: 24 }, (_, i) => word(String(i + 1)));
 
 describe('lesson integration', () => {
-  it('due-gates mistake sessions, excludes known words, and keeps new words separate', () => {
+  it('due-gates daily reviews while allowing voluntary practice and excluding known words', () => {
     const words = [word('due'), word('future'), word('known'), word('new')];
     const state = storage({
       due: progress('due', 'learning', { next_review_at: new Date(now.getTime() - 86_400_000).toISOString() }),
@@ -14,8 +14,7 @@ describe('lesson integration', () => {
       known: progress('known', 'known'),
     });
     const session = createLessonSession({ mode: 'mistakes', words, storage: state, durationMinutes: 10, wordIds: ['due', 'future', 'known'] });
-    expect(session?.sourceWordIds).toEqual(['due']);
-    expect(session?.sourceWordIds).not.toContain('future');
+    expect(session?.sourceWordIds).toEqual(['due', 'future']);
     expect(session?.sourceWordIds).not.toContain('known');
 
     const daily = createLessonSession({ mode: 'default', words, storage: state, durationMinutes: 10 });
@@ -27,7 +26,7 @@ describe('lesson integration', () => {
     const extra = createLessonSession({ mode: 'extra', words, storage: state, durationMinutes: 10 });
     expect(extra?.sourceWordIds).toContain('due');
     expect(extra?.sourceWordIds).toContain('new');
-    expect(extra?.sourceWordIds).not.toContain('future');
+    expect(extra?.sourceWordIds).toContain('future');
     expect(extra?.sourceWordIds).not.toContain('known');
   });
 

@@ -116,18 +116,25 @@ function getLessonLimits(durationMinutes: LessonDurationMinutes, wordTarget?: nu
 
 function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'original'): ExerciseOption[] {
   const correctLabel = mode === 'translation' ? word.translation : word.original;
-  const pool = words.filter((candidate) => candidate.id !== word.id);
+  const comparable = (value: string) => value.normalize('NFKC').trim().toLocaleLowerCase().replace(/\s+/g, ' ');
+  // Duplicate dictionary entries and synonyms must not become competing
+  // answers to the same prompt.
+  const pool = words.filter((candidate) =>
+    candidate.id !== word.id &&
+    comparable(candidate.original) !== comparable(word.original) &&
+    comparable(candidate.translation) !== comparable(word.translation),
+  );
   const distractors: ExerciseOption[] = [];
-  const seen = new Set<string>([correctLabel]);
+  const seen = new Set<string>([comparable(correctLabel)]);
 
   shuffleArray(pool).forEach((candidate) => {
     const label = mode === 'translation' ? candidate.translation : candidate.original;
 
-    if (seen.has(label) || distractors.length >= 3) {
+    if (seen.has(comparable(label)) || distractors.length >= 3) {
       return;
     }
 
-    seen.add(label);
+    seen.add(comparable(label));
     distractors.push({
       id: candidate.id,
       label,
@@ -156,10 +163,10 @@ function createSentenceCloze(word: Word): string | null {
   }
 
   if (word.language === 'japanese') {
-    return example.includes(original) ? example.replace(original, '＿＿') : null;
+    return example.includes(original) ? example.split(original).join('＿＿') : null;
   }
 
-  const pattern = new RegExp(`(^|[^\\p{L}])${escapeRegExp(original)}(?=$|[^\\p{L}])`, 'iu');
+  const pattern = new RegExp(`(^|[^\\p{L}])${escapeRegExp(original)}(?=$|[^\\p{L}])`, 'giu');
   return pattern.test(example) ? example.replace(pattern, '$1＿＿') : null;
 }
 
@@ -610,10 +617,12 @@ function uniqueWords(words: Word[]): Word[] {
 }
 
 function pickExtraFocusWords(words: Word[], storage: AppStorage, limit: number): Word[] {
-  return words
-    .filter((word) => isWordDueForReview(getWordProgress(storage, word.id)))
-    .sort((left, right) => getStudyUrgency(getWordProgress(storage, right.id)) - getStudyUrgency(getWordProgress(storage, left.id)))
-    .slice(0, limit);
+  // Voluntary practice remains available immediately after a daily lesson.
+  // applyOutcomes separately protects the interval for reviews before due.
+  return rankWordsForStudy(words.filter((word) => {
+    const status = getWordProgress(storage, word.id).status;
+    return status !== 'new' && status !== 'known' && status !== 'ignored';
+  }), storage).slice(0, limit);
 }
 
 function pickLongTermMemoryWords(
@@ -670,9 +679,10 @@ function addMemoryCheckExercises(
     return moduleResult;
   }
 
-  const memoryExercises = memoryWords.map((word, index) =>
-    createExercise(word, optionPool, 'memory_check', moduleResult.exercises.length + index),
-  );
+  const memoryExercises = memoryWords.map((word, index) => ({
+    ...createExercise(word, optionPool, 'memory_check', moduleResult.exercises.length + index),
+    id: `${moduleResult.module.id}-${word.id}-memory_check-${moduleResult.exercises.length + index}`,
+  }));
   const exercises = shuffleArray([...moduleResult.exercises, ...memoryExercises]);
   const wordIds = Array.from(new Set([...moduleResult.module.wordIds, ...memoryWords.map((word) => word.id)]));
 
@@ -698,7 +708,7 @@ function createMistakesSession(
     return null;
   }
 
-  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool);
+  const limits = getLessonLimits(durationMinutes, useFullPool ? words.length : wordTarget, useFullPool);
   const mistakeWords = words.slice(0, limits.mistakesWords);
   const reviewModule = createExerciseModule(
     'module-mistakes',
@@ -738,7 +748,7 @@ function createDailySession(
   wordTarget?: number,
   useFullPool = false,
 ): LessonSession | null {
-  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool);
+  const limits = getLessonLimits(durationMinutes, useFullPool ? words.length : wordTarget, useFullPool);
   const newWords = pickNewWords(words, storage, limits.newWords);
   const learningWords = pickLearningWords(words, storage, limits.activeWords);
   const introductionWords = newWords.length > 0 ? newWords : learningWords.slice(0, Math.max(1, limits.newWords));
@@ -804,8 +814,10 @@ function createDailySession(
   );
   const module3 = createExerciseModule(
     'module-review-learning',
-    'Повторение не до конца выученных слов',
-    'Возврат к словам, которые еще требуют внимания.',
+    scheduledReviewWords.length > 0 ? 'Повторение не до конца выученных слов' : 'Повторение слов урока',
+    scheduledReviewWords.length > 0
+      ? 'Возврат к словам, которые еще требуют внимания.'
+      : 'Первое повторение новых слов после знакомства и тренировки.',
     reviewWords,
     ['audio_to_original_input', 'kanji_to_hiragana_input'],
     uniqueWords(words),
@@ -872,7 +884,7 @@ function createExtraSession(
   useFullPool = false,
   title?: string,
 ): LessonSession | null {
-  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool);
+  const limits = getLessonLimits(durationMinutes, useFullPool ? words.length : wordTarget, useFullPool);
   const focusWords = pickExtraFocusWords(words, storage, limits.activeWords);
   const newWords = words
     .filter((word) => getWordProgress(storage, word.id).status === 'new' && !focusWords.some((item) => item.id === word.id))
@@ -963,12 +975,13 @@ export function createFlashcardSession({
   activePackIds = [],
   title,
 }: CreateFlashcardSessionInput): LessonSession | null {
-  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool);
-  const flashcardLimit = useFullPool ? Math.max(words.length, wordTarget ?? 0) : wordTarget ?? Math.max(limits.newWords + 2, 6);
+  const eligibleWords = getPracticePool(words, storage);
+  const limits = getLessonLimits(durationMinutes, useFullPool ? eligibleWords.length : wordTarget, useFullPool);
+  const flashcardLimit = useFullPool ? eligibleWords.length : wordTarget ?? Math.max(limits.newWords + 2, 6);
   const focusWords =
     mode === 'pack'
-      ? words.slice(0, flashcardLimit)
-      : uniqueWords([...pickExtraFocusWords(words, storage, limits.activeWords), ...pickNewWords(words, storage, limits.newWords)]).slice(
+      ? eligibleWords.slice(0, flashcardLimit)
+      : uniqueWords([...pickExtraFocusWords(eligibleWords, storage, limits.activeWords), ...pickNewWords(eligibleWords, storage, limits.newWords)]).slice(
           0,
           flashcardLimit,
         );
@@ -989,7 +1002,7 @@ export function createFlashcardSession({
     kind: 'preview' as const,
     wordIds: focusWords.map((word) => word.id),
     exerciseTypes: [],
-    stepIds: focusWords.map((word) => `flashcard-${word.id}`),
+    stepIds: focusWords.map((word) => `${mode === 'pack' ? 'module-pack-flashcards' : 'module-extra-flashcards'}-${word.id}`),
   };
 
   const modules = renumberModules([module]);
@@ -1031,7 +1044,7 @@ function createPreviewModule(
     kind: 'preview',
     wordIds: words.map((word) => word.id),
     exerciseTypes: [],
-    stepIds: words.map((word) => `preview-${word.id}`),
+    stepIds: words.map((word) => `module-new-words-${word.id}`),
   };
 }
 
@@ -1046,7 +1059,10 @@ function createExerciseModule(
 ): { module: LessonModule; exercises: Exercise[] } {
   const orderedWords = storage ? weaveWordOrder(rankWordsForStudy(words, storage)) : shuffleArray(words);
   const sequence = buildExerciseSequence(orderedWords, exerciseTypes, storage);
-  const exercises = sequence.map((item, index) => createExercise(item.word, optionPool, item.type, index));
+  const exercises = sequence.map((item, index) => {
+    const exercise = createExercise(item.word, optionPool, item.type, index);
+    return { ...exercise, id: `${id}-${exercise.id}` };
+  });
 
   return {
     module: {
@@ -1108,7 +1124,7 @@ function buildSteps(modules: LessonModule[], moduleExercises: Record<string, Exe
     const exercises = moduleExercises[module.id] ?? [];
     exercises.forEach((exercise, index) => {
       steps.push({
-        id: `${module.id}-${exercise.id}`,
+        id: exercise.id,
         moduleId: module.id,
         moduleTitle: module.title,
         moduleDescription: module.description,
@@ -1169,7 +1185,7 @@ export function scheduleExerciseRetry(
   }
 
   const retryStep: LessonStep = {
-    id: `${anchorStep.moduleId}-${retryExercise.id}`,
+    id: retryExercise.id,
     moduleId: anchorStep.moduleId,
     moduleTitle: anchorStep.moduleTitle,
     moduleDescription: anchorStep.moduleDescription,
@@ -1193,6 +1209,7 @@ export function scheduleExerciseRetry(
 
     return {
       ...module,
+      wordIds: Array.from(new Set(moduleSteps.map((step) => step.wordId))),
       exerciseTypes:
         module.id === anchorStep.moduleId
           ? Array.from(new Set([...module.exerciseTypes, retryExercise.type]))
@@ -1234,6 +1251,13 @@ export function scheduleExerciseRetry(
   };
 }
 
+function getPracticePool(words: Word[], storage: AppStorage): Word[] {
+  return uniqueWords(words).filter((word) => {
+    const status = getWordProgress(storage, word.id).status;
+    return status !== 'known' && status !== 'ignored';
+  });
+}
+
 export function createLessonSession({
   mode,
   words,
@@ -1245,19 +1269,19 @@ export function createLessonSession({
   activePackIds = [],
   title,
 }: CreateLessonSessionInput): LessonSession | null {
+  const eligibleWords = getPracticePool(words, storage);
   if (mode === 'mistakes' && wordIds?.length) {
-    const dueMistakes = getPoolFromIds(words, wordIds).filter((word) =>
-      isWordDueForReview(getWordProgress(storage, word.id)),
-    );
-    return createMistakesSession(dueMistakes, activePackIds, durationMinutes, wordTarget, useFullPool);
+    const mistakeWords = getPoolFromIds(eligibleWords, wordIds);
+    return createMistakesSession(mistakeWords, activePackIds, durationMinutes, wordTarget, useFullPool);
   }
 
   if (mode === 'default') {
-    return createDailySession(words, storage, activePackIds, durationMinutes, wordTarget, useFullPool);
+    const session = createDailySession(eligibleWords, storage, activePackIds, durationMinutes, wordTarget, useFullPool);
+    return session && title ? { ...session, title } : session;
   }
 
   if (mode === 'extra' || mode === 'pack') {
-    return createExtraSession(mode, words, storage, activePackIds, durationMinutes, wordTarget, useFullPool, title);
+    return createExtraSession(mode, eligibleWords, storage, activePackIds, durationMinutes, wordTarget, useFullPool, title);
   }
 
   return null;

@@ -20,8 +20,12 @@ function normalizeFrenchAnswerToken(value: string): string {
     .toLowerCase()
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
+    .replace(/œ/g, 'oe')
+    .replace(/æ/g, 'ae')
     .replace(/[’`]/g, "'")
-    .replace(/[^a-z\s'-]/g, ' ')
+    .replace(/[‐‑‒–—]/g, '-')
+    .replace(/\s*'\s*/g, "'")
+    .replace(/[^\p{L}\p{N}\s'-]/gu, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -78,6 +82,12 @@ function normalizeJapaneseRomaji(value: string): string {
 }
 
 function getJapaneseRomajiVariants(value: string): Set<string> {
+  // Do not silently drop incorrect kana/kanji around an otherwise valid
+  // romanized answer. Kana is checked separately by isAnswerMatch.
+  if (!/^[a-z\u00c0-\u024f\s'’[\]-]+$/i.test(value.normalize('NFKC'))) {
+    return new Set();
+  }
+
   const normalized = normalizeJapaneseRomaji(value);
 
   if (!normalized) {
@@ -571,8 +581,7 @@ export function percentage(value: number, total: number): number {
   return Math.round((value / total) * 100);
 }
 
-export function getTodayDateKey(): string {
-  const now = new Date();
+export function getTodayDateKey(now = new Date()): string {
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
