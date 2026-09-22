@@ -61,6 +61,22 @@ function isValidDateString(value: unknown): value is string {
   return typeof value === 'string' && Number.isFinite(new Date(value).getTime());
 }
 
+function isValidDateKey(value: unknown): value is string {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T00:00:00Z`);
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+
+function nonNegativeInteger(value: unknown): number {
+  return Math.floor(finiteNumber(value, 0));
+}
+
+function stringList(value: unknown, maxLength = 1_000): string[] {
+  return Array.isArray(value)
+    ? value.map((item) => cleanText(item, '', maxLength)).filter(Boolean)
+    : [];
+}
+
 function createDefaultProfile(): UserProfile {
   const now = new Date().toISOString();
 
@@ -95,8 +111,8 @@ function createDefaultStorage(): AppStorage {
 }
 
 function normalizeWord(word: Word): Word {
-  const language = word.language ?? 'french';
-  const normalizedSource = word.source ?? 'custom';
+  const language = word.language === 'japanese' ? 'japanese' : 'french';
+  const normalizedSource = word.source === 'core' || word.source === 'pack' ? word.source : 'custom';
   const original = cleanText(word.original, '', 240);
   const translation = cleanText(word.translation, '', 400);
   const rawTranscription = cleanText(word.transcription, '', 240);
@@ -120,7 +136,8 @@ function normalizeWord(word: Word): Word {
     part_of_speech: cleanText(word.part_of_speech, 'word', 80) || 'word',
     tags: Array.isArray(word.tags) ? word.tags.map((tag) => cleanText(tag, '', 80)).filter(Boolean).slice(0, 30) : [],
     packIds: Array.isArray(word.packIds) ? word.packIds.filter((id) => typeof id === 'string').slice(0, 50) : [],
-    source: word.source ?? 'custom',
+    source: normalizedSource,
+    level: word.level === 'A2' || word.level === 'B1' ? word.level : 'A1',
     imagePath: word.imagePath ?? undefined,
     imageUrl: word.imageUrl ?? undefined,
     imageAlt: word.imageAlt ?? undefined,
@@ -177,8 +194,8 @@ function normalizeRadicalProgress(progress: Partial<RadicalProgress>, radicalId:
     correctAnswers,
     wrongAnswers,
     status,
-    lastStudiedAt: typeof progress.lastStudiedAt === 'string' ? progress.lastStudiedAt : null,
-    masteredAt: typeof progress.masteredAt === 'string' ? progress.masteredAt : null,
+    lastStudiedAt: isValidDateString(progress.lastStudiedAt) ? progress.lastStudiedAt : null,
+    masteredAt: isValidDateString(progress.masteredAt) ? progress.masteredAt : null,
   };
 }
 
@@ -203,9 +220,7 @@ function normalizeProgress(progress: Partial<WordProgress>, wordId: string): Wor
   const successfulReviewDates = Array.isArray(progress.successful_review_dates)
     ? Array.from(
         new Set(
-          progress.successful_review_dates.filter(
-            (date): date is string => typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date),
-          ),
+          progress.successful_review_dates.filter(isValidDateKey),
         ),
       ).sort().slice(-MAX_SUCCESSFUL_REVIEW_DATES)
     : [];
@@ -234,21 +249,21 @@ function normalizeCustomPack(value: unknown): import('../types').WordPack | null
 
   const pack = value as Partial<import('../types').WordPack>;
 
-  if (!pack.id || !pack.title || !pack.language || !Array.isArray(pack.words)) {
+  if (typeof pack.id !== 'string' || !pack.id.trim() || typeof pack.title !== 'string' || !Array.isArray(pack.words)) {
     return null;
   }
 
   return {
     id: pack.id,
-    language: pack.language,
+    language: pack.language === 'japanese' ? 'japanese' : 'french',
     title: cleanText(pack.title, 'Импортированный пак', 80),
     description: cleanText(pack.description, 'Импортированный пользовательский пак.', 500),
-    accent: pack.accent ?? '#1a8ce2',
+    accent: cleanText(pack.accent, '#1a8ce2', 80),
     coverImageUrl: pack.coverImageUrl,
     coverImageAlt: pack.coverImageAlt,
     words: pack.words
-      .filter((word): word is Word => Boolean(word?.id && word?.original && word?.translation))
-      .map((word) => normalizeWord({ ...word, source: 'pack', packIds: [pack.id!] })),
+      .filter((word): word is Word => isRecord(word) && typeof word.id === 'string' && typeof word.original === 'string' && typeof word.translation === 'string')
+      .map((word) => normalizeWord({ ...word, language: pack.language === 'japanese' ? 'japanese' : 'french', source: 'pack', packIds: [pack.id!] })),
   };
 }
 
@@ -257,8 +272,10 @@ function normalizeProfile(profile?: Partial<UserProfile>): UserProfile {
 
   return {
     ...fallback,
-    ...profile,
     displayName: cleanText(profile?.displayName, fallback.displayName, MAX_PROFILE_NAME_LENGTH) || fallback.displayName,
+    createdAt: isValidDateString(profile?.createdAt) ? profile.createdAt : fallback.createdAt,
+    updatedAt: isValidDateString(profile?.updatedAt) ? profile.updatedAt : fallback.updatedAt,
+    lastStudiedAt: isValidDateString(profile?.lastStudiedAt) ? profile.lastStudiedAt : null,
   };
 }
 
@@ -269,26 +286,58 @@ function normalizeHistoryEntry(value: unknown): StudyHistoryEntry | null {
 
   const entry = value as Partial<StudyHistoryEntry>;
 
-  if (!entry.id || !entry.date || !entry.completedAt || !entry.sessionId || !entry.mode) {
+  if (
+    typeof entry.id !== 'string' || !entry.id || typeof entry.sessionId !== 'string' || !entry.sessionId ||
+    !isValidDateKey(entry.date) || !isValidDateString(entry.completedAt) ||
+    !['default', 'extra', 'mistakes', 'pack'].includes(entry.mode ?? '')
+  ) {
     return null;
   }
 
   return {
     id: entry.id,
     date: entry.date,
-    language: entry.language ?? 'french',
+    language: entry.language === 'japanese' ? 'japanese' : 'french',
     completedAt: entry.completedAt,
     sessionId: entry.sessionId,
-    mode: entry.mode,
-    durationMinutes: (entry.durationMinutes as LessonDurationMinutes | undefined) ?? 20,
-    moduleTitles: entry.moduleTitles ?? [],
-    modulesCompleted: entry.modulesCompleted ?? 0,
-    wordsLearned: entry.wordsLearned ?? 0,
-    mistakesMade: entry.mistakesMade ?? 0,
-    correctAnswers: entry.correctAnswers ?? 0,
-    totalAnswers: entry.totalAnswers ?? 0,
-    timeSpentSeconds: entry.timeSpentSeconds ?? 0,
-    activePackIds: entry.activePackIds ?? [],
+    mode: entry.mode!,
+    durationMinutes: entry.durationMinutes === 10 || entry.durationMinutes === 30 ? entry.durationMinutes : 20,
+    moduleTitles: stringList(entry.moduleTitles),
+    modulesCompleted: nonNegativeInteger(entry.modulesCompleted),
+    wordsLearned: nonNegativeInteger(entry.wordsLearned),
+    mistakesMade: Math.min(nonNegativeInteger(entry.mistakesMade), nonNegativeInteger(entry.totalAnswers)),
+    correctAnswers: Math.min(nonNegativeInteger(entry.correctAnswers), nonNegativeInteger(entry.totalAnswers)),
+    totalAnswers: nonNegativeInteger(entry.totalAnswers),
+    timeSpentSeconds: nonNegativeInteger(entry.timeSpentSeconds),
+    activePackIds: stringList(entry.activePackIds),
+  };
+}
+
+function normalizeDailyLessonRecord(value: unknown): DailyLessonRecord | null {
+  if (!isRecord(value) || !isValidDateKey(value.date) || !isValidDateString(value.completedAt) || typeof value.sessionId !== 'string') {
+    return null;
+  }
+
+  const totalModules = nonNegativeInteger(value.totalModules);
+  const totalSteps = nonNegativeInteger(value.totalSteps);
+  const totalAnswers = nonNegativeInteger(value.totalAnswers);
+  return {
+    date: value.date,
+    language: value.language === 'japanese' ? 'japanese' : 'french',
+    completedAt: value.completedAt,
+    sessionId: value.sessionId,
+    totalModules,
+    completedModules: Math.min(totalModules, nonNegativeInteger(value.completedModules)),
+    totalSteps,
+    completedSteps: Math.min(totalSteps, nonNegativeInteger(value.completedSteps)),
+    correctAnswers: Math.min(totalAnswers, nonNegativeInteger(value.correctAnswers)),
+    totalAnswers,
+    newWords: nonNegativeInteger(value.newWords),
+    reviewWords: nonNegativeInteger(value.reviewWords),
+    reinforcementWords: nonNegativeInteger(value.reinforcementWords),
+    knownWords: nonNegativeInteger(value.knownWords),
+    difficultWordIds: stringList(value.difficultWordIds),
+    timeSpentSeconds: nonNegativeInteger(value.timeSpentSeconds),
   };
 }
 
@@ -299,7 +348,7 @@ function normalizeRadicalHistoryEntry(value: unknown): RadicalStudyHistoryEntry 
 
   const entry = value as Partial<RadicalStudyHistoryEntry>;
 
-  if (!entry.id || !entry.date || !entry.completedAt || !Array.isArray(entry.radicalIds)) {
+  if (typeof entry.id !== 'string' || !entry.id || !isValidDateKey(entry.date) || !isValidDateString(entry.completedAt) || !Array.isArray(entry.radicalIds)) {
     return null;
   }
 
@@ -308,7 +357,7 @@ function normalizeRadicalHistoryEntry(value: unknown): RadicalStudyHistoryEntry 
     date: entry.date,
     completedAt: entry.completedAt,
     radicalIds: entry.radicalIds.filter((id): id is string => typeof id === 'string').slice(0, 50),
-    correctAnswers: Math.floor(finiteNumber(entry.correctAnswers, 0)),
+    correctAnswers: Math.min(nonNegativeInteger(entry.correctAnswers), nonNegativeInteger(entry.totalAnswers)),
     totalAnswers: Math.floor(finiteNumber(entry.totalAnswers, 0)),
   };
 }
@@ -316,105 +365,104 @@ function normalizeRadicalHistoryEntry(value: unknown): RadicalStudyHistoryEntry 
 function normalizePackState(packState: Partial<UserPackState> | undefined, packId: string): UserPackState {
   return {
     packId,
-    status: packState?.status ?? 'not_added',
-    addedAt: packState?.addedAt ?? null,
-    completedAt: packState?.completedAt ?? null,
+    status: packState?.status === 'added' || packState?.status === 'in_progress' || packState?.status === 'completed' ? packState.status : 'not_added',
+    addedAt: isValidDateString(packState?.addedAt) ? packState.addedAt : null,
+    completedAt: isValidDateString(packState?.completedAt) ? packState.completedAt : null,
   };
 }
 
 function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
   const parsed = parsedValue as Partial<AppStorage>;
   const defaults = createDefaultStorage();
-    const progressEntries: Array<[string, unknown]> = isRecord(parsed.progressByWordId)
-      ? Object.entries(parsed.progressByWordId)
-      : [];
-    const dailyStats: unknown[] = Array.isArray(parsed.dailyStats) ? parsed.dailyStats : [];
-    const completedDailyLessons: unknown[] = Array.isArray(parsed.completedDailyLessons) ? parsed.completedDailyLessons : [];
-    const studyHistory: unknown[] = Array.isArray(parsed.studyHistory) ? parsed.studyHistory : [];
-    const packStateEntries = isRecord(parsed.packStates) ? Object.entries(parsed.packStates) : [];
-    const customWords: unknown[] = Array.isArray(parsed.customWords) ? parsed.customWords : [];
-    const customPacks: unknown[] = Array.isArray(parsed.customPacks) ? parsed.customPacks : [];
-    const radicalProgressEntries: Array<[string, unknown]> = isRecord(parsed.radicalProgressById)
-      ? Object.entries(parsed.radicalProgressById)
-      : [];
-    const radicalStudyHistory: unknown[] = Array.isArray(parsed.radicalStudyHistory) ? parsed.radicalStudyHistory : [];
+  const progressEntries: Array<[string, unknown]> = isRecord(parsed.progressByWordId)
+    ? Object.entries(parsed.progressByWordId)
+    : [];
+  const dailyStats: unknown[] = Array.isArray(parsed.dailyStats) ? parsed.dailyStats : [];
+  const completedDailyLessons: unknown[] = Array.isArray(parsed.completedDailyLessons) ? parsed.completedDailyLessons : [];
+  const studyHistory: unknown[] = Array.isArray(parsed.studyHistory) ? parsed.studyHistory : [];
+  const packStateEntries = isRecord(parsed.packStates) ? Object.entries(parsed.packStates) : [];
+  const customWords: unknown[] = Array.isArray(parsed.customWords) ? parsed.customWords : [];
+  const customPacks: unknown[] = Array.isArray(parsed.customPacks) ? parsed.customPacks : [];
+  const radicalProgressEntries: Array<[string, unknown]> = isRecord(parsed.radicalProgressById)
+    ? Object.entries(parsed.radicalProgressById)
+    : [];
+  const radicalStudyHistory: unknown[] = Array.isArray(parsed.radicalStudyHistory) ? parsed.radicalStudyHistory : [];
 
-    return {
-      ...defaults,
-      ...parsed,
-      learningLanguage: parsed.learningLanguage === 'japanese' ? 'japanese' : 'french',
-      progressByWordId: Object.fromEntries(
-        progressEntries
-          .filter((entry): entry is [string, Partial<WordProgress>] => isRecord(entry[1]))
-          .map(([wordId, progress]) => [wordId, normalizeProgress(progress, wordId)]),
-      ),
-      dailyStats: dailyStats
-        .filter((item): item is Record<string, unknown> => isRecord(item) && typeof item.date === 'string')
-        .map((item) => ({
-          date: item.date as string,
-          language: (item.language === 'japanese' ? 'japanese' : 'french') as LearningLanguage,
-          completedLessons: Math.floor(finiteNumber(item.completedLessons, 0)),
-          correctAnswers: Math.floor(finiteNumber(item.correctAnswers, 0)),
-          totalAnswers: Math.floor(finiteNumber(item.totalAnswers, 0)),
-          wordsLearned: Math.floor(finiteNumber(item.wordsLearned, 0)),
-          reviewsCompleted: Math.floor(finiteNumber(item.reviewsCompleted, 0)),
-        }))
-        .slice(-180),
-      completedDailyLessons: completedDailyLessons
-        .filter((item): item is DailyLessonRecord =>
-          isRecord(item) && typeof item.date === 'string' && typeof item.completedAt === 'string' && typeof item.sessionId === 'string',
-        )
-        .map((item) => ({
-          ...item,
-          language: item.language ?? 'french',
-          timeSpentSeconds: item.timeSpentSeconds ?? 0,
-        }))
-        .slice(-180),
-      lessonDurationMinutes:
-        parsed.lessonDurationMinutes === 10 || parsed.lessonDurationMinutes === 30 ? parsed.lessonDurationMinutes : 20,
-      lessonDurationEnabled: typeof parsed.lessonDurationEnabled === 'boolean' ? parsed.lessonDurationEnabled : true,
-      lessonWordTarget:
-        parsed.lessonWordTarget === 10 ||
-        parsed.lessonWordTarget === 15 ||
-        parsed.lessonWordTarget === 25 ||
-        parsed.lessonWordTarget === 30 ||
-        parsed.lessonWordTarget === 35 ||
-        parsed.lessonWordTarget === 40 ||
-        parsed.lessonWordTarget === 45 ||
-        parsed.lessonWordTarget === 50
-          ? parsed.lessonWordTarget
-          : 20,
-      lessonSourcePackId: typeof parsed.lessonSourcePackId === 'string' ? parsed.lessonSourcePackId : null,
-      profile: normalizeProfile(isRecord(parsed.profile) ? parsed.profile as Partial<UserProfile> : undefined),
-      studyHistory: studyHistory
-        .map((entry) => normalizeHistoryEntry(entry))
-        .filter((entry): entry is StudyHistoryEntry => entry !== null)
-        .slice(-180),
-      packStates: Object.fromEntries(
-        packStateEntries.map(([packId, packState]) => [
-          packId,
-          normalizePackState(isRecord(packState) ? packState as Partial<UserPackState> : undefined, packId),
-        ]),
-      ),
-      customWords: customWords
-        .filter((word): word is Word =>
-          isRecord(word) && typeof word.id === 'string' && typeof word.original === 'string' && typeof word.translation === 'string',
-        )
-        .map((word) => normalizeWord(word)),
-      customPacks: customPacks
-        .filter(isRecord)
-        .map((pack) => normalizeCustomPack(pack))
-        .filter((pack): pack is import('../types').WordPack => pack !== null),
-      radicalProgressById: Object.fromEntries(
-        radicalProgressEntries
-          .filter((entry): entry is [string, Partial<RadicalProgress>] => isRecord(entry[1]))
-          .map(([radicalId, progress]) => [radicalId, normalizeRadicalProgress(progress, radicalId)]),
-      ),
-      radicalStudyHistory: radicalStudyHistory
-        .map((entry) => normalizeRadicalHistoryEntry(entry))
-        .filter((entry): entry is RadicalStudyHistoryEntry => entry !== null)
-        .slice(-120),
-    };
+  return {
+    ...defaults,
+    learningLanguage: parsed.learningLanguage === 'japanese' ? 'japanese' : 'french',
+    streakDays: nonNegativeInteger(parsed.streakDays),
+    lastLessonDate: isValidDateKey(parsed.lastLessonDate) ? parsed.lastLessonDate : null,
+    progressByWordId: Object.fromEntries(
+      progressEntries
+        .filter((entry): entry is [string, Partial<WordProgress>] => isRecord(entry[1]))
+        .map(([wordId, progress]) => [wordId, normalizeProgress(progress, wordId)]),
+    ),
+    dailyStats: dailyStats
+      .filter((item): item is Record<string, unknown> => isRecord(item) && isValidDateKey(item.date))
+      .map((item) => ({
+        date: item.date as string,
+        language: (item.language === 'japanese' ? 'japanese' : 'french') as LearningLanguage,
+        completedLessons: Math.floor(finiteNumber(item.completedLessons, 0)),
+        correctAnswers: Math.min(nonNegativeInteger(item.correctAnswers), nonNegativeInteger(item.totalAnswers)),
+        totalAnswers: Math.floor(finiteNumber(item.totalAnswers, 0)),
+        wordsLearned: Math.floor(finiteNumber(item.wordsLearned, 0)),
+        reviewsCompleted: Math.floor(finiteNumber(item.reviewsCompleted, 0)),
+      }))
+      .sort((left, right) => left.date.localeCompare(right.date))
+      .slice(-180),
+    completedDailyLessons: completedDailyLessons
+      .map(normalizeDailyLessonRecord)
+      .filter((item): item is DailyLessonRecord => item !== null)
+      .sort((left, right) => left.date.localeCompare(right.date))
+      .slice(-180),
+    lessonDurationMinutes:
+      parsed.lessonDurationMinutes === 10 || parsed.lessonDurationMinutes === 30 ? parsed.lessonDurationMinutes : 20,
+    lessonDurationEnabled: typeof parsed.lessonDurationEnabled === 'boolean' ? parsed.lessonDurationEnabled : true,
+    lessonWordTarget:
+      parsed.lessonWordTarget === 10 ||
+      parsed.lessonWordTarget === 15 ||
+      parsed.lessonWordTarget === 25 ||
+      parsed.lessonWordTarget === 30 ||
+      parsed.lessonWordTarget === 35 ||
+      parsed.lessonWordTarget === 40 ||
+      parsed.lessonWordTarget === 45 ||
+      parsed.lessonWordTarget === 50
+        ? parsed.lessonWordTarget
+        : 20,
+    lessonSourcePackId: typeof parsed.lessonSourcePackId === 'string' ? parsed.lessonSourcePackId : null,
+    profile: normalizeProfile(isRecord(parsed.profile) ? parsed.profile as Partial<UserProfile> : undefined),
+    studyHistory: studyHistory
+      .map((entry) => normalizeHistoryEntry(entry))
+      .filter((entry): entry is StudyHistoryEntry => entry !== null)
+      .sort((left, right) => left.completedAt.localeCompare(right.completedAt))
+      .slice(-180),
+    packStates: Object.fromEntries(
+      packStateEntries.map(([packId, packState]) => [
+        packId,
+        normalizePackState(isRecord(packState) ? packState as Partial<UserPackState> : undefined, packId),
+      ]),
+    ),
+    customWords: customWords
+      .filter((word): word is Word =>
+        isRecord(word) && typeof word.id === 'string' && typeof word.original === 'string' && typeof word.translation === 'string',
+      )
+      .map((word) => normalizeWord(word)),
+    customPacks: customPacks
+      .filter(isRecord)
+      .map((pack) => normalizeCustomPack(pack))
+      .filter((pack): pack is import('../types').WordPack => pack !== null),
+    radicalProgressById: Object.fromEntries(
+      radicalProgressEntries
+        .filter((entry): entry is [string, Partial<RadicalProgress>] => isRecord(entry[1]))
+        .map(([radicalId, progress]) => [radicalId, normalizeRadicalProgress(progress, radicalId)]),
+    ),
+    radicalStudyHistory: radicalStudyHistory
+      .map((entry) => normalizeRadicalHistoryEntry(entry))
+      .filter((entry): entry is RadicalStudyHistoryEntry => entry !== null)
+      .sort((left, right) => left.completedAt.localeCompare(right.completedAt))
+      .slice(-120),
+  };
 }
 
 function parseStoredStorage(raw: string): AppStorage {

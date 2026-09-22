@@ -1,8 +1,23 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { loadStorage, saveStorage } from '../src/lib/storage';
-import { installStorage, storage, progress, now } from './fixtures';
+import { completeDailyLesson, getCompletedDailyLesson, getCurrentStreakDays, loadStorage, recordStudyHistory, saveStorage } from '../src/lib/storage';
+import type { DailyLessonRecord, StudyHistoryEntry } from '../src/types';
+import { installStorage, storage, progress, now, localDateKey, word } from './fixtures';
 
 const envelope = (payload: unknown, version = 2) => JSON.stringify({ version, savedAt: now.toISOString(), payload });
+
+const historyEntry = (overrides: Partial<StudyHistoryEntry> = {}): StudyHistoryEntry => ({
+  id: 'daily-history', date: localDateKey(now), language: 'french', completedAt: now.toISOString(),
+  sessionId: 'daily', mode: 'default', durationMinutes: 20, moduleTitles: ['Знакомство', 'Проверка'],
+  modulesCompleted: 5, wordsLearned: 2, mistakesMade: 1, correctAnswers: 7, totalAnswers: 8,
+  timeSpentSeconds: 120, activePackIds: ['plants'], ...overrides,
+});
+
+const dailyRecord = (overrides: Partial<DailyLessonRecord> = {}): DailyLessonRecord => ({
+  date: localDateKey(now), language: 'french', completedAt: now.toISOString(), sessionId: 'daily',
+  totalModules: 5, completedModules: 5, totalSteps: 10, completedSteps: 10,
+  correctAnswers: 7, totalAnswers: 8, newWords: 2, reviewWords: 1, reinforcementWords: 2,
+  knownWords: 0, difficultWordIds: ['difficult'], timeSpentSeconds: 120, ...overrides,
+});
 
 beforeEach(() => installStorage());
 
@@ -44,6 +59,102 @@ describe('storage migration', () => {
     expect(corrupt.error?.kind).toBe('corrupt');
     expect(window.localStorage.getItem('anki-plus-storage-quarantine')).toContain('{invalid');
     expect(corrupt.storage.progressByWordId).toEqual({});
+  });
+});
+
+describe('stored data validation', () => {
+  it('repairs malformed history and profile fields without discarding valid progress', () => {
+    const valid = historyEntry();
+    const payload = {
+      ...storage({ kept: progress('kept', 'learning') }),
+      streakDays: '7', lastLessonDate: '2026-02-30',
+      profile: { displayName: '  Анна  ', createdAt: 'invalid', updatedAt: {}, lastStudiedAt: 'invalid' },
+      studyHistory: [
+        { ...valid, id: 'invalid-date', date: '2026-02-30' },
+        { ...valid, id: 'invalid-timestamp', completedAt: {} },
+        { ...valid, id: 'invalid-mode', mode: 'unsupported' },
+        { ...valid, moduleTitles: 'not an array', activePackIds: [null, {}, 'plants'], wordsLearned: '2',
+          modulesCompleted: -4, mistakesMade: -1, correctAnswers: 99, timeSpentSeconds: -10, durationMinutes: 999 },
+      ],
+      dailyStats: [{ date: 'invalid' }, { date: valid.date, correctAnswers: 99, totalAnswers: 2 }],
+    };
+    window.localStorage.setItem('anki-plus-storage', envelope(payload));
+
+    const result = loadStorage();
+    expect(result.error).toBeNull();
+    expect(result.storage.progressByWordId.kept.status).toBe('learning');
+    expect(result.storage.profile.displayName).toBe('Анна');
+    expect(result.storage.profile.lastStudiedAt).toBeNull();
+    expect(Number.isFinite(Date.parse(result.storage.profile.createdAt))).toBe(true);
+    expect(result.storage.lastLessonDate).toBeNull();
+    expect(getCurrentStreakDays(result.storage, now)).toBe(0);
+    expect(result.storage.studyHistory).toHaveLength(1);
+    expect(result.storage.studyHistory[0]).toMatchObject({
+      moduleTitles: [], activePackIds: ['plants'], wordsLearned: 0, modulesCompleted: 0,
+      mistakesMade: 0, correctAnswers: 8, totalAnswers: 8, timeSpentSeconds: 0, durationMinutes: 20,
+    });
+    expect(result.storage.dailyStats).toHaveLength(1);
+    expect(result.storage.dailyStats[0].correctAnswers).toBe(2);
+  });
+
+  it('normalizes daily completion fields and rejects impossible review dates', () => {
+    const payload = {
+      ...storage({ a: progress('a', 'review', { successful_review_dates: ['2026-02-30', '2026-01-01', '2026-01-01', '2026-13-01'] }) }),
+      completedDailyLessons: [
+        { ...dailyRecord(), date: 'invalid' },
+        { ...dailyRecord(), difficultWordIds: {}, totalModules: 5, completedModules: 99, newWords: -4 },
+      ],
+    };
+    window.localStorage.setItem('anki-plus-storage', envelope(payload));
+
+    const loaded = loadStorage().storage;
+    expect(loaded.progressByWordId.a.successful_review_dates).toEqual(['2026-01-01']);
+    expect(loaded.completedDailyLessons).toHaveLength(1);
+    expect(getCompletedDailyLesson(loaded, localDateKey(now))).toMatchObject({
+      difficultWordIds: [], completedModules: 5, newWords: 0,
+    });
+  });
+
+  it('keeps Japanese pack words in their pack language and handles malformed pack entries', () => {
+    const payload = {
+      ...storage(),
+      customPacks: [{ id: 'japanese-pack', title: 'Японский', language: 'japanese', words: [
+        { ...word('jp'), language: undefined, original: '水', transcription: '[みず · mizu]' },
+        { id: 'broken', original: 7, translation: {} }, null,
+      ] }],
+      packStates: { 'japanese-pack': { status: 'added', addedAt: now.toISOString() }, broken: { status: {}, addedAt: {} } },
+      radicalStudyHistory: [{ id: 'radicals', date: localDateKey(now), completedAt: now.toISOString(), radicalIds: ['water'], correctAnswers: 1, totalAnswers: 1 }],
+    };
+    window.localStorage.setItem('anki-plus-storage', envelope(payload));
+
+    const result = loadStorage();
+    expect(result.error).toBeNull();
+    expect(result.storage.customPacks[0].words).toHaveLength(1);
+    expect(result.storage.customPacks[0].words[0]).toMatchObject({
+      language: 'japanese', transcription: '[みず · mizu]', packIds: ['japanese-pack'], source: 'pack',
+    });
+    expect(result.storage.packStates.broken).toMatchObject({ status: 'not_added', addedAt: null });
+    expect(result.storage.radicalStudyHistory).toHaveLength(1);
+  });
+});
+
+describe('durable lesson history', () => {
+  it('preserves daily completion per day and language while recording extra practice separately', () => {
+    let state = completeDailyLesson(storage({ known: progress('known', 'known') }), { record: dailyRecord(), historyEntry: historyEntry() });
+    state = completeDailyLesson(state, {
+      record: dailyRecord({ language: 'japanese', sessionId: 'japanese-daily' }),
+      historyEntry: historyEntry({ id: 'japanese-history', sessionId: 'japanese-daily', language: 'japanese' }),
+    });
+    state = recordStudyHistory(state, historyEntry({ id: 'extra-history', sessionId: 'extra', mode: 'extra' }));
+    state = { ...state, lessonDurationMinutes: 30, lessonWordTarget: 30 };
+    expect(saveStorage(state)).toEqual({ ok: true });
+
+    const loaded = loadStorage().storage;
+    expect(loaded).toEqual(state);
+    expect(loaded.studyHistory).toHaveLength(3);
+    expect(getCompletedDailyLesson(loaded, localDateKey(now))?.sessionId).toBe('daily');
+    expect(getCompletedDailyLesson({ ...loaded, learningLanguage: 'japanese' }, localDateKey(now))?.sessionId).toBe('japanese-daily');
+    expect(getCompletedDailyLesson(loaded, '2026-01-11')).toBeNull();
   });
 });
 
