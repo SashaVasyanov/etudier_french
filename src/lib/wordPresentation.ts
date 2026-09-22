@@ -307,13 +307,9 @@ export function getLessonWordBadge(word: Word): string {
 }
 
 export function getLessonWordNotes(word: Word): string[] {
-  const notes = [
-    word.transcription ? `${word.transcription} · ${getPartOfSpeechLabel(word.part_of_speech)}` : getPartOfSpeechLabel(word.part_of_speech),
-    getWordDescription(word),
-    word.example_translation,
-  ].filter(Boolean);
-
-  return Array.from(new Set(notes)).slice(0, 3);
+  // Pronunciation and the example translation already have their own places
+  // on the introduction card. Notes should add context, not repeat them.
+  return [getWordDescription(word)].filter(Boolean);
 }
 
 export function getExerciseCopy(

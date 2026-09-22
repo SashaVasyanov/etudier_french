@@ -204,7 +204,7 @@ function buildNounExample(word: Word): { example_original: string; example_trans
   const specific: Record<string, { example_original: string; example_translation: string }> = {
     addition: {
       example_original: "L'addition, s'il vous plaît.",
-      example_translation: 'Счёт просят в ресторане после еды.',
+      example_translation: 'Счёт, пожалуйста.',
     },
     aeroport: {
       example_original: "L'aéroport est à trente minutes du centre.",
@@ -844,83 +844,67 @@ function buildFunctionWordExample(word: Word): { example_original: string; examp
     const prepositions: Record<string, { example_original: string; example_translation: string }> = {
       avec: {
         example_original: 'Je viens avec mon ami au cinéma.',
-        example_translation:
-          'Предлог «avec» используют, когда нужно сказать «с кем?» или «с чем?»: сопровождение, совместность, средство.',
+        example_translation: 'Я иду в кино со своим другом.',
       },
       sans: {
         example_original: 'Elle sort sans parapluie malgré la pluie.',
-        example_translation:
-          'Предлог «sans» используют, чтобы показать отсутствие чего-то: «без кого?» или «без чего?».',
+        example_translation: 'Она выходит без зонта, несмотря на дождь.',
       },
       pour: {
         example_original: 'Ce cadeau est pour ma soeur.',
-        example_translation:
-          'Предлог «pour» часто вводит адресата, цель или назначение: «для кого?», «зачем?», «на какой срок?».',
+        example_translation: 'Этот подарок для моей сестры.',
       },
       dans: {
         example_original: 'Les clés sont dans le sac.',
-        example_translation:
-          'Предлог «dans» показывает нахождение внутри пространства или момент в будущем: «внутри», «через какое-то время».',
+        example_translation: 'Ключи в сумке.',
       },
       sur: {
         example_original: 'Le téléphone est sur la table.',
-        example_translation:
-          'Предлог «sur» используют для положения на поверхности или для темы речи: «на», «о».',
+        example_translation: 'Телефон на столе.',
       },
       sous: {
         example_original: 'Le chat dort sous la chaise.',
-        example_translation:
-          'Предлог «sous» показывает положение под чем-то: «под кем?» или «под чем?».',
+        example_translation: 'Кот спит под стулом.',
       },
       de: {
         example_original: 'Je parle de mon travail avec Paul.',
-        example_translation:
-          'Предлог «de» очень частотный: он вводит тему, происхождение, принадлежность и часто стоит после других слов по управлению.',
+        example_translation: 'Я говорю с Полем о своей работе.',
       },
       a: {
         example_original: 'Nous allons à Paris demain matin.',
-        example_translation:
-          'Предлог «à» используют для направления и места, а также в конструкциях типа «parler à quelqu’un», времени и грамматическом управлении.',
+        example_translation: 'Завтра утром мы едем в Париж.',
       },
       en: {
         example_original: 'Elle voyage en train et parle en français.',
-        example_translation:
-          'Предлог «en» используют для способа действия, языка, транспорта, страны женского рода и состояния: «en train», «en France», «en colère».',
+        example_translation: 'Она путешествует на поезде и говорит по-французски.',
       },
       par: {
         example_original: 'Je passe par le parc pour rentrer.',
-        example_translation:
-          'Предлог «par» показывает путь, способ или автора действия: «через», «посредством», «кем сделано».',
+        example_translation: 'По дороге домой я прохожу через парк.',
       },
       chez: {
         example_original: 'Nous dînons chez des amis ce soir.',
-        example_translation:
-          'Предлог «chez» используют, когда говорят о чьём-то доме, месте работы или круге людей: «у кого?», «к кому?».',
+        example_translation: 'Сегодня вечером мы ужинаем у друзей.',
       },
       entre: {
         example_original: 'Le café est entre la banque et la poste.',
-        example_translation:
-          'Предлог «entre» показывает положение или выбор между двумя или несколькими объектами: «между».',
+        example_translation: 'Кафе находится между банком и почтой.',
       },
       avant: {
         example_original: 'Je lis un peu avant de dormir.',
-        example_translation:
-          'Предлог «avant» указывает на предшествование по времени; с инфинитивом часто используется форма «avant de + infinitif».',
+        example_translation: 'Я немного читаю перед сном.',
       },
       apres: {
         example_original: 'On se retrouve après le cours.',
-        example_translation:
-          'Предлог «après» показывает, что одно действие следует после другого: «после чего?».',
+        example_translation: 'Встретимся после занятия.',
       },
       pendant: {
         example_original: 'Je prends des notes pendant la réunion.',
-        example_translation:
-          'Предлог «pendant» указывает длительность действия или период, в течение которого что-то происходит.',
+        example_translation: 'Я делаю заметки во время встречи.',
       },
       depuis: {
         example_original: "J'habite ici depuis deux ans.",
-        example_translation:
-          'Предлог «depuis» используют для действия, которое началось в прошлом и продолжается до сих пор: «с какого времени?».',
+        example_translation: 'Я живу здесь уже два года.',
       },
     };
 
@@ -934,91 +918,91 @@ function buildFunctionWordExample(word: Word): { example_original: string; examp
     const determiners: Record<string, { example_original: string; example_translation: string }> = {
       ce: {
         example_original: 'Ce livre est facile à lire.',
-        example_translation: 'Определитель «ce» ставят перед существительным мужского рода в единственном числе: «этот».',
+        example_translation: 'Эту книгу легко читать.',
       },
       cette: {
         example_original: 'Cette rue est très calme le soir.',
-        example_translation: 'Определитель «cette» ставят перед существительным женского рода в единственном числе: «эта».',
+        example_translation: 'Вечером на этой улице очень тихо.',
       },
       ces: {
         example_original: 'Ces photos viennent de notre voyage.',
-        example_translation: 'Определитель «ces» используют с существительными во множественном числе: «эти».',
+        example_translation: 'Эти фотографии из нашей поездки.',
       },
       le: {
         example_original: 'Le train arrive à huit heures.',
-        example_translation: 'Артикль «le» указывает на конкретное существительное мужского рода в единственном числе.',
+        example_translation: 'Поезд прибывает в восемь часов.',
       },
       la: {
         example_original: 'La porte est déjà ouverte.',
-        example_translation: 'Артикль «la» указывает на конкретное существительное женского рода в единственном числе.',
+        example_translation: 'Дверь уже открыта.',
       },
       les: {
         example_original: 'Les enfants jouent dans le jardin.',
-        example_translation: 'Артикль «les» используют с конкретными существительными во множественном числе.',
+        example_translation: 'Дети играют в саду.',
       },
       un: {
         example_original: "J'ai acheté un billet pour demain.",
-        example_translation: 'Артикль «un» вводит новое или неопределённое существительное мужского рода в единственном числе.',
+        example_translation: 'Я купил билет на завтра.',
       },
       une: {
         example_original: "Elle cherche une réponse simple.",
-        example_translation: 'Артикль «une» вводит новое или неопределённое существительное женского рода в единственном числе.',
+        example_translation: 'Она ищет простой ответ.',
       },
       des: {
         example_original: "Nous avons acheté des fruits au marché.",
-        example_translation: 'Артикль «des» используют для неопределённого количества существительных во множественном числе.',
+        example_translation: 'Мы купили фрукты на рынке.',
       },
       mon: {
         example_original: 'Mon bureau est près de la fenêtre.',
-        example_translation: 'Определитель «mon» показывает принадлежность: «мой» перед существительным мужского рода или перед гласной.',
+        example_translation: 'Мой письменный стол стоит у окна.',
       },
       ma: {
         example_original: 'Ma soeur habite à Lyon.',
-        example_translation: 'Определитель «ma» показывает принадлежность: «моя» перед существительным женского рода.',
+        example_translation: 'Моя сестра живёт в Лионе.',
       },
       mes: {
         example_original: 'Mes amis arrivent ce soir.',
-        example_translation: 'Определитель «mes» означает «мои» и используется с существительными во множественном числе.',
+        example_translation: 'Мои друзья приезжают сегодня вечером.',
       },
       ton: {
         example_original: 'Ton café est prêt.',
-        example_translation: 'Определитель «ton» означает «твой» перед существительным мужского рода или перед гласной.',
+        example_translation: 'Твой кофе готов.',
       },
       ta: {
         example_original: 'Ta veste est sur la chaise.',
-        example_translation: 'Определитель «ta» означает «твоя» перед существительным женского рода.',
+        example_translation: 'Твоя куртка на стуле.',
       },
       tes: {
         example_original: 'Tes clés sont sur la table.',
-        example_translation: 'Определитель «tes» означает «твои» и используется с существительными во множественном числе.',
+        example_translation: 'Твои ключи на столе.',
       },
       son: {
         example_original: 'Son ordinateur est neuf.',
-        example_translation: 'Определитель «son» означает «его/её» перед существительным мужского рода или перед гласной.',
+        example_translation: 'Его компьютер новый.',
       },
       sa: {
         example_original: 'Sa voiture est devant la maison.',
-        example_translation: 'Определитель «sa» означает «его/её» перед существительным женского рода.',
+        example_translation: 'Его машина стоит перед домом.',
       },
       ses: {
         example_original: 'Ses parents vivent à Marseille.',
-        example_translation: 'Определитель «ses» означает «его/её» с существительными во множественном числе.',
+        example_translation: 'Его родители живут в Марселе.',
       },
       notre: {
         example_original: 'Notre cours commence à neuf heures.',
-        example_translation: 'Определитель «notre» означает «наш/наша» в единственном числе.',
+        example_translation: 'Наше занятие начинается в девять часов.',
       },
       votre: {
         example_original: 'Votre réservation est confirmée.',
-        example_translation: 'Определитель «votre» означает «ваш/ваша» в единственном числе или в вежливой форме.',
+        example_translation: 'Ваше бронирование подтверждено.',
       },
       leur: {
         example_original: 'Leur appartement est au troisième étage.',
-        example_translation: 'Определитель «leur» означает «их» перед существительным в единственном числе.',
+        example_translation: 'Их квартира на третьем этаже.',
       },
       quel: {
         example_original: 'Quel film veux-tu voir ce soir ?',
-        example_translation: 'Определитель «quel» используют в вопросах перед существительным мужского рода: «какой?».',
+        example_translation: 'Какой фильм ты хочешь посмотреть сегодня вечером?',
       },
     };
 
@@ -1032,51 +1016,51 @@ function buildFunctionWordExample(word: Word): { example_original: string; examp
     const pronouns: Record<string, { example_original: string; example_translation: string }> = {
       je: {
         example_original: 'Je commence la leçon maintenant.',
-        example_translation: 'Местоимение «je» означает «я» и используется, когда говорящий говорит о себе как о подлежащем.',
+        example_translation: 'Я начинаю урок сейчас.',
       },
       tu: {
         example_original: 'Tu connais déjà ce mot ?',
-        example_translation: 'Местоимение «tu» означает «ты» и используется в неформальном обращении к одному человеку.',
+        example_translation: 'Ты уже знаешь это слово?',
       },
       il: {
         example_original: 'Il travaille aujourd’hui à la maison.',
-        example_translation: 'Местоимение «il» означает «он» и используется как подлежащее в мужском роде.',
+        example_translation: 'Сегодня он работает дома.',
       },
       elle: {
         example_original: 'Elle arrive après le déjeuner.',
-        example_translation: 'Местоимение «elle» означает «она» и используется как подлежащее в женском роде.',
+        example_translation: 'Она придёт после обеда.',
       },
       nous: {
         example_original: 'Nous révisons ensemble avant le test.',
-        example_translation: 'Местоимение «nous» означает «мы» и используется, когда говорящий включает себя в группу.',
+        example_translation: 'Мы вместе повторяем материал перед тестом.',
       },
       vous: {
         example_original: 'Vous avez une minute, madame ?',
-        example_translation: 'Местоимение «vous» означает «вы» для множественного числа или вежливого обращения к одному человеку.',
+        example_translation: 'У вас есть минутка, мадам?',
       },
       ils: {
         example_original: 'Ils arrivent par le train de midi.',
-        example_translation: 'Местоимение «ils» означает «они» для мужского рода или смешанной группы.',
+        example_translation: 'Они приезжают полуденным поездом.',
       },
       elles: {
         example_original: 'Elles parlent de leur projet.',
-        example_translation: 'Местоимение «elles» означает «они» для группы женского рода.',
+        example_translation: 'Они говорят о своём проекте.',
       },
       on: {
         example_original: 'En France, on dit souvent bonjour en entrant.',
-        example_translation: 'Местоимение «on» часто означает «мы» или безличное «кто-то/люди» в общем смысле.',
+        example_translation: 'Во Франции часто здороваются, когда входят.',
       },
       qui: {
         example_original: 'Qui vient avec nous ce soir ?',
-        example_translation: 'Местоимение «qui» используют в вопросе о человеке: «кто?».',
+        example_translation: 'Кто пойдёт с нами сегодня вечером?',
       },
       quoi: {
         example_original: 'Tu cherches quoi exactement ?',
-        example_translation: 'Местоимение «quoi» используют, когда спрашивают о предмете или действии: «что?».',
+        example_translation: 'Что именно ты ищешь?',
       },
       laquelle: {
         example_original: 'Laquelle de ces rues mène à la gare ?',
-        example_translation: 'Местоимение «laquelle» используют, когда выбирают один предмет женского рода из нескольких: «какая именно?».',
+        example_translation: 'Какая из этих улиц ведёт к вокзалу?',
       },
     };
 
@@ -1090,23 +1074,23 @@ function buildFunctionWordExample(word: Word): { example_original: string; examp
     const conjunctions: Record<string, { example_original: string; example_translation: string }> = {
       et: {
         example_original: 'Je prends un café et je commence à travailler.',
-        example_translation: 'Союз «et» соединяет слова или части предложения и добавляет новую информацию: «и».',
+        example_translation: 'Я пью кофе и начинаю работать.',
       },
       mais: {
         example_original: 'Je comprends la règle, mais j’ai besoin de pratique.',
-        example_translation: 'Союз «mais» вводит противопоставление или ограничение: «но».',
+        example_translation: 'Я понимаю правило, но мне нужна практика.',
       },
       ou: {
         example_original: 'On va au parc ou on reste à la maison ?',
-        example_translation: 'Союз «ou» показывает выбор между вариантами: «или».',
+        example_translation: 'Пойдём в парк или останемся дома?',
       },
       si: {
         example_original: 'Si tu veux, on peut recommencer.',
-        example_translation: 'Союз «si» вводит условие: «если».',
+        example_translation: 'Если хочешь, можно начать заново.',
       },
       'parce que': {
         example_original: 'Je reste chez moi parce que je suis fatigué.',
-        example_translation: 'Союз «parce que» вводит причину и отвечает на вопрос «почему?».',
+        example_translation: 'Я остаюсь дома, потому что устал.',
       },
     };
 
@@ -1120,103 +1104,103 @@ function buildFunctionWordExample(word: Word): { example_original: string; examp
     const adverbs: Record<string, { example_original: string; example_translation: string }> = {
       "aujourd'hui": {
         example_original: "Aujourd'hui, nous finissons plus tôt.",
-        example_translation: 'Наречие «aujourd’hui» указывает на сегодняшний день и отвечает на вопрос «когда?».',
+        example_translation: 'Сегодня мы заканчиваем раньше.',
       },
       demain: {
         example_original: 'Demain, je passe un examen important.',
-        example_translation: 'Наречие «demain» указывает на следующий день: «завтра».',
+        example_translation: 'Завтра я сдаю важный экзамен.',
       },
       hier: {
         example_original: "Hier, j'ai vu Marie en ville.",
-        example_translation: 'Наречие «hier» указывает на предыдущий день: «вчера».',
+        example_translation: 'Вчера я видел Мари в городе.',
       },
       maintenant: {
         example_original: 'Maintenant, je comprends mieux la règle.',
-        example_translation: 'Наречие «maintenant» указывает на момент речи: «сейчас».',
+        example_translation: 'Теперь я лучше понимаю правило.',
       },
       ici: {
         example_original: 'Vous pouvez attendre ici quelques minutes.',
-        example_translation: 'Наречие «ici» показывает место рядом с говорящим: «здесь».',
+        example_translation: 'Вы можете подождать здесь несколько минут.',
       },
-      'là': {
+      la: {
         example_original: 'Pose le sac là, près de la porte.',
-        example_translation: 'Наречие «là» показывает место там, в указанной точке: «там/вот здесь».',
+        example_translation: 'Поставь сумку туда, возле двери.',
       },
       loin: {
         example_original: 'La gare n’est pas loin d’ici.',
-        example_translation: 'Наречие «loin» показывает большое расстояние: «далеко».',
+        example_translation: 'Вокзал недалеко отсюда.',
       },
       souvent: {
         example_original: 'Je relis souvent mes notes le soir.',
-        example_translation: 'Наречие «souvent» указывает частоту действия: «часто».',
+        example_translation: 'Я часто перечитываю свои заметки вечером.',
       },
       jamais: {
         example_original: 'Il ne voyage jamais sans son passeport.',
-        example_translation: 'Наречие «jamais» обычно используется с отрицанием и означает «никогда».',
+        example_translation: 'Он никогда не путешествует без своего паспорта.',
       },
       parfois: {
         example_original: 'Parfois, nous déjeunons au parc.',
-        example_translation: 'Наречие «parfois» указывает, что действие происходит время от времени: «иногда».',
+        example_translation: 'Иногда мы обедаем в парке.',
       },
       toujours: {
         example_original: 'Elle arrive toujours à l’heure.',
-        example_translation: 'Наречие «toujours» означает постоянство или повторяемость: «всегда».',
+        example_translation: 'Она всегда приходит вовремя.',
       },
       encore: {
         example_original: 'Je dois encore apprendre dix mots.',
-        example_translation: 'Наречие «encore» означает «ещё» или «снова» в зависимости от контекста.',
+        example_translation: 'Мне нужно выучить ещё десять слов.',
       },
       deja: {
         example_original: 'Nous avons déjà terminé le module.',
-        example_translation: 'Наречие «déjà» показывает, что действие произошло раньше ожидаемого: «уже».',
+        example_translation: 'Мы уже закончили модуль.',
       },
       ensemble: {
         example_original: 'Nous travaillons ensemble sur ce projet.',
-        example_translation: 'Наречие «ensemble» показывает совместность действия: «вместе».',
+        example_translation: 'Мы вместе работаем над этим проектом.',
       },
       comment: {
         example_original: 'Comment tu prononces ce mot ?',
-        example_translation: 'Наречие «comment» используют в вопросах о способе действия: «как?».',
+        example_translation: 'Как ты произносишь это слово?',
       },
       pourquoi: {
         example_original: 'Pourquoi tu changes de plan ?',
-        example_translation: 'Наречие «pourquoi» используют, когда спрашивают о причине: «почему?».',
+        example_translation: 'Почему ты меняешь план?',
       },
       quand: {
         example_original: 'Quand commence la réunion ?',
-        example_translation: 'Наречие «quand» используют в вопросах о времени: «когда?».',
+        example_translation: 'Когда начинается встреча?',
       },
       ou: {
         example_original: 'Où as-tu mis le dictionnaire ?',
-        example_translation: 'Наречие «où» используют в вопросах о месте: «где?», «куда?».',
+        example_translation: 'Куда ты положил словарь?',
       },
       oui: {
         example_original: 'Oui, je peux t’aider après le cours.',
-        example_translation: 'Наречие «oui» выражает согласие или подтверждение: «да».',
+        example_translation: 'Да, я могу помочь тебе после занятия.',
       },
       non: {
         example_original: 'Non, ce n’est pas la bonne réponse.',
-        example_translation: 'Наречие «non» выражает отрицание или несогласие: «нет».',
+        example_translation: 'Нет, это неправильный ответ.',
       },
       'peut-etre': {
         example_original: 'Peut-être qu’il arrive plus tard.',
-        example_translation: 'Наречие «peut-être» выражает неуверенность или вероятность: «может быть».',
+        example_translation: 'Возможно, он придёт позже.',
       },
       pres: {
         example_original: 'La pharmacie est tout près d’ici.',
-        example_translation: 'Наречие «près» указывает на близкое расстояние: «близко, рядом».',
+        example_translation: 'Аптека совсем рядом.',
       },
       trop: {
         example_original: 'Ce sac est trop lourd pour moi.',
-        example_translation: 'Наречие «trop» показывает избыточную степень: «слишком».',
+        example_translation: 'Эта сумка слишком тяжёлая для меня.',
       },
       tres: {
         example_original: 'Ce texte est très utile pour réviser.',
-        example_translation: 'Наречие «très» усиливает признак или качество: «очень».',
+        example_translation: 'Этот текст очень полезен для повторения.',
       },
       assez: {
         example_original: 'Cette explication est assez claire.',
-        example_translation: 'Наречие «assez» показывает достаточную или умеренную степень: «достаточно, довольно».',
+        example_translation: 'Это объяснение довольно понятное.',
       },
     };
 
