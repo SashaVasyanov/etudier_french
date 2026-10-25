@@ -138,6 +138,52 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+const KANJI_CHAR = /[\u3400-\u9fff\u3005]/;
+const KATAKANA_CHAR = /[\u30a0-\u30ff]/;
+const HIRAGANA_CHAR = /[\u3041-\u309f]/;
+const PARTICLE_START = new Set([...'がをにはのでともへやかだなよねしすまほけこじ']);
+
+/**
+ * Japanese has no spaces, so a plain substring search would blank out 日 inside
+ * 今日 or 少年 inside 青少年. Only cut occurrences whose edges do not run into
+ * the same script (a kanji word must not touch other kanji, a katakana word
+ * other katakana). Hiragana-only words cannot be delimited reliably and get a
+ * different exercise instead.
+ */
+function createJapaneseSentenceCloze(example: string, original: string): string | null {
+  if (!KANJI_CHAR.test(original) && !KATAKANA_CHAR.test(original)) {
+    return null;
+  }
+
+  const first = original[0];
+  const last = original[original.length - 1];
+  const clashes = (neighbour: string | undefined, edge: string) =>
+    neighbour !== undefined
+    && ((KANJI_CHAR.test(edge) && KANJI_CHAR.test(neighbour)) || (KATAKANA_CHAR.test(edge) && KATAKANA_CHAR.test(neighbour)));
+  // After a word ending in kanji, hiragana must start a particle or copula
+  // (日が, 日です, 簡単に); otherwise it is okurigana of another word (数える).
+  const startsOtherWord = (next: string | undefined) =>
+    next !== undefined && KANJI_CHAR.test(last) && HIRAGANA_CHAR.test(next) && !PARTICLE_START.has(next);
+
+  let result = '';
+  let cursor = 0;
+  let replaced = false;
+  let index = example.indexOf(original);
+
+  while (index !== -1) {
+    const before = index > 0 ? example[index - 1] : undefined;
+    const after = example[index + original.length];
+    if (!clashes(before, first) && !clashes(after, last) && !startsOtherWord(after)) {
+      result += `${example.slice(cursor, index)}＿＿`;
+      cursor = index + original.length;
+      replaced = true;
+    }
+    index = example.indexOf(original, index + original.length);
+  }
+
+  return replaced ? result + example.slice(cursor) : null;
+}
+
 function createSentenceCloze(word: Word): string | null {
   const example = word.example_original.trim();
   const original = word.original.trim();
@@ -147,7 +193,7 @@ function createSentenceCloze(word: Word): string | null {
   }
 
   if (word.language === 'japanese') {
-    return example.includes(original) ? example.split(original).join('＿＿') : null;
+    return createJapaneseSentenceCloze(example, original);
   }
 
   const pattern = new RegExp(`(^|[^\\p{L}])${escapeRegExp(original)}(?=$|[^\\p{L}])`, 'giu');

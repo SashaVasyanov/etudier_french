@@ -1469,16 +1469,19 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
     const wordImageManifestPromise = loadWordImageManifest();
 
     if (language === 'japanese') {
-      const [{ JAPANESE_CORE_WORDS }, { applyJapaneseWordCorrection }, wordImageManifest] = await Promise.all([
+      const [{ JAPANESE_CORE_WORDS }, { applyJapaneseWordCorrection, JAPANESE_EXCLUDED_WORDS, cleanJapaneseEntry }, wordImageManifest] = await Promise.all([
         import('./japaneseWords'),
         import('./japaneseWordCorrections'),
         wordImageManifestPromise,
       ]);
 
       return sortWordsByCurriculum(
-        JAPANESE_CORE_WORDS.map((word) =>
-          normalizeWord(applyJapaneseWordCorrection({ ...word, ...wordImageManifest[word.id] })),
-        ),
+        [
+          ...JAPANESE_CORE_WORDS.filter((word) => !JAPANESE_EXCLUDED_WORDS.has(word.original)).map((word) =>
+            normalizeWord(cleanJapaneseEntry(applyJapaneseWordCorrection({ ...word, ...wordImageManifest[word.id] }))),
+          ),
+          ...getPackWords('japanese').map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
+        ],
         language,
       );
     }
@@ -1507,7 +1510,7 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
             normalizeWord({ ...word, language: 'french', ...wordImageManifest[word.id], packIds: [], source: 'core' } as Word),
           )
           .filter((word) => isSupportedCoreWord(word)),
-        ...getPackWords().map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
+        ...getPackWords('french').map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
       ],
       language,
     );

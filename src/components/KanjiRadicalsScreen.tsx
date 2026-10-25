@@ -372,7 +372,7 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
             </div>
             <p>{selectedRadical.description}</p>
             <div className="radical-detail-meta">
-              <span><small>Японское название</small><strong>{selectedRadical.japaneseName}</strong><em>{selectedRadical.japaneseReading}</em></span>
+              <span><small>Японское название</small><strong>{selectedRadical.japaneseName}</strong>{selectedRadical.japaneseReading !== selectedRadical.japaneseName ? <em>{selectedRadical.japaneseReading}</em> : null}</span>
               <span><small>Черт</small><strong>{selectedRadical.strokes}</strong></span>
               <span><small>Позиция</small><strong>{selectedRadical.position}</strong></span>
               <span><small>Варианты</small><strong>{selectedRadical.variants.join(' · ') || '—'}</strong></span>

@@ -169,3 +169,19 @@ describe('lesson generation and recovery', () => {
     expect(session.exercises.some((exercise) => exercise.wordId === 'cat-ja' && exercise.type === 'kanji_to_hiragana_input')).toBe(true);
   });
 });
+
+describe('Japanese sentence cloze', () => {
+  const jaWord = (id: string, original: string, example: string): Word => ({
+    ...word(id), language: 'japanese', original, transcription: '[x · x]', example_original: example,
+  });
+  const clozeFor = (item: Word) => createLessonSession({
+    mode: 'mistakes', words: [item], storage: storage(), durationMinutes: 10, wordIds: [item.id],
+  })!.exercises.find((exercise) => exercise.type === 'sentence_cloze_input')?.prompt ?? null;
+
+  it('never cuts a word out of a longer compound or a different word', () => {
+    expect(clozeFor(jaWord('hi', '日', '今日は暖かい日です。'))).toBe('今日は暖かい＿＿です。');
+    expect(clozeFor(jaWord('shonen', '少年', '青少年と少年が来た。'))).toBe('青少年と＿＿が来た。');
+    expect(clozeFor(jaWord('mokuteki', '目的', '盲目的に従う。'))).toBeNull();
+    expect(clozeFor(jaWord('kazu', '数', '１０まで数えなさい。'))).toBeNull();
+  });
+});

@@ -51,3 +51,21 @@ describe('active dictionary words', () => {
     expect(getActiveWords(words, []).map((item) => item.id)).toEqual(['or', 'where', 'tea', 'other-language']);
   });
 });
+
+describe('Japanese starter packs', () => {
+  it('offers five themed packs of twenty words with readings and examples that contain the word', async () => {
+    const { getStarterPacks } = await import('../src/data/words');
+    const packs = getStarterPacks('japanese');
+    expect(packs).toHaveLength(5);
+    for (const pack of packs) {
+      expect(pack.words).toHaveLength(20);
+      for (const item of pack.words) {
+        expect(item.language).toBe('japanese');
+        expect(item.example_original).toContain(item.original);
+        expect(Boolean(item.example_reading)).toBe(true);
+        expect(item.transcription).toContain(' · ');
+      }
+    }
+    expect(new Set(packs.flatMap((pack) => pack.words.map((item) => item.id))).size).toBe(100);
+  });
+});

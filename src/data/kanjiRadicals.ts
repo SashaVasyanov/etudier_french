@@ -603,7 +603,9 @@ export const KANJI_RADICALS: KanjiRadical[] = KANGXI_RADICAL_SEEDS.map((seed) =>
     symbol: seed.symbol,
     variants: seed.variants,
     meaning: seed.meaning,
-    japaneseName: '部首',
+    // The compact catalog only knows the kana name; never show the generic
+    // word 部首 («ключ») as if it were the radical's own name.
+    japaneseName: seed.japaneseReading,
     japaneseReading: seed.japaneseReading,
     strokes: seed.strokes,
     position: seed.variants.length > 0 ? 'самостоятельно или в вариантной форме' : 'самостоятельно или в составе',
