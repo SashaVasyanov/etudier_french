@@ -876,6 +876,22 @@ export const FRENCH_NOUN_GENDERS: Readonly<Record<string, 'm' | 'f' | 'pl'>> = {
   "île": 'f',
   "œil": 'm',
   "œuf": 'm',
+  "agenda": 'm',
+  "âne": 'm',
+  "baskets": 'pl',
+  "bouquet": 'm',
+  "courriel": 'm',
+  "croisement": 'm',
+  "écureuil": 'm',
+  "lessive": 'f',
+  "mousse": 'f',
+  "patron": 'm',
+  "potager": 'm',
+  "rosier": 'm',
+  "short": 'm',
+  "t-shirt": 'm',
+  "terrasse": 'f',
+  "vaisselle": 'f',
 };
 
 // Words with an aspirated h take no elision: le haricot, la honte.
