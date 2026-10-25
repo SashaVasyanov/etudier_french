@@ -60,13 +60,16 @@ export function TextInputExercise({
     nextButtonRef.current?.focus();
 
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key !== 'Enter') {
+      // The Enter that submitted the answer bubbles up from the input after
+      // React has already re-rendered and attached this listener. Ignore it
+      // (and IME/auto-repeat Enters), otherwise the result screen is skipped.
+      if (event.key !== 'Enter' || event.defaultPrevented || event.isComposing || event.repeat) {
         return;
       }
 
       const target = event.target;
 
-      if (target instanceof HTMLButtonElement) {
+      if (target instanceof Element && target.closest('button, input, textarea, select, a, [contenteditable="true"]')) {
         return;
       }
 
@@ -132,7 +135,9 @@ export function TextInputExercise({
             placeholder={placeholder}
             onChange={(event) => onChange(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key !== 'Enter') {
+              // Enter while a Japanese/Chinese IME is converting kana confirms
+              // the conversion; it must not submit a half-typed answer.
+              if (event.key !== 'Enter' || event.nativeEvent.isComposing || event.keyCode === 229) {
                 return;
               }
 
