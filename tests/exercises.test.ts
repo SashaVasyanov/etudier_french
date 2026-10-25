@@ -34,7 +34,7 @@ describe('lesson generation and recovery', () => {
     checkSessionStructure(session);
   });
 
-  it('on a review-only day asks for recall first instead of previewing translations', () => {
+  it('on a review-only day starts with an objective check instead of previewing translations', () => {
     const words = [word('a'), word('b')];
     const due = new Date(now.getTime() - 86_400_000).toISOString();
     const state = storage({ a: progress('a', 'learning', { next_review_at: due }), b: progress('b', 'review', { next_review_at: due }) });
@@ -42,7 +42,7 @@ describe('lesson generation and recovery', () => {
     expect(session.modules[0].kind).toBe('exercise');
     expect(session.steps.some((step) => step.kind === 'preview')).toBe(false);
     const firstModuleSteps = session.steps.filter((step) => step.moduleId === session.modules[0].id);
-    expect(firstModuleSteps.every((step) => step.kind === 'exercise' && step.exercise.type === 'memory_check')).toBe(true);
+    expect(firstModuleSteps.every((step) => step.kind === 'exercise' && step.exercise.type !== 'memory_check')).toBe(true);
     checkSessionStructure(session);
   });
 

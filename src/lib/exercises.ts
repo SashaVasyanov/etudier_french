@@ -779,7 +779,8 @@ function createDailySession(
 
   // On a review-only day the first module must not show translations of the
   // very words the next modules test: that would hand out the answers and
-  // inflate every interval. Ask for recall first, reveal afterwards.
+  // inflate every interval. Ask for an objectively checked answer first (it is
+  // the first answer of the day that grades the review), reveal afterwards.
   const recallWarmup =
     newWords.length > 0
       ? null
@@ -787,9 +788,9 @@ function createDailySession(
           const result = createExerciseModule(
             'module-recall-warmup',
             'Вспомните слова',
-            'Сначала попробуйте вспомнить значение сами — ответ откроется после выбора.',
+            'Выберите значение слова — ответ откроется только после выбора.',
             introductionWords,
-            ['memory_check'],
+            ['original_to_translation_choice'],
             uniqueWords(words),
             storage,
           );
@@ -803,7 +804,10 @@ function createDailySession(
       ? 'Быстрое закрепление слов, которые вы только что увидели.'
       : 'Проверка узнавания перед основным запланированным повторением.',
     introductionWords,
-    ['original_to_translation_choice', 'translation_to_original_input'],
+    // On review days module 1 already asked for the meaning; ask the other way.
+    newWords.length > 0
+      ? ['original_to_translation_choice', 'translation_to_original_input']
+      : ['translation_to_original_choice', 'translation_to_original_input'],
     uniqueWords(words),
     storage,
   );
