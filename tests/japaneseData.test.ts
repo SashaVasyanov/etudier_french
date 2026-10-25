@@ -19,3 +19,19 @@ describe('Japanese dictionary data', () => {
     expect(door?.transcription.startsWith('[ドア ·')).toBe(true);
   });
 });
+
+describe('JLPT levels', () => {
+  it('grades the Japanese dictionary by JLPT and teaches N5 words first', async () => {
+    const { loadWords } = await import('../src/data/words');
+    const { getStudyLevelRank } = await import('../src/lib/levels');
+    const words = await loadWords('japanese');
+    const byOriginal = (original: string) => words.find((item) => item.original === original && item.source === 'core');
+    expect(byOriginal('時間')?.jlpt).toBe('N5');
+    expect(byOriginal('世界')?.jlpt).toBe('N4');
+    const graded = words.filter((item) => item.jlpt).length;
+    expect(graded / words.length).toBeGreaterThan(0.8);
+    const ranks = words.map((item) => getStudyLevelRank(item));
+    expect(ranks.every((rank, index) => index === 0 || ranks[index - 1] <= rank)).toBe(true);
+    expect(words[0].jlpt).toBe('N5');
+  });
+});

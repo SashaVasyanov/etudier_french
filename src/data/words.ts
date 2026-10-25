@@ -1,5 +1,6 @@
 import { getPackWords, STARTER_PACKS } from './wordPacks';
-import type { LearningLanguage, Word, WordLevel, WordPack } from '../types';
+import type { JlptLevel, LearningLanguage, Word, WordLevel, WordPack } from '../types';
+import { getStudyLevelRank } from '../lib/levels';
 import { createFallbackWordImage } from '../lib/wordImages';
 import { deriveFrenchLatinTranscription } from '../lib/utils';
 import { FRENCH_H_ASPIRE, FRENCH_NOUN_GENDERS } from './frenchNounGenders';
@@ -1135,16 +1136,34 @@ async function fetchJson<T>(url: string): Promise<T> {
   }
 }
 
+function frequencyRank(word: Word): number {
+  const match = /^ja-(\d+)$/.exec(word.id);
+  return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
+}
+
 function sortWordsByCurriculum(words: Word[], language: LearningLanguage): Word[] {
   return [...words].sort((left, right) => {
-    const levelDiff = LEVEL_ORDER[left.level] - LEVEL_ORDER[right.level];
+    const levelDiff = language === 'japanese'
+      ? getStudyLevelRank(left) - getStudyLevelRank(right)
+      : LEVEL_ORDER[left.level] - LEVEL_ORDER[right.level];
 
     if (levelDiff !== 0) {
       return levelDiff;
     }
 
+    // Within a JLPT level the more frequent words come first.
+    if (language === 'japanese') {
+      const frequencyDiff = frequencyRank(left) - frequencyRank(right);
+      if (frequencyDiff !== 0) return frequencyDiff;
+    }
+
     return left.original.localeCompare(right.original, language === 'japanese' ? 'ja' : 'fr');
   });
+}
+
+function withJlptLevel(word: Word, levels: Readonly<Record<string, JlptLevel>>): Word {
+  const jlpt = levels[word.original] ?? (word.original.endsWith('する') ? levels[word.original.slice(0, -2)] : undefined);
+  return jlpt ? { ...word, jlpt } : word;
 }
 
 export async function loadWords(language: LearningLanguage): Promise<Word[]> {
@@ -1158,9 +1177,15 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
     const wordImageManifestPromise = loadWordImageManifest();
 
     if (language === 'japanese') {
-      const [{ JAPANESE_CORE_WORDS }, { applyJapaneseWordCorrection, JAPANESE_EXCLUDED_WORDS, cleanJapaneseEntry }, wordImageManifest] = await Promise.all([
+      const [
+        { JAPANESE_CORE_WORDS },
+        { applyJapaneseWordCorrection, JAPANESE_EXCLUDED_WORDS, cleanJapaneseEntry },
+        { JAPANESE_JLPT_LEVELS },
+        wordImageManifest,
+      ] = await Promise.all([
         import('./japaneseWords'),
         import('./japaneseWordCorrections'),
+        import('./japaneseJlpt'),
         wordImageManifestPromise,
       ]);
 
@@ -1170,7 +1195,7 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
             normalizeWord(cleanJapaneseEntry(applyJapaneseWordCorrection({ ...word, ...wordImageManifest[word.id] }))),
           ),
           ...getPackWords('japanese').map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
-        ],
+        ].map((word) => withJlptLevel(word, JAPANESE_JLPT_LEVELS)),
         language,
       );
     }

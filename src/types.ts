@@ -1,5 +1,7 @@
 export type WordStatus = 'new' | 'learning' | 'review' | 'known' | 'mastered' | 'difficult' | 'ignored';
 export type WordLevel = 'A1' | 'A2' | 'B1';
+/** Japanese Language Proficiency Test level, N5 (easiest) … N1. */
+export type JlptLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
 export type LessonMode = 'default' | 'extra' | 'mistakes' | 'pack';
 export type LessonDurationMinutes = 10 | 20 | 30;
 export type LessonWordTarget = 10 | 15 | 20 | 25 | 30 | 35 | 40 | 45 | 50;
@@ -32,6 +34,8 @@ export interface Word {
   example_translation: string;
   part_of_speech: string;
   level: WordLevel;
+  /** Japanese words only; missing when the word is not in the JLPT lists. */
+  jlpt?: JlptLevel;
   tags: string[];
   packIds: string[];
   source: WordSource;

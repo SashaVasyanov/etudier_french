@@ -11,6 +11,7 @@ import { PackWordRow } from './PackWordRow';
 import { StatusBadge } from './StatusBadge';
 import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
+import { getWordLevelLabel } from '../lib/levels';
 
 interface PackDetailScreenProps {
   pack: WordPack;
@@ -202,7 +203,7 @@ export function PackDetailScreen({
                   <>
                     <StatusBadge status={progress.status} />
                     <span className="tag-badge">{getPartOfSpeechLabel(word.part_of_speech)}</span>
-                    <span className="tag-badge">{word.level}</span>
+                    <span className="tag-badge">{getWordLevelLabel(word)}</span>
                   </>
                 }
                 details={

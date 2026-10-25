@@ -30,3 +30,10 @@ CC BY, CC BY-SA or another license recorded in that manifest.
 Some abstract Japanese associations were generated specifically for étudier
 with OpenAI image generation. Those entries are identified by the
 `openai-imagegen` provider in the same manifest.
+
+## JLPT vocabulary levels
+
+`src/data/japaneseJlpt.ts` assigns JLPT levels using the word lists from
+[open-anki-jlpt-decks](https://github.com/jamsinclair/open-anki-jlpt-decks)
+(MIT License, © 2020 Jamie Sinclair), which are based on Jonathan Waller's
+JLPT resources at [tanos.co.uk](http://www.tanos.co.uk/jlpt/) (CC BY).

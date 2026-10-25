@@ -6,6 +6,7 @@ import { getPackByWord } from '../lib/packs';
 import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordProgress } from '../lib/storage';
 import type { AppStorage, DictionaryTab, LearningLanguage, Word, WordLevel, WordPack } from '../types';
+import { getLevelOptions, getStudyLevel, getStudyLevelLabel, getWordLevelLabel, type StudyLevel } from '../lib/levels';
 import { AppCard } from './AppCard';
 import { AppIcon } from './AppIcon';
 import { PackWordRow } from './PackWordRow';
@@ -39,7 +40,7 @@ const VISIBLE_WORDS_STEP = 80;
 export default function DictionaryScreen({ learningLanguage, words, storage, packs, onMarkWordKnown, onRestoreWord, onAddWord }: DictionaryScreenProps) {
   const [tab, setTab] = useState<DictionaryFilterTab>('all');
   const [query, setQuery] = useState('');
-  const [level, setLevel] = useState<'all' | WordLevel>('all');
+  const [level, setLevel] = useState<'all' | StudyLevel>('all');
   const [packFilter, setPackFilter] = useState<'all' | 'core' | string>('all');
   const [visibleWordCount, setVisibleWordCount] = useState(INITIAL_VISIBLE_WORDS);
   // Cards are compact by default; details (meaning, context, image source)
@@ -98,7 +99,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                 : tab === 'excluded'
                   ? status === 'ignored'
                   : status === 'difficult';
-      const matchesLevel = level === 'all' ? true : word.level === level;
+      const matchesLevel = level === 'all' ? true : getStudyLevel(word) === level;
       const matchesPack =
         packFilter === 'all' ? true : packFilter === 'core' ? word.source === 'core' : word.packIds.includes(packFilter);
       const matchesQuery =
@@ -259,19 +260,22 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                 onChange={(event) => setNewWord((current) => ({ ...current, part_of_speech: event.target.value }))}
               />
             </label>
-            <label className="form-field">
-              <span>Уровень</span>
-              <select
-                className="level-select"
-                aria-label="Уровень слова"
-                value={newWord.level}
-                onChange={(event) => setNewWord((current) => ({ ...current, level: event.target.value as WordLevel }))}
-              >
-                <option value="A1">A1</option>
-                <option value="A2">A2</option>
-                <option value="B1">B1</option>
-              </select>
-            </label>
+            {/* JLPT levels come from the official lists, so own Japanese words have none. */}
+            {learningLanguage === 'french' ? (
+              <label className="form-field">
+                <span>Уровень</span>
+                <select
+                  className="level-select"
+                  aria-label="Уровень слова"
+                  value={newWord.level}
+                  onChange={(event) => setNewWord((current) => ({ ...current, level: event.target.value as WordLevel }))}
+                >
+                  <option value="A1">A1</option>
+                  <option value="A2">A2</option>
+                  <option value="B1">B1</option>
+                </select>
+              </label>
+            ) : null}
             <label className="form-field">
               <span>Теги</span>
               <input
@@ -308,11 +312,11 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
             aria-label={`Поиск по слову на ${languageTitle}, переводу или тегам`}
             onChange={(event) => setQuery(event.target.value)}
           />
-          <select className="level-select" aria-label="Уровень слов" value={level} onChange={(event) => setLevel(event.target.value as 'all' | WordLevel)}>
+          <select className="level-select" aria-label="Уровень слов" value={level} onChange={(event) => setLevel(event.target.value as 'all' | StudyLevel)}>
             <option value="all">Все уровни</option>
-            <option value="A1">A1</option>
-            <option value="A2">A2</option>
-            <option value="B1">B1</option>
+            {getLevelOptions(learningLanguage).map((option) => (
+              <option key={option} value={option}>{getStudyLevelLabel(option)}</option>
+            ))}
           </select>
           <select className="level-select" aria-label="Источник слов" value={packFilter} onChange={(event) => setPackFilter(event.target.value)}>
             <option value="all">Все активные паки</option>
@@ -341,7 +345,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
 
         <div className="dictionary-summary">
           <span>Найдено карточек: {filteredWords.length}</span>
-          <span>{level !== 'all' ? `Уровень ${level}` : 'Все уровни'} · {packFilter === 'all' ? 'Все активные источники' : packFilter === 'core' ? 'Базовый курс' : packs.find((pack) => pack.id === packFilter)?.title ?? ''}</span>
+          <span>{level !== 'all' ? `Уровень ${getStudyLevelLabel(level)}` : 'Все уровни'} · {packFilter === 'all' ? 'Все активные источники' : packFilter === 'core' ? 'Базовый курс' : packs.find((pack) => pack.id === packFilter)?.title ?? ''}</span>
         </div>
       </AppCard>
 
@@ -412,7 +416,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                 badges={
                   <>
                     <StatusBadge status={progress.status} />
-                    <span className="tag-badge">{word.level}</span>
+                    <span className="tag-badge">{getWordLevelLabel(word)}</span>
                     {word.source === 'core' ? (
                       <span className="tag-badge">Базовый курс</span>
                     ) : word.source === 'custom' ? (

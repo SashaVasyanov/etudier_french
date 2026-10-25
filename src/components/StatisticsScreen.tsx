@@ -5,6 +5,7 @@ import { getCurrentStreakDays, getWordProgress } from '../lib/storage';
 import { getAnswerAccuracy, getRecentWordCounts, summarizeWordStatuses } from '../lib/studyMetrics';
 import { getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { AppIcon } from './AppIcon';
+import { getLevelOptions, getStudyLevel } from '../lib/levels';
 
 interface StatisticsScreenProps {
   learningLanguage: LearningLanguage;
@@ -98,13 +99,16 @@ function getMonthlyLessonCounts(storage: AppStorage, learningLanguage: LearningL
   });
 }
 
-function countLevels(words: Word[]): Array<{ label: string; value: number; color: string }> {
-  const levels: WordLevel[] = ['A1', 'A2', 'B1'];
+function countLevels(words: Word[], language: LearningLanguage): Array<{ label: string; value: number; color: string }> {
+  const levels = getLevelOptions(language);
 
-  return levels.map((level) => ({
-    label: LEVEL_LABELS[level],
-    value: words.filter((word) => word.level === level).length,
-    color: LEVEL_COLORS[level],
+  return levels.map((level, index) => ({
+    label: language === 'japanese' ? (level === 'none' ? 'Вне JLPT' : `JLPT ${level}`) : LEVEL_LABELS[level as WordLevel],
+    value: words.filter((word) => getStudyLevel(word) === level).length,
+    // One hue: lighter for easier levels, gray for words outside the scale.
+    color: level === 'none' ? 'var(--fill-strong)' : language === 'japanese'
+      ? `color-mix(in srgb, var(--accent) ${Math.round(35 + (index / 4) * 65)}%, var(--surface))`
+      : LEVEL_COLORS[level as WordLevel],
   }));
 }
 
@@ -150,8 +154,8 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
   const weeklyWords = getRecentWordCounts(storage.dailyStats, learningLanguage);
   const monthlyLessons = useMemo(() => getMonthlyLessonCounts(storage, learningLanguage), [learningLanguage, storage]);
   const diagramItems = useMemo(
-    () => (diagramMode === 'levels' ? countLevels(learnedWordList) : countSpeechTypes(learnedWordList)),
-    [diagramMode, learnedWordList],
+    () => (diagramMode === 'levels' ? countLevels(learnedWordList, learningLanguage) : countSpeechTypes(learnedWordList)),
+    [diagramMode, learnedWordList, learningLanguage],
   );
   const maxWeeklyCount = Math.max(1, ...weeklyWords.map((item) => item.count));
   const maxMonthlyCount = Math.max(1, ...monthlyLessons.map((item) => item.count));

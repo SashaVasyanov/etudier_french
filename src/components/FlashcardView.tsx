@@ -6,6 +6,7 @@ import { LessonCard } from './LessonCard';
 import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
 import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
+import { getWordLevelLabel } from '../lib/levels';
 
 interface FlashcardViewProps {
   word: Word;
@@ -45,7 +46,7 @@ export function FlashcardView({
           <CenteredWordBlock
             title={getDisplayWord(word)}
             subtitle={isRevealed ? word.translation : 'Попробуйте вспомнить перевод'}
-            meta={`${getPartOfSpeechLabel(word.part_of_speech)} · ${word.level}`}
+            meta={`${getPartOfSpeechLabel(word.part_of_speech)} · ${getWordLevelLabel(word)}`}
             titleClassName="exercise-title lesson-word-title"
             subtitleClassName="lesson-translation"
           />

@@ -1,3 +1,4 @@
+import { getStudyLevelRank } from './levels';
 import type {
   AppStorage,
   Exercise,
@@ -354,20 +355,8 @@ function createExercise(word: Word, optionPool: Word[], type: ExerciseType, inde
   }
 }
 
-function levelWeight(level: Word['level']): number {
-  if (level === 'A1') {
-    return 0;
-  }
-
-  if (level === 'A2') {
-    return 1;
-  }
-
-  return 2;
-}
-
 function sortByCurriculum(left: Word, right: Word): number {
-  const levelDiff = levelWeight(left.level) - levelWeight(right.level);
+  const levelDiff = getStudyLevelRank(left) - getStudyLevelRank(right);
 
   if (levelDiff !== 0) {
     return levelDiff;

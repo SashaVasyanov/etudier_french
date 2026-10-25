@@ -5,6 +5,7 @@ import { JapaneseExampleReading } from './JapaneseExampleReading';
 import { LessonCard } from './LessonCard';
 import { WordImage } from './WordImage';
 import { getDisplayWord, getLessonWordBadge, getLessonWordNotes, getPartOfSpeechLabel } from '../lib/wordPresentation';
+import { getWordLevelLabel } from '../lib/levels';
 
 interface LessonWordPreviewProps {
   word: Word;
@@ -55,7 +56,7 @@ export function LessonWordPreview({
                 <AudioButton label="Прослушать" onClick={onReplayAudio} />
               </div>
               <p className="lesson-preview-description">{word.transcription || 'Транскрипция уточняется'}</p>
-              <span className="lesson-preview-meta">{getPartOfSpeechLabel(word.part_of_speech)} · {word.level}</span>
+              <span className="lesson-preview-meta">{getPartOfSpeechLabel(word.part_of_speech)} · {getWordLevelLabel(word)}</span>
             </div>
           </div>
 
