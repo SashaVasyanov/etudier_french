@@ -17,10 +17,11 @@ interface DictionaryScreenProps {
   storage: AppStorage;
   packs: WordPack[];
   onMarkWordKnown: (wordId: string) => boolean;
+  onRestoreWord: (wordId: string) => void;
   onAddWord: (word: Omit<Word, 'id' | 'language' | 'audio_original' | 'packIds' | 'source'>) => boolean;
 }
 
-type DictionaryFilterTab = DictionaryTab | 'known';
+type DictionaryFilterTab = DictionaryTab | 'known' | 'excluded';
 
 const TABS: Array<{ id: DictionaryFilterTab; label: string }> = [
   { id: 'all', label: 'Все слова' },
@@ -28,11 +29,12 @@ const TABS: Array<{ id: DictionaryFilterTab; label: string }> = [
   { id: 'known', label: 'Известные' },
   { id: 'mastered', label: 'Выученные' },
   { id: 'difficult', label: 'Сложные' },
+  { id: 'excluded', label: 'Исключённые' },
 ];
 const INITIAL_VISIBLE_WORDS = 80;
 const VISIBLE_WORDS_STEP = 80;
 
-export default function DictionaryScreen({ learningLanguage, words, storage, packs, onMarkWordKnown, onAddWord }: DictionaryScreenProps) {
+export default function DictionaryScreen({ learningLanguage, words, storage, packs, onMarkWordKnown, onRestoreWord, onAddWord }: DictionaryScreenProps) {
   const [tab, setTab] = useState<DictionaryFilterTab>('all');
   const [query, setQuery] = useState('');
   const [level, setLevel] = useState<'all' | WordLevel>('all');
@@ -82,7 +84,9 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
               ? status === 'known'
               : tab === 'mastered'
                 ? status === 'mastered'
-                : status === 'difficult';
+                : tab === 'excluded'
+                  ? status === 'ignored'
+                  : status === 'difficult';
       const matchesLevel = level === 'all' ? true : word.level === level;
       const matchesPack =
         packFilter === 'all' ? true : packFilter === 'core' ? word.source === 'core' : word.packIds.includes(packFilter);
@@ -338,15 +342,25 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                     >
                       Аудио
                     </button>
-                    <button
-                      type="button"
-                      className="secondary-button word-known-button"
-                      disabled={progress.status === 'known'}
-                      aria-label={progress.status === 'known' ? `${getDisplayWord(word)} уже отмечено как известное` : `Отметить ${getDisplayWord(word)} как уже известное`}
-                      onClick={() => onMarkWordKnown(word.id)}
-                    >
-                      {progress.status === 'known' ? 'Уже известно' : 'Уже знаю'}
-                    </button>
+                    {progress.status === 'known' || progress.status === 'ignored' ? (
+                      <button
+                        type="button"
+                        className="secondary-button word-known-button"
+                        aria-label={`Вернуть ${getDisplayWord(word)} в изучение`}
+                        onClick={() => onRestoreWord(word.id)}
+                      >
+                        Вернуть в изучение
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="secondary-button word-known-button"
+                        aria-label={`Отметить ${getDisplayWord(word)} как уже известное`}
+                        onClick={() => onMarkWordKnown(word.id)}
+                      >
+                        Уже знаю
+                      </button>
+                    )}
                   </div>
                 }
                 badges={

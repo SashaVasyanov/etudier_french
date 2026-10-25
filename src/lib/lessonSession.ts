@@ -2,6 +2,8 @@ import type { AppStorage, ExerciseOutcome, LessonSession, StudyHistoryEntry } fr
 import { applyOutcomes, completeDailyLesson, getWordProgress, recordStudyHistory } from './storage';
 import { getTodayDateKey } from './utils';
 
+const MAX_SECONDS_PER_STEP = 120;
+
 /** Keep completed steps in place so dismissing a repeated word cannot skip another word. */
 export function removeUpcomingWord(session: LessonSession, stepIndex: number, wordId: string): LessonSession {
   const remainingSteps = session.steps.filter((step, index) => index < stepIndex || step.wordId !== wordId);
@@ -42,6 +44,7 @@ export function finishLessonSession(
   outcomes: ExerciseOutcome[],
   knownWordIds: string[],
   now = new Date(),
+  options: { partial?: boolean } = {},
 ): AppStorage {
   if (storage.studyHistory.some((entry) => entry.sessionId === session.id && entry.language === storage.learningLanguage)) {
     return storage;
@@ -52,7 +55,13 @@ export function finishLessonSession(
   const completedModules = session.modules.filter((module) => module.stepIds.length > 0);
   const completedAt = now.toISOString();
   const date = getTodayDateKey(now);
-  const timeSpentSeconds = Math.max(0, Math.round((now.getTime() - new Date(session.startedAt).getTime()) / 1000));
+  const elapsedSeconds = Math.max(0, Math.round((now.getTime() - new Date(session.startedAt).getTime()) / 1000));
+  // A lesson left open for hours must not count the idle time as study time.
+  const timeSpentSeconds = Math.min(elapsedSeconds, (outcomes.length + knownWordIds.length + 1) * MAX_SECONDS_PER_STEP);
+  // A daily lesson belongs to the day it was started. One finished on a later
+  // day (or abandoned and settled) keeps its answers but is not that day's
+  // completed lesson.
+  const startedOnAnotherDay = getTodayDateKey(new Date(session.startedAt)) !== date;
   const masteredIds = session.sourceWordIds.filter((wordId) => {
     const before = getWordProgress(storage, wordId).status;
     return before !== 'mastered' && before !== 'known' && getWordProgress(updated, wordId).status === 'mastered';
@@ -68,7 +77,7 @@ export function finishLessonSession(
   };
 
   // Skipping every word is not evidence of completing five learning modules.
-  if (session.mode !== 'default' || completedModules.length !== 5 || outcomes.length === 0) {
+  if (session.mode !== 'default' || options.partial || startedOnAnotherDay || completedModules.length !== 5 || outcomes.length === 0) {
     return recordStudyHistory(updated, historyEntry);
   }
 

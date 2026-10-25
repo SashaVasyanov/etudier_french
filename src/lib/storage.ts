@@ -874,6 +874,38 @@ export function markWordAsIgnored(currentStorage: AppStorage, wordId: string): A
   };
 }
 
+/** Undo of «Уже знаю» / «Не хочу учить»: put back the exact previous progress. */
+export function restoreWordProgress(currentStorage: AppStorage, wordId: string, previous: WordProgress | undefined): AppStorage {
+  const progressByWordId = { ...currentStorage.progressByWordId };
+  if (previous) progressByWordId[wordId] = previous;
+  else delete progressByWordId[wordId];
+  return { ...currentStorage, progressByWordId };
+}
+
+/** Bring a known or excluded word back into study from the dictionary. */
+export function restoreWordToLearning(currentStorage: AppStorage, wordId: string, now = new Date()): AppStorage {
+  const existing = currentStorage.progressByWordId[wordId];
+  if (!existing || (existing.status !== 'known' && existing.status !== 'ignored')) return currentStorage;
+  // «Уже знаю» bumps shown_count, so look at real study traces instead.
+  const wasStudied = existing.repetition_step > 0 || existing.wrong_count > 0;
+
+  return {
+    ...currentStorage,
+    progressByWordId: {
+      ...currentStorage.progressByWordId,
+      [wordId]: {
+        ...existing,
+        status: wasStudied ? 'learning' : 'new',
+        next_review_at: wasStudied ? now.toISOString() : null,
+        interval_days: wasStudied ? 1 : 0,
+        repetition_step: wasStudied ? 1 : 0,
+        successful_review_dates: [],
+        learned_at: null,
+      },
+    },
+  };
+}
+
 export function getCompletedDailyLesson(storage: AppStorage, date = getTodayDateKey()): DailyLessonRecord | null {
   return storage.completedDailyLessons.find(
     (item) => item.date === date && item.language === storage.learningLanguage,

@@ -1,7 +1,7 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { createFlashcardSession, createLessonSession } from '../src/lib/exercises';
 import { finishLessonSession, getLessonProgress, removeUpcomingWord } from '../src/lib/lessonSession';
-import { markWordAsKnown } from '../src/lib/storage';
+import { getCompletedDailyLesson, markWordAsKnown } from '../src/lib/storage';
 import type { ExerciseOutcome, LessonSession } from '../src/types';
 import { localDateKey, now, storage, word } from './fixtures';
 
@@ -104,3 +104,31 @@ describe('lesson lifecycle', () => {
     expect(updated).toBe(state);
   });
 });
+
+describe('daily lesson day boundaries', () => {
+  beforeEach(() => { vi.useFakeTimers(); vi.setSystemTime(now); });
+  afterEach(() => { vi.useRealTimers(); });
+
+  it('a daily lesson started on an earlier day keeps its answers but is not today\'s completion', () => {
+    const session = { ...sessionFor(), startedAt: new Date(now.getTime() - 2 * 86_400_000).toISOString() };
+    const updated = finishLessonSession(storage(), session, answersFor(session), [], now);
+    expect(getCompletedDailyLesson(updated, localDateKey(now))).toBeNull();
+    expect(updated.studyHistory).toHaveLength(1);
+    expect(Object.keys(updated.progressByWordId).length).toBeGreaterThan(0);
+  });
+
+  it('a partial settle never records a daily completion', () => {
+    const session = sessionFor();
+    const updated = finishLessonSession(storage(), session, answersFor(session), [], now, { partial: true });
+    expect(getCompletedDailyLesson(updated, localDateKey(now))).toBeNull();
+    expect(updated.studyHistory).toHaveLength(1);
+  });
+
+  it('does not count hours of idle time as study time', () => {
+    const session = { ...sessionFor(), startedAt: new Date(now.getTime() - 6 * 60 * 60 * 1000).toISOString() };
+    const answers = answersFor(session);
+    const updated = finishLessonSession(storage(), session, answers, [], now);
+    expect(updated.studyHistory[0].timeSpentSeconds).toBeLessThanOrEqual((answers.length + 1) * 120);
+  });
+});
+

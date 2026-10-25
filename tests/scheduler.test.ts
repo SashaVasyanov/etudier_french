@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyOutcomes, markWordAsKnown, markWordAsIgnored } from '../src/lib/storage';
+import { applyOutcomes, markWordAsKnown, markWordAsIgnored, restoreWordProgress, restoreWordToLearning } from '../src/lib/storage';
 import { isWordDueForReview } from '../src/lib/storage';
 import { localDateKey, outcome, progress, storage, now } from './fixtures';
 
@@ -143,5 +143,24 @@ describe('scheduler lapses and grading', () => {
     const before = storage({ a: progress('a', 'review', { wrong_count: 9, repetition_step: 2, interval_days: 2, next_review_at: due(), successful_review_dates: [dayKey(-3)] }) });
     const p = applyOutcomes(before, [wrong('a'), correct('a', 1), correct('a', 2)], now).progressByWordId.a;
     expect(p.status).toBe('learning');
+  });
+});
+
+describe('undo and restore of excluded words', () => {
+  it('restores the exact previous progress after an accidental exclusion', () => {
+    const previous = progress('a', 'review', { shown_count: 4, interval_days: 4 });
+    const excluded = markWordAsIgnored(storage({ a: previous }), 'a');
+    expect(restoreWordProgress(excluded, 'a', previous).progressByWordId.a).toEqual(previous);
+    const fresh = markWordAsKnown(storage(), 'b');
+    expect(restoreWordProgress(fresh, 'b', undefined).progressByWordId.b).toBeUndefined();
+  });
+
+  it('brings a known or excluded word back into study from the dictionary', () => {
+    const studied = markWordAsIgnored(storage({ a: progress('a', 'review', { shown_count: 3, repetition_step: 2 }) }), 'a');
+    const restored = restoreWordToLearning(studied, 'a', now).progressByWordId.a;
+    expect(restored.status).toBe('learning');
+    expect(isWordDueForReview(restored, now)).toBe(true);
+    const neverSeen = restoreWordToLearning(markWordAsKnown(storage(), 'b'), 'b', now).progressByWordId.b;
+    expect(neverSeen.status).toBe('new');
   });
 });

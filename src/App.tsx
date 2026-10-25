@@ -19,7 +19,7 @@ import {
 } from './lib/languages';
 import { derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
 import { finishLessonSession, getLessonProgress, removeUpcomingWord } from './lib/lessonSession';
-import { loadLessonDraft, saveLessonDraft, type LessonDraft } from './lib/lessonDraft';
+import { isSessionFromAnotherDay, loadLessonDraft, saveLessonDraft, type LessonDraft } from './lib/lessonDraft';
 import {
   addCustomPack,
   addWordPack,
@@ -27,6 +27,8 @@ import {
   loadStorage,
   markWordAsIgnored,
   markWordAsKnown,
+  restoreWordProgress,
+  restoreWordToLearning,
   recordRadicalStudySession,
   saveStorage,
   setLearningLanguagePreference,
@@ -49,6 +51,7 @@ import type {
   LessonSession,
   StorageError,
   Word,
+  WordProgress,
 } from './types';
 import './styles/app.css';
 
@@ -73,15 +76,40 @@ type Screen =
   | 'packs'
   | 'packDetail';
 
+const LATE_FINISH_NOTICE = 'Урок был начат в предыдущий день: ответы сохранены, а сегодняшний урок ещё впереди.';
+const STALE_DRAFT_NOTICE = 'Урок прошлого дня остался незавершённым: ваши ответы сохранены. Сегодня начинается новый урок.';
+
+function settleDraft(currentStorage: AppStorage, draft: LessonDraft): AppStorage {
+  return finishLessonSession(currentStorage, draft.session, draft.outcomes, draft.knownWordIds, new Date(), { partial: true });
+}
+
 function App() {
-  const [initialStorageLoad] = useState(() => loadStorage());
-  const [initialDraft] = useState(() => {
-    const draft = loadLessonDraft(initialStorageLoad.storage.learningLanguage);
-    return draft && !initialStorageLoad.storage.studyHistory.some((entry) => entry.sessionId === draft.session.id)
-      && !getCompletedDailyLesson(initialStorageLoad.storage) ? draft : null;
+  const [initialState] = useState(() => {
+    const storageLoad = loadStorage();
+    const savedDraft = loadLessonDraft(storageLoad.storage.learningLanguage);
+    const draft = savedDraft && !storageLoad.storage.studyHistory.some((entry) => entry.sessionId === savedDraft.session.id)
+      && !getCompletedDailyLesson(storageLoad.storage) ? savedDraft : null;
+    // A daily lesson left unfinished on an earlier day is not resumed as
+    // today's lesson: its answers are kept, and today starts fresh.
+    if (draft && !storageLoad.error?.blocksSave && isSessionFromAnotherDay(draft.session, getTodayDateKey())) {
+      if (draft.outcomes.length === 0 && draft.knownWordIds.length === 0) {
+        saveLessonDraft(storageLoad.storage.learningLanguage, null);
+        return { storageLoad, draft: null, settledStaleDraft: false };
+      }
+      return {
+        storageLoad: { ...storageLoad, storage: settleDraft(storageLoad.storage, draft) },
+        draft: null,
+        settledStaleDraft: true,
+      };
+    }
+    return { storageLoad, draft, settledStaleDraft: false };
   });
+  const initialStorageLoad = initialState.storageLoad;
+  const initialDraft = initialState.draft;
   const dailyDraftRef = useRef<LessonDraft | null>(initialDraft);
-  const [lessonNotice, setLessonNotice] = useState<string | null>(null);
+  const [lessonNotice, setLessonNotice] = useState<string | null>(
+    initialState.settledStaleDraft ? STALE_DRAFT_NOTICE : null,
+  );
   const [today, setToday] = useState(getTodayDateKey);
   const [screen, setScreen] = useState<Screen>('home');
   useEffect(() => {
@@ -104,6 +132,12 @@ function App() {
   const [wordsLoadError, setWordsLoadError] = useState<string | null>(null);
   const [wordsReloadKey, setWordsReloadKey] = useState(0);
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
+  const [undoExclusion, setUndoExclusion] = useState<{
+    wordId: string;
+    label: string;
+    kind: 'known' | 'ignored';
+    previous: WordProgress | undefined;
+  } | null>(null);
   const storageRef = useRef(storage);
   const storageErrorRef = useRef(storageError);
 
@@ -202,6 +236,12 @@ function App() {
   }, [storage.learningLanguage, wordsReloadKey]);
 
   useEffect(() => {
+    if (!undoExclusion) return undefined;
+    const timeoutId = window.setTimeout(() => setUndoExclusion(null), 12_000);
+    return () => window.clearTimeout(timeoutId);
+  }, [undoExclusion]);
+
+  useEffect(() => {
     storageRef.current = storage;
     storageErrorRef.current = storageError;
   }, [storage, storageError]);
@@ -226,14 +266,16 @@ function App() {
   useEffect(() => {
     const persistLatestStorage = () => {
       if (!storageErrorRef.current?.blocksSave) {
-        void saveStorage(storageRef.current);
+        void saveStorage(withUnfinishedPracticeRef.current(storageRef.current));
       }
     };
 
     window.addEventListener('pagehide', persistLatestStorage);
+    window.addEventListener('beforeunload', persistLatestStorage);
 
     return () => {
       window.removeEventListener('pagehide', persistLatestStorage);
+      window.removeEventListener('beforeunload', persistLatestStorage);
       persistLatestStorage();
     };
   }, []);
@@ -326,6 +368,18 @@ function App() {
     setScreen(nextScreen);
   }
 
+  // Extra practice, pack and mistake sessions have no recovery draft. When one
+  // is replaced or the app closes, its answers are committed instead of lost.
+  function withUnfinishedPractice(currentStorage: AppStorage): AppStorage {
+    if (!session || session.mode === 'default' || (outcomes.length === 0 && knownWordIds.length === 0)) return currentStorage;
+    return finishLessonSession(currentStorage, session, outcomes, knownWordIds, new Date(), { partial: true });
+  }
+  function commitUnfinishedPractice() {
+    setStorage((currentStorage) => withUnfinishedPractice(currentStorage));
+  }
+  const withUnfinishedPracticeRef = useRef(withUnfinishedPractice);
+  withUnfinishedPracticeRef.current = withUnfinishedPractice;
+
   function resumeDraft(draft: LessonDraft) {
     if (draft.session.steps.some((step) => !wordsById.has(step.wordId))) {
       setLessonNotice('Состав словаря изменился. Начните новый урок — сохранённые результаты остаются в профиле.');
@@ -365,6 +419,16 @@ function App() {
       return;
     }
 
+    if (mode === 'default' && dailyDraftRef.current && isSessionFromAnotherDay(dailyDraftRef.current.session, getTodayDateKey())) {
+      const settled = settleDraft(storageRef.current, dailyDraftRef.current);
+      storageRef.current = settled;
+      setStorage(settled);
+      dailyDraftRef.current = null;
+      saveLessonDraft(storage.learningLanguage, null);
+      if (session?.mode === 'default') clearSessionState('home');
+      setLessonNotice(STALE_DRAFT_NOTICE);
+      return;
+    }
     if (mode === 'default' && dailyDraftRef.current && resumeDraft(dailyDraftRef.current)) return;
     if (session?.mode === mode && session.presentation === 'standard' && mode !== 'pack' && mode !== 'default') {
       if (currentLessonDraft && resumeDraft(currentLessonDraft)) return;
@@ -422,6 +486,7 @@ function App() {
       return;
     }
 
+    commitUnfinishedPractice();
     const sourcePackId = options?.packId ?? selectedLessonSourcePack?.id;
     if (sourcePackId) setStorage((current) => addWordPack(current, sourcePackId));
     nextSession.activePackIds = [...new Set(nextSession.sourceWordIds.flatMap((id) => wordsById.get(id)?.packIds ?? []))]
@@ -474,6 +539,7 @@ function App() {
       setLessonNotice('В этой подборке нет слов для карточек. Выберите другой пак или добавьте новые слова.');
       return;
     }
+    commitUnfinishedPractice();
     const sourcePackId = options?.packId ?? selectedLessonSourcePack?.id;
     if (sourcePackId) setStorage((current) => addWordPack(current, sourcePackId));
     nextSession.activePackIds = [...new Set(nextSession.sourceWordIds.flatMap((id) => wordsById.get(id)?.packIds ?? []))]
@@ -553,7 +619,9 @@ function App() {
       if (saved?.ok) saveLessonDraft(storage.learningLanguage, null);
     }
 
-    clearSessionState(activeSession.mode === 'default' ? 'dailyComplete' : 'result', { preserveOutcomes: true });
+    const finishedAsDaily = activeSession.mode === 'default' && !isSessionFromAnotherDay(activeSession, getTodayDateKey());
+    if (activeSession.mode === 'default' && !finishedAsDaily) setLessonNotice(LATE_FINISH_NOTICE);
+    clearSessionState(finishedAsDaily ? 'dailyComplete' : activeSession.mode === 'default' ? 'home' : 'result', { preserveOutcomes: true });
   }
 
   function goToNextStep() {
@@ -597,10 +665,12 @@ function App() {
     const nextIndex = stepIndex + (isSubmitted ? 1 : 0);
     const nextSession = removeUpcomingWord(session, nextIndex, currentWord.id);
     const nextKnownWordIds = Array.from(new Set([...knownWordIds, currentWord.id]));
+    const previous = storageRef.current.progressByWordId[currentWord.id];
 
     if (!markWordKnown(currentWord.id)) {
       return;
     }
+    setUndoExclusion({ wordId: currentWord.id, label: currentWord.original, kind: 'known', previous });
     setKnownWordIds(nextKnownWordIds);
     resetExerciseState();
 
@@ -613,6 +683,18 @@ function App() {
     setStepIndex(nextIndex);
   }
 
+  // The word does not come back into the running lesson (that would reshuffle
+  // its steps), but its previous progress is restored for the next lessons.
+  function undoLastExclusion() {
+    if (!undoExclusion) return;
+    const { wordId, previous } = undoExclusion;
+    const restored = restoreWordProgress(storageRef.current, wordId, previous);
+    storageRef.current = restored;
+    setStorage(restored);
+    setKnownWordIds((ids) => ids.filter((id) => id !== wordId));
+    setUndoExclusion(null);
+  }
+
   function handleIgnoreWord() {
     if (!session || !currentWord) {
       return;
@@ -621,9 +703,11 @@ function App() {
     const nextIndex = stepIndex + (isSubmitted ? 1 : 0);
     const nextSession = removeUpcomingWord(session, nextIndex, currentWord.id);
 
+    const previous = storageRef.current.progressByWordId[currentWord.id];
     const updated = markWordAsIgnored(storageRef.current, currentWord.id);
     storageRef.current = updated;
     setStorage(updated);
+    setUndoExclusion({ wordId: currentWord.id, label: currentWord.original, kind: 'ignored', previous });
     resetExerciseState();
 
     if (nextIndex >= nextSession.steps.length) {
@@ -721,10 +805,23 @@ function App() {
             ) : null}
           </section>
         ) : null}
+        {undoExclusion ? (
+          <section className="app-error-state undo-exclusion" role="status" aria-live="polite">
+            <p>
+              {undoExclusion.kind === 'known'
+                ? `«${undoExclusion.label}» отмечено как известное и больше не попадёт в уроки.`
+                : `«${undoExclusion.label}» исключено из изучения.`}
+            </p>
+            <button type="button" className="ghost-button" onClick={undoLastExclusion}>Отменить</button>
+            <button type="button" className="ghost-button" onClick={() => setUndoExclusion(null)}>Понятно</button>
+          </section>
+        ) : null}
         {lessonNotice ? (
           <section className="app-error-state" role="status">
             <p>{lessonNotice}</p>
-            <button type="button" className="ghost-button" onClick={() => { setSelectedPackId(null); setScreen('packs'); setLessonNotice(null); }}>Открыть паки</button>
+            {/пак|«Темы»/i.test(lessonNotice) ? (
+              <button type="button" className="ghost-button" onClick={() => { setSelectedPackId(null); setScreen('packs'); setLessonNotice(null); }}>Открыть паки</button>
+            ) : null}
             <button type="button" className="ghost-button" onClick={() => setLessonNotice(null)}>Понятно</button>
           </section>
         ) : null}
@@ -910,6 +1007,11 @@ function App() {
               storage={storage}
               packs={packs}
               onMarkWordKnown={(wordId) => markWordKnown(wordId)}
+              onRestoreWord={(wordId) => {
+                const restored = restoreWordToLearning(storageRef.current, wordId);
+                storageRef.current = restored;
+                setStorage(restored);
+              }}
               onAddWord={(word) => {
                 const customWord: Word = {
                   ...word,
@@ -1016,6 +1118,7 @@ function App() {
                 setStorage((currentStorage) => updateProfileName(currentStorage, value));
               }}
               onLearningLanguageChange={(value) => {
+                commitUnfinishedPractice();
                 clearSessionState('profile');
                 dailyDraftRef.current = loadLessonDraft(value);
                 setSelectedPackId(null);

@@ -408,6 +408,23 @@
   background: #e06075;
 }
 
+/* "Не хочу учить" is a rare, destructive choice: keep it visible but quiet,
+   always below the main action. */
+.danger-button.quiet-danger {
+  background: transparent;
+  border-color: rgba(239, 117, 136, 0.45);
+  color: #c94a5e;
+  font-weight: 600;
+}
+
+.danger-button.quiet-danger:hover {
+  background: rgba(239, 117, 136, 0.1);
+}
+
+.lesson-preview-toolbar .danger-button {
+  order: 4;
+}
+
 .ghost-button,
 .audio-button,
 .tab-button,

@@ -1,4 +1,5 @@
 import type { Exercise, ExerciseOutcome, LearningLanguage, LessonModule, LessonSession, LessonStep } from '../types';
+import { getTodayDateKey } from './utils';
 
 export interface LessonDraft {
   session: LessonSession;
@@ -8,6 +9,11 @@ export interface LessonDraft {
   selectedAnswer: string | null;
   typedAnswer: string;
   isSubmitted: boolean;
+}
+
+/** A daily lesson belongs to the local day it was started on. */
+export function isSessionFromAnotherDay(session: Pick<LessonSession, 'startedAt'>, today: string): boolean {
+  return getTodayDateKey(new Date(session.startedAt)) !== today;
 }
 
 const keyFor = (language: LearningLanguage) => `anki-plus-daily-draft-${language}`;

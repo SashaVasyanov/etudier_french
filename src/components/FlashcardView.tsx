@@ -96,7 +96,7 @@ export function FlashcardView({
               </button>
             ) : null}
             {onIgnoreWord ? (
-              <button type="button" className="danger-button full-width" onClick={onIgnoreWord}>
+              <button type="button" className="danger-button quiet-danger full-width" onClick={onIgnoreWord}>
                 Не хочу учить
               </button>
             ) : null}
@@ -113,7 +113,7 @@ export function FlashcardView({
               Вернуться позже
             </button>
             {onIgnoreWord ? (
-              <button type="button" className="danger-button full-width" onClick={onIgnoreWord}>
+              <button type="button" className="danger-button quiet-danger full-width" onClick={onIgnoreWord}>
                 Не хочу учить
               </button>
             ) : null}
