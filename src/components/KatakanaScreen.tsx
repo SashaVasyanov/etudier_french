@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { KATAKANA, KATAKANA_WORDS, type KanaChar, type LoanWord } from '../data/katakana';
 import { getKanaStatus, KANA_LEARNED_STREAK } from '../lib/storage';
 import { isKanaWordReadingMatch } from '../lib/utils';
@@ -74,6 +74,8 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
   const [submitted, setSubmitted] = useState(false);
   const [signOutcomes, setSignOutcomes] = useState<Array<{ kana: string; isCorrect: boolean }>>([]);
   const [wordResults, setWordResults] = useState<boolean[]>([]);
+  // Guards against a repeated key press answering twice before React re-renders.
+  const submittedRef = useRef(false);
 
   const summary = useMemo(() => {
     const statuses = KATAKANA.map((kana) => getKanaStatus(storage.kanaProgress[kana.kana]));
@@ -99,11 +101,13 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
     setSubmitted(false);
     setSignOutcomes([]);
     setWordResults([]);
+    submittedRef.current = false;
     setView('study');
   }
 
   function submit(value: string) {
-    if (!question || submitted || !value.trim()) return;
+    if (!question || submittedRef.current || !value.trim()) return;
+    submittedRef.current = true;
     setAnswer(value);
     setSubmitted(true);
     if (question.kind === 'sign') {
@@ -123,6 +127,13 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
     setIndex((current) => current + 1);
     setAnswer('');
     setSubmitted(false);
+    submittedRef.current = false;
+  }
+
+  /** «Завершить» keeps the answers already given. */
+  function stop() {
+    if (signOutcomes.length > 0) onCompleteSession(signOutcomes);
+    setView('table');
   }
 
   // 1–4 pick an answer, Enter moves on (the input handles its own Enter).
@@ -150,7 +161,7 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
     return (
       <section className="radicals-page radical-study-page katakana-page">
         <header className="radical-study-progress">
-          <button type="button" className="radical-back-button" onClick={() => setView('table')}>
+          <button type="button" className="radical-back-button" onClick={stop}>
             <AppIcon name="close" size={20} /> Завершить
           </button>
           <div>
@@ -210,7 +221,9 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
                 aria-label="Чтение слова"
                 onChange={(event) => setAnswer(event.target.value)}
                 onKeyDown={(event) => {
-                  if (event.nativeEvent.isComposing) event.stopPropagation();
+                  // Enter that confirms a Japanese IME candidate must not send the
+                  // answer (WKWebView may report keyCode 229 without isComposing).
+                  if (event.key === 'Enter' && (event.nativeEvent.isComposing || event.keyCode === 229)) event.preventDefault();
                 }}
               />
               {!submitted ? <button type="submit" className="radical-primary-button" disabled={!answer.trim()}>Проверить</button> : null}
@@ -253,7 +266,7 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
         <article className="radical-result-card">
           <span className="radical-result-mark"><AppIcon name="sparkles" size={32} /></span>
           <span className="radical-question-kicker">Тренировка завершена</span>
-          <h1>{signsRight === signOutcomes.length ? 'Все знаки прочитаны' : 'Катакана становится привычнее'}</h1>
+          <h1>{signsRight === signOutcomes.length ? 'Все знаки — без ошибок' : 'Катакана становится привычнее'}</h1>
           <p>{missed.length > 0 ? <>Повторить: <span lang="ja">{missed.join(' ')}</span></> : 'Знаки без ошибок засчитаны в серию.'}</p>
           <div className="radical-result-stats">
             <span><strong>{signsRight} из {signOutcomes.length}</strong> знаков</span>
@@ -276,7 +289,7 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
           <h1>Катакана</h1>
           <p>
             Катаканой пишут заимствованные слова: コーヒー, テレビ, ホテル. Знак считается выученным после{' '}
-            {KANA_LEARNED_STREAK} верных ответов подряд. В конце тренировки — чтение привычных слов: меню, вывесок, магазинов.
+            {KANA_LEARNED_STREAK} верных ответов подряд. В конце тренировки — чтение слов, которые встречаются в меню, на вывесках и в магазинах.
           </p>
         </div>
         <button type="button" className="radical-primary-button" onClick={start}>
@@ -295,7 +308,7 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
         <section key={group} className="radical-catalog-panel">
           <div className="radical-catalog-head">
             <div>
-              <h2>{group === 'basic' ? 'Основные знаки' : 'Звонкие знаки (с ゛ и ゜)'}</h2>
+              <h2>{group === 'basic' ? 'Основные знаки' : 'Звонкие и полузвонкие знаки'}</h2>
             </div>
           </div>
           <div className="kana-grid" lang="ja">
@@ -311,6 +324,12 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
           </div>
         </section>
       ))}
+
+      <p className="radical-caveat" lang="ru">
+        В словах встречаются и маленькие знаки: <span lang="ja">ャ ュ ョ</span> смягчают слог (<span lang="ja">ニュ</span> — nyu),{' '}
+        <span lang="ja">ッ</span> удваивает следующий согласный (<span lang="ja">ベッド</span> — beddo), а <span lang="ja">ー</span>{' '}
+        удлиняет гласный (<span lang="ja">コーヒー</span> — koohii). Редкие <span lang="ja">ヂ</span> и <span lang="ja">ヅ</span> в таблицу не вошли.
+      </p>
     </section>
   );
 }

@@ -225,7 +225,7 @@ export function HomeDashboard({
           <div>
             <span>Сегодняшний ритм</span>
             <h2>{today && today.totalAnswers > 0 ? `${todayAccuracy}% точность сегодня` : 'Первый шаг ждёт'}</h2>
-            <p>{today ? `Новых слов: ${today.wordsLearned} · ${countRu(today.totalAnswers, RU_ANSWERS)}` : 'Начни короткий урок — и появится твоя статистика.'}</p>
+            <p>{today ? `Освоено: ${countRu(today.wordsLearned, RU_WORDS)} · ${countRu(today.totalAnswers, RU_ANSWERS)}` : 'Начни короткий урок — и появится твоя статистика.'}</p>
           </div>
         </section>
 

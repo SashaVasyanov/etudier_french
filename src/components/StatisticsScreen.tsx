@@ -194,7 +194,11 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
           <div className="analytics-card-head">
             <div>
               <h2>Слова за неделю</h2>
-              <p>{wordsInProcess > 0 ? `В работе сейчас ${countRu(wordsInProcess, RU_WORDS)}${wordStats.difficult > 0 ? `, сложных ещё ${wordStats.difficult}` : ''}.` : 'Сейчас нет слов в работе.'}</p>
+              <p>{wordsInProcess > 0
+                ? `В работе сейчас ${countRu(wordsInProcess, RU_WORDS)}${wordStats.difficult > 0 ? ` и ещё ${wordStats.difficult} сложных` : ''}.`
+                : wordStats.difficult > 0
+                  ? `Сложных слов: ${wordStats.difficult}.`
+                  : 'Сейчас нет слов в работе.'}</p>
             </div>
             <span className="analytics-summary-badge">+{countRu(weeklyTotal, RU_WORDS)}</span>
           </div>

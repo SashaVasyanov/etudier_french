@@ -39,6 +39,18 @@ export function mergeTranslations(primary: string, secondary: string): string {
   return unique.length > 0 ? `${primary}; ${unique.join(', ')}` : primary;
 }
 
+/**
+ * Words count as the same card when the spelling matches — and, for Japanese,
+ * the reading too: 実 [じつ] «правда» and 実 [み] «плод» are different words.
+ */
+function getMergeKey(word: Word): string {
+  const base = `${word.language}:${normalizeWordKey(word.original)}`;
+  if (word.language !== 'japanese') return base;
+  const reading = (word.transcription ?? '').replace(/^\[|\]$/g, '').split(/[·・]/)[0]?.trim() ?? '';
+  const hiragana = reading.replace(/[\u30a1-\u30f6]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0x60));
+  return `${base}:${hiragana}`;
+}
+
 export function getEnabledPackIds(storage: AppStorage): string[] {
   return Object.values(storage.packStates)
     .filter((packState) => packState.status !== 'not_added')
@@ -58,7 +70,7 @@ export function getActiveWords(words: Word[], enabledPackIds: string[]): Word[] 
   const bestByOriginal = new Map<string, Word>();
 
   availableWords.forEach((word) => {
-    const key = `${word.language}:${normalizeWordKey(word.original)}`;
+    const key = getMergeKey(word);
     const current = bestByOriginal.get(key);
 
     if (!current) {
@@ -71,8 +83,18 @@ export function getActiveWords(words: Word[], enabledPackIds: string[]): Word[] 
 
     const preferred = nextPriority < currentPriority ? word : current;
     const other = preferred === word ? current : word;
+    // Pack examples are written by hand for the level of the pack; the core
+    // dictionary's are often generated or long, so the pack's one wins.
+    const packExample = preferred.source !== 'pack' && other.source === 'pack' && other.example_original
+      ? {
+          example_original: other.example_original,
+          example_translation: other.example_translation,
+          example_reading: other.example_reading,
+        }
+      : {};
     bestByOriginal.set(key, {
       ...preferred,
+      ...packExample,
       translation: mergeTranslations(preferred.translation, other.translation),
       packIds: [...new Set([...current.packIds, ...word.packIds])],
     });
@@ -91,14 +113,14 @@ const SOURCE_PRIORITY: Record<Word['source'], number> = { core: 0, custom: 1, pa
 export function canonicalizePackWords(packs: WordPack[], words: Word[]): WordPack[] {
   const canonicalIdByKey = new Map<string, Word>();
   words.forEach((word) => {
-    const key = `${word.language}:${normalizeWordKey(word.original)}`;
+    const key = getMergeKey(word);
     const current = canonicalIdByKey.get(key);
     if (!current || SOURCE_PRIORITY[word.source] < SOURCE_PRIORITY[current.source]) canonicalIdByKey.set(key, word);
   });
   return packs.map((pack) => {
     let changed = false;
     const packWords = pack.words.map((word) => {
-      const canonical = canonicalIdByKey.get(`${word.language}:${normalizeWordKey(word.original)}`);
+      const canonical = canonicalIdByKey.get(getMergeKey(word));
       if (!canonical || canonical.id === word.id) return word;
       changed = true;
       return { ...word, id: canonical.id };

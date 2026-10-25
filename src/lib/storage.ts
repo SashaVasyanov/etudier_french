@@ -732,7 +732,7 @@ const SUCCESSFUL_SESSION_RATIO = 0.75;
 const DIFFICULT_SESSION_MISTAKES = 2;
 const NEW_WORD_DIFFICULT_MISTAKES = 3;
 const MIN_EASE = 1.3;
-const MAX_EASE = 3.0;
+const MAX_EASE = 3.4;
 const MAX_INTERVAL_DAYS = 180;
 
 // Exercises where the learner produces the answer rather than recognizing it.
@@ -747,8 +747,9 @@ const RECALL_EXERCISES = new Set<ExerciseOutcome['type']>([
 /**
  * SM-2 quality (0–5) of one word in one session. The first answer of the day
  * is the real recall signal; later slips lower the grade but do not fail it.
- * 5 — all correct with at least one recall exercise; 4 — all correct, only
- * recognition; 3 — first answer correct, some slips (≥ 75 % right);
+ * 5 — all correct with at least one recall exercise; 4 — all correct with
+ * only recognition, or one slip; 3 — first answer correct, several slips
+ * (still ≥ 75 % right);
  * 2 — failed after a correct start or one wrong first answer; 1 — mostly wrong.
  */
 export function gradeSession(outcomes: ExerciseOutcome[]): number {
@@ -757,7 +758,9 @@ export function gradeSession(outcomes: ExerciseOutcome[]): number {
   const wrongAnswers = outcomes.length - correctAnswers;
   if (!outcomes[0].isCorrect) return wrongAnswers >= DIFFICULT_SESSION_MISTAKES && correctAnswers < wrongAnswers ? 1 : 2;
   if (correctAnswers / outcomes.length < SUCCESSFUL_SESSION_RATIO) return 2;
-  if (wrongAnswers > 0) return 3;
+  // A single slip after a correct first answer is usually a typo.
+  if (wrongAnswers >= 2) return 3;
+  if (wrongAnswers === 1) return 4;
   return outcomes.some((outcome) => RECALL_EXERCISES.has(outcome.type)) ? 5 : 4;
 }
 
@@ -781,10 +784,10 @@ export function isWordDueForReview(progress: WordProgress, now = new Date()): bo
 }
 
 /** A stable ±10 % spread so words learned together do not all fall on one day. */
-function spreadInterval(wordId: string, intervalDays: number): number {
+function spreadInterval(seed: string, intervalDays: number): number {
   if (intervalDays < 7) return intervalDays;
   let hash = 0;
-  for (const char of wordId) hash = (hash * 31 + char.charCodeAt(0)) % 1_000_003;
+  for (const char of seed) hash = (hash * 31 + char.charCodeAt(0)) % 1_000_003;
   const factor = 0.9 + (hash % 21) / 100;
   return Math.round(intervalDays * factor);
 }
@@ -793,7 +796,8 @@ function spreadInterval(wordId: string, intervalDays: number): number {
  * Early steps follow a fixed ladder (2 → 4 → 10 days) so a new word is seen
  * three times in its first two weeks; after that the SM-2 rule applies:
  * previous interval × ease, plus half of the days the review was overdue
- * (the word was remembered for that long anyway).
+ * (the word was remembered for that long anyway). The due date is then
+ * spread by ±10 % (see below).
  */
 function nextSuccessfulInterval(progress: WordProgress, successfulReviewDays: number, easeFactor: number, now: Date): number {
   if (successfulReviewDays <= 1) return 2;
@@ -805,7 +809,7 @@ function nextSuccessfulInterval(progress: WordProgress, successfulReviewDays: nu
     ? Math.max(0, Math.floor((now.getTime() - new Date(progress.next_review_at).getTime()) / (24 * 60 * 60 * 1000)))
     : 0;
   const interval = Math.round((previous + Math.min(overdueDays, previous) / 2) * easeFactor);
-  return clamp(spreadInterval(progress.word_id, interval), 10, MAX_INTERVAL_DAYS);
+  return clamp(interval, 10, MAX_INTERVAL_DAYS);
 }
 
 function buildAggregatedProgress(
@@ -839,7 +843,8 @@ function buildAggregatedProgress(
       progress: {
         ...base,
         status: wrongAnswers >= NEW_WORD_DIFFICULT_MISTAKES ? 'difficult' : 'learning',
-        ease_factor: easeFactor,
+        // Mistakes on a word seen for the first time are not forgetting.
+        ease_factor: existing.ease_factor,
         repetition_step: 1,
         interval_days: 1,
         next_review_at: addDays(startOfDay(now), 1).toISOString(),
@@ -892,7 +897,12 @@ function buildAggregatedProgress(
       ease_factor: easeFactor,
       repetition_step: existing.repetition_step + 1,
       interval_days: intervalDays,
-      next_review_at: addDays(startOfDay(now), intervalDays).toISOString(),
+      // The stored interval stays exact; only the due date is spread, with a
+      // seed that changes every review so no word drifts one way.
+      next_review_at: addDays(
+        startOfDay(now),
+        Math.min(MAX_INTERVAL_DAYS, spreadInterval(`${existing.word_id}:${existing.repetition_step}`, intervalDays)),
+      ).toISOString(),
       learned_at: becameMastered ? now.toISOString() : existing.learned_at,
       successful_review_dates: successfulReviewDates,
     },
@@ -922,7 +932,9 @@ export function getCurrentStreakDays(storage: AppStorage, now = new Date()): num
   const today = getTodayDateKey(now);
   if (storage.lastLessonDate === today) return storage.streakDays;
   const yesterday = getTodayDateKey(addDays(startOfDay(now), -1));
-  return storage.lastLessonDate === yesterday ? storage.streakDays : 0;
+  // «>=» also keeps the streak when the start of the day was moved later and
+  // the last lesson now counts as «tomorrow».
+  return storage.lastLessonDate >= yesterday ? storage.streakDays : 0;
 }
 
 export function applyOutcomes(currentStorage: AppStorage, outcomes: ExerciseOutcome[], now = new Date()): AppStorage {

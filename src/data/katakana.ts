@@ -70,7 +70,7 @@ export const KATAKANA_WORDS: LoanWord[] = [
   { kana: 'デパート', romaji: 'depaato', translation: 'универмаг' },
   { kana: 'スーパー', romaji: 'suupaa', translation: 'супермаркет' },
   { kana: 'レストラン', romaji: 'resutoran', translation: 'ресторан' },
-  { kana: 'アパート', romaji: 'apaato', translation: 'многоквартирный дом' },
+  { kana: 'アパート', romaji: 'apaato', translation: 'квартира (в малоэтажном доме)' },
   { kana: 'ペン', romaji: 'pen', translation: 'ручка' },
   { kana: 'ノート', romaji: 'nooto', translation: 'тетрадь' },
   { kana: 'シャツ', romaji: 'shatsu', translation: 'рубашка' },

@@ -617,11 +617,21 @@ export function getDayStartHour(): number {
   return dayStartHour;
 }
 
+/**
+ * Wall-clock based, so a daylight-saving change does not skip or repeat a day:
+ * before the chosen hour the calendar day before is still «today».
+ */
+function getStudyDayDate(now: Date): Date {
+  const day = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (now.getHours() < dayStartHour) day.setDate(day.getDate() - 1);
+  return day;
+}
+
 export function getTodayDateKey(now = new Date()): string {
-  const studyTime = new Date(now.getTime() - dayStartHour * 60 * 60 * 1000);
-  const year = studyTime.getFullYear();
-  const month = String(studyTime.getMonth() + 1).padStart(2, '0');
-  const day = String(studyTime.getDate()).padStart(2, '0');
+  const studyDay = getStudyDayDate(now);
+  const year = studyDay.getFullYear();
+  const month = String(studyDay.getMonth() + 1).padStart(2, '0');
+  const day = String(studyDay.getDate()).padStart(2, '0');
 
   return `${year}-${month}-${day}`;
 }
@@ -644,7 +654,7 @@ export function isReviewDue(date: string | null, now = new Date()): boolean {
 
 /** When the study day containing `date` began (midnight or the chosen hour). */
 export function startOfDay(date = new Date()): Date {
-  const next = new Date(date.getTime() - dayStartHour * 60 * 60 * 1000);
+  const next = getStudyDayDate(date);
   next.setHours(dayStartHour, 0, 0, 0);
   return next;
 }

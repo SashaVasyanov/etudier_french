@@ -263,6 +263,8 @@ const JAPANESE_WORD_CORRECTIONS: Readonly<Record<string, JapaneseWordCorrection>
     example_translation: 'Выпал первый в этом году снег.',
   },
   '人殺し': { translation: 'убийца; убийство' },
+  '趣味': { translation: 'хобби, увлечение; вкус' },
+  '安心': { translation: 'спокойствие, облегчение' },
   'あっち': { translation: 'туда, там (разг.)' },
   '行': {
     translation: 'строка',

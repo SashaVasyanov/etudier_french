@@ -203,7 +203,8 @@ describe('SM-2 grading and long intervals', () => {
     const { gradeSession, nextEaseFactor } = await import('../src/lib/storage');
     expect(gradeSession([correct('a', 0), correct('a', 1)])).toBe(5);
     expect(gradeSession([choice('a', true, 0), choice('a', true, 1)])).toBe(4);
-    expect(gradeSession([correct('a', 0), correct('a', 1), correct('a', 2), wrong('a', 3)])).toBe(3);
+    expect(gradeSession([correct('a', 0), correct('a', 1), correct('a', 2), wrong('a', 3)])).toBe(4);
+    expect(gradeSession([...[0, 1, 2, 3, 4, 5].map((n) => correct('a', n)), wrong('a', 6), wrong('a', 7)])).toBe(3);
     expect(gradeSession([correct('a', 0), wrong('a', 1)])).toBe(2);
     expect(gradeSession([wrong('a', 0), correct('a', 1), correct('a', 2)])).toBe(2);
     expect(gradeSession([wrong('a', 0), wrong('a', 1), correct('a', 2)])).toBe(1);
@@ -221,8 +222,10 @@ describe('SM-2 grading and long intervals', () => {
     }) });
     const p = applyOutcomes(before, [correct('a', 0), correct('a', 1)], now).progressByWordId.a;
     expect(p.ease_factor).toBeCloseTo(2.6);
-    expect(p.interval_days).toBeGreaterThanOrEqual(70);
-    expect(p.interval_days).toBeLessThanOrEqual(86);
+    expect(p.interval_days).toBe(78);
+    const dueInDays = Math.round((new Date(p.next_review_at!).getTime() - now.getTime()) / 86_400_000);
+    expect(dueInDays).toBeGreaterThanOrEqual(69);
+    expect(dueInDays).toBeLessThanOrEqual(87);
     expect(p.status).toBe('mastered');
   });
 
@@ -233,5 +236,28 @@ describe('SM-2 grading and long intervals', () => {
       successful_review_dates: [dayKey(-400), dayKey(-300), dayKey(-190)],
     }) });
     expect(applyOutcomes(overdue, [correct('a', 0)], now).progressByWordId.a.interval_days).toBe(180);
+  });
+});
+
+describe('review fixes', () => {
+  it('does not lower the ease of a word on its first meeting', () => {
+    const p = applyOutcomes(storage({ a: progress('a') }), [wrong('a', 0), wrong('a', 1), correct('a', 2)], now).progressByWordId.a;
+    expect(p.ease_factor).toBe(2.5);
+  });
+
+  it('keeps day keys continuous across a daylight-saving change', async () => {
+    const { setDayStartHour, getTodayDateKey, startOfDay, addDays } = await import('../src/lib/utils');
+    const previousTz = process.env.TZ;
+    try {
+      process.env.TZ = 'Europe/Berlin';
+      setDayStartHour(4);
+      const monday = new Date(2026, 2, 30, 10, 0);
+      expect(getTodayDateKey(monday)).toBe('2026-03-30');
+      expect(getTodayDateKey(addDays(startOfDay(monday), -1))).toBe('2026-03-29');
+      expect(getTodayDateKey(addDays(startOfDay(monday), -2))).toBe('2026-03-28');
+    } finally {
+      setDayStartHour(0);
+      process.env.TZ = previousTz;
+    }
   });
 });

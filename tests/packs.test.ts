@@ -97,3 +97,19 @@ describe('homonyms from different packs', () => {
     expect(mergeTranslations('семя, семена / косточка (плода)', 'семя')).toBe('семя, семена / косточка (плода)');
   });
 });
+
+describe('Japanese homographs', () => {
+  it('keeps words with the same kanji but different readings apart and prefers the pack example', async () => {
+    const { getActiveWords } = await import('../src/lib/packs');
+    const base = { language: 'japanese', packIds: [], example_translation: '', part_of_speech: 'noun' };
+    const truth = { ...base, id: 'core-jitsu', original: '実', translation: 'правда', transcription: '[じつ · jitsu]', source: 'core', example_original: '実は…' };
+    const fruit = { ...base, id: 'pack-mi', original: '実', translation: 'плод', transcription: '[み · mi]', source: 'pack', packIds: ['p'], example_original: '木に実がなる。' };
+    const time = { ...base, id: 'core-jikan', original: '時間', translation: 'время', transcription: '[じかん · jikan]', source: 'core', example_original: 'длинный пример 時間' };
+    const timePack = { ...time, id: 'pack-jikan', source: 'pack', packIds: ['n5'], example_original: '時間がありません。' };
+    const active = getActiveWords([truth, fruit, time, timePack] as unknown as import('../src/types').Word[], ['p', 'n5']);
+    expect(active.map((item) => item.translation).sort()).toEqual(['время', 'плод', 'правда']);
+    const merged = active.find((item) => item.original === '時間')!;
+    expect(merged.id).toBe('core-jikan');
+    expect(merged.example_original).toBe('時間がありません。');
+  });
+});
