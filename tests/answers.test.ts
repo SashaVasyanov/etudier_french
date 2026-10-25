@@ -73,3 +73,23 @@ describe('Japanese romaji answers', () => {
     expect(isAnswerMatch(answer, target.original, 'japanese', target)).toBe(true);
   });
 });
+
+describe('Japanese particle は', () => {
+  const jp = (original: string, kana: string, romaji: string) => ({
+    ...word(original), language: 'japanese' as const, original, transcription: `[${kana} · ${romaji}]`,
+  });
+
+  it.each([
+    [jp('電話', 'でんわ', 'denwa'), 'denha'],
+    [jp('母', 'はは', 'haha'), 'hawa'],
+    [jp('平和', 'へいわ', 'heiwa'), 'heiha'],
+  ])('does not swap ha/wa inside ordinary words: %s %s', (target, answer) => {
+    expect(isAnswerMatch(answer, target.original, 'japanese', target)).toBe(false);
+  });
+
+  it('accepts "wa" for a final particle は in expressions', () => {
+    const target = jp('あるいは', 'あるいは', 'aruiha');
+    expect(isAnswerMatch('aruiwa', target.original, 'japanese', target)).toBe(true);
+    expect(isAnswerMatch('aruiha', target.original, 'japanese', target)).toBe(true);
+  });
+});

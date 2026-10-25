@@ -9,6 +9,8 @@ export interface LessonDraft {
   selectedAnswer: string | null;
   typedAnswer: string;
   isSubmitted: boolean;
+  /** Last time the learner acted in this lesson (ISO); absent in older drafts. */
+  updatedAt?: string;
 }
 
 /** A daily lesson belongs to the local day it was started on. */
@@ -67,7 +69,8 @@ function isDraft(value: unknown): value is LessonDraft {
     || !integer(value.stepIndex) || value.stepIndex >= session.steps.length
     || !Array.isArray(value.outcomes) || !value.outcomes.every(isOutcome) || !strings(value.knownWordIds)
     || !(value.selectedAnswer === null || typeof value.selectedAnswer === 'string')
-    || typeof value.typedAnswer !== 'string' || typeof value.isSubmitted !== 'boolean') return false;
+    || typeof value.typedAnswer !== 'string' || typeof value.isSubmitted !== 'boolean'
+    || (value.updatedAt !== undefined && !Number.isFinite(Date.parse(String(value.updatedAt))))) return false;
   const modules = session.modules as LessonModule[];
   const steps = session.steps as LessonStep[];
   const exercises = session.exercises as Exercise[];

@@ -164,3 +164,14 @@ describe('undo and restore of excluded words', () => {
     expect(neverSeen.status).toBe('new');
   });
 });
+
+describe('streak with answers settled after the fact', () => {
+  it('does not move the streak backwards when an earlier day is applied later', () => {
+    const today = localDateKey(now);
+    const before = { ...storage(), lastLessonDate: today, streakDays: 5 };
+    const yesterday = new Date(now.getTime() - 86_400_000);
+    const after = applyOutcomes(before, [correct('a')], yesterday);
+    expect(after.lastLessonDate).toBe(today);
+    expect(after.streakDays).toBe(5);
+  });
+});

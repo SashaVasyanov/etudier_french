@@ -132,3 +132,11 @@ describe('daily lesson day boundaries', () => {
   });
 });
 
+
+describe('flashcard study time', () => {
+  it('counts flashcard steps, which produce no answers', () => {
+    const session = { ...createFlashcardSession({ mode: 'extra', words, storage: storage(), durationMinutes: 10 })!, startedAt: new Date(now.getTime() - 10 * 60 * 1000).toISOString() };
+    const updated = finishLessonSession(storage(), session, [], ['a'], now);
+    expect(updated.studyHistory[0].timeSpentSeconds).toBe(Math.min(600, (session.steps.length + 1) * 120));
+  });
+});

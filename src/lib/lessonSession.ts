@@ -57,7 +57,9 @@ export function finishLessonSession(
   const date = getTodayDateKey(now);
   const elapsedSeconds = Math.max(0, Math.round((now.getTime() - new Date(session.startedAt).getTime()) / 1000));
   // A lesson left open for hours must not count the idle time as study time.
-  const timeSpentSeconds = Math.min(elapsedSeconds, (outcomes.length + knownWordIds.length + 1) * MAX_SECONDS_PER_STEP);
+  // Flashcards produce no answers, so count their steps instead.
+  const stepsDone = session.presentation === 'flashcards' ? session.steps.length : outcomes.length + knownWordIds.length;
+  const timeSpentSeconds = Math.min(elapsedSeconds, (stepsDone + 1) * MAX_SECONDS_PER_STEP);
   // A daily lesson belongs to the day it was started. One finished on a later
   // day (or abandoned and settled) keeps its answers but is not that day's
   // completed lesson.

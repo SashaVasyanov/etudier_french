@@ -47,6 +47,7 @@ import { getTodayDateKey, isAnswerMatch, isJapaneseReadingMatch } from './lib/ut
 import type {
   AppStorage,
   ExerciseOutcome,
+  LearningLanguage,
   LessonMode,
   LessonSession,
   StorageError,
@@ -79,30 +80,56 @@ type Screen =
 const LATE_FINISH_NOTICE = 'Урок был начат в предыдущий день: ответы сохранены, а сегодняшний урок ещё впереди.';
 const STALE_DRAFT_NOTICE = 'Урок прошлого дня остался незавершённым: ваши ответы сохранены. Сегодня начинается новый урок.';
 
-function settleDraft(currentStorage: AppStorage, draft: LessonDraft): AppStorage {
-  return finishLessonSession(currentStorage, draft.session, draft.outcomes, draft.knownWordIds, new Date(), { partial: true });
+interface PreparedDailyDraft {
+  storage: AppStorage;
+  draft: LessonDraft | null;
+  settled: boolean;
+}
+
+/**
+ * A daily lesson left unfinished on an earlier day is not resumed as today's
+ * lesson: its answers are applied (dated by the last activity), it is recorded
+ * as practice without a daily completion, and the draft is removed once the
+ * result is safely saved.
+ */
+function settleStaleDailyDraft(currentStorage: AppStorage, language: LearningLanguage, draft: LessonDraft): PreparedDailyDraft {
+  if (draft.outcomes.length === 0 && draft.knownWordIds.length === 0) {
+    saveLessonDraft(language, null);
+    return { storage: currentStorage, draft: null, settled: false };
+  }
+  const answeredAt = new Date(draft.updatedAt ?? draft.session.startedAt);
+  const settled = finishLessonSession(
+    { ...currentStorage, learningLanguage: language },
+    draft.session, draft.outcomes, draft.knownWordIds, answeredAt, { partial: true },
+  );
+  const nextStorage = { ...settled, learningLanguage: currentStorage.learningLanguage };
+  if (saveStorage(nextStorage).ok) saveLessonDraft(language, null);
+  return { storage: nextStorage, draft: null, settled: true };
+}
+
+/** The saved daily draft that may be resumed today, settling a stale one. */
+function prepareDailyDraft(currentStorage: AppStorage, language: LearningLanguage, canSave: boolean): PreparedDailyDraft {
+  const saved = loadLessonDraft(language);
+  const alreadyRecorded = saved
+    ? currentStorage.studyHistory.some((entry) => entry.sessionId === saved.session.id && entry.language === language)
+    : false;
+  if (!saved || alreadyRecorded) return { storage: currentStorage, draft: null, settled: false };
+  if (isSessionFromAnotherDay(saved.session, getTodayDateKey())) {
+    return canSave ? settleStaleDailyDraft(currentStorage, language, saved) : { storage: currentStorage, draft: null, settled: false };
+  }
+  const completedToday = getCompletedDailyLesson({ ...currentStorage, learningLanguage: language });
+  return { storage: currentStorage, draft: completedToday ? null : saved, settled: false };
 }
 
 function App() {
   const [initialState] = useState(() => {
     const storageLoad = loadStorage();
-    const savedDraft = loadLessonDraft(storageLoad.storage.learningLanguage);
-    const draft = savedDraft && !storageLoad.storage.studyHistory.some((entry) => entry.sessionId === savedDraft.session.id)
-      && !getCompletedDailyLesson(storageLoad.storage) ? savedDraft : null;
-    // A daily lesson left unfinished on an earlier day is not resumed as
-    // today's lesson: its answers are kept, and today starts fresh.
-    if (draft && !storageLoad.error?.blocksSave && isSessionFromAnotherDay(draft.session, getTodayDateKey())) {
-      if (draft.outcomes.length === 0 && draft.knownWordIds.length === 0) {
-        saveLessonDraft(storageLoad.storage.learningLanguage, null);
-        return { storageLoad, draft: null, settledStaleDraft: false };
-      }
-      return {
-        storageLoad: { ...storageLoad, storage: settleDraft(storageLoad.storage, draft) },
-        draft: null,
-        settledStaleDraft: true,
-      };
-    }
-    return { storageLoad, draft, settledStaleDraft: false };
+    const prepared = prepareDailyDraft(storageLoad.storage, storageLoad.storage.learningLanguage, !storageLoad.error?.blocksSave);
+    return {
+      storageLoad: { ...storageLoad, storage: prepared.storage },
+      draft: prepared.draft,
+      settledStaleDraft: prepared.settled,
+    };
   });
   const initialStorageLoad = initialState.storageLoad;
   const initialDraft = initialState.draft;
@@ -199,7 +226,7 @@ function App() {
 
   useEffect(() => {
     if (session?.mode !== 'default') return;
-    const draft = { session, stepIndex, outcomes, knownWordIds, selectedAnswer, typedAnswer, isSubmitted };
+    const draft = { session, stepIndex, outcomes, knownWordIds, selectedAnswer, typedAnswer, isSubmitted, updatedAt: new Date().toISOString() };
     dailyDraftRef.current = draft;
     if (!storageError?.blocksSave && !saveLessonDraft(storage.learningLanguage, draft)) {
       setLessonNotice('Не удалось сохранить незавершённый урок. Не закрывайте приложение до завершения занятия.');
@@ -375,12 +402,18 @@ function App() {
     return finishLessonSession(currentStorage, session, outcomes, knownWordIds, new Date(), { partial: true });
   }
   function commitUnfinishedPractice() {
-    setStorage((currentStorage) => withUnfinishedPractice(currentStorage));
+    // Synchronous on purpose: callers may go on to finishLesson(), which saves
+    // from storageRef and would overwrite a deferred functional update.
+    const nextStorage = withUnfinishedPractice(storageRef.current);
+    if (nextStorage === storageRef.current) return;
+    storageRef.current = nextStorage;
+    setStorage(nextStorage);
   }
   const withUnfinishedPracticeRef = useRef(withUnfinishedPractice);
   withUnfinishedPracticeRef.current = withUnfinishedPractice;
 
   function resumeDraft(draft: LessonDraft) {
+    if (session && session.mode !== 'default' && session.id !== draft.session.id) commitUnfinishedPractice();
     if (draft.session.steps.some((step) => !wordsById.has(step.wordId))) {
       setLessonNotice('Состав словаря изменился. Начните новый урок — сохранённые результаты остаются в профиле.');
       if (draft.session.mode === 'default') {
@@ -393,7 +426,7 @@ function App() {
     let nextSession = draft.session;
     const nextIndex = draft.stepIndex + (draft.isSubmitted ? 1 : 0);
     const removedIds = new Set(nextSession.steps.slice(nextIndex).filter((step) =>
-      ['known', 'ignored'].includes(getWordProgress(storage, step.wordId).status),
+      ['known', 'ignored'].includes(getWordProgress(storageRef.current, step.wordId).status),
     ).map((step) => step.wordId));
     removedIds.forEach((id) => { nextSession = removeUpcomingWord(nextSession, nextIndex, id); });
     if (nextIndex >= nextSession.steps.length && !draft.isSubmitted) {
@@ -414,26 +447,33 @@ function App() {
   }
 
   function startLesson(mode: LessonMode, options?: { wordIds?: string[]; title?: string; packId?: string }) {
-    if (mode === 'default' && getCompletedDailyLesson(storage)) {
+    let currentStorage = storageRef.current;
+    let settledStaleDraft = false;
+    if (mode === 'default' && dailyDraftRef.current && isSessionFromAnotherDay(dailyDraftRef.current.session, getTodayDateKey())) {
+      if (storageErrorRef.current?.blocksSave) {
+        setLessonNotice('Сначала нужно разобраться с сохранением прогресса — вчерашний урок пока не закрыт.');
+        return;
+      }
+      if (session?.mode === 'default') clearSessionState('home');
+      const prepared = settleStaleDailyDraft(currentStorage, currentStorage.learningLanguage, dailyDraftRef.current);
+      dailyDraftRef.current = null;
+      currentStorage = prepared.storage;
+      storageRef.current = currentStorage;
+      setStorage(currentStorage);
+      settledStaleDraft = prepared.settled;
+      if (prepared.settled) setLessonNotice(STALE_DRAFT_NOTICE);
+    }
+
+    if (mode === 'default' && getCompletedDailyLesson(currentStorage)) {
       setScreen('dailyComplete');
       return;
     }
 
-    if (mode === 'default' && dailyDraftRef.current && isSessionFromAnotherDay(dailyDraftRef.current.session, getTodayDateKey())) {
-      const settled = settleDraft(storageRef.current, dailyDraftRef.current);
-      storageRef.current = settled;
-      setStorage(settled);
-      dailyDraftRef.current = null;
-      saveLessonDraft(storage.learningLanguage, null);
-      if (session?.mode === 'default') clearSessionState('home');
-      setLessonNotice(STALE_DRAFT_NOTICE);
-      return;
-    }
     if (mode === 'default' && dailyDraftRef.current && resumeDraft(dailyDraftRef.current)) return;
     if (session?.mode === mode && session.presentation === 'standard' && mode !== 'pack' && mode !== 'default') {
       if (currentLessonDraft && resumeDraft(currentLessonDraft)) return;
     }
-    setLessonNotice(null);
+    if (!settledStaleDraft) setLessonNotice(null);
     if (mode !== 'pack' && (mode === 'default' ? dailyLessonWords : lessonPoolWords).length === 0 && !options?.wordIds?.length) {
       if (mode === 'default') setScreen('dailyComplete');
       else setLessonNotice('Для практики пока нет слов. Добавьте слова или выберите другой пак.');
@@ -453,7 +493,7 @@ function App() {
             ? words.filter((word) => word.packIds.includes(options.packId!))
             : lessonPoolWords;
     const lessonWords = lessonWordsBase.filter((word) => {
-      const status = getWordProgress(storage, word.id).status;
+      const status = getWordProgress(currentStorage, word.id).status;
       return status !== 'ignored' && status !== 'known';
     });
     const activePackIds =
@@ -465,10 +505,10 @@ function App() {
     const nextSession = createLessonSession({
       mode,
       words: lessonWords,
-      storage,
-      durationMinutes: storage.lessonDurationMinutes,
-      wordTarget: storage.lessonWordTarget,
-      useFullPool: !storage.lessonDurationEnabled,
+      storage: currentStorage,
+      durationMinutes: currentStorage.lessonDurationMinutes,
+      wordTarget: currentStorage.lessonWordTarget,
+      useFullPool: !currentStorage.lessonDurationEnabled,
       wordIds: options?.wordIds,
       newWordIds: mode === 'default' && selectedLessonSourceWords ? lessonPoolWords.map((word) => word.id) : undefined,
       activePackIds,
@@ -721,10 +761,20 @@ function App() {
 
   function handleNavigate(target: 'home' | 'lesson' | 'dictionary' | 'radicals' | 'statistics' | 'profile' | 'packs') {
     if (target === 'lesson') {
-      if (session?.mode === 'default' && dailyDraftRef.current && resumeDraft(dailyDraftRef.current)) return;
+      const dailyDraft = dailyDraftRef.current;
+      const dailyDraftIsStale = Boolean(dailyDraft && isSessionFromAnotherDay(dailyDraft.session, getTodayDateKey()));
+      if (dailyDraftIsStale && (!session || session.mode === 'default')) {
+        startLesson('default');
+        return;
+      }
+      if (session?.mode === 'default' && dailyDraft && resumeDraft(dailyDraft)) return;
       if (currentLessonDraft && resumeDraft(currentLessonDraft)) return;
 
-      if (dailyDraftRef.current && resumeDraft(dailyDraftRef.current)) return;
+      if (dailyDraftIsStale) {
+        startLesson('default');
+        return;
+      }
+      if (dailyDraft && resumeDraft(dailyDraft)) return;
       setScreen(getCompletedDailyLesson(storage) ? 'dailyComplete' : 'home');
       return;
     }
@@ -1120,7 +1170,13 @@ function App() {
               onLearningLanguageChange={(value) => {
                 commitUnfinishedPractice();
                 clearSessionState('profile');
-                dailyDraftRef.current = loadLessonDraft(value);
+                const prepared = prepareDailyDraft(storageRef.current, value, !storageErrorRef.current?.blocksSave);
+                dailyDraftRef.current = prepared.draft;
+                if (prepared.settled) {
+                  storageRef.current = prepared.storage;
+                  setStorage(prepared.storage);
+                  setLessonNotice(STALE_DRAFT_NOTICE);
+                }
                 setSelectedPackId(null);
                 setBaseWords([]);
                 setIsLoadingWords(true);

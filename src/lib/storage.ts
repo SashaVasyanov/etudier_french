@@ -770,6 +770,11 @@ function buildAggregatedProgress(
 function getUpdatedStreak(storage: AppStorage, now: Date): Pick<AppStorage, 'lastLessonDate' | 'streakDays'> {
   const today = toLocalDateKey(now);
   if (storage.lastLessonDate === today) return { lastLessonDate: today, streakDays: storage.streakDays };
+  // Answers settled after the fact (a previous day's draft) must not move the
+  // streak backwards past a later study day.
+  if (storage.lastLessonDate && storage.lastLessonDate > today) {
+    return { lastLessonDate: storage.lastLessonDate, streakDays: storage.streakDays };
+  }
   if (!storage.lastLessonDate) return { lastLessonDate: today, streakDays: 1 };
 
   const previousDate = new Date(`${storage.lastLessonDate}T00:00:00`);

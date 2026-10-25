@@ -96,16 +96,15 @@ function getJapaneseRomajiVariants(value: string): Set<string> {
 
   // Both the learner's answer and the stored reading go through the same
   // canonical form: Hepburn/Kunrei spellings are unified (shi/si, chi/ti,
-  // ji/zi, tsu/tu, cha/tya, shimbun/shinbun), long vowels keep their length
-  // (kou = koo = kō, but never ko), and a final は may be typed as "wa".
-  const canonical = canonicalizeJapaneseRomaji(normalized);
-  const variants = [canonical];
+  // ji/zi, tsu/tu, cha/tya, shimbun/shinbun) and long vowels keep their
+  // length (kou = koo = kō, but never ko).
+  return new Set([canonicalizeJapaneseRomaji(normalized)]);
+}
 
-  if (canonical.endsWith('ha')) {
-    variants.push(`${canonical.slice(0, -2)}wa`);
-  }
-
-  return new Set(variants);
+/** Expressions ending in the particle は (こんにちは, あるいは) are said with "wa". */
+function getParticleWaVariant(kana: string | null): string | null {
+  const hiragana = kana ? katakanaToHiragana(normalizeJapaneseAnswerToken(kana)) : '';
+  return hiragana.length >= 3 && hiragana.endsWith('は') ? `${hiragana.slice(0, -1)}わ` : null;
 }
 
 function canonicalizeJapaneseRomaji(romaji: string): string {
@@ -243,7 +242,8 @@ function getJapaneseAnswerVariants(correctAnswer: string, word?: Word): Set<stri
     return [normalized, katakanaToHiragana(normalized)];
   });
 
-  const romajiValues = [romaji, kana ? kanaToRomaji(kana) : null, ...readingAliases].filter(
+  const particleWa = getParticleWaVariant(kana);
+  const romajiValues = [romaji, kana ? kanaToRomaji(kana) : null, particleWa ? kanaToRomaji(particleWa) : null, ...readingAliases].filter(
     (value): value is string => Boolean(value),
   );
 
