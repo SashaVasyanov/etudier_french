@@ -24,8 +24,9 @@ command -v cargo >/dev/null || fail "cargo не найден (установит
 echo "\n— Тесты"
 npm test || fail "тесты не прошли"
 
-echo "\n— Сборка (npm run tauri:build)"
-npm run tauri:build || fail "сборка не удалась"
+echo "\n— Сборка (tauri build --bundles app)"
+# Only the .app: the DMG step needs extra Finder permissions and is not used.
+npm run tauri -- build --bundles app || fail "сборка не удалась"
 
 APP="src-tauri/target/release/bundle/macos/étudier.app"
 [ -d "$APP" ] || fail "не найден $APP"
