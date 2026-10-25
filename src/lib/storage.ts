@@ -641,6 +641,10 @@ function getBaseExerciseEaseDelta(outcome: ExerciseOutcome): number {
 
 const SCHEDULED_WORD_STATUSES = new Set<WordStatus>(['learning', 'difficult', 'review', 'mastered']);
 const MASTERY_REVIEW_DAYS = 3;
+const SUCCESSFUL_SESSION_RATIO = 0.75;
+const DIFFICULT_SESSION_MISTAKES = 2;
+const NEW_WORD_DIFFICULT_MISTAKES = 3;
+const LAPSE_EASE_PENALTY = 0.2;
 
 export function isWordDueForReview(progress: WordProgress, now = new Date()): boolean {
   if (!SCHEDULED_WORD_STATUSES.has(progress.status)) {
@@ -683,7 +687,10 @@ function buildAggregatedProgress(
 
   const correctAnswers = outcomes.filter((outcome) => outcome.isCorrect).length;
   const wrongAnswers = outcomes.length - correctAnswers;
-  const isSuccessfulSession = correctAnswers > 0 && wrongAnswers === 0;
+  // A daily lesson shows the same word 4–6 times. The first answer of the day is
+  // the real recall signal; a later slip (typo) must not fail the whole review,
+  // but repeated mistakes still do.
+  const isSuccessfulSession = outcomes[0].isCorrect && correctAnswers / outcomes.length >= SUCCESSFUL_SESSION_RATIO;
   const wasDue = isWordDueForReview(existing, now);
   const base: WordProgress = {
     ...existing,
@@ -697,7 +704,7 @@ function buildAggregatedProgress(
     return {
       progress: {
         ...base,
-        status: base.wrong_count >= 3 ? 'difficult' : 'learning',
+        status: wrongAnswers >= NEW_WORD_DIFFICULT_MISTAKES ? 'difficult' : 'learning',
         ease_factor: clamp(existing.ease_factor + getSessionEaseDelta(outcomes), 1.3, 3.4),
         repetition_step: 1,
         interval_days: 1,
@@ -715,14 +722,18 @@ function buildAggregatedProgress(
   }
 
   if (!isSuccessfulSession) {
+    // A lapse restarts the ladder: earlier successful days no longer count
+    // towards mastery, and the word comes back on short intervals (1 → 2 → 4).
+    const forgotKnownWord = existing.status === 'mastered' || existing.status === 'difficult';
     return {
       progress: {
         ...base,
-        status: base.wrong_count >= 3 || existing.status === 'mastered' ? 'difficult' : 'learning',
-        ease_factor: clamp(existing.ease_factor + getSessionEaseDelta(outcomes), 1.3, 3.4),
-        repetition_step: Math.max(1, existing.repetition_step - 1),
+        status: forgotKnownWord || wrongAnswers >= DIFFICULT_SESSION_MISTAKES ? 'difficult' : 'learning',
+        ease_factor: clamp(existing.ease_factor + Math.min(0, getSessionEaseDelta(outcomes)) - LAPSE_EASE_PENALTY, 1.3, 3.4),
+        repetition_step: 1,
         interval_days: 1,
         next_review_at: addDays(startOfDay(now), 1).toISOString(),
+        successful_review_dates: [],
       },
       completedDueReview: true,
       becameMastered: false,

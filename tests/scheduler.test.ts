@@ -93,3 +93,55 @@ describe('scheduler properties', () => {
     expect(p.status).not.toBe('mastered');
   });
 });
+
+describe('scheduler lapses and grading', () => {
+  const due = () => new Date(now.getTime() - 86_400_000).toISOString();
+  const dayKey = (offset: number) => localDateKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset, 12));
+
+  it('a failed review resets the mastery ladder so the next success is not mastery', () => {
+    const before = storage({ a: progress('a', 'review', {
+      repetition_step: 3, interval_days: 4, next_review_at: due(), successful_review_dates: [dayKey(-8), dayKey(-6)],
+    }) });
+    const failed = applyOutcomes(before, [wrong('a'), wrong('a', 1)], now).progressByWordId.a;
+    expect(failed.successful_review_dates).toEqual([]);
+    expect(failed.interval_days).toBe(1);
+    expect(failed.status).toBe('difficult');
+
+    const nextDay = new Date(now.getTime() + 86_400_000);
+    const recovered = applyOutcomes(storage({ a: failed }), [correct('a')], nextDay).progressByWordId.a;
+    expect(recovered.status).toBe('review');
+    expect(recovered.interval_days).toBe(2);
+  });
+
+  it('a forgotten mastered word becomes difficult and returns on a short interval', () => {
+    const before = storage({ a: progress('a', 'mastered', {
+      repetition_step: 6, interval_days: 28, ease_factor: 3, next_review_at: due(),
+      successful_review_dates: [dayKey(-60), dayKey(-40), dayKey(-30)],
+    }) });
+    const p = applyOutcomes(before, [wrong('a')], now).progressByWordId.a;
+    expect(p.status).toBe('difficult');
+    expect(p.interval_days).toBe(1);
+    expect(p.ease_factor).toBeLessThan(3);
+    expect(p.successful_review_dates).toEqual([]);
+  });
+
+  it('grades by the first answer: one later slip among several correct answers still passes', () => {
+    const before = storage({ a: progress('a', 'learning', { repetition_step: 1, interval_days: 1, next_review_at: due() }) });
+    const p = applyOutcomes(before, [correct('a'), correct('a', 1), wrong('a', 2), correct('a', 3)], now).progressByWordId.a;
+    expect(p.status).toBe('review');
+    expect(p.successful_review_dates).toEqual([localDateKey(now)]);
+  });
+
+  it('a wrong first answer fails the review even if later answers are correct', () => {
+    const before = storage({ a: progress('a', 'learning', { repetition_step: 1, interval_days: 1, next_review_at: due() }) });
+    const p = applyOutcomes(before, [wrong('a'), correct('a', 1), correct('a', 2)], now).progressByWordId.a;
+    expect(p.status).toBe('learning');
+    expect(p.interval_days).toBe(1);
+  });
+
+  it('lifetime mistakes alone do not make a word difficult', () => {
+    const before = storage({ a: progress('a', 'review', { wrong_count: 9, repetition_step: 2, interval_days: 2, next_review_at: due(), successful_review_dates: [dayKey(-3)] }) });
+    const p = applyOutcomes(before, [wrong('a'), correct('a', 1), correct('a', 2)], now).progressByWordId.a;
+    expect(p.status).toBe('learning');
+  });
+});
