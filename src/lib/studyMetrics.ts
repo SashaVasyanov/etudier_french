@@ -1,4 +1,4 @@
-import type { DailyStats, LearningLanguage, StudyHistoryEntry } from '../types';
+import type { DailyStats, LearningLanguage, StudyHistoryEntry, WordProgress } from '../types';
 import { percentage } from './utils';
 
 function dateKey(date: Date): string {
@@ -43,4 +43,32 @@ export function getRecentWordCounts(dailyStats: DailyStats[], language: Learning
 
     return { key, label: weekdayLabels[date.getDay()], count: daily?.wordsLearned ?? 0 };
   });
+}
+
+/**
+ * One definition of the word counters for every screen (home, profile,
+ * statistics), so the same number never shows up as two different values.
+ * «Освоено» = mastered or marked as known; «в работе» = learning or review;
+ * difficult words are counted separately.
+ */
+export function summarizeWordStatuses(progressList: WordProgress[]) {
+  let learned = 0;
+  let inProgress = 0;
+  let difficult = 0;
+  let seen = 0;
+  progressList.forEach((progress) => {
+    if (progress.status === 'mastered' || progress.status === 'known') learned += 1;
+    else if (progress.status === 'learning' || progress.status === 'review') inProgress += 1;
+    else if (progress.status === 'difficult') difficult += 1;
+    if (progress.shown_count > 0 || progress.status === 'mastered' || progress.status === 'known') seen += 1;
+  });
+  return { learned, inProgress, difficult, seen };
+}
+
+/** Share of correct answers in the daily stats of one language, optionally from a date on. */
+export function getAnswerAccuracy(dailyStats: DailyStats[], language: LearningLanguage, fromDateKey?: string) {
+  const relevant = dailyStats.filter((entry) => entry.language === language && (!fromDateKey || entry.date >= fromDateKey));
+  const correctAnswers = relevant.reduce((sum, entry) => sum + entry.correctAnswers, 0);
+  const totalAnswers = relevant.reduce((sum, entry) => sum + entry.totalAnswers, 0);
+  return { correctAnswers, totalAnswers, accuracy: percentage(correctAnswers, totalAnswers) };
 }

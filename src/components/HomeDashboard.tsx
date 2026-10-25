@@ -3,6 +3,7 @@ import { getTodayDateKey, percentage, countRu, RU_ANSWERS, RU_PACKS, RU_WORDS } 
 import { getCurrentStreakDays } from '../lib/storage';
 import { getPackCompletionRatio } from '../lib/packs';
 import { getLessonProgress } from '../lib/lessonSession';
+import { getAnswerAccuracy, summarizeWordStatuses } from '../lib/studyMetrics';
 import type { LessonDraft } from '../lib/lessonDraft';
 import type {
   AppStorage,
@@ -74,13 +75,9 @@ export function HomeDashboard({
   const today = storage.dailyStats.find(
     (item) => item.date === getTodayDateKey() && item.language === learningLanguage,
   );
-  const todayAccuracy = today ? percentage(today.correctAnswers, today.totalAnswers) : 0;
-  const learnedWordIds = new Set(
-    progressList
-      .filter((progress) => progress.status === 'mastered' || progress.status === 'known')
-      .map((progress) => progress.word_id),
-  );
-  const wordsInProcess = progressList.filter((progress) => progress.status === 'learning' || progress.status === 'review').length;
+  const todayAccuracy = getAnswerAccuracy(storage.dailyStats, learningLanguage, getTodayDateKey()).accuracy;
+  const wordStats = summarizeWordStatuses(progressList);
+  const wordsInProcess = wordStats.inProgress;
   const selectedLessonPack = packs.find((pack) => pack.id === lessonSourcePackId) ?? null;
   const lessonPackLabel = selectedLessonPack ? selectedLessonPack.title : 'Все слова';
   const displayName = storage.profile.displayName.trim() || 'Ученик';
@@ -91,7 +88,7 @@ export function HomeDashboard({
         .sort((left, right) => getPackCompletionRatio(right, storage) - getPackCompletionRatio(left, storage))[0] ?? null,
     [packs, selectedLessonPack, storage],
   );
-  const overallProgress = percentage(learnedWordIds.size, Math.max(1, totalWords.length));
+  const overallProgress = percentage(wordStats.learned, Math.max(1, totalWords.length));
   const isDailyComplete = Boolean(dailyCompletion);
   const draftProgress = dailyDraft ? getLessonProgress(dailyDraft.session, dailyDraft.stepIndex) : null;
   const completedModuleCount = dailyCompletion?.completedModules ?? draftProgress?.completedModules ?? 0;
@@ -100,7 +97,7 @@ export function HomeDashboard({
     ? `${lessonDurationMinutes} минут · до ${lessonWordTarget} слов`
     : 'В своём темпе · без лимита';
   const packCompletion = activePack ? getPackCompletionRatio(activePack, storage) : 0;
-  const difficultCount = progressList.filter((progress) => progress.status === 'difficult').length;
+  const difficultCount = wordStats.difficult;
   const learningLanguageLabel = learningLanguage === 'japanese' ? 'Японский' : 'Французский';
   const learningLanguageChip = learningLanguage === 'japanese' ? 'JP · японский' : 'FR · французский';
   const radicalProgress = Object.values(storage.radicalProgressById);
@@ -191,7 +188,7 @@ export function HomeDashboard({
             <span style={{ width: `${overallProgress}%` }} />
           </div>
           <div className="progress-bento-stats">
-            <span><strong>{learnedWordIds.size}</strong> освоено</span>
+            <span><strong>{wordStats.learned}</strong> освоено</span>
             <span><strong>{wordsInProcess}</strong> в работе</span>
             <span><strong>{difficultCount}</strong> требуют внимания</span>
           </div>
@@ -227,8 +224,8 @@ export function HomeDashboard({
           <span className="bento-icon green"><AppIcon name="leaf" size={23} /></span>
           <div>
             <span>Сегодняшний ритм</span>
-            <h2>{today && today.totalAnswers > 0 ? `${todayAccuracy}% точность` : 'Первый шаг ждёт'}</h2>
-            <p>{today ? `Освоено: ${countRu(today.wordsLearned, RU_WORDS)} · ${countRu(today.totalAnswers, RU_ANSWERS)}` : 'Начни короткий урок — и появится твоя статистика.'}</p>
+            <h2>{today && today.totalAnswers > 0 ? `${todayAccuracy}% точность сегодня` : 'Первый шаг ждёт'}</h2>
+            <p>{today ? `Новых слов: ${today.wordsLearned} · ${countRu(today.totalAnswers, RU_ANSWERS)}` : 'Начни короткий урок — и появится твоя статистика.'}</p>
           </div>
         </section>
 

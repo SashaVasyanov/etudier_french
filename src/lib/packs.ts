@@ -10,6 +10,35 @@ function normalizeWordKey(value: string): string {
     .trim();
 }
 
+function normalizeMeaning(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/ё/g, 'е')
+    .replace(/\(en:[^)]*\)/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function splitMeanings(translation: string): string[] {
+  return translation.split(/\s*[/;,]\s*/).map(normalizeMeaning).filter(Boolean);
+}
+
+/**
+ * The same spelling can mean different things in different packs (chambre —
+ * «номер» in Travel, «спальня» in Home). One card keeps every meaning instead
+ * of silently dropping the second one; spelling variants (самолёт/самолет) and
+ * meanings already listed are not repeated.
+ */
+export function mergeTranslations(primary: string, secondary: string): string {
+  const known = new Set(splitMeanings(primary));
+  const extra = secondary
+    .split(/\s*[/;,]\s*/)
+    .map((part) => part.replace(/\(en:[^)]*\)/g, '').trim())
+    .filter((part) => part && !known.has(normalizeMeaning(part)));
+  const unique = [...new Map(extra.map((part) => [normalizeMeaning(part), part])).values()];
+  return unique.length > 0 ? `${primary}; ${unique.join(', ')}` : primary;
+}
+
 export function getEnabledPackIds(storage: AppStorage): string[] {
   return Object.values(storage.packStates)
     .filter((packState) => packState.status !== 'not_added')
@@ -41,8 +70,10 @@ export function getActiveWords(words: Word[], enabledPackIds: string[]): Word[] 
     const nextPriority = word.source === 'core' ? 0 : word.source === 'custom' ? 1 : 2;
 
     const preferred = nextPriority < currentPriority ? word : current;
+    const other = preferred === word ? current : word;
     bestByOriginal.set(key, {
       ...preferred,
+      translation: mergeTranslations(preferred.translation, other.translation),
       packIds: [...new Set([...current.packIds, ...word.packIds])],
     });
   });

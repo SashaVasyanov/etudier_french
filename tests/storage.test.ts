@@ -241,3 +241,19 @@ describe('backup and storage budget', () => {
     expect(removed.packStates.small).toBeUndefined();
   });
 });
+
+describe('history per language', () => {
+  it('keeps each language its own window and counts lessons beyond it', async () => {
+    const entry = (index: number, language: 'french' | 'japanese') => historyEntry({
+      id: `${language}-${index}`, language, sessionId: `s-${language}-${index}`,
+      completedAt: new Date(Date.UTC(2026, 0, 1, 0, index)).toISOString(),
+    });
+    let state = storage();
+    for (let index = 0; index < 400; index += 1) state = recordStudyHistory(state, entry(index, 'french'));
+    state = recordStudyHistory(state, entry(0, 'japanese'));
+    state = recordStudyHistory(state, entry(0, 'japanese'));
+    expect(state.studyHistory.filter((item) => item.language === 'japanese')).toHaveLength(1);
+    expect(state.studyHistory.filter((item) => item.language === 'french')).toHaveLength(365);
+    expect(state.lessonTotals).toEqual({ french: 400, japanese: 1 });
+  });
+});

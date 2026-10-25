@@ -82,3 +82,13 @@ describe('canonical pack words', () => {
     expect((result.words[0] as unknown as { image: string }).image).toBe('pic');
   });
 });
+
+describe('homonyms from different packs', () => {
+  it('keeps every meaning of one spelling', async () => {
+    const { mergeTranslations } = await import('../src/lib/packs');
+    expect(mergeTranslations('номер', 'спальня')).toBe('номер; спальня');
+    expect(mergeTranslations('самолёт', 'самолет')).toBe('самолёт');
+    expect(mergeTranslations('папка', 'досье / папка')).toBe('папка; досье');
+    expect(mergeTranslations('семя, семена / косточка (плода)', 'семя')).toBe('семя, семена / косточка (плода)');
+  });
+});

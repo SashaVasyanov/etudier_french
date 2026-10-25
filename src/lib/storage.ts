@@ -107,7 +107,34 @@ function createDefaultStorage(): AppStorage {
     customPacks: [],
     radicalProgressById: {},
     radicalStudyHistory: [],
+    lessonTotals: { french: 0, japanese: 0 },
   };
+}
+
+// History used to be one list of 180 entries for both languages, so a busy
+// learner's counters stopped growing. Each language now keeps its own window.
+const HISTORY_LIMIT_PER_LANGUAGE = 365;
+const DAILY_RECORDS_LIMIT_PER_LANGUAGE = 730;
+
+function capPerLanguage<T extends { language: LearningLanguage }>(items: T[], limit: number): T[] {
+  const kept = new Set<T>();
+  (['french', 'japanese'] as const).forEach((language) => {
+    items.filter((item) => item.language === language).slice(-limit).forEach((item) => kept.add(item));
+  });
+  return items.filter((item) => kept.has(item));
+}
+
+function countLessonsByLanguage(history: StudyHistoryEntry[]): Record<LearningLanguage, number> {
+  return {
+    french: history.filter((entry) => entry.language === 'french').length,
+    japanese: history.filter((entry) => entry.language === 'japanese').length,
+  };
+}
+
+function withLessonTotal(currentStorage: AppStorage, entry: StudyHistoryEntry): Record<LearningLanguage, number> {
+  const isNew = !currentStorage.studyHistory.some((item) => item.id === entry.id);
+  const totals = currentStorage.lessonTotals ?? { french: 0, japanese: 0 };
+  return isNew ? { ...totals, [entry.language]: totals[entry.language] + 1 } : totals;
 }
 
 function normalizeWord(word: Word): Word {
@@ -387,6 +414,15 @@ function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
     ? Object.entries(parsed.radicalProgressById)
     : [];
   const radicalStudyHistory: unknown[] = Array.isArray(parsed.radicalStudyHistory) ? parsed.radicalStudyHistory : [];
+  const normalizedHistory = capPerLanguage(
+    studyHistory
+      .map((entry) => normalizeHistoryEntry(entry))
+      .filter((entry): entry is StudyHistoryEntry => entry !== null)
+      .sort((left, right) => left.completedAt.localeCompare(right.completedAt)),
+    HISTORY_LIMIT_PER_LANGUAGE,
+  );
+  const historyTotals = countLessonsByLanguage(normalizedHistory);
+  const storedTotals: Partial<Record<LearningLanguage, unknown>> = isRecord(parsed.lessonTotals) ? parsed.lessonTotals : {};
 
   return {
     ...defaults,
@@ -398,7 +434,7 @@ function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
         .filter((entry): entry is [string, Partial<WordProgress>] => isRecord(entry[1]))
         .map(([wordId, progress]) => [wordId, normalizeProgress(progress, wordId)]),
     ),
-    dailyStats: dailyStats
+    dailyStats: capPerLanguage(dailyStats
       .filter((item): item is Record<string, unknown> => isRecord(item) && isValidDateKey(item.date))
       .map((item) => ({
         date: item.date as string,
@@ -409,13 +445,14 @@ function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
         wordsLearned: Math.floor(finiteNumber(item.wordsLearned, 0)),
         reviewsCompleted: Math.floor(finiteNumber(item.reviewsCompleted, 0)),
       }))
-      .sort((left, right) => left.date.localeCompare(right.date))
-      .slice(-180),
-    completedDailyLessons: completedDailyLessons
-      .map(normalizeDailyLessonRecord)
-      .filter((item): item is DailyLessonRecord => item !== null)
-      .sort((left, right) => left.date.localeCompare(right.date))
-      .slice(-180),
+      .sort((left, right) => left.date.localeCompare(right.date)), DAILY_RECORDS_LIMIT_PER_LANGUAGE),
+    completedDailyLessons: capPerLanguage(
+      completedDailyLessons
+        .map(normalizeDailyLessonRecord)
+        .filter((item): item is DailyLessonRecord => item !== null)
+        .sort((left, right) => left.date.localeCompare(right.date)),
+      DAILY_RECORDS_LIMIT_PER_LANGUAGE,
+    ),
     lessonDurationMinutes:
       parsed.lessonDurationMinutes === 10 || parsed.lessonDurationMinutes === 30 ? parsed.lessonDurationMinutes : 20,
     lessonDurationEnabled: typeof parsed.lessonDurationEnabled === 'boolean' ? parsed.lessonDurationEnabled : true,
@@ -432,11 +469,11 @@ function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
         : 20,
     lessonSourcePackId: typeof parsed.lessonSourcePackId === 'string' ? parsed.lessonSourcePackId : null,
     profile: normalizeProfile(isRecord(parsed.profile) ? parsed.profile as Partial<UserProfile> : undefined),
-    studyHistory: studyHistory
-      .map((entry) => normalizeHistoryEntry(entry))
-      .filter((entry): entry is StudyHistoryEntry => entry !== null)
-      .sort((left, right) => left.completedAt.localeCompare(right.completedAt))
-      .slice(-180),
+    studyHistory: normalizedHistory,
+    lessonTotals: {
+      french: Math.max(nonNegativeInteger(storedTotals.french), historyTotals.french),
+      japanese: Math.max(nonNegativeInteger(storedTotals.japanese), historyTotals.japanese),
+    },
     packStates: Object.fromEntries(
       packStateEntries.map(([packId, packState]) => [
         packId,
@@ -908,10 +945,10 @@ export function applyOutcomes(currentStorage: AppStorage, outcomes: ExerciseOutc
     ...currentStorage,
     ...getUpdatedStreak(currentStorage, now),
     progressByWordId,
-    dailyStats: [
+    dailyStats: capPerLanguage([
       ...currentStorage.dailyStats.filter((item) => !(item.date === today && item.language === language)),
       nextStat,
-    ].sort((left, right) => left.date.localeCompare(right.date)).slice(-180),
+    ].sort((left, right) => left.date.localeCompare(right.date)), DAILY_RECORDS_LIMIT_PER_LANGUAGE),
     profile: { ...currentStorage.profile, lastStudiedAt: now.toISOString(), updatedAt: now.toISOString() },
   };
 }
@@ -1000,21 +1037,26 @@ export function completeDailyLesson(
   currentStorage: AppStorage,
   payload: DailyLessonCompletionPayload,
 ): AppStorage {
-  const completedDailyLessons = currentStorage.completedDailyLessons
-    .filter((item) => !(item.date === payload.record.date && item.language === payload.record.language))
-    .concat(payload.record)
-    .sort((left, right) => left.date.localeCompare(right.date))
-    .slice(-180);
-  const studyHistory = currentStorage.studyHistory
-    .filter((item) => item.id !== payload.historyEntry.id)
-    .concat(payload.historyEntry)
-    .sort((left, right) => left.completedAt.localeCompare(right.completedAt))
-    .slice(-180);
+  const completedDailyLessons = capPerLanguage(
+    currentStorage.completedDailyLessons
+      .filter((item) => !(item.date === payload.record.date && item.language === payload.record.language))
+      .concat(payload.record)
+      .sort((left, right) => left.date.localeCompare(right.date)),
+    DAILY_RECORDS_LIMIT_PER_LANGUAGE,
+  );
+  const studyHistory = capPerLanguage(
+    currentStorage.studyHistory
+      .filter((item) => item.id !== payload.historyEntry.id)
+      .concat(payload.historyEntry)
+      .sort((left, right) => left.completedAt.localeCompare(right.completedAt)),
+    HISTORY_LIMIT_PER_LANGUAGE,
+  );
 
   return {
     ...currentStorage,
     completedDailyLessons,
     studyHistory,
+    lessonTotals: withLessonTotal(currentStorage, payload.historyEntry),
     profile: {
       ...currentStorage.profile,
       lastStudiedAt: payload.historyEntry.completedAt,
@@ -1024,15 +1066,18 @@ export function completeDailyLesson(
 }
 
 export function recordStudyHistory(currentStorage: AppStorage, historyEntry: StudyHistoryEntry): AppStorage {
-  const studyHistory = currentStorage.studyHistory
-    .filter((item) => item.id !== historyEntry.id)
-    .concat(historyEntry)
-    .sort((left, right) => left.completedAt.localeCompare(right.completedAt))
-    .slice(-180);
+  const studyHistory = capPerLanguage(
+    currentStorage.studyHistory
+      .filter((item) => item.id !== historyEntry.id)
+      .concat(historyEntry)
+      .sort((left, right) => left.completedAt.localeCompare(right.completedAt)),
+    HISTORY_LIMIT_PER_LANGUAGE,
+  );
 
   return {
     ...currentStorage,
     studyHistory,
+    lessonTotals: withLessonTotal(currentStorage, historyEntry),
     profile: {
       ...currentStorage.profile,
       lastStudiedAt: historyEntry.completedAt,

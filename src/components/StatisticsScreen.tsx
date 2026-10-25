@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import type { AppStorage, LearningLanguage, Word, WordLevel } from '../types';
-import { formatDurationLabel, getTodayDateKey, percentage, countRu, pluralRu, RU_WORDS } from '../lib/utils';
-import { getCurrentStreakDays } from '../lib/storage';
-import { getRecentWordCounts } from '../lib/studyMetrics';
+import { formatDurationLabel, getTodayDateKey, countRu, pluralRu, RU_WORDS } from '../lib/utils';
+import { getCurrentStreakDays, getWordProgress } from '../lib/storage';
+import { getAnswerAccuracy, getRecentWordCounts, summarizeWordStatuses } from '../lib/studyMetrics';
 import { getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { AppIcon } from './AppIcon';
 
@@ -138,14 +138,13 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
     [storage.progressByWordId, words],
   );
   const learnedWords = learnedWordList.length;
-  const wordsInProcess = words.filter((word) => {
-    const status = storage.progressByWordId[word.id]?.status;
-    return status === 'learning' || status === 'review' || status === 'difficult';
-  }).length;
+  const wordStats = useMemo(
+    () => summarizeWordStatuses(words.map((word) => getWordProgress(storage, word.id))),
+    [storage, words],
+  );
+  const wordsInProcess = wordStats.inProgress;
   const currentStreak = getCurrentStreakDays(storage);
-  const correctAnswers = languageHistory.reduce((sum, item) => sum + item.correctAnswers, 0);
-  const totalAnswers = languageHistory.reduce((sum, item) => sum + item.totalAnswers, 0);
-  const accuracy = percentage(correctAnswers, totalAnswers);
+  const { correctAnswers, totalAnswers, accuracy } = getAnswerAccuracy(storage.dailyStats, learningLanguage);
   const studyTimeSeconds = languageHistory.reduce((sum, item) => sum + item.timeSpentSeconds, 0);
   const weeklyWords = getRecentWordCounts(storage.dailyStats, learningLanguage);
   const monthlyLessons = useMemo(() => getMonthlyLessonCounts(storage, learningLanguage), [learningLanguage, storage]);
@@ -158,7 +157,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
   const diagramSegments = useMemo(() => buildDiagramSegments(diagramItems), [diagramItems]);
   const breakdownTotal = Math.max(1, diagramItems.reduce((sum, item) => sum + item.value, 0));
   const weeklyTotal = weeklyWords.reduce((sum, item) => sum + item.count, 0);
-  const completedLessons = languageHistory.length;
+  const completedLessons = Math.max(storage.lessonTotals[learningLanguage], languageHistory.length);
   const hasDiagramData = diagramItems.some((item) => item.value > 0);
 
   return (
@@ -178,7 +177,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
         </article>
         <article className="analytics-kpi-card analytics-kpi-green">
           <span className="analytics-kpi-icon"><AppIcon name="target" size={22} /></span>
-          <div><span>Точность</span><strong>{accuracy}%</strong><small>{correctAnswers} из {totalAnswers} ответов</small></div>
+          <div><span>Точность за всё время</span><strong>{accuracy}%</strong><small>{correctAnswers} из {totalAnswers} ответов</small></div>
         </article>
         <article className="analytics-kpi-card analytics-kpi-orange">
           <span className="analytics-kpi-icon"><AppIcon name="flame" size={22} /></span>
@@ -195,7 +194,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
           <div className="analytics-card-head">
             <div>
               <h2>Слова за неделю</h2>
-              <p>{wordsInProcess > 0 ? `В работе сейчас ${countRu(wordsInProcess, RU_WORDS)}.` : 'Сейчас нет слов в работе.'}</p>
+              <p>{wordsInProcess > 0 ? `В работе сейчас ${countRu(wordsInProcess, RU_WORDS)}${wordStats.difficult > 0 ? `, сложных ещё ${wordStats.difficult}` : ''}.` : 'Сейчас нет слов в работе.'}</p>
             </div>
             <span className="analytics-summary-badge">+{countRu(weeklyTotal, RU_WORDS)}</span>
           </div>

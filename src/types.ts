@@ -250,6 +250,8 @@ export interface AppStorage {
   customPacks: WordPack[];
   radicalProgressById: Record<string, RadicalProgress>;
   radicalStudyHistory: RadicalStudyHistoryEntry[];
+  /** Lessons finished per language over all time; history itself is capped. */
+  lessonTotals: Record<LearningLanguage, number>;
 }
 
 export interface DailyLessonCompletionPayload {

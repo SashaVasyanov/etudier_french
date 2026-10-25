@@ -32,6 +32,7 @@ export function storage(entries: Record<string, WordProgress> = {}): AppStorage 
     lessonWordTarget: 20, lessonSourcePackId: null,
     profile: { displayName: 'Test', createdAt: now.toISOString(), updatedAt: now.toISOString(), lastStudiedAt: null },
     studyHistory: [], packStates: {}, customWords: [], customPacks: [], radicalProgressById: {}, radicalStudyHistory: [],
+    lessonTotals: { french: 0, japanese: 0 },
   };
 }
 

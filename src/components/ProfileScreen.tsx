@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { LEARNING_LANGUAGE_OPTIONS, getLearningLanguageMenuLabel } from '../lib/languages';
 import { getCurrentStreakDays } from '../lib/storage';
-import { summarizeStudyHistory } from '../lib/studyMetrics';
+import { summarizeStudyHistory, summarizeWordStatuses } from '../lib/studyMetrics';
 import { formatDateTimeLabel, formatDurationLabel, formatLongDateLabel, countRu, pluralRu, RU_LESSONS, RU_MISTAKES, RU_MODULES, RU_WORDS } from '../lib/utils';
 import type {
   AppStorage,
@@ -39,15 +39,6 @@ interface ProfileScreenProps {
 const DURATION_OPTIONS: LessonDurationMinutes[] = [10, 20, 30];
 const WORD_TARGET_OPTIONS: LessonWordTarget[] = [10, 15, 20, 25, 30, 35, 40, 45, 50];
 
-function countStatuses(progressList: WordProgress[]) {
-  return {
-    learned: progressList.filter((item) => item.shown_count > 0 || item.status === 'mastered').length,
-    mastered: progressList.filter((item) => item.status === 'mastered').length,
-    difficult: progressList.filter((item) => item.status === 'difficult').length,
-    learning: progressList.filter((item) => item.status === 'learning' || item.status === 'review').length,
-  };
-}
-
 function getModeLabel(mode: StudyHistoryEntry['mode']): string {
   if (mode === 'default') {
     return 'ежедневный урок';
@@ -83,13 +74,14 @@ export default function ProfileScreen({
   onExportBackup,
   onImportBackup,
 }: ProfileScreenProps) {
-  const stats = useMemo(() => countStatuses(progressList), [progressList]);
+  const stats = useMemo(() => summarizeWordStatuses(progressList), [progressList]);
   const languageHistory = useMemo(
     () => storage.studyHistory.filter((entry) => entry.language === learningLanguage),
     [learningLanguage, storage.studyHistory],
   );
   const history = useMemo(() => [...languageHistory].reverse(), [languageHistory]);
   const summary = summarizeStudyHistory(languageHistory);
+  const lessonsCompleted = Math.max(storage.lessonTotals[learningLanguage], languageHistory.length);
   const selectedPack = packs.find((pack) => pack.id === lessonSourcePackId) ?? null;
   const displayName = profile.displayName.trim() || 'Ученик';
 
@@ -113,11 +105,11 @@ export default function ProfileScreen({
       <section className="settings-profile-overview" aria-label="Сводка профиля">
         <article>
           <span className="settings-overview-icon violet"><AppIcon name="book-open" size={22} /></span>
-          <div><strong>{stats.learned}</strong><small>{pluralRu(stats.learned, ['слово встречалось', 'слова встречалось', 'слов встречалось'])}</small></div>
+          <div><strong>{stats.seen}</strong><small>{pluralRu(stats.seen, ['слово встречалось', 'слова встречалось', 'слов встречалось'])}</small></div>
         </article>
         <article>
           <span className="settings-overview-icon green"><AppIcon name="check-circle" size={22} /></span>
-          <div><strong>{stats.mastered}</strong><small>{pluralRu(stats.mastered, ['слово освоено', 'слова освоено', 'слов освоено'])}</small></div>
+          <div><strong>{stats.learned}</strong><small>{pluralRu(stats.learned, ['слово освоено', 'слова освоено', 'слов освоено'])}</small></div>
         </article>
         <article>
           <span className="settings-overview-icon orange"><AppIcon name="flame" size={22} /></span>
@@ -125,7 +117,7 @@ export default function ProfileScreen({
         </article>
         <article>
           <span className="settings-overview-icon blue"><AppIcon name="calendar" size={22} /></span>
-          <div><strong>{languageHistory.length}</strong><small>{pluralRu(languageHistory.length, ['урок завершён', 'урока завершено', 'уроков завершено'])}</small></div>
+          <div><strong>{lessonsCompleted}</strong><small>{pluralRu(lessonsCompleted, ['урок завершён', 'урока завершено', 'уроков завершено'])}</small></div>
         </article>
       </section>
 
@@ -151,11 +143,11 @@ export default function ProfileScreen({
           </label>
           <div className="settings-mini-grid">
             <span>
-              <strong>{stats.mastered}</strong>
-              Выучено
+              <strong>{stats.learned}</strong>
+              Освоено
             </span>
             <span>
-              <strong>{stats.learning}</strong>
+              <strong>{stats.inProgress}</strong>
               В работе
             </span>
             <span>

@@ -50,3 +50,21 @@ describe('calendar study metrics', () => {
     expect(counts.map((item) => item.label)).toEqual(['Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс', 'Пн']);
   });
 });
+
+describe('shared word counters', () => {
+  it('counts known as learned and keeps difficult apart from «в работе»', async () => {
+    const { summarizeWordStatuses, getAnswerAccuracy } = await import('../src/lib/studyMetrics');
+    const { progress } = await import('./fixtures');
+    const result = summarizeWordStatuses([
+      progress('a', 'mastered'), progress('b', 'known'), progress('c', 'learning', { shown_count: 2 }),
+      progress('d', 'review', { shown_count: 4 }), progress('e', 'difficult', { shown_count: 3 }), progress('f', 'new'),
+    ]);
+    expect(result).toEqual({ learned: 2, inProgress: 2, difficult: 1, seen: 5 });
+    const stats = [
+      { date: '2026-10-24', language: 'french' as const, completedLessons: 1, correctAnswers: 6, totalAnswers: 10, wordsLearned: 2, reviewsCompleted: 0 },
+      { date: '2026-10-25', language: 'french' as const, completedLessons: 1, correctAnswers: 9, totalAnswers: 10, wordsLearned: 2, reviewsCompleted: 0 },
+    ];
+    expect(getAnswerAccuracy(stats, 'french').accuracy).toBe(75);
+    expect(getAnswerAccuracy(stats, 'french', '2026-10-25').accuracy).toBe(90);
+  });
+});

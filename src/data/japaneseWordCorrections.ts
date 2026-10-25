@@ -311,7 +311,7 @@ export function applyJapaneseWordCorrection(word: Word): Word {
  * written (ドア, not どあ), and a leftover sense number («1. природа») is dropped.
  */
 export function cleanJapaneseEntry(word: Word): Word {
-  const translation = word.translation.replace(/^\d+\.\s*/, '');
+  const translation = word.translation.replace(/^\d+\.\s*/, '').replace(/\s*\(en:[^)]*\)/g, '').trim();
   const katakana = /^[\u30a0-\u30ff]+(する)?$/.test(word.original);
   const romaji = katakana ? word.transcription.match(/·\s*([^\]]+)\]/)?.[1]?.trim() : undefined;
   return {
