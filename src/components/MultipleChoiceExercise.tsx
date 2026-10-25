@@ -6,6 +6,7 @@ import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
 import { LessonChoiceButton } from './LessonChoiceButton';
 import { WordImage } from './WordImage';
+import { SentenceAudioButton } from './SentenceAudioButton';
 
 interface MultipleChoiceExerciseProps {
   exercise: Exercise;
@@ -180,6 +181,12 @@ export function MultipleChoiceExercise({
                   )}
                 </strong>
                 <AnswerWordDetails word={word} />
+                {word.example_original && word.example_original !== word.original ? (
+                  <div className="feedback-example example-line">
+                    <span lang={word.language === 'japanese' ? 'ja' : 'fr'}>{word.example_original}</span>
+                    <SentenceAudioButton text={word.example_original} language={word.language} />
+                  </div>
+                ) : null}
               </div>
               {onReplayAudio ? (
                 <button type="button" className="feedback-replay-button" onClick={onReplayAudio}>

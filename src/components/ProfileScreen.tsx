@@ -15,6 +15,7 @@ import type {
 } from '../types';
 import { AppIcon } from './AppIcon';
 import { BackupPanel } from './BackupPanel';
+import { SpeechSettingsPanel } from './SpeechSettingsPanel';
 
 interface ProfileScreenProps {
   learningLanguage: LearningLanguage;
@@ -34,6 +35,7 @@ interface ProfileScreenProps {
   onLessonSourcePackChange: (packId: string | null) => void;
   dayStartHour: number;
   onDayStartHourChange: (hour: number) => void;
+  onSpeechChange: (change: { language?: LearningLanguage; voiceId?: string | null; rate?: number }) => void;
   onExportBackup: () => string;
   onImportBackup: (raw: string) => string | null;
 }
@@ -78,6 +80,7 @@ export default function ProfileScreen({
   onImportBackup,
   dayStartHour,
   onDayStartHourChange,
+  onSpeechChange,
 }: ProfileScreenProps) {
   const stats = useMemo(() => summarizeWordStatuses(progressList), [progressList]);
   const languageHistory = useMemo(
@@ -314,6 +317,8 @@ export default function ProfileScreen({
             </span>
           </div>
         </section>
+
+        <SpeechSettingsPanel language={learningLanguage} speech={storage.speech} onChange={onSpeechChange} />
 
         <BackupPanel onExport={onExportBackup} onImport={onImportBackup} />
 

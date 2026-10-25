@@ -11,7 +11,7 @@ import { LessonWordPreview } from './components/LessonWordPreview';
 import { MemoryCheckExercise } from './components/MemoryCheckExercise';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
 import { getLessonPoolWords, getStarterPacks, loadWords } from './data/words';
-import { playWordAudio, stopAudio } from './lib/audio';
+import { playWordAudio, setSpeechPreferences, stopAudio } from './lib/audio';
 import { createFlashcardSession, createLessonSession, scheduleExerciseRetry } from './lib/exercises';
 import {
   getLearningLanguageProductTitle,
@@ -41,6 +41,7 @@ import {
   setLessonSourcePackPreference,
   setLessonWordTargetPreference,
   setDayStartPreference,
+  setSpeechPreference,
   setWordPackStatus,
   getWordProgress,
   getCompletedDailyLesson,
@@ -310,6 +311,11 @@ function App() {
       window.clearTimeout(timeoutId);
     };
   }, [storage, storageError?.blocksSave]);
+
+  // Voice and speed chosen in the profile apply to every playback.
+  useEffect(() => {
+    setSpeechPreferences(storage.speech);
+  }, [storage.speech]);
 
   const restoringBackupRef = useRef(false);
 
@@ -1278,6 +1284,9 @@ function App() {
               }}
               onLessonSourcePackChange={(packId) => {
                 setStorage((currentStorage) => setLessonSourcePackPreference(currentStorage, packId));
+              }}
+              onSpeechChange={(change) => {
+                setStorage((currentStorage) => setSpeechPreference(currentStorage, change));
               }}
               dayStartHour={storage.dayStartHour}
               onDayStartHourChange={(hour) => {

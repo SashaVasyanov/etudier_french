@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createFlashcardSession, createLessonSession, scheduleExerciseRetry } from '../src/lib/exercises';
+import { createFlashcardSession, createLessonSession, createSentenceCloze, scheduleExerciseRetry } from '../src/lib/exercises';
 import { applyOutcomes, setLessonDurationPreference } from '../src/lib/storage';
 import type { LessonDurationMinutes, LessonSession, Word } from '../src/types';
 import { now, outcome, progress, storage, word } from './fixtures';
@@ -155,18 +155,29 @@ describe('lesson generation and recovery', () => {
     expect(session.exercises.filter((exercise) => exercise.wordId === 'car').every((exercise) => !exercise.options)).toBe(true);
   });
 
-  it('hides repeated target words in French and Japanese cloze exercises', () => {
+  it('hides repeated target words in French and Japanese cloze exercises', async () => {
+    const { createSentenceCloze } = await import('../src/lib/exercises');
     const words: Word[] = [
       { ...word('cat'), original: 'chat', example_original: 'Le chat regarde le chat.' },
       { ...word('cat-ja'), language: 'japanese', original: '猫', transcription: '[ねこ · neko]', example_original: '猫と猫がいます。' },
     ];
-    const session = createLessonSession({ mode: 'default', words, storage: storage(), durationMinutes: 10 })!;
     for (const item of words) {
-      const cloze = session.exercises.find((exercise) => exercise.wordId === item.id && exercise.type === 'sentence_cloze_input');
-      expect(cloze).toBeDefined();
-      expect(cloze!.prompt).not.toContain(item.original);
+      const prompt = createSentenceCloze(item);
+      expect(prompt).toBeTruthy();
+      expect(prompt!).not.toContain(item.original);
     }
-    expect(session.exercises.some((exercise) => exercise.wordId === 'cat-ja' && exercise.type === 'kanji_to_hiragana_input')).toBe(true);
+  });
+
+  it('mixes task types and no longer asks to type the hiragana reading', () => {
+    const words: Word[] = Array.from({ length: 8 }, (_, index) => ({
+      ...word(`ja-${index}`), language: 'japanese', original: `漢字${index}`, transcription: `[かんじ · kanji${index}]`, example_original: `これは漢字${index}です。`,
+    }));
+    const session = createLessonSession({ mode: 'default', words, storage: storage(), durationMinutes: 10 })!;
+    const types = session.exercises.map((exercise) => exercise.type);
+    expect(types).not.toContain('kanji_to_hiragana_input');
+    expect(new Set(types).size).toBeGreaterThanOrEqual(5);
+    const typing = types.filter((type) => type.endsWith('_input')).length;
+    expect(typing / types.length).toBeLessThan(0.5);
   });
 });
 
@@ -174,9 +185,7 @@ describe('Japanese sentence cloze', () => {
   const jaWord = (id: string, original: string, example: string): Word => ({
     ...word(id), language: 'japanese', original, transcription: '[x · x]', example_original: example,
   });
-  const clozeFor = (item: Word) => createLessonSession({
-    mode: 'mistakes', words: [item], storage: storage(), durationMinutes: 10, wordIds: [item.id],
-  })!.exercises.find((exercise) => exercise.type === 'sentence_cloze_input')?.prompt ?? null;
+  const clozeFor = (item: Word) => createSentenceCloze(item);
 
   it('never cuts a word out of a longer compound or a different word', () => {
     expect(clozeFor(jaWord('hi', '日', '今日は暖かい日です。'))).toBe('今日は暖かい＿＿です。');

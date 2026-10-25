@@ -6,6 +6,7 @@ import { AnswerWordDetails } from './AnswerWordDetails';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { JapaneseExampleReading } from './JapaneseExampleReading';
 import { LessonCard } from './LessonCard';
+import { SentenceAudioButton } from './SentenceAudioButton';
 
 interface TextInputExerciseProps {
   exercise: Exercise;
@@ -171,7 +172,10 @@ export function TextInputExercise({
               </div>
               {isClozeExercise ? (
                 <div className="cloze-answer-context">
-                  <p className="example-original" lang={word.language === 'japanese' ? 'ja' : 'fr'}>{word.example_original}</p>
+                  <div className="example-line">
+                    <p className="example-original" lang={word.language === 'japanese' ? 'ja' : 'fr'}>{word.example_original}</p>
+                    <SentenceAudioButton text={word.example_original} language={word.language} />
+                  </div>
                   {word.language === 'japanese' ? <JapaneseExampleReading word={word} /> : null}
                   <p className="example-translation" lang="ru">{word.example_translation}</p>
                 </div>

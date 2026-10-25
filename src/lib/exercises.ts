@@ -15,7 +15,7 @@ import type {
 } from '../types';
 import { getWordProgress, isWordDueForReview } from './storage';
 import { isReviewDue, shuffleArray } from './utils';
-import { containsJapaneseKanji, getJapaneseHiraganaReading } from './wordPresentation';
+import { getJapaneseHiraganaReading } from './wordPresentation';
 
 interface LessonLimits {
   newWords: number;
@@ -196,7 +196,7 @@ function createJapaneseSentenceCloze(example: string, original: string): string 
   return replaced ? result + example.slice(cursor) : null;
 }
 
-function createSentenceCloze(word: Word): string | null {
+export function createSentenceCloze(word: Word): string | null {
   const example = word.example_original.trim();
   const original = word.original.trim();
 
@@ -213,8 +213,10 @@ function createSentenceCloze(word: Word): string | null {
 }
 
 function canCreateExercise(word: Word, type: ExerciseType): boolean {
+  // «Type the hiragana reading» was dropped from lessons: it trained spelling
+  // of readings rather than the word itself.
   if (type === 'kanji_to_hiragana_input') {
-    return word.language === 'japanese' && containsJapaneseKanji(word.original) && Boolean(getJapaneseHiraganaReading(word));
+    return false;
   }
 
   if (type === 'sentence_cloze_input') {
@@ -230,9 +232,9 @@ function getAvailableExerciseTypes(word: Word, exerciseTypes: ExerciseType[]): E
       return type;
     }
 
-    return type === 'kanji_to_hiragana_input' || type === 'sentence_cloze_input'
-      ? 'translation_to_original_input'
-      : null;
+    // No usable sentence for a gap: ask for the word by choice instead, so
+    // lessons do not turn into a row of typing tasks.
+    return type === 'sentence_cloze_input' ? 'translation_to_original_choice' : null;
   });
 
   return Array.from(new Set(availableTypes.filter((type): type is ExerciseType => type !== null)));
@@ -551,14 +553,20 @@ function buildExerciseSequence(
   words: Word[],
   exerciseTypes: ExerciseType[],
   storage?: AppStorage,
+  perWord?: number,
 ): Array<{ word: Word; type: ExerciseType }> {
   const orderedWords = storage ? rankWordsForStudy(words, storage) : shuffleArray(words);
-  const queues = orderedWords.map((word) => ({
-    word,
-    queue: storage
+  const queues = orderedWords.map((word, wordIndex) => {
+    const types = storage
       ? reorderExerciseTypesForWord(word, storage, exerciseTypes)
-      : shuffleArray(getAvailableExerciseTypes(word, exerciseTypes)),
-  }));
+      : shuffleArray(getAvailableExerciseTypes(word, exerciseTypes));
+    if (!perWord || perWord >= types.length) return { word, queue: types };
+    // Each word gets a few of the module's task types, starting at a
+    // different one for every word, so a module mixes all of its types.
+    const offset = wordIndex % types.length;
+    const rotated = [...types.slice(offset), ...types.slice(0, offset)];
+    return { word, queue: rotated.slice(0, perWord) };
+  });
   const sequence: Array<{ word: Word; type: ExerciseType }> = [];
   let previousWordId: string | null = null;
   let previousType: ExerciseType | null = null;
@@ -745,7 +753,7 @@ function createMistakesSession(
     'Сложные слова',
     'Точечное повторение слов, где были ошибки.',
     mistakeWords,
-    ['translation_to_original_input', 'sentence_cloze_input', 'kanji_to_hiragana_input'],
+    ['translation_to_original_input', 'sentence_cloze_input', 'translation_to_original_choice', 'audio_to_translation_choice'],
     uniqueWords(words),
     undefined,
   );
@@ -852,8 +860,8 @@ function createDailySession(
     introductionWords,
     // On review days module 1 already asked for the meaning; ask the other way.
     newWords.length > 0
-      ? ['original_to_translation_choice', 'translation_to_original_input']
-      : ['translation_to_original_choice', 'translation_to_original_input'],
+      ? ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_translation_choice']
+      : ['translation_to_original_choice', 'audio_to_translation_choice', 'translation_to_original_input'],
     uniqueWords(words),
     storage,
   );
@@ -864,7 +872,7 @@ function createDailySession(
       ? 'Возврат к словам, которые еще требуют внимания.'
       : 'Первое повторение новых слов после знакомства и тренировки.',
     reviewWords,
-    ['audio_to_original_input', 'kanji_to_hiragana_input'],
+    ['audio_to_translation_choice', 'translation_to_original_input', 'original_to_translation_choice', 'audio_to_original_input'],
     uniqueWords(words),
     storage,
   );
@@ -873,7 +881,7 @@ function createDailySession(
     'Смешанное закрепление',
     'Слова возвращаются в новом порядке, чтобы проверить узнавание без заучивания по шаблону.',
     reinforcementWords,
-    ['sentence_cloze_input', 'translation_to_original_choice'],
+    ['sentence_cloze_input', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
     uniqueWords(words),
     storage,
   );
@@ -883,7 +891,7 @@ function createDailySession(
       'Финальная мини-проверка',
       'Короткий итоговый блок: ключевые слова дня и редкая проверка давно выученного.',
       recapWords,
-      ['translation_to_original_input', 'sentence_cloze_input'],
+      ['translation_to_original_input', 'sentence_cloze_input', 'original_to_translation_choice'],
       uniqueWords(words),
       storage,
     ),
@@ -956,7 +964,7 @@ function createExtraSession(
       ? 'Тренируйте слова выбранного пака вне ежедневного лимита.'
       : 'Продолжайте обучение после завершения ежедневного урока.',
     focusWords,
-    ['original_to_translation_choice', 'translation_to_original_input'],
+    ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_translation_choice', 'translation_to_original_input'],
     uniqueWords(words),
     storage,
   );
@@ -967,7 +975,7 @@ function createExtraSession(
       ? 'Просмотрите и закрепите новые слова, которые лежат внутри выбранного пака.'
       : 'Здесь появляются слова, которые еще не попали в дневной урок.',
     newWords,
-    ['original_to_translation_choice', 'translation_to_original_input'],
+    ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_translation_choice', 'translation_to_original_input'],
     uniqueWords(words),
     storage,
   );
@@ -977,7 +985,7 @@ function createExtraSession(
       'Смешанное закрепление',
       'Финальный блок на закрепление активных, новых и давно выученных слов.',
       mixedWords,
-      ['sentence_cloze_input', 'audio_to_original_input', 'kanji_to_hiragana_input'],
+      ['sentence_cloze_input', 'audio_to_original_input', 'translation_to_original_choice', 'original_to_translation_choice'],
       uniqueWords(words),
       storage,
     ),
@@ -1102,9 +1110,10 @@ function createExerciseModule(
   exerciseTypes: ExerciseType[],
   optionPool: Word[] = words,
   storage?: AppStorage,
+  perWord = 2,
 ): { module: LessonModule; exercises: Exercise[] } {
   const orderedWords = storage ? weaveWordOrder(rankWordsForStudy(words, storage)) : shuffleArray(words);
-  const sequence = buildExerciseSequence(orderedWords, exerciseTypes, storage);
+  const sequence = buildExerciseSequence(orderedWords, exerciseTypes, storage, perWord);
   const exercises = sequence.map((item, index) => {
     const exercise = createExercise(item.word, optionPool, item.type, index);
     return { ...exercise, id: `${id}-${exercise.id}` };
@@ -1205,9 +1214,6 @@ export function scheduleExerciseRetry(
   }
 
   const candidateTypes: ExerciseType[] = [
-    ...(word.language === 'japanese' && failedExercise.type !== 'kanji_to_hiragana_input'
-      ? (['kanji_to_hiragana_input'] as ExerciseType[])
-      : []),
     ...(failedExercise.type !== 'sentence_cloze_input' ? (['sentence_cloze_input'] as ExerciseType[]) : []),
     'translation_to_original_input',
   ];

@@ -11,6 +11,7 @@ import type {
   RadicalProgress,
   RadicalStatus,
   RadicalStudyHistoryEntry,
+  SpeechPreferences,
   StorageLoadResult,
   StorageSaveResult,
   StudyHistoryEntry,
@@ -104,6 +105,7 @@ function createDefaultStorage(): AppStorage {
     lessonTotals: { french: 0, japanese: 0 },
     dayStartHour: 0,
     kanaProgress: {},
+    speech: { voices: {}, rate: 0.9 },
   };
 }
 
@@ -470,6 +472,7 @@ function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
       french: Math.max(nonNegativeInteger(storedTotals.french), historyTotals.french),
       japanese: Math.max(nonNegativeInteger(storedTotals.japanese), historyTotals.japanese),
     },
+    speech: normalizeSpeech(parsed.speech),
     kanaProgress: Object.fromEntries(
       (isRecord(parsed.kanaProgress) ? Object.entries(parsed.kanaProgress as Record<string, unknown>) : [])
         .filter((entry): entry is [string, Record<string, unknown>] => entry[0].length <= 2 && isRecord(entry[1]))
@@ -1369,6 +1372,31 @@ export function addCustomWord(currentStorage: AppStorage, word: Word): AppStorag
 export function setDayStartPreference(currentStorage: AppStorage, hour: number): AppStorage {
   setDayStartHour(hour);
   return { ...currentStorage, dayStartHour: Math.min(MAX_DAY_START_HOUR, Math.max(0, Math.floor(hour))) };
+}
+
+function normalizeSpeech(value: unknown): SpeechPreferences {
+  const record = isRecord(value) ? value : {};
+  const voices = isRecord(record.voices) ? record.voices : {};
+  const rate = typeof record.rate === 'number' && record.rate >= 0.5 && record.rate <= 1.2 ? record.rate : 0.9;
+  return {
+    voices: {
+      ...(typeof voices.french === 'string' ? { french: voices.french.slice(0, 300) } : {}),
+      ...(typeof voices.japanese === 'string' ? { japanese: voices.japanese.slice(0, 300) } : {}),
+    },
+    rate,
+  };
+}
+
+export function setSpeechPreference(
+  currentStorage: AppStorage,
+  change: { language?: LearningLanguage; voiceId?: string | null; rate?: number },
+): AppStorage {
+  const voices = { ...currentStorage.speech.voices };
+  if (change.language) {
+    if (change.voiceId) voices[change.language] = change.voiceId;
+    else delete voices[change.language];
+  }
+  return { ...currentStorage, speech: normalizeSpeech({ voices, rate: change.rate ?? currentStorage.speech.rate }) };
 }
 
 export const KANA_LEARNED_STREAK = 3;

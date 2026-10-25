@@ -72,108 +72,81 @@ function waitForVoices(): Promise<SpeechSynthesisVoice[]> {
   return voicesReadyPromise;
 }
 
-function getFrenchVoiceScore(voice: SpeechSynthesisVoice): number {
-  const lang = voice.lang.toLowerCase();
-  const name = `${voice.name} ${voice.voiceURI}`.toLowerCase();
+// macOS ships playful «novelty» voices and the robotic Eloquence voices for
+// every language (Eddy, Flo, Grandma…). They must never be picked on their own.
+const LOW_QUALITY_VOICES = [
+  'albert', 'bad news', 'bahh', 'bells', 'boing', 'bubbles', 'cellos', 'good news', 'jester', 'junior', 'organ',
+  'superstar', 'trinoids', 'whisper', 'wobble', 'zarvox', 'ralph', 'fred', 'kathy', 'deranged', 'hysterical',
+  'eddy', 'flo', 'grandma', 'grandpa', 'reed', 'rocko', 'sandy', 'shelley',
+];
 
-  if (!lang.startsWith('fr')) {
-    return -1;
-  }
+// Natural-sounding voices that come with macOS or can be downloaded for free.
+const GOOD_VOICE_NAMES: Record<Word['language'], string[]> = {
+  french: ['amélie', 'amelie', 'thomas', 'audrey', 'aurélie', 'aurelie', 'marie', 'jacques'],
+  japanese: ['kyoko', 'otoya', 'o-ren', 'hattori'],
+};
 
-  let score = 0;
+export type VoiceQuality = 'premium' | 'enhanced' | 'standard' | 'basic';
 
-  if (lang === 'fr-fr') {
-    score += 100;
-  } else if (lang.startsWith('fr-')) {
-    score += 60;
-  } else {
-    score += 40;
-  }
+export interface VoiceOption {
+  id: string;
+  name: string;
+  quality: VoiceQuality;
+}
 
-  if (name.includes('france') || name.includes('français') || name.includes('francais')) {
-    score += 28;
-  }
+let preferredVoiceIds: Partial<Record<Word['language'], string>> = {};
+let speechRate = 0.9;
 
-  if (name.includes('natural') || name.includes('online')) {
-    score += 16;
-  }
+/** The learner's choices from the profile; applied to every playback. */
+export function setSpeechPreferences(preferences: { voices?: Partial<Record<Word['language'], string>>; rate?: number }): void {
+  preferredVoiceIds = preferences.voices ?? {};
+  speechRate = preferences.rate && preferences.rate >= 0.5 && preferences.rate <= 1.2 ? preferences.rate : 0.9;
+}
 
-  if (name.includes('microsoft') || name.includes('google') || name.includes('apple')) {
-    score += 10;
-  }
+function voiceText(voice: SpeechSynthesisVoice): string {
+  return `${voice.name} ${voice.voiceURI}`.toLowerCase();
+}
 
-  if (name.includes('denise') || name.includes('henri') || name.includes('thomas') || name.includes('amelie')) {
-    score += 8;
-  }
+export function getVoiceQuality(voice: SpeechSynthesisVoice): VoiceQuality {
+  const text = voiceText(voice);
+  if (LOW_QUALITY_VOICES.some((name) => new RegExp(`(^|[^a-z])${name}([^a-z]|$)`).test(text))) return 'basic';
+  if (/premium|премиум|neural|natural/.test(text)) return 'premium';
+  if (/enhanced|улучш|siri/.test(text)) return 'enhanced';
+  return 'standard';
+}
 
-  if (voice.localService) {
-    score += 4;
-  }
+function matchesLanguage(voice: SpeechSynthesisVoice, language: Word['language']): boolean {
+  const lang = voice.lang.toLowerCase().replace('_', '-');
+  return language === 'japanese' ? lang.startsWith('ja') : lang.startsWith('fr');
+}
 
-  if (name.includes('canada') || lang === 'fr-ca') {
-    score -= 20;
-  }
-
+function scoreVoice(voice: SpeechSynthesisVoice, language: Word['language']): number {
+  const quality = getVoiceQuality(voice);
+  const text = voiceText(voice);
+  const lang = voice.lang.toLowerCase().replace('_', '-');
+  let score = { premium: 300, enhanced: 200, standard: 100, basic: 0 }[quality];
+  if (GOOD_VOICE_NAMES[language].some((name) => text.includes(name))) score += 30;
+  if (lang === (language === 'japanese' ? 'ja-jp' : 'fr-fr')) score += 20;
+  if (language === 'french' && lang === 'fr-ca') score -= 10;
   return score;
 }
 
-function pickFrenchVoice(
-  availableVoices = cachedVoices.length > 0 ? cachedVoices : getVoices(),
-): SpeechSynthesisVoice | undefined {
-  const rankedVoices = availableVoices
-    .map((voice) => ({ voice, score: getFrenchVoiceScore(voice) }))
-    .filter(({ score }) => score >= 0)
-    .sort((left, right) => right.score - left.score);
-
-  return rankedVoices[0]?.voice;
+function rankVoices(voices: SpeechSynthesisVoice[], language: Word['language']): SpeechSynthesisVoice[] {
+  return voices
+    .filter((voice) => matchesLanguage(voice, language))
+    .sort((left, right) => scoreVoice(right, language) - scoreVoice(left, language));
 }
 
-function getJapaneseVoiceScore(voice: SpeechSynthesisVoice): number {
-  const lang = voice.lang.toLowerCase();
-  const name = `${voice.name} ${voice.voiceURI}`.toLowerCase();
-
-  if (!lang.startsWith('ja')) {
-    return -1;
-  }
-
-  let score = 0;
-
-  if (lang === 'ja-jp') {
-    score += 100;
-  } else if (lang.startsWith('ja-')) {
-    score += 60;
-  } else {
-    score += 40;
-  }
-
-  if (name.includes('japan') || name.includes('japanese') || name.includes('nihongo')) {
-    score += 26;
-  }
-
-  if (name.includes('natural') || name.includes('online')) {
-    score += 16;
-  }
-
-  if (name.includes('microsoft') || name.includes('google') || name.includes('apple')) {
-    score += 10;
-  }
-
-  if (voice.localService) {
-    score += 4;
-  }
-
-  return score;
+function pickVoice(language: Word['language'], voices = cachedVoices.length > 0 ? cachedVoices : getVoices()): SpeechSynthesisVoice | undefined {
+  const preferred = preferredVoiceIds[language];
+  const chosen = preferred ? voices.find((voice) => voice.voiceURI === preferred) : undefined;
+  return chosen ?? rankVoices(voices, language)[0];
 }
 
-function pickJapaneseVoice(
-  availableVoices = cachedVoices.length > 0 ? cachedVoices : getVoices(),
-): SpeechSynthesisVoice | undefined {
-  const rankedVoices = availableVoices
-    .map((voice) => ({ voice, score: getJapaneseVoiceScore(voice) }))
-    .filter(({ score }) => score >= 0)
-    .sort((left, right) => right.score - left.score);
-
-  return rankedVoices[0]?.voice;
+/** Installed voices for a language, best first, for the voice picker. */
+export async function listVoices(language: Word['language']): Promise<VoiceOption[]> {
+  const voices = await waitForVoices();
+  return rankVoices(voices, language).map((voice) => ({ id: voice.voiceURI, name: voice.name, quality: getVoiceQuality(voice) }));
 }
 
 function normalizeSpeechText(value: string): string {
@@ -239,11 +212,10 @@ async function speakFallback(text: string, token: number, language: Word['langua
 
   activeUtterance = new SpeechSynthesisUtterance(normalizeSpeechText(text));
   activeUtterance.lang = language === 'japanese' ? 'ja-JP' : 'fr-FR';
-  activeUtterance.rate = language === 'japanese' ? 0.92 : 0.86;
+  activeUtterance.rate = speechRate;
   activeUtterance.pitch = 1;
   activeUtterance.volume = 1;
-  activeUtterance.voice =
-    (language === 'japanese' ? pickJapaneseVoice(voices) : pickFrenchVoice(voices)) ?? null;
+  activeUtterance.voice = pickVoice(language, voices) ?? null;
 
   return new Promise((resolve, reject) => {
     if (!activeUtterance) {
@@ -301,6 +273,20 @@ export async function playWordAudio(word: Word, options?: { force?: boolean }): 
     await speakFallback(getSpokenWordText(word), token, word.language);
   } catch {
     return;
+  }
+}
+
+/** Speaks any text (an example sentence, a voice preview). */
+export async function playTextAudio(text: string, language: Word['language']): Promise<void> {
+  if (!text.trim()) return;
+  stopAudio();
+  const token = playbackToken + 1;
+  playbackToken = token;
+  lastPlayAt = Date.now();
+  try {
+    await speakFallback(text, token, language);
+  } catch {
+    // Speech is a convenience; a failed playback must not break the lesson.
   }
 }
 

@@ -6,6 +6,7 @@ import { LessonCard } from './LessonCard';
 import { WordImage } from './WordImage';
 import { getDisplayWord, getLessonWordBadge, getLessonWordNotes, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordLevelLabel } from '../lib/levels';
+import { SentenceAudioButton } from './SentenceAudioButton';
 
 interface LessonWordPreviewProps {
   word: Word;
@@ -72,7 +73,10 @@ export function LessonWordPreview({
               ))}
             </ul>
             <div className="lesson-preview-example-card">
-              <p className="lesson-preview-example">{word.example_original}</p>
+              <div className="example-line">
+                <p className="lesson-preview-example">{word.example_original}</p>
+                <SentenceAudioButton text={word.example_original} language={word.language} />
+              </div>
               <JapaneseExampleReading word={word} />
               {word.example_translation ? <p className="lesson-preview-example-translation">{word.example_translation}</p> : null}
             </div>

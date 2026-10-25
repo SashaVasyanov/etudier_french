@@ -35,6 +35,7 @@ export function storage(entries: Record<string, WordProgress> = {}): AppStorage 
     lessonTotals: { french: 0, japanese: 0 },
     dayStartHour: 0,
     kanaProgress: {},
+    speech: { voices: {}, rate: 0.9 },
   };
 }
 

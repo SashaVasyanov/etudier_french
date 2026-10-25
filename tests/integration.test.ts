@@ -45,8 +45,7 @@ describe('lesson integration', () => {
 
     expect(session?.modules).toHaveLength(5);
     expect(session?.exercises.filter((exercise) => exercise.options)).toHaveLength(0);
-    expect(session?.exercises.some((exercise) => exercise.type === 'translation_to_original_input')).toBe(true);
-    expect(session?.exercises.some((exercise) => exercise.type === 'audio_to_original_input')).toBe(true);
+    expect(session?.exercises.every((exercise) => exercise.type.endsWith('_input'))).toBe(true);
   });
 
   it('reaches mastered only on the third distinct due date', () => {

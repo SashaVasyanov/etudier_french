@@ -260,6 +260,13 @@ export interface AppStorage {
   dayStartHour: number;
   /** Katakana reading practice, keyed by the katakana character. */
   kanaProgress: Record<string, KanaProgress>;
+  /** Voice per language (speechSynthesis voiceURI) and speaking rate. */
+  speech: SpeechPreferences;
+}
+
+export interface SpeechPreferences {
+  voices: Partial<Record<LearningLanguage, string>>;
+  rate: number;
 }
 
 export interface KanaProgress {
