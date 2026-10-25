@@ -975,3 +975,69 @@ h3 {
   flex: 1 0 auto;
   white-space: nowrap;
 }
+
+.form-field {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.form-field > span {
+  padding-left: 4px;
+  color: var(--label-2);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Medium windows: an icon rail. */
+@media (min-width: 821px) and (max-width: 1180px) {
+  .desktop-app-layout:not(.lesson-desktop-layout) {
+    grid-template-columns: 92px minmax(0, 1fr);
+  }
+
+  .app-sidebar {
+    padding: 18px 10px 12px;
+    align-items: stretch;
+  }
+
+  .sidebar-logo {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .sidebar-logo strong,
+  .nav-button strong {
+    display: none;
+  }
+
+  .app-sidebar,
+  .app-nav,
+  .nav-button {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .nav-button {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .nav-button {
+    min-height: 44px;
+    padding: 0;
+    justify-content: center;
+    justify-items: center;
+  }
+
+  .sidebar-streak-card {
+    padding: 10px 0;
+    display: grid;
+    place-items: center;
+  }
+
+  /* The inner home grid must not become a column of the page grid. */
+  .learning-home-grid {
+    grid-column: auto;
+  }
+}

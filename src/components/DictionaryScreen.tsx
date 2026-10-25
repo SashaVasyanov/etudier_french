@@ -191,73 +191,97 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
             }}
           >
             {formError ? <p className="form-inline-message" role="alert">{formError}</p> : null}
-            <input
-              className="text-input"
-              value={newWord.original}
-              maxLength={240}
-              placeholder={learningLanguage === 'french' ? 'Например, bonjour' : 'Например, こんにちは'}
-              aria-label={learningLanguage === 'french' ? 'Французское слово' : 'Японское слово'}
-              required
-              onChange={(event) => setNewWord((current) => ({ ...current, original: event.target.value }))}
-            />
-            <input
-              className="text-input"
-              value={newWord.translation}
-              maxLength={400}
-              placeholder="Например, привет"
-              aria-label="Перевод"
-              required
-              onChange={(event) => setNewWord((current) => ({ ...current, translation: event.target.value }))}
-            />
-            <input
-              className="text-input"
-              value={newWord.transcription}
-              maxLength={240}
-              placeholder="Например, [bɔ̃ʒuʁ]"
-              aria-label="Транскрипция"
-              onChange={(event) => setNewWord((current) => ({ ...current, transcription: event.target.value }))}
-            />
-            <input
-              className="text-input"
-              value={newWord.example_original}
-              maxLength={1000}
-              placeholder={learningLanguage === 'french' ? 'Например, Bonjour !' : 'Например, こんにちは。'}
-              aria-label={learningLanguage === 'french' ? 'Пример на французском' : 'Пример на японском'}
-              onChange={(event) => setNewWord((current) => ({ ...current, example_original: event.target.value }))}
-            />
-            <input
-              className="text-input"
-              value={newWord.example_translation}
-              maxLength={1000}
-              placeholder="Например, приветствие"
-              aria-label="Перевод примера"
-              onChange={(event) => setNewWord((current) => ({ ...current, example_translation: event.target.value }))}
-            />
-            <input
-              className="text-input"
-              value={newWord.part_of_speech}
-              maxLength={80}
-              placeholder="Например, существительное"
-              aria-label="Часть речи"
-              onChange={(event) => setNewWord((current) => ({ ...current, part_of_speech: event.target.value }))}
-            />
-            <select
-              className="level-select"
-              aria-label="Уровень слова"
-              value={newWord.level}
-              onChange={(event) => setNewWord((current) => ({ ...current, level: event.target.value as WordLevel }))}
-            >
-              <option value="A1">A1</option>
-              <option value="A2">A2</option>
-              <option value="B1">B1</option>
-            </select>
-            <input
-              className="text-input"
-              value={newWord.tags}
-              maxLength={500}
-              placeholder="Теги через запятую"
-              onChange={(event) => setNewWord((current) => ({ ...current, tags: event.target.value }))}
-            />
+            <label className="form-field">
+              <span>Слово</span>
+              <input
+                className="text-input"
+                value={newWord.original}
+                maxLength={240}
+                placeholder={learningLanguage === 'french' ? 'Например, bonjour' : 'Например, こんにちは'}
+                aria-label={learningLanguage === 'french' ? 'Французское слово' : 'Японское слово'}
+                required
+                onChange={(event) => setNewWord((current) => ({ ...current, original: event.target.value }))}
+              />
+            </label>
+            <label className="form-field">
+              <span>Перевод</span>
+              <input
+                className="text-input"
+                value={newWord.translation}
+                maxLength={400}
+                placeholder="Например, привет"
+                aria-label="Перевод"
+                required
+                onChange={(event) => setNewWord((current) => ({ ...current, translation: event.target.value }))}
+              />
+            </label>
+            <label className="form-field">
+              <span>Транскрипция</span>
+              <input
+                className="text-input"
+                value={newWord.transcription}
+                maxLength={240}
+                placeholder="Например, [bɔ̃ʒuʁ]"
+                aria-label="Транскрипция"
+                onChange={(event) => setNewWord((current) => ({ ...current, transcription: event.target.value }))}
+              />
+            </label>
+            <label className="form-field">
+              <span>Пример</span>
+              <input
+                className="text-input"
+                value={newWord.example_original}
+                maxLength={1000}
+                placeholder={learningLanguage === 'french' ? 'Например, Bonjour !' : 'Например, こんにちは。'}
+                aria-label={learningLanguage === 'french' ? 'Пример на французском' : 'Пример на японском'}
+                onChange={(event) => setNewWord((current) => ({ ...current, example_original: event.target.value }))}
+              />
+            </label>
+            <label className="form-field">
+              <span>Перевод примера</span>
+              <input
+                className="text-input"
+                value={newWord.example_translation}
+                maxLength={1000}
+                placeholder="Например, приветствие"
+                aria-label="Перевод примера"
+                onChange={(event) => setNewWord((current) => ({ ...current, example_translation: event.target.value }))}
+              />
+            </label>
+            <label className="form-field">
+              <span>Часть речи</span>
+              <input
+                className="text-input"
+                value={newWord.part_of_speech}
+                maxLength={80}
+                placeholder="Например, существительное"
+                aria-label="Часть речи"
+                onChange={(event) => setNewWord((current) => ({ ...current, part_of_speech: event.target.value }))}
+              />
+            </label>
+            <label className="form-field">
+              <span>Уровень</span>
+              <select
+                className="level-select"
+                aria-label="Уровень слова"
+                value={newWord.level}
+                onChange={(event) => setNewWord((current) => ({ ...current, level: event.target.value as WordLevel }))}
+              >
+                <option value="A1">A1</option>
+                <option value="A2">A2</option>
+                <option value="B1">B1</option>
+              </select>
+            </label>
+            <label className="form-field">
+              <span>Теги</span>
+              <input
+                className="text-input"
+                value={newWord.tags}
+                maxLength={500}
+                placeholder="Теги через запятую"
+                onChange={(event) => setNewWord((current) => ({ ...current, tags: event.target.value }))}
+              />
+            </label>
             <div className="custom-word-actions">
               <button type="submit" className="primary-button">
                 Сохранить слово
