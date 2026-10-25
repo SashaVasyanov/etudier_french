@@ -16,44 +16,18 @@ import { getWordProgress, isWordDueForReview } from './storage';
 import { isReviewDue, shuffleArray } from './utils';
 import { containsJapaneseKanji, getJapaneseHiraganaReading } from './wordPresentation';
 
-const LESSON_LIMITS: Record<
-  LessonDurationMinutes,
-  {
-    newWords: number;
-    activeWords: number;
-    reinforcementWords: number;
-    recapWords: number;
-    mistakesWords: number;
-    memoryCheckWords: number;
-  }
-> = {
-  10: {
-    newWords: 3,
-    activeWords: 4,
-    reinforcementWords: 4,
-    recapWords: 3,
-    mistakesWords: 4,
-    memoryCheckWords: 1,
-  },
-  20: {
-    newWords: 6,
-    activeWords: 6,
-    reinforcementWords: 6,
-    recapWords: 4,
-    mistakesWords: 6,
-    memoryCheckWords: 1,
-  },
-  30: {
-    newWords: 8,
-    activeWords: 8,
-    reinforcementWords: 10,
-    recapWords: 5,
-    mistakesWords: 8,
-    memoryCheckWords: 2,
-  },
-};
+interface LessonLimits {
+  newWords: number;
+  activeWords: number;
+  reinforcementWords: number;
+  recapWords: number;
+  mistakesWords: number;
+  memoryCheckWords: number;
+}
 
-type LessonLimits = (typeof LESSON_LIMITS)[LessonDurationMinutes];
+// One source of truth for lesson size: the word target. A duration preset only
+// picks a default target (see setLessonDurationPreference in storage.ts).
+const DEFAULT_WORD_TARGET_BY_DURATION: Record<LessonDurationMinutes, number> = { 10: 10, 20: 20, 30: 30 };
 
 const LONG_TERM_MEMORY_MIN_DAYS = 3;
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
@@ -66,6 +40,9 @@ interface CreateLessonSessionInput {
   wordTarget?: number;
   useFullPool?: boolean;
   wordIds?: string[];
+  /** Daily lesson only: restrict new words to these ids (a chosen topic pack),
+   *  while due reviews still come from every word in `words`. */
+  newWordIds?: string[];
   activePackIds?: string[];
   title?: string;
 }
@@ -81,28 +58,35 @@ interface CreateFlashcardSessionInput {
   title?: string;
 }
 
-function getLessonLimits(durationMinutes: LessonDurationMinutes, wordTarget?: number, useFullPool = false): LessonLimits {
-  if (useFullPool && wordTarget && wordTarget > 0) {
-    const target = Math.max(10, wordTarget);
-    const memoryCheckWords = Math.max(1, Math.min(6, Math.round(target / 40)));
+function getNewWordsQuota(target: number): number {
+  return Math.max(3, Math.round(target * 0.34));
+}
 
+function getLessonLimits(
+  durationMinutes: LessonDurationMinutes,
+  wordTarget: number | undefined,
+  useFullPool: boolean,
+  poolSize: number,
+): LessonLimits {
+  const target = Math.max(10, Math.min(50, wordTarget ?? DEFAULT_WORD_TARGET_BY_DURATION[durationMinutes]));
+  const newWords = getNewWordsQuota(target);
+
+  if (useFullPool) {
+    // Without a lesson limit every due review and practice word may come up,
+    // but new words still follow the daily quota: introducing the whole
+    // dictionary at once is never a useful lesson.
+    const pool = Math.max(target, poolSize);
     return {
-      newWords: target,
-      activeWords: target,
-      reinforcementWords: target,
-      recapWords: target,
-      mistakesWords: target,
-      memoryCheckWords,
+      newWords,
+      activeWords: pool,
+      reinforcementWords: pool,
+      recapWords: pool,
+      mistakesWords: pool,
+      memoryCheckWords: Math.max(1, Math.min(6, Math.round(pool / 40))),
     };
   }
 
-  if (!wordTarget) {
-    return LESSON_LIMITS[durationMinutes];
-  }
-
-  const target = Math.max(10, Math.min(50, wordTarget));
   const memoryCheckWords = Math.max(1, Math.min(3, Math.round(target / 30)));
-  const newWords = Math.max(3, Math.round(target * 0.34));
 
   return {
     newWords,
@@ -708,7 +692,7 @@ function createMistakesSession(
     return null;
   }
 
-  const limits = getLessonLimits(durationMinutes, useFullPool ? words.length : wordTarget, useFullPool);
+  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool, words.length);
   const mistakeWords = words.slice(0, limits.mistakesWords);
   const reviewModule = createExerciseModule(
     'module-mistakes',
@@ -747,9 +731,11 @@ function createDailySession(
   durationMinutes: LessonDurationMinutes,
   wordTarget?: number,
   useFullPool = false,
+  newWordIds?: string[],
 ): LessonSession | null {
-  const limits = getLessonLimits(durationMinutes, useFullPool ? words.length : wordTarget, useFullPool);
-  const newWords = pickNewWords(words, storage, limits.newWords);
+  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool, words.length);
+  const newWordIdSet = newWordIds ? new Set(newWordIds) : null;
+  const newWords = pickNewWords(newWordIdSet ? words.filter((word) => newWordIdSet.has(word.id)) : words, storage, limits.newWords);
   const learningWords = pickLearningWords(words, storage, limits.activeWords);
   const introductionWords = newWords.length > 0 ? newWords : learningWords.slice(0, Math.max(1, limits.newWords));
   const scheduledReviewWords = learningWords;
@@ -894,7 +880,7 @@ function createExtraSession(
   useFullPool = false,
   title?: string,
 ): LessonSession | null {
-  const limits = getLessonLimits(durationMinutes, useFullPool ? words.length : wordTarget, useFullPool);
+  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool, words.length);
   const focusWords = pickExtraFocusWords(words, storage, limits.activeWords);
   const newWords = words
     .filter((word) => getWordProgress(storage, word.id).status === 'new' && !focusWords.some((item) => item.id === word.id))
@@ -986,7 +972,7 @@ export function createFlashcardSession({
   title,
 }: CreateFlashcardSessionInput): LessonSession | null {
   const eligibleWords = getPracticePool(words, storage);
-  const limits = getLessonLimits(durationMinutes, useFullPool ? eligibleWords.length : wordTarget, useFullPool);
+  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool, eligibleWords.length);
   const flashcardLimit = useFullPool ? eligibleWords.length : wordTarget ?? Math.max(limits.newWords + 2, 6);
   const focusWords =
     mode === 'pack'
@@ -1276,6 +1262,7 @@ export function createLessonSession({
   wordTarget,
   useFullPool = false,
   wordIds,
+  newWordIds,
   activePackIds = [],
   title,
 }: CreateLessonSessionInput): LessonSession | null {
@@ -1286,7 +1273,7 @@ export function createLessonSession({
   }
 
   if (mode === 'default') {
-    const session = createDailySession(eligibleWords, storage, activePackIds, durationMinutes, wordTarget, useFullPool);
+    const session = createDailySession(eligibleWords, storage, activePackIds, durationMinutes, wordTarget, useFullPool, newWordIds);
     return session && title ? { ...session, title } : session;
   }
 

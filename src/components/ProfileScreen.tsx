@@ -193,7 +193,7 @@ export default function ProfileScreen({
               <small>
                 {lessonDurationEnabled
                   ? 'Урок ограничен выбранными минутами и количеством слов.'
-                  : 'Урок идёт без лимита, пока выбранный пул слов не закончится.'}
+                  : 'Без лимита: все запланированные повторения сразу, новые слова — по дневной норме.'}
               </small>
             </span>
             <label className="settings-toggle">
@@ -228,12 +228,11 @@ export default function ProfileScreen({
           <label className="settings-row">
             <span>
               Слов в уроке
-              <small>Можно выбрать короткую или плотную сессию.</small>
+              <small>Задаёт объём урока и дневную норму новых слов. Длительность подстроится сама.</small>
             </span>
             <select
               className="settings-select"
               value={lessonWordTarget}
-              disabled={!lessonDurationEnabled}
               onChange={(event) => onLessonWordTargetChange(Number(event.target.value) as LessonWordTarget)}
             >
               {WORD_TARGET_OPTIONS.map((option) => (

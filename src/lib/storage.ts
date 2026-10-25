@@ -972,9 +972,13 @@ export function setLessonWordTargetPreference(
   currentStorage: AppStorage,
   lessonWordTarget: LessonWordTarget,
 ): AppStorage {
+  // Keep the duration label honest: a 50-word lesson is not a 10-minute one.
+  const lessonDurationMinutes: LessonDurationMinutes = lessonWordTarget <= 15 ? 10 : lessonWordTarget <= 30 ? 20 : 30;
+
   return {
     ...currentStorage,
     lessonWordTarget,
+    lessonDurationMinutes,
   };
 }
 

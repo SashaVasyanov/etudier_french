@@ -143,6 +143,17 @@ function App() {
     () => getLessonPoolWords(lessonSourceWords).filter((word) => getWordProgress(storage, word.id).status !== 'ignored'),
     [lessonSourceWords, storage],
   );
+  // A chosen topic only decides which NEW words come next. Reviews that are due
+  // must keep coming from every active word, otherwise they pile up unseen.
+  const dailyLessonWords = useMemo(() => {
+    if (!selectedLessonSourceWords) return lessonPoolWords;
+    const seen = new Set<string>();
+    return [...lessonPoolWords, ...getLessonPoolWords(availableWords)].filter((word) => {
+      if (seen.has(word.id) || getWordProgress(storage, word.id).status === 'ignored') return false;
+      seen.add(word.id);
+      return true;
+    });
+  }, [availableWords, lessonPoolWords, selectedLessonSourceWords, storage]);
   const progressList = useMemo(() => availableWords.map((word) => getWordProgress(storage, word.id)), [storage, availableWords]);
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
@@ -359,7 +370,7 @@ function App() {
       if (currentLessonDraft && resumeDraft(currentLessonDraft)) return;
     }
     setLessonNotice(null);
-    if (mode !== 'pack' && lessonPoolWords.length === 0 && !options?.wordIds?.length) {
+    if (mode !== 'pack' && (mode === 'default' ? dailyLessonWords : lessonPoolWords).length === 0 && !options?.wordIds?.length) {
       if (mode === 'default') setScreen('dailyComplete');
       else setLessonNotice('Для практики пока нет слов. Добавьте слова или выберите другой пак.');
       return;
@@ -373,7 +384,7 @@ function App() {
       options?.wordIds && options.wordIds.length > 0
         ? words
         : mode === 'default'
-          ? lessonPoolWords
+          ? dailyLessonWords
           : mode === 'pack' && options?.packId
             ? words.filter((word) => word.packIds.includes(options.packId!))
             : lessonPoolWords;
@@ -387,15 +398,15 @@ function App() {
         : selectedLessonSourcePack
           ? Array.from(new Set([...enabledPackIds, selectedLessonSourcePack.id]))
           : enabledPackIds;
-    const lessonWordTarget = storage.lessonDurationEnabled ? storage.lessonWordTarget : Math.max(lessonWords.length, 10);
     const nextSession = createLessonSession({
       mode,
       words: lessonWords,
       storage,
       durationMinutes: storage.lessonDurationMinutes,
-      wordTarget: lessonWordTarget,
+      wordTarget: storage.lessonWordTarget,
       useFullPool: !storage.lessonDurationEnabled,
       wordIds: options?.wordIds,
+      newWordIds: mode === 'default' && selectedLessonSourceWords ? lessonPoolWords.map((word) => word.id) : undefined,
       activePackIds,
       title: options?.title ?? (mode === 'default' && selectedLessonSourcePack ? `Урок: ${selectedLessonSourcePack.title}` : undefined),
     });
@@ -447,13 +458,12 @@ function App() {
       const status = getWordProgress(storage, word.id).status;
       return status !== 'ignored' && status !== 'known';
     });
-    const flashcardWordTarget = storage.lessonDurationEnabled ? storage.lessonWordTarget : Math.max(flashcardWords.length, 10);
     const nextSession = createFlashcardSession({
       mode,
       words: flashcardWords,
       storage,
       durationMinutes: storage.lessonDurationMinutes,
-      wordTarget: flashcardWordTarget,
+      wordTarget: storage.lessonWordTarget,
       useFullPool: !storage.lessonDurationEnabled,
       activePackIds:
         mode === 'pack' && options?.packId ? Array.from(new Set([...enabledPackIds, options.packId])) : enabledPackIds,

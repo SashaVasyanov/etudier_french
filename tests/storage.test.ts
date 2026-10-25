@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { completeDailyLesson, getCompletedDailyLesson, getCurrentStreakDays, loadStorage, recordStudyHistory, saveStorage } from '../src/lib/storage';
+import { completeDailyLesson, getCompletedDailyLesson, getCurrentStreakDays, loadStorage, recordStudyHistory, saveStorage, setLessonDurationPreference, setLessonWordTargetPreference } from '../src/lib/storage';
 import type { DailyLessonRecord, StudyHistoryEntry } from '../src/types';
 import { installStorage, storage, progress, now, localDateKey, word } from './fixtures';
 
@@ -190,5 +190,15 @@ describe('storage envelope and failure behavior', () => {
     expect(JSON.parse(fake.getItem('anki-plus-storage')!).version).toBe(2);
     expect(JSON.parse(fake.getItem('anki-plus-storage-backup')!).payload.progressByWordId.old.status).toBe('learning');
     expect(fake.getItem('anki-plus-storage-backup')).toBe(firstRaw);
+  });
+});
+
+describe('lesson size preferences', () => {
+  it('keeps duration and word target consistent in both directions', () => {
+    const base = storage();
+    expect(setLessonDurationPreference(base, 10).lessonWordTarget).toBe(10);
+    expect(setLessonWordTargetPreference(base, 50).lessonDurationMinutes).toBe(30);
+    expect(setLessonWordTargetPreference(base, 15).lessonDurationMinutes).toBe(10);
+    expect(setLessonWordTargetPreference(base, 25).lessonDurationMinutes).toBe(20);
   });
 });

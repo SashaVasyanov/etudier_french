@@ -89,13 +89,33 @@ describe('lesson generation and recovery', () => {
     expect(sizes[1]).toBeLessThan(sizes[2]);
   });
 
-  it('uses the full pool with the duration limit disabled even without a word target', () => {
+  it('without a duration limit keeps the daily new-word quota but includes every due review', () => {
     const words = Array.from({ length: 24 }, (_, index) => word(String(index)));
-    const state = storage();
-    for (const mode of ['default', 'extra', 'pack'] as const) {
-      expect(createLessonSession({ mode, words, storage: state, durationMinutes: 10, useFullPool: true })?.sourceWordIds).toHaveLength(words.length);
+    const due = new Date(now.getTime() - 86_400_000).toISOString();
+    const dueWords = Array.from({ length: 20 }, (_, index) => word(`due-${index}`));
+    const state = storage(Object.fromEntries(dueWords.map((item) => [item.id, progress(item.id, 'learning', { next_review_at: due })])));
+    const session = createLessonSession({ mode: 'default', words: [...words, ...dueWords], storage: state, durationMinutes: 10, wordTarget: 10, useFullPool: true })!;
+    const newIds = session.sourceWordIds.filter((id) => !id.startsWith('due-'));
+    expect(newIds).toHaveLength(3);
+    expect(dueWords.every((item) => session.sourceWordIds.includes(item.id))).toBe(true);
+    for (const mode of ['extra', 'pack'] as const) {
+      expect(createLessonSession({ mode, words, storage: storage(), durationMinutes: 10, useFullPool: true })!.sourceWordIds.length).toBeLessThan(words.length);
     }
-    expect(createFlashcardSession({ mode: 'extra', words, storage: state, durationMinutes: 10, useFullPool: true })?.sourceWordIds).toHaveLength(words.length);
+    expect(createFlashcardSession({ mode: 'pack', words, storage: storage(), durationMinutes: 10, useFullPool: true })?.sourceWordIds).toHaveLength(words.length);
+  });
+
+  it('restricts new words to the chosen topic while reviews come from all words', () => {
+    const topic = [word('t1'), word('t2'), word('t3'), word('t4')];
+    const other = [word('o1'), word('o2'), word('o3'), word('o4')];
+    const due = new Date(now.getTime() - 86_400_000).toISOString();
+    const state = storage({ o4: progress('o4', 'review', { next_review_at: due }) });
+    const session = createLessonSession({
+      mode: 'default', words: [...topic, ...other], storage: state, durationMinutes: 10, wordTarget: 10,
+      newWordIds: topic.map((item) => item.id),
+    })!;
+    expect(session.sourceWordIds).toContain('o4');
+    expect(session.sourceWordIds.some((id) => ['o1', 'o2', 'o3'].includes(id))).toBe(false);
+    expect(session.sourceWordIds.filter((id) => id.startsWith('t')).length).toBeGreaterThan(0);
   });
 
   it('preserves module metadata when a spaced retry lands in a later module', () => {
