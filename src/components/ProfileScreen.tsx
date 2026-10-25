@@ -113,19 +113,19 @@ export default function ProfileScreen({
       <section className="settings-profile-overview" aria-label="Сводка профиля">
         <article>
           <span className="settings-overview-icon violet"><AppIcon name="book-open" size={22} /></span>
-          <div><strong>{stats.learned}</strong><small>слов встречалось</small></div>
+          <div><strong>{stats.learned}</strong><small>{pluralRu(stats.learned, ['слово встречалось', 'слова встречалось', 'слов встречалось'])}</small></div>
         </article>
         <article>
           <span className="settings-overview-icon green"><AppIcon name="check-circle" size={22} /></span>
-          <div><strong>{stats.mastered}</strong><small>слов освоено</small></div>
+          <div><strong>{stats.mastered}</strong><small>{pluralRu(stats.mastered, ['слово освоено', 'слова освоено', 'слов освоено'])}</small></div>
         </article>
         <article>
           <span className="settings-overview-icon orange"><AppIcon name="flame" size={22} /></span>
-          <div><strong>{getCurrentStreakDays(storage)}</strong><small>дней в серии</small></div>
+          <div><strong>{getCurrentStreakDays(storage)}</strong><small>{pluralRu(getCurrentStreakDays(storage), ['день в серии', 'дня в серии', 'дней в серии'])}</small></div>
         </article>
         <article>
           <span className="settings-overview-icon blue"><AppIcon name="calendar" size={22} /></span>
-          <div><strong>{languageHistory.length}</strong><small>{pluralRu(languageHistory.length, RU_LESSONS)} завершено</small></div>
+          <div><strong>{languageHistory.length}</strong><small>{pluralRu(languageHistory.length, ['урок завершён', 'урока завершено', 'уроков завершено'])}</small></div>
         </article>
       </section>
 

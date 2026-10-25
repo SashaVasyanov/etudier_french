@@ -1,3 +1,4 @@
+import { FRENCH_H_ASPIRE, FRENCH_NOUN_GENDERS } from '../data/frenchNounGenders';
 import type { ExerciseType, LearningLanguage, Word } from '../types';
 
 const PART_OF_SPEECH_LABELS: Record<string, string> = {
@@ -33,7 +34,11 @@ function escapeRegExp(value: string): string {
 }
 
 function startsWithVowelSound(value: string): boolean {
-  return /^[aeiouyhàâæéèêëîïôœùûü]/i.test(value.trim());
+  const word = value.trim().toLowerCase();
+  if (FRENCH_H_ASPIRE.has(word) || FRENCH_H_ASPIRE.has(word.split(/[\s-]/)[0])) return false;
+  // y before a vowel is a consonant: le yaourt, le yoga.
+  if (/^y[aeiouéèêàâôû]/.test(word)) return false;
+  return /^[aeiouyhàâæéèêëîïôœùûü]/.test(word);
 }
 
 const ARTICLE_EXCEPTIONS: Record<string, string> = {
@@ -160,11 +165,21 @@ export function getFrenchArticleForWord(word: Word): string | null {
     return null;
   }
 
+  // The gender list is the source of truth; examples and endings are only a
+  // fallback for words outside it (imported or custom words).
+  const gender = FRENCH_NOUN_GENDERS[original.toLowerCase()];
+  if (gender) {
+    if (gender === 'pl') return 'les';
+    if (startsWithVowelSound(original)) return "l'";
+    return gender === 'f' ? 'la' : 'le';
+  }
+
   const normalizedOriginal = normalizeKey(original);
   const explicitArticle = ARTICLE_EXCEPTIONS[normalizedOriginal] ?? getArticleFromExample(word);
 
   if (explicitArticle) {
-    return explicitArticle;
+    // «un ami» in an example still means «l'ami» as a dictionary form.
+    return (explicitArticle === 'le' || explicitArticle === 'la') && startsWithVowelSound(original) ? "l'" : explicitArticle;
   }
 
   if (isLikelyPluralNoun(original)) {

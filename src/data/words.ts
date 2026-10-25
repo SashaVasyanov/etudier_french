@@ -139,6 +139,7 @@ function chooseVariantPair(
 
 function startsWithVowelSound(value: string): boolean {
   const word = value.trim().toLowerCase();
+  if (/^y[aeiouéèêàâôû]/.test(word)) return false; // le yaourt, le yoga
   return /^[aeiouyhàâæéèêëîïôœùûü]/i.test(word) && !FRENCH_H_ASPIRE.has(word.split(/[\s-]/)[0]) && !FRENCH_H_ASPIRE.has(word);
 }
 
@@ -198,6 +199,13 @@ function withArticle(word: string, mode: 'definite' | 'indefinite', capitalized 
   const phrase = `${article}${separator}${word}`;
   return capitalized ? phrase.charAt(0).toUpperCase() + phrase.slice(1) : phrase;
 }
+
+const MASS_NOUNS = new Set(`sang riz lait eau neige pluie sable sel sucre beurre farine huile miel vin biere cafe the jus fromage pain
+viande poulet boeuf porc agneau jambon thon saumon soupe confiture chocolat creme yaourt vinaigre poivre ail persil basilic menthe
+sirop limonade laine soie coton cuir bois papier argent monnaie air ciel terre herbe mais linge`.split(/\s+/));
+const ABSTRACT_NOUNS = new Set(`soif faim colere stress age calme courage patience honte joie peur fatigue amour amitie bonheur confiance
+curiosite fierte jalousie tristesse tendresse liberte paix silence sommeil attention importance sante chance ennui envie espoir
+inquietude respect responsabilite securite verite memoire douleur fievre toux grippe rhume`.split(/\s+/));
 
 function buildNounExample(word: Word): { example_original: string; example_translation: string } {
   const original = word.original;
@@ -491,11 +499,17 @@ function buildNounExample(word: Word): { example_original: string; example_trans
   const shortTranslation = word.translation.split(/\s*[/;,(]\s*/)[0].trim() || word.translation;
   const plural = getFrenchArticle(original, 'definite') === 'les';
   const capitalizedTranslation = shortTranslation.charAt(0).toUpperCase() + shortTranslation.slice(1);
+  const important = { example_original: `${definiteCap}, c'est important.`, example_translation: `${capitalizedTranslation} — это важно.` };
+  const where = { example_original: `Où ${plural ? 'sont' : 'est'} ${definite} ?`, example_translation: `Где ${shortTranslation}?` };
+  // «un sang», «une soif» are wrong: uncountable and abstract nouns only get
+  // templates with the definite article.
+  if (ABSTRACT_NOUNS.has(key)) return important;
+  if (MASS_NOUNS.has(key)) return chooseVariantPair(word.id, [where, important]);
   return chooseVariantPair(word.id, [
     { example_original: `Voici ${indefinite}.`, example_translation: `Вот ${shortTranslation}.` },
-    { example_original: `Où ${plural ? 'sont' : 'est'} ${definite} ?`, example_translation: `Где ${shortTranslation}?` },
+    where,
     { example_original: `Il y a ${indefinite} ici.`, example_translation: `Здесь есть ${shortTranslation}.` },
-    { example_original: `${definiteCap}, c'est important.`, example_translation: `${capitalizedTranslation} — это важно.` },
+    important,
   ]);
 }
 
@@ -968,6 +982,20 @@ function buildExpressionExample(word: Word): { example_original: string; example
   ]);
 }
 
+// Determiner-like adjectives do not fit a predicate template («Il est même»).
+const ADJECTIVE_EXAMPLES: Record<string, { example_original: string; example_translation: string }> = {
+  meme: { example_original: 'Nous avons le même livre.', example_translation: 'У нас одна и та же книга.' },
+  autre: { example_original: 'Je voudrais un autre café.', example_translation: 'Я бы хотел ещё один кофе.' },
+  dernier: { example_original: "C'est le dernier train ce soir.", example_translation: 'Это последний поезд сегодня вечером.' },
+  prochain: { example_original: 'À la semaine prochaine !', example_translation: 'До следующей недели!' },
+  premier: { example_original: "C'est mon premier jour ici.", example_translation: 'Это мой первый день здесь.' },
+  seul: { example_original: 'Il habite seul.', example_translation: 'Он живёт один.' },
+  chaque: { example_original: 'Je cours chaque matin.', example_translation: 'Я бегаю каждое утро.' },
+  plusieurs: { example_original: "J'ai plusieurs amis à Paris.", example_translation: 'У меня несколько друзей в Париже.' },
+  certain: { example_original: "J'en suis certain.", example_translation: 'Я в этом уверен.' },
+  tout: { example_original: 'Tout le monde est là.', example_translation: 'Все здесь.' },
+};
+
 function buildLexicalExample(word: Word): { example_original: string; example_translation: string } {
   const original = word.original;
 
@@ -987,12 +1015,15 @@ function buildLexicalExample(word: Word): { example_original: string; example_tr
           `Нужно ${word.translation.toLowerCase()} внимательно.`,
         ]),
       };
-    case 'adjective':
+    case 'adjective': {
+      const specificAdjective = ADJECTIVE_EXAMPLES[normalizeKey(original)];
+      if (specificAdjective) return specificAdjective;
       // A masculine subject in both languages keeps the dictionary forms correct.
       return {
-        example_original: `Ce choix est ${original}.`,
-        example_translation: `Этот выбор ${word.translation.split(/\s*[/;,(]\s*/)[0].trim().toLowerCase()}.`,
+        example_original: `Il est ${original}.`,
+        example_translation: `Он ${word.translation.split(/\s*[/;,(]\s*/)[0].trim().toLowerCase()}.`,
       };
+    }
     default:
       return buildExpressionExample(word);
   }

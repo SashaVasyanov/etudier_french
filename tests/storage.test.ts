@@ -214,11 +214,14 @@ describe('backup and storage budget', () => {
     let message = '';
     try { importStorageSnapshot('hello'); } catch (error) { message = (error as Error).message; }
     expect(message).toContain('резервная копия');
+    message = '';
+    try { importStorageSnapshot('{}'); } catch (error) { message = (error as Error).message; }
+    expect(message).toContain('резервная копия');
   });
 
   it('keeps one backup snapshot per day instead of overwriting it on every save', () => {
-    const first = storage({ a: progress('a', 'learning') });
-    saveStorage(first);
+    const yesterday = new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString();
+    window.localStorage.setItem('anki-plus-storage', JSON.stringify({ version: 2, savedAt: yesterday, payload: storage({ a: progress('a', 'learning') }) }));
     saveStorage(storage({ a: progress('a', 'review') }));
     saveStorage(storage({ a: progress('a', 'mastered') }));
     const backup = JSON.parse(window.localStorage.getItem('anki-plus-storage-backup')!);
@@ -227,10 +230,10 @@ describe('backup and storage budget', () => {
 
   it('refuses an import that would overflow local storage and can remove an imported pack', async () => {
     const { addCustomPack, removeCustomPack } = await import('../src/lib/storage');
-    const words = Array.from({ length: 1500 }, (_, index) => ({ ...word(`big-${index}`), example_original: 'x'.repeat(800), source: 'custom' as const }));
+    const words = Array.from({ length: 2000 }, (_, index) => ({ ...word(`big-${index}`), example_original: 'x'.repeat(1000), source: 'custom' as const }));
     let message = '';
     try { addCustomPack(storage(), { id: 'big', language: 'french', title: 'Big', description: '', accent: '#fff', words }); } catch (error) { message = (error as Error).message; }
-    expect(message).toContain('не поместится');
+    expect(message).toContain('почти заполнено');
     const small = addCustomPack(storage(), { id: 'small', language: 'french', title: 'Small', description: '', accent: '#fff', words: [word('s1')] });
     expect(small.customPacks).toHaveLength(1);
     const removed = removeCustomPack(small, 'small');

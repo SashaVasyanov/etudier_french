@@ -50,6 +50,32 @@ export function getActiveWords(words: Word[], enabledPackIds: string[]): Word[] 
   return Array.from(bestByOriginal.values());
 }
 
+const SOURCE_PRIORITY: Record<Word['source'], number> = { core: 0, custom: 1, pack: 2 };
+
+/**
+ * Lessons merge duplicates into one word (see getActiveWords) and record
+ * progress under that word's id. Pack words get the same id, keeping their own
+ * picture and example, so pack progress counts words learned anywhere.
+ */
+export function canonicalizePackWords(packs: WordPack[], words: Word[]): WordPack[] {
+  const canonicalIdByKey = new Map<string, Word>();
+  words.forEach((word) => {
+    const key = `${word.language}:${normalizeWordKey(word.original)}`;
+    const current = canonicalIdByKey.get(key);
+    if (!current || SOURCE_PRIORITY[word.source] < SOURCE_PRIORITY[current.source]) canonicalIdByKey.set(key, word);
+  });
+  return packs.map((pack) => {
+    let changed = false;
+    const packWords = pack.words.map((word) => {
+      const canonical = canonicalIdByKey.get(`${word.language}:${normalizeWordKey(word.original)}`);
+      if (!canonical || canonical.id === word.id) return word;
+      changed = true;
+      return { ...word, id: canonical.id };
+    });
+    return changed ? { ...pack, words: packWords } : pack;
+  });
+}
+
 export function getPackByWord(word: Word, packs: WordPack[]): WordPack[] {
   return packs.filter((pack) => word.packIds.includes(pack.id));
 }

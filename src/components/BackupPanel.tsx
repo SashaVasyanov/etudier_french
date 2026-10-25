@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { AppIcon } from './AppIcon';
 
+const COPY_SHORTCUT = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent) ? '⌘C' : 'Ctrl+C';
+
 interface BackupPanelProps {
   /** Serialized copy of all local progress. */
   onExport: () => string;
@@ -26,7 +28,7 @@ export function BackupPanel({ onExport, onImport }: BackupPanelProps) {
       await navigator.clipboard.writeText(snapshot);
       setMessage({ tone: 'success', text: 'Копия скопирована в буфер обмена. Сохраните её в заметке или файле.' });
     } catch {
-      setMessage({ tone: 'success', text: 'Копия показана ниже: выделите текст и скопируйте его (⌘C).' });
+      setMessage({ tone: 'success', text: `Копия показана ниже: выделите текст и скопируйте его (${COPY_SHORTCUT}).` });
     }
   }
 

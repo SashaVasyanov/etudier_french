@@ -562,10 +562,11 @@ export function loadStorage(): StorageLoadResult {
 }
 
 /**
- * localStorage holds about 5 MB per app. Leave room for the daily backup copy
- * and the lesson draft: refuse growth (imports) past this estimate.
+ * localStorage holds about 5 MB per app. The daily backup is optional (it is
+ * dropped when space runs out), so the main copy may use most of the quota;
+ * leave room for the lesson draft and refuse imports past this estimate.
  */
-export const STORAGE_SOFT_LIMIT_BYTES = 2_000_000;
+export const STORAGE_SOFT_LIMIT_BYTES = 3_500_000;
 
 /** Rough UTF-16 size of the saved data, as localStorage counts it. */
 export function estimateStorageBytes(storage: AppStorage): number {
@@ -609,8 +610,10 @@ export function saveStorage(storage: AppStorage): StorageSaveResult {
       // The backup is a once-a-day snapshot (the state before today's first
       // save), not a copy that trails the main data by one keystroke. A full
       // quota must never block saving the main data.
-      const backupDay = readEnvelopeDay(window.localStorage.getItem(STORAGE_BACKUP_KEY));
-      if (currentIsValid && backupDay !== getTodayDateKey(now)) {
+      // The main copy was last written on an earlier day → this is today's first
+      // save, so the main copy is exactly «yesterday's state».
+      const firstSaveToday = readEnvelopeDay(currentRaw) !== getTodayDateKey(now);
+      if (currentIsValid && (firstSaveToday || !window.localStorage.getItem(STORAGE_BACKUP_KEY))) {
         try {
           window.localStorage.setItem(STORAGE_BACKUP_KEY, currentRaw);
         } catch {
@@ -622,9 +625,9 @@ export function saveStorage(storage: AppStorage): StorageSaveResult {
     try {
       window.localStorage.setItem(STORAGE_KEY, serialized);
     } catch {
-      // Make room by dropping the backup and the stale quarantine copy, then retry once.
+      // Make room by dropping the backup, then retry once. The quarantine copy
+      // may be the only trace of damaged data, so it is never dropped here.
       window.localStorage.removeItem(STORAGE_BACKUP_KEY);
-      window.localStorage.removeItem(STORAGE_QUARANTINE_KEY);
       window.localStorage.setItem(STORAGE_KEY, serialized);
     }
     return { ok: true };
@@ -647,10 +650,29 @@ export function exportStorageSnapshot(storage: AppStorage): string {
 
 /** Parses a copy made by exportStorageSnapshot; throws a readable error otherwise. */
 export function importStorageSnapshot(raw: string): AppStorage {
+  const invalid = 'Это не резервная копия étudier или она повреждена.';
+  let value: unknown;
+  try {
+    value = JSON.parse(raw.trim());
+  } catch {
+    throw new Error(invalid);
+  }
+  // Any JSON object would normalize into an empty profile and silently wipe
+  // progress, so only a real exported envelope is accepted.
+  if (
+    !isRecord(value)
+    || typeof value.version !== 'number'
+    || typeof value.savedAt !== 'string'
+    || !isRecord(value.payload)
+    || !isRecord(value.payload.progressByWordId)
+    || !isRecord(value.payload.profile)
+  ) {
+    throw new Error(invalid);
+  }
   try {
     return parseStoredStorage(raw.trim());
   } catch (error) {
-    throw new Error(error instanceof RangeError ? error.message : 'Это не резервная копия étudier или она повреждена.');
+    throw new Error(error instanceof RangeError ? error.message : invalid);
   }
 }
 
@@ -1141,8 +1163,13 @@ export function addCustomPack(currentStorage: AppStorage, pack: import('../types
     },
   };
 
-  if (estimateStorageBytes(nextStorage) > STORAGE_SOFT_LIMIT_BYTES) {
-    throw new RangeError('Пак не поместится в локальное хранилище. Удалите ненужные паки или разделите этот на части.');
+  const nextBytes = estimateStorageBytes(nextStorage);
+  if (nextBytes > STORAGE_SOFT_LIMIT_BYTES) {
+    const usedMb = (estimateStorageBytes(currentStorage) / 1_000_000).toFixed(1);
+    const packMb = Math.max(0.1, (nextBytes - estimateStorageBytes(currentStorage)) / 1_000_000).toFixed(1);
+    throw new RangeError(
+      `Локальное хранилище почти заполнено: занято около ${usedMb} МБ, пак добавит ещё ${packMb} МБ (предел около ${STORAGE_SOFT_LIMIT_BYTES / 1_000_000} МБ). Удалите ненужные паки или разделите этот на части.`,
+    );
   }
 
   return nextStorage;

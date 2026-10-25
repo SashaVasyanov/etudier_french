@@ -220,7 +220,12 @@ const JAPANESE_WORD_CORRECTIONS: Readonly<Record<string, JapaneseWordCorrection>
   '信頼する': { translation: 'доверять, полагаться (на кого-л.)' },
   '未来': { translation: 'будущее' },
   '部下': { translation: 'подчинённый' },
-  '行き': { translation: 'поездка туда; «…行き» — «до …» (о направлении)' },
+  '行き': {
+    translation: 'поездка туда; «…行き» — «до …» (о направлении)',
+    example_original: '東京行きの電車に乗ります。',
+    example_reading: 'とうきょういきのでんしゃにのります。',
+    example_translation: 'Я сажусь на поезд до Токио.',
+  },
   '契約する': { translation: 'заключать договор' },
   '大人': { translation: 'взрослый', part_of_speech: 'noun' },
   'アクセスする': { translation: 'заходить (на сайт), получать доступ' },
@@ -251,7 +256,12 @@ const JAPANESE_WORD_CORRECTIONS: Readonly<Record<string, JapaneseWordCorrection>
   '身体': { translation: 'тело, организм' },
   '生まれ': { translation: 'происхождение; место рождения' },
   '位': { translation: 'примерно; ранг, разряд' },
-  '初': { translation: 'первый (раз), начальный' },
+  '初': {
+    translation: 'первый (раз), начальный',
+    example_original: '今年初の雪が降りました。',
+    example_reading: 'ことしはつのゆきがふりました。',
+    example_translation: 'Выпал первый в этом году снег.',
+  },
   '人殺し': { translation: 'убийца; убийство' },
   'あっち': { translation: 'туда, там (разг.)' },
   '行': {

@@ -57,7 +57,7 @@ export function DailyCompletionScreen({
           Новых слов: {completion?.newWords ?? 0} · Отмечено знакомыми: {completion?.knownWords ?? 0} · Повторение: {completion?.reviewWords ?? 0} · Закрепление: {completion?.reinforcementWords ?? 0}
         </p>
         <p className="info-subtle">
-          В активной базе сейчас {countRu(words.length, RU_WORDS)}. Сегодня в поток попало {totalKnownOrLearned} новых или сразу отмеченных знакомыми слов.
+          В активной базе сейчас {countRu(words.length, RU_WORDS)}. Сегодня в поток попало новых или сразу отмеченных знакомыми слов: {totalKnownOrLearned}.
         </p>
       </AppCard>
 

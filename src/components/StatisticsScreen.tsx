@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { AppStorage, LearningLanguage, Word, WordLevel } from '../types';
-import { formatDurationLabel, getTodayDateKey, percentage, countRu, RU_LESSONS, RU_WORDS } from '../lib/utils';
+import { formatDurationLabel, getTodayDateKey, percentage, countRu, pluralRu, RU_WORDS } from '../lib/utils';
 import { getCurrentStreakDays } from '../lib/storage';
 import { getRecentWordCounts } from '../lib/studyMetrics';
 import { getPartOfSpeechLabel } from '../lib/wordPresentation';
@@ -182,7 +182,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
         </article>
         <article className="analytics-kpi-card analytics-kpi-orange">
           <span className="analytics-kpi-icon"><AppIcon name="flame" size={22} /></span>
-          <div><span>Серия</span><strong>{currentStreak} дн.</strong><small>{countRu(completedLessons, RU_LESSONS)} завершено</small></div>
+          <div><span>Серия</span><strong>{currentStreak} дн.</strong><small>{completedLessons} {pluralRu(completedLessons, ['урок завершён', 'урока завершено', 'уроков завершено'])}</small></div>
         </article>
         <article className="analytics-kpi-card analytics-kpi-blue">
           <span className="analytics-kpi-icon"><AppIcon name="clock" size={22} /></span>

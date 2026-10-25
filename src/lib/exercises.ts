@@ -141,7 +141,17 @@ function escapeRegExp(value: string): string {
 const KANJI_CHAR = /[\u3400-\u9fff\u3005]/;
 const KATAKANA_CHAR = /[\u30a0-\u30ff]/;
 const HIRAGANA_CHAR = /[\u3041-\u309f]/;
-const PARTICLE_START = new Set([...'がをにはのでともへやかだなよねしすまほけこじ']);
+// Hiragana that may follow a kanji word: particles, the copula and する.
+// Matched as whole prefixes, so okurigana (話す, 書き, 早く) is not mistaken
+// for a particle the way single letters (す, し, ほ) would be.
+const PARTICLE_PREFIXES = [
+  'まで', 'から', 'より', 'しか', 'ほど', 'けど', 'じゃ', 'こそ', 'さえ', 'すら', 'ばかり', 'など', 'くらい', 'ぐらい',
+  'です', 'でし', 'だ', 'できる', 'でき',
+  'が', 'を', 'に', 'は', 'の', 'で', 'と', 'も', 'へ', 'や', 'か', 'な', 'よ', 'ね',
+];
+// «勉強します» is a noun + する, but after a single kanji the same letters are
+// usually okurigana (話します, 出して), so する forms need a compound noun.
+const SURU_PREFIXES = ['する', 'すれ', 'しま', 'した', 'して', 'しな', 'しよ', 'させ', 'され'];
 
 /**
  * Japanese has no spaces, so a plain substring search would blank out 日 inside
@@ -162,8 +172,9 @@ function createJapaneseSentenceCloze(example: string, original: string): string 
     && ((KANJI_CHAR.test(edge) && KANJI_CHAR.test(neighbour)) || (KATAKANA_CHAR.test(edge) && KATAKANA_CHAR.test(neighbour)));
   // After a word ending in kanji, hiragana must start a particle or copula
   // (日が, 日です, 簡単に); otherwise it is okurigana of another word (数える).
-  const startsOtherWord = (next: string | undefined) =>
-    next !== undefined && KANJI_CHAR.test(last) && HIRAGANA_CHAR.test(next) && !PARTICLE_START.has(next);
+  const allowedPrefixes = original.length >= 2 ? [...PARTICLE_PREFIXES, ...SURU_PREFIXES] : PARTICLE_PREFIXES;
+  const startsOtherWord = (rest: string) =>
+    KANJI_CHAR.test(last) && HIRAGANA_CHAR.test(rest[0] ?? '') && !allowedPrefixes.some((prefix) => rest.startsWith(prefix));
 
   let result = '';
   let cursor = 0;
@@ -173,7 +184,7 @@ function createJapaneseSentenceCloze(example: string, original: string): string 
   while (index !== -1) {
     const before = index > 0 ? example[index - 1] : undefined;
     const after = example[index + original.length];
-    if (!clashes(before, first) && !clashes(after, last) && !startsOtherWord(after)) {
+    if (!clashes(before, first) && !clashes(after, last) && !startsOtherWord(example.slice(index + original.length))) {
       result += `${example.slice(cursor, index)}＿＿`;
       cursor = index + original.length;
       replaced = true;

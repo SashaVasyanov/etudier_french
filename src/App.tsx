@@ -17,7 +17,7 @@ import {
   getLearningLanguageProductTitle,
   getLearningLanguageTitle,
 } from './lib/languages';
-import { derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
+import { canonicalizePackWords, derivePackStatus, getActiveWords, getEnabledPackIds } from './lib/packs';
 import { finishLessonSession, getLessonProgress, removeUpcomingWord } from './lib/lessonSession';
 import { isSessionFromAnotherDay, loadLessonDraft, saveLessonDraft, type LessonDraft } from './lib/lessonDraft';
 import {
@@ -176,7 +176,18 @@ function App() {
     () => storage.customPacks.filter((pack) => pack.language === storage.learningLanguage),
     [storage.customPacks, storage.learningLanguage],
   );
-  const packs = useMemo(() => [...starterPacks, ...importedPacks], [starterPacks, importedPacks]);
+  const customWords = useMemo(
+    () => storage.customWords.filter((word) => word.language === storage.learningLanguage),
+    [storage.customWords, storage.learningLanguage],
+  );
+  const customPackWords = useMemo(() => importedPacks.flatMap((pack) => pack.words), [importedPacks]);
+  const words = useMemo(() => [...baseWords, ...customWords, ...customPackWords], [baseWords, customPackWords, customWords]);
+  // A pack word that duplicates a dictionary word shares its id, so the pack
+  // screens show the progress the learner made on that word in daily lessons.
+  const packs = useMemo(
+    () => canonicalizePackWords([...starterPacks, ...importedPacks], words),
+    [starterPacks, importedPacks, words],
+  );
   const selectedPack = useMemo(
     () => (selectedPackId ? packs.find((pack) => pack.id === selectedPackId) ?? null : null),
     [packs, selectedPackId],
@@ -186,12 +197,6 @@ function App() {
     [packs, storage.lessonSourcePackId],
   );
   const enabledPackIds = useMemo(() => getEnabledPackIds(storage).filter((id) => packs.some((pack) => pack.id === id)), [storage, packs]);
-  const customWords = useMemo(
-    () => storage.customWords.filter((word) => word.language === storage.learningLanguage),
-    [storage.customWords, storage.learningLanguage],
-  );
-  const customPackWords = useMemo(() => importedPacks.flatMap((pack) => pack.words), [importedPacks]);
-  const words = useMemo(() => [...baseWords, ...customWords, ...customPackWords], [baseWords, customPackWords, customWords]);
   const wordsById = useMemo(() => new Map(words.map((word) => [word.id, word])), [words]);
   const availableWords = useMemo(() => getActiveWords(words, enabledPackIds), [enabledPackIds, words]);
   const selectedLessonSourceWords = useMemo(() => {
@@ -199,9 +204,11 @@ function App() {
       return null;
     }
 
-    const packWords = words.filter((word) => word.packIds.includes(selectedLessonSourcePack.id));
+    // Merged words keep every pack id, so duplicates of dictionary words are
+    // studied (and their progress saved) under one id.
+    const packWords = availableWords.filter((word) => word.packIds.includes(selectedLessonSourcePack.id));
     return packWords.length > 0 ? packWords : selectedLessonSourcePack.words;
-  }, [selectedLessonSourcePack, words]);
+  }, [availableWords, selectedLessonSourcePack]);
   const lessonSourceWords = selectedLessonSourceWords ?? availableWords;
   const lessonPoolWords = useMemo(
     () => getLessonPoolWords(lessonSourceWords).filter((word) => getWordProgress(storage, word.id).status !== 'ignored'),
@@ -299,8 +306,12 @@ function App() {
     };
   }, [storage, storageError?.blocksSave]);
 
+  const restoringBackupRef = useRef(false);
+
   useEffect(() => {
     const persistLatestStorage = () => {
+      // A restored copy is already saved; the page is reloading onto it.
+      if (restoringBackupRef.current) return;
       if (!storageErrorRef.current?.blocksSave) {
         void saveStorage(withUnfinishedPracticeRef.current(storageRef.current));
       }
@@ -1186,8 +1197,9 @@ function App() {
                   const restored = importStorageSnapshot(raw);
                   const saved = saveStorage(restored);
                   if (!saved.ok) return saved.error.message;
-                  // The unload handler saves storageRef: point it at the restored
-                  // data so the reload does not write the old progress back.
+                  // The unload handler would write the old progress (and an
+                  // unfinished practice session) back over the restored copy.
+                  restoringBackupRef.current = true;
                   storageRef.current = restored;
                   // Drafts belong to the replaced progress; start clean.
                   saveLessonDraft('french', null);

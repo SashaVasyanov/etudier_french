@@ -69,3 +69,16 @@ describe('Japanese starter packs', () => {
     expect(new Set(packs.flatMap((pack) => pack.words.map((item) => item.id))).size).toBe(100);
   });
 });
+
+describe('canonical pack words', () => {
+  it('gives a pack duplicate of a dictionary word the dictionary id', async () => {
+    const { canonicalizePackWords } = await import('../src/lib/packs');
+    const core = { id: 'core-1', original: 'Chat', language: 'french', source: 'core', packIds: [] } as unknown as import('../src/types').Word;
+    const dup = { id: 'pack-1', original: 'chat', language: 'french', source: 'pack', packIds: ['p'], image: 'pic' } as unknown as import('../src/types').Word;
+    const own = { id: 'pack-2', original: 'chien', language: 'french', source: 'pack', packIds: ['p'] } as unknown as import('../src/types').Word;
+    const pack = { id: 'p', words: [dup, own] } as unknown as import('../src/types').WordPack;
+    const [result] = canonicalizePackWords([pack], [core, dup, own]);
+    expect(result.words.map((word) => word.id)).toEqual(['core-1', 'pack-2']);
+    expect((result.words[0] as unknown as { image: string }).image).toBe('pic');
+  });
+});

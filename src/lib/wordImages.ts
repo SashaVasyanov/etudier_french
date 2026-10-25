@@ -365,6 +365,17 @@ const ILLUSTRATION_SHAPES: Record<string, IllustrationShape> = {
     primary: 'M168 207 91 137c-29-27-10-75 28-75 20 0 38 12 49 30 11-18 29-30 49-30 38 0 57 48 28 75l-77 70Z',
     secondary: 'M118 91c10-8 24-8 34 0',
   },
+  // Neutral animal mark: a paw print, for animals that have no picture of their own.
+  paw: {
+    primary: 'M168 140c-30 0-58 27-58 52 0 17 13 26 29 26 11 0 19-6 29-6s18 6 29 6c16 0 29-9 29-26 0-25-28-52-58-52Z',
+    secondary: 'M118 132a17 22 0 1 0 0-44 17 22 0 0 0 0 44Zm100 0a17 22 0 1 0 0-44 17 22 0 0 0 0 44Z',
+    detail: 'M148 104a16 21 0 1 0 0-42 16 21 0 0 0 0 42Zm40 0a16 21 0 1 0 0-42 16 21 0 0 0 0 42Z',
+  },
+  key: {
+    primary: 'M118 112a42 42 0 1 0 0 84 42 42 0 0 0 0-84Zm0 26a16 16 0 1 1 0 32 16 16 0 0 1 0-32Z',
+    secondary: 'M156 144h96v20h-96z',
+    detail: 'M212 164h18v26h-18zm-32 0h18v18h-18z',
+  },
   clock: {
     primary: 'M168 72a76 76 0 1 0 0 152 76 76 0 0 0 0-152Z',
     secondary: 'M168 96v58l39 22',
