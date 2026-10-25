@@ -94,31 +94,38 @@ function getJapaneseRomajiVariants(value: string): Set<string> {
     return new Set();
   }
 
-  const alternateSpellings = normalized
-    .replace(/shi/g, 'si')
-    .replace(/chi/g, 'ti')
+  // Both the learner's answer and the stored reading go through the same
+  // canonical form: Hepburn/Kunrei spellings are unified (shi/si, chi/ti,
+  // ji/zi, tsu/tu, cha/tya, shimbun/shinbun), long vowels keep their length
+  // (kou = koo = kō, but never ko), and a final は may be typed as "wa".
+  const canonical = canonicalizeJapaneseRomaji(normalized);
+  const variants = [canonical];
+
+  if (canonical.endsWith('ha')) {
+    variants.push(`${canonical.slice(0, -2)}wa`);
+  }
+
+  return new Set(variants);
+}
+
+function canonicalizeJapaneseRomaji(romaji: string): string {
+  return romaji
+    .replace(/wo/g, 'o')
+    .replace(/cch/g, 'tch')
+    .replace(/t?ch/g, (match) => (match.length > 2 ? 'tty' : 'ty'))
+    .replace(/sh/g, 'sy')
+    .replace(/j/g, 'zy')
+    .replace(/(sy|ty|zy)i/g, (_match, consonant: string) => `${consonant[0]}i`)
     .replace(/tsu/g, 'tu')
     .replace(/fu/g, 'hu')
-    .replace(/sha/g, 'sya')
-    .replace(/shu/g, 'syu')
-    .replace(/sho/g, 'syo')
-    .replace(/ja/g, 'zya')
-    .replace(/ju/g, 'zyu')
-    .replace(/jo/g, 'zyo');
-  const shortenLongVowels = (romaji: string) =>
-    romaji
-      .replace(/ou/g, 'o')
-      .replace(/oo/g, 'o')
-      .replace(/uu/g, 'u')
-      .replace(/ii/g, 'i')
-      .replace(/ee/g, 'e');
-
-  return new Set([
-    normalized,
-    alternateSpellings,
-    shortenLongVowels(normalized),
-    shortenLongVowels(alternateSpellings),
-  ]);
+    .replace(/d(?=[iu])/g, 'z')
+    .replace(/zyy/g, 'zy')
+    .replace(/m(?=[bpm])/g, 'n')
+    .replace(/ou|oo/g, 'O')
+    .replace(/uu/g, 'U')
+    .replace(/aa/g, 'A')
+    .replace(/ii/g, 'I')
+    .replace(/ee/g, 'E');
 }
 
 const JAPANESE_KANA_ROMAJI: Record<string, string> = {

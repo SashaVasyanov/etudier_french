@@ -38,3 +38,38 @@ describe('Japanese written answers', () => {
     expect(isJapaneseReadingMatch('猫', 'ねこ', cat)).toBe(false);
   });
 });
+
+describe('Japanese romaji answers', () => {
+  const jp = (original: string, kana: string, romaji: string) => ({
+    ...word(original), language: 'japanese' as const, original, transcription: `[${kana} · ${romaji}]`,
+  });
+
+  it.each([
+    [jp('勇気', 'ゆうき', 'yuuki'), 'yuki'],
+    [jp('高校', 'こうこう', 'koukou'), 'koko'],
+    [jp('思う', 'おもう', 'omou'), 'omo'],
+    [jp('囚人', 'しゅうじん', 'shuujin'), 'shujin'],
+    [jp('お祖父さん', 'おじいさん', 'ojiisan'), 'ojisan'],
+    [jp('ビール', 'ビール', 'biiru'), 'biru'],
+  ])('does not accept a dropped long vowel for %s: %s', (target, answer) => {
+    expect(isAnswerMatch(answer, target.original, 'japanese', target)).toBe(false);
+  });
+
+  it.each([
+    [jp('勇気', 'ゆうき', 'yuuki'), 'yūki'],
+    [jp('高校', 'こうこう', 'koukou'), 'kōkō'],
+    [jp('高校', 'こうこう', 'koukou'), 'kookoo'],
+    [jp('お茶', 'おちゃ', 'ocha'), 'otya'],
+    [jp('辞書', 'じしょ', 'jisho'), 'zisyo'],
+    [jp('辞書', 'じしょ', 'jisho'), 'zisho'],
+    [jp('新聞', 'しんぶん', 'shinbun'), 'shimbun'],
+    [jp('抹茶', 'まっちゃ', 'maccha'), 'matcha'],
+    [jp('抹茶', 'まっちゃ', 'maccha'), 'mattya'],
+    [jp('続く', 'つづく', 'tsuzuku'), 'tuzuku'],
+    [jp('ビール', 'ビール', 'biiru'), 'bīru'],
+    [jp('こんにちは', 'こんにちは', 'konnichiha'), 'konnichiwa'],
+    [jp('富士', 'ふじ', 'fuji'), 'huzi'],
+  ])('accepts a spelling variant for %s: %s', (target, answer) => {
+    expect(isAnswerMatch(answer, target.original, 'japanese', target)).toBe(true);
+  });
+});
