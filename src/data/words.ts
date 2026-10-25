@@ -2,6 +2,7 @@ import { getPackWords, STARTER_PACKS } from './wordPacks';
 import type { LearningLanguage, Word, WordLevel, WordPack } from '../types';
 import { createFallbackWordImage } from '../lib/wordImages';
 import { deriveFrenchLatinTranscription } from '../lib/utils';
+import { FRENCH_H_ASPIRE, FRENCH_NOUN_GENDERS } from './frenchNounGenders';
 
 const DATASET_URLS = ['/data/words_a1.json', '/data/words_a2.json', '/data/words_b1.json'] as const;
 const FETCH_TIMEOUT_MS = 10_000;
@@ -137,7 +138,8 @@ function chooseVariantPair(
 }
 
 function startsWithVowelSound(value: string): boolean {
-  return /^[aeiouyhàâæéèêëîïôœùûü]/i.test(value.trim());
+  const word = value.trim().toLowerCase();
+  return /^[aeiouyhàâæéèêëîïôœùûü]/i.test(word) && !FRENCH_H_ASPIRE.has(word.split(/[\s-]/)[0]) && !FRENCH_H_ASPIRE.has(word);
 }
 
 function isLikelyPluralNoun(value: string): boolean {
@@ -164,6 +166,14 @@ function isLikelyFeminineNoun(value: string): boolean {
 
 function getFrenchArticle(word: string, mode: 'definite' | 'indefinite'): string {
   const trimmed = word.trim();
+  const gender = FRENCH_NOUN_GENDERS[trimmed.toLowerCase()];
+
+  if (gender) {
+    if (gender === 'pl') return mode === 'definite' ? 'les' : 'des';
+    if (mode === 'definite' && startsWithVowelSound(trimmed)) return "l'";
+    if (gender === 'f') return mode === 'definite' ? 'la' : 'une';
+    return mode === 'definite' ? 'le' : 'un';
+  }
 
   if (isLikelyPluralNoun(trimmed)) {
     return mode === 'definite' ? 'les' : 'des';
@@ -189,16 +199,11 @@ function withArticle(word: string, mode: 'definite' | 'indefinite', capitalized 
   return capitalized ? phrase.charAt(0).toUpperCase() + phrase.slice(1) : phrase;
 }
 
-function hasTag(word: Word, ...tags: string[]): boolean {
-  return tags.some((tag) => word.tags.includes(tag));
-}
-
 function buildNounExample(word: Word): { example_original: string; example_translation: string } {
   const original = word.original;
   const definite = withArticle(original, 'definite');
   const definiteCap = withArticle(original, 'definite', true);
   const indefinite = withArticle(original, 'indefinite');
-  const translation = word.translation.toLowerCase();
   const key = normalizeKey(original);
 
   const specific: Record<string, { example_original: string; example_translation: string }> = {
@@ -480,359 +485,17 @@ function buildNounExample(word: Word): { example_original: string; example_trans
     return specific[key];
   }
 
-  if (hasTag(word, 'work', 'service')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `${definiteCap} parle avec un client.`,
-        example_translation: `${word.translation} разговаривает с клиентом.`,
-      },
-      {
-        example_original: `Tout le monde attend ${definite}.`,
-        example_translation: `Все ждут ${translation}.`,
-      },
-      {
-        example_original: `${definiteCap} connaît bien son travail.`,
-        example_translation: `${word.translation} хорошо знает свою работу.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'food')) {
-    if (hasTag(word, 'service')) {
-      return chooseVariantPair(word.id, [
-        {
-          example_original: `${definiteCap} est déjà sur la table.`,
-          example_translation: `${word.translation} уже на столе.`,
-        },
-        {
-          example_original: `Je regarde ${definite} avant de commander.`,
-          example_translation: `Я смотрю на ${translation} перед заказом.`,
-        },
-        {
-          example_original: `Au restaurant, ${definite} change chaque jour.`,
-          example_translation: `В ресторане ${translation} меняется каждый день.`,
-        },
-      ]);
-    }
-
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `Au marché, j'achète ${indefinite}.`,
-        example_translation: `На рынке я покупаю ${translation}.`,
-      },
-      {
-        example_original: `Pour le dîner, nous préparons ${definite}.`,
-        example_translation: `На ужин мы готовим ${translation}.`,
-      },
-      {
-        example_original: `${definiteCap} est déjà sur la table.`,
-        example_translation: `${word.translation} уже на столе.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'transport', 'travel')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `Le matin, je prends ${definite} pour aller en ville.`,
-        example_translation: `Утром я еду на ${translation} в город.`,
-      },
-      {
-        example_original: `Nous attendons ${definite} près de la station.`,
-        example_translation: `Мы ждём ${translation} возле станции.`,
-      },
-      {
-        example_original: `${definiteCap} part dans quelques minutes.`,
-        example_translation: `${word.translation} отправляется через несколько минут.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'home', 'objects')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `${definiteCap} est près du mur.`,
-        example_translation: `${word.translation} стоит у стены.`,
-      },
-      {
-        example_original: `Je range ${definite} après usage.`,
-        example_translation: `Я убираю ${translation} после использования.`,
-      },
-      {
-        example_original: `Dans cette pièce, ${definite} est très utile.`,
-        example_translation: `В этой комнате ${translation} очень полезен.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'home')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `${definiteCap} est très calme le soir.`,
-        example_translation: `${word.translation} очень тихий вечером.`,
-      },
-      {
-        example_original: `Nous passons beaucoup de temps dans ${definite}.`,
-        example_translation: `Мы проводим много времени в ${translation}.`,
-      },
-      {
-        example_original: `${definiteCap} se trouve près de l'entrée.`,
-        example_translation: `${word.translation} находится рядом со входом.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'city', 'service')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `On se retrouve devant ${definite} à midi.`,
-        example_translation: `Встретимся у ${translation} в полдень.`,
-      },
-      {
-        example_original: `${definiteCap} est au centre du quartier.`,
-        example_translation: `${word.translation} находится в центре района.`,
-      },
-      {
-        example_original: `Je cherche ${definite} sur le plan de la ville.`,
-        example_translation: `Я ищу ${translation} на плане города.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'people', 'family')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `${definiteCap} arrive toujours à l'heure.`,
-        example_translation: `${word.translation} всегда приходит вовремя.`,
-      },
-      {
-        example_original: `Je parle avec ${definite} après le cours.`,
-        example_translation: `Я разговариваю с ${translation} после занятия.`,
-      },
-      {
-        example_original: `Tout le monde connaît ${definite}.`,
-        example_translation: `Все знают ${translation}.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'study', 'work')) {
-    if (hasTag(word, 'daily')) {
-      return chooseVariantPair(word.id, [
-        {
-          example_original: `${definiteCap} ouvre ses portes à huit heures.`,
-          example_translation: `${word.translation} открывается в восемь часов.`,
-        },
-        {
-          example_original: `Beaucoup d'étudiants passent la journée à ${definite}.`,
-          example_translation: `Многие студенты проводят день в ${translation}.`,
-        },
-        {
-          example_original: `${definiteCap} organise un nouvel événement.`,
-          example_translation: `${word.translation} организует новое мероприятие.`,
-        },
-      ]);
-    }
-
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `Pendant le cours, ${definite} aide à comprendre le sujet.`,
-        example_translation: `Во время занятия ${translation} помогает понять тему.`,
-      },
-      {
-        example_original: `Au travail, j'utilise ${definite} chaque jour.`,
-        example_translation: `На работе я использую ${translation} каждый день.`,
-      },
-      {
-        example_original: `Le professeur prépare ${definite} avant la leçon.`,
-        example_translation: `Преподаватель готовит ${translation} перед уроком.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'technology', 'media', 'communication')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `J'utilise ${definite} tous les jours.`,
-        example_translation: `Я использую ${translation} каждый день.`,
-      },
-      {
-        example_original: `${definiteCap} reste sur le bureau.`,
-        example_translation: `${word.translation} лежит на столе.`,
-      },
-      {
-        example_original: `Je vérifie ${definite} avant de partir.`,
-        example_translation: `Я проверяю ${translation} перед выходом.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'communication')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `${definiteCap} continue après la réunion.`,
-        example_translation: `${word.translation} продолжается после встречи.`,
-      },
-      {
-        example_original: `Je relis ${definite} avant d'envoyer la réponse.`,
-        example_translation: `Я перечитываю ${translation} перед тем, как отправить ответ.`,
-      },
-      {
-        example_original: `${definiteCap} est plus clair maintenant.`,
-        example_translation: `${word.translation} теперь яснее.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'nature')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `Dans le jardin, ${definite} pousse bien au soleil.`,
-        example_translation: `В саду ${translation} хорошо растёт на солнце.`,
-      },
-      {
-        example_original: `Après la pluie, ${definite} a l'air plus frais.`,
-        example_translation: `После дождя ${translation} выглядит свежее.`,
-      },
-      {
-        example_original: `Je regarde ${definite} pendant la promenade.`,
-        example_translation: `Я смотрю на ${translation} во время прогулки.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'health')) {
-    if (hasTag(word, 'daily')) {
-      return chooseVariantPair(word.id, [
-        {
-          example_original: `${definiteCap} me fait mal depuis ce matin.`,
-          example_translation: `${word.translation} болит у меня с утра.`,
-        },
-        {
-          example_original: `Le médecin examine ${definite} avec attention.`,
-          example_translation: `Врач внимательно осматривает ${translation}.`,
-        },
-        {
-          example_original: `${definiteCap} est important pour rester en forme.`,
-          example_translation: `${word.translation} важен, чтобы оставаться в форме.`,
-        },
-      ]);
-    }
-
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `Le médecin examine ${definite} avec attention.`,
-        example_translation: `Врач внимательно осматривает ${translation}.`,
-      },
-      {
-        example_original: `Après le sport, ${definite} a besoin de repos.`,
-        example_translation: `После спорта ${translation} нуждается в отдыхе.`,
-      },
-      {
-        example_original: `${definiteCap} va mieux aujourd'hui.`,
-        example_translation: `Сегодня ${word.translation} чувствует себя лучше.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'time')) {
-    if (hasTag(word, 'thinking')) {
-      return chooseVariantPair(word.id, [
-        {
-          example_original: `${definiteCap} change notre façon de voir les choses.`,
-          example_translation: `${word.translation} меняет наш взгляд на вещи.`,
-        },
-        {
-          example_original: `Je réfléchis souvent à ${definite}.`,
-          example_translation: `Я часто думаю о ${translation}.`,
-        },
-        {
-          example_original: `${definiteCap} influence encore ses choix.`,
-          example_translation: `${word.translation} всё ещё влияет на его выбор.`,
-        },
-      ]);
-    }
-
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `${definiteCap} passe très vite aujourd'hui.`,
-        example_translation: `Сегодня ${translation} проходит очень быстро.`,
-      },
-      {
-        example_original: `Je note ${definite} dans mon agenda.`,
-        example_translation: `Я записываю ${translation} в ежедневник.`,
-      },
-      {
-        example_original: `${definiteCap} change tous nos plans.`,
-        example_translation: `${word.translation} меняет все наши планы.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'shopping')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `Je cherche ${definite} dans ce magasin.`,
-        example_translation: `Я ищу ${translation} в этом магазине.`,
-      },
-      {
-        example_original: `${definiteCap} coûte plus cher ici.`,
-        example_translation: `${word.translation} здесь стоит дороже.`,
-      },
-      {
-        example_original: `Avant d'acheter, j'essaie ${definite}.`,
-        example_translation: `Перед покупкой я примеряю ${translation}.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'feelings')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `${definiteCap} change tout dans cette histoire.`,
-        example_translation: `${word.translation} меняет всё в этой истории.`,
-      },
-      {
-        example_original: `On sent ${definite} dans sa voix.`,
-        example_translation: `Это ${translation} слышно в его голосе.`,
-      },
-      {
-        example_original: `${definiteCap} reste difficile à expliquer.`,
-        example_translation: `${word.translation} всё ещё трудно объяснить.`,
-      },
-    ]);
-  }
-
-  if (hasTag(word, 'thinking')) {
-    return chooseVariantPair(word.id, [
-      {
-        example_original: `${definiteCap} semble logique dans ce contexte.`,
-        example_translation: `${word.translation} кажется логичным в этом контексте.`,
-      },
-      {
-        example_original: `Nous discutons ${definite} pendant la réunion.`,
-        example_translation: `Мы обсуждаем ${translation} во время встречи.`,
-      },
-      {
-        example_original: `${definiteCap} aide à avancer plus vite.`,
-        example_translation: `${word.translation} помогает двигаться быстрее.`,
-      },
-    ]);
-  }
-
+  // Generic sentences must stay grammatical in BOTH languages. Russian nouns
+  // inflect, so only templates that keep the translation in the nominative
+  // case are used (no «Я разговариваю с ученик»).
+  const shortTranslation = word.translation.split(/\s*[/;,(]\s*/)[0].trim() || word.translation;
+  const plural = getFrenchArticle(original, 'definite') === 'les';
+  const capitalizedTranslation = shortTranslation.charAt(0).toUpperCase() + shortTranslation.slice(1);
   return chooseVariantPair(word.id, [
-    {
-      example_original: `${definiteCap} joue un rôle important ici.`,
-      example_translation: `Здесь ${translation} играет важную роль.`,
-    },
-    {
-      example_original: `Dans cette situation, ${definite} est vraiment utile.`,
-      example_translation: `В этой ситуации ${translation} действительно полезен.`,
-    },
-    {
-      example_original: `Je pense souvent à ${definite}.`,
-      example_translation: `Я часто думаю о ${translation}.`,
-    },
+    { example_original: `Voici ${indefinite}.`, example_translation: `Вот ${shortTranslation}.` },
+    { example_original: `Où ${plural ? 'sont' : 'est'} ${definite} ?`, example_translation: `Где ${shortTranslation}?` },
+    { example_original: `Il y a ${indefinite} ici.`, example_translation: `Здесь есть ${shortTranslation}.` },
+    { example_original: `${definiteCap}, c'est important.`, example_translation: `${capitalizedTranslation} — это важно.` },
   ]);
 }
 
@@ -1325,17 +988,10 @@ function buildLexicalExample(word: Word): { example_original: string; example_tr
         ]),
       };
     case 'adjective':
+      // A masculine subject in both languages keeps the dictionary forms correct.
       return {
-        example_original: chooseVariant(original, [
-          `Ce choix est ${original}.`,
-          `Le résultat paraît ${original}.`,
-          `Aujourd’hui, tout semble ${original}.`,
-        ]),
-        example_translation: chooseVariant(original, [
-          `Этот выбор ${word.translation.toLowerCase()}.`,
-          `Результат кажется ${word.translation.toLowerCase()}.`,
-          `Сегодня всё выглядит ${word.translation.toLowerCase()}.`,
-        ]),
+        example_original: `Ce choix est ${original}.`,
+        example_translation: `Этот выбор ${word.translation.split(/\s*[/;,(]\s*/)[0].trim().toLowerCase()}.`,
       };
     default:
       return buildExpressionExample(word);
@@ -1343,7 +999,9 @@ function buildLexicalExample(word: Word): { example_original: string; example_tr
 }
 
 function improveWordExamples(word: Word): Pick<Word, 'example_original' | 'example_translation'> {
-  if (word.source === 'custom' && !isGenericExample(word.example_original)) {
+  // Pack and custom words come with hand-written examples: keep them. Only the
+  // generated core dataset gets template sentences.
+  if (word.source !== 'core' && word.example_original.trim() && !isGenericExample(word.example_original)) {
     return {
       example_original: word.example_original.trim(),
       example_translation: word.example_translation.trim(),

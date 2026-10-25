@@ -93,3 +93,12 @@ describe('Japanese particle は', () => {
     expect(isAnswerMatch('aruiha', target.original, 'japanese', target)).toBe(true);
   });
 });
+
+describe('French transcription', () => {
+  it('keeps nasal vowels and the IPA g', async () => {
+    const { deriveFrenchLatinTranscription } = await import('../src/lib/utils');
+    expect(deriveFrenchLatinTranscription('lapin', '[lapɛ̃]')).toBe('[lapen]');
+    expect(deriveFrenchLatinTranscription('branche', '[bʁɑ̃ʃ]')).toBe('[bransh]');
+    expect(deriveFrenchLatinTranscription('collègue', '[kɔlɛɡ]')).toBe('[koleg]');
+  });
+});

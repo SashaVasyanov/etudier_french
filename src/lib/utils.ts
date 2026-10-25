@@ -359,6 +359,7 @@ const TRANSCRIPTION_CHAR_MAP: Record<string, string> = {
   'ɾ': 'r',
   'ɹ': 'r',
   'ʃ': 'sh',
+  'ɡ': 'g',
   'ʒ': 'zh',
   'ɲ': 'gn',
   'ŋ': 'ng',
@@ -369,8 +370,18 @@ const TRANSCRIPTION_CHAR_MAP: Record<string, string> = {
   '̃': '',
 };
 
+// Nasal vowels must be resolved before the combining tilde is dropped,
+// otherwise lapin [lapɛ̃] turns into "lape".
+const FRENCH_NASAL_VOWELS: Array<[RegExp, string]> = [
+  [/ɑ\u0303/g, 'an'],
+  [/ɔ\u0303/g, 'on'],
+  [/ɛ\u0303/g, 'en'],
+  [/œ\u0303/g, 'un'],
+];
+
 export function normalizeTranscription(value: string): string {
-  return [...value]
+  const withNasals = FRENCH_NASAL_VOWELS.reduce((text, [pattern, latin]) => text.replace(pattern, latin), value.normalize('NFD'));
+  return [...withNasals]
     .map((char) => TRANSCRIPTION_CHAR_MAP[char] ?? char)
     .join('')
     .normalize('NFKD')
