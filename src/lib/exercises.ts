@@ -791,16 +791,25 @@ function createDailySession(
     return null;
   }
 
-  const module1 = createPreviewModule(
-    introductionWords,
+  // On a review-only day the first module must not show translations of the
+  // very words the next modules test: that would hand out the answers and
+  // inflate every interval. Ask for recall first, reveal afterwards.
+  const recallWarmup =
     newWords.length > 0
-      ? undefined
-      : {
-          title: 'Слова к повторению',
-          description: 'Короткая подготовка перед запланированным повторением.',
-          theme: 'review',
-        },
-  );
+      ? null
+      : (() => {
+          const result = createExerciseModule(
+            'module-recall-warmup',
+            'Вспомните слова',
+            'Сначала попробуйте вспомнить значение сами — ответ откроется после выбора.',
+            introductionWords,
+            ['memory_check'],
+            uniqueWords(words),
+            storage,
+          );
+          return { ...result, module: { ...result.module, theme: 'review' as const, position: 1 } };
+        })();
+  const module1 = recallWarmup?.module ?? createPreviewModule(introductionWords);
   const module2 = createExerciseModule(
     'module-training-new',
     newWords.length > 0 ? 'Тренировка новых слов' : 'Разминка перед повторением',
@@ -850,8 +859,9 @@ function createDailySession(
     [module1, module2.module, module3.module, module4.module, module5.module]
       .filter((module) => module.wordIds.length > 0 && module.stepIds.length > 0),
   );
-  const exercises = [...module2.exercises, ...module3.exercises, ...module4.exercises, ...module5.exercises];
+  const exercises = [...(recallWarmup?.exercises ?? []), ...module2.exercises, ...module3.exercises, ...module4.exercises, ...module5.exercises];
   const steps = buildSteps(modules, {
+    ...(recallWarmup ? { [recallWarmup.module.id]: recallWarmup.exercises } : {}),
     [module2.module.id]: module2.exercises,
     [module3.module.id]: module3.exercises,
     [module4.module.id]: module4.exercises,
