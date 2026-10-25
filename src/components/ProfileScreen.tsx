@@ -32,12 +32,15 @@ interface ProfileScreenProps {
   onLessonDurationChange: (value: LessonDurationMinutes) => void;
   onLessonWordTargetChange: (value: LessonWordTarget) => void;
   onLessonSourcePackChange: (packId: string | null) => void;
+  dayStartHour: number;
+  onDayStartHourChange: (hour: number) => void;
   onExportBackup: () => string;
   onImportBackup: (raw: string) => string | null;
 }
 
 const DURATION_OPTIONS: LessonDurationMinutes[] = [10, 20, 30];
 const WORD_TARGET_OPTIONS: LessonWordTarget[] = [10, 15, 20, 25, 30, 35, 40, 45, 50];
+const DAY_START_OPTIONS = [0, 1, 2, 3, 4, 5, 6];
 
 function getModeLabel(mode: StudyHistoryEntry['mode']): string {
   if (mode === 'default') {
@@ -73,6 +76,8 @@ export default function ProfileScreen({
   onLessonSourcePackChange,
   onExportBackup,
   onImportBackup,
+  dayStartHour,
+  onDayStartHourChange,
 }: ProfileScreenProps) {
   const stats = useMemo(() => summarizeWordStatuses(progressList), [progressList]);
   const languageHistory = useMemo(
@@ -235,6 +240,24 @@ export default function ProfileScreen({
               {WORD_TARGET_OPTIONS.map((option) => (
                 <option key={option} value={option}>
                   {option} слов
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="settings-row">
+            <span>
+              Начало дня
+              <small>Урок до этого часа засчитывается за предыдущий день, а серия не прерывается.</small>
+            </span>
+            <select
+              className="settings-select"
+              value={dayStartHour}
+              onChange={(event) => onDayStartHourChange(Number(event.target.value))}
+            >
+              {DAY_START_OPTIONS.map((hour) => (
+                <option key={hour} value={hour}>
+                  {hour === 0 ? 'в полночь' : `в ${hour}:00`}
                 </option>
               ))}
             </select>

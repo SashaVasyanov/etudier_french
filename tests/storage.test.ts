@@ -257,3 +257,19 @@ describe('history per language', () => {
     expect(state.lessonTotals).toEqual({ french: 400, japanese: 1 });
   });
 });
+
+describe('katakana practice', () => {
+  it('learns a sign after three right answers in a row and resets on a mistake', async () => {
+    const { recordKanaSession, getKanaStatus, loadStorage } = await import('../src/lib/storage');
+    let state = storage();
+    expect(getKanaStatus(state.kanaProgress['シ'])).toBe('new');
+    state = recordKanaSession(state, [{ kana: 'シ', isCorrect: true }, { kana: 'シ', isCorrect: true }]);
+    expect(getKanaStatus(state.kanaProgress['シ'])).toBe('learning');
+    state = recordKanaSession(state, [{ kana: 'シ', isCorrect: false }, { kana: 'ツ', isCorrect: true }]);
+    expect(state.kanaProgress['シ']).toMatchObject({ correct: 2, wrong: 1, streak: 0 });
+    state = recordKanaSession(state, [1, 2, 3].map(() => ({ kana: 'シ', isCorrect: true })));
+    expect(getKanaStatus(state.kanaProgress['シ'])).toBe('learned');
+    saveStorage(state);
+    expect(loadStorage().storage.kanaProgress['シ'].streak).toBe(3);
+  });
+});

@@ -33,6 +33,8 @@ export function storage(entries: Record<string, WordProgress> = {}): AppStorage 
     profile: { displayName: 'Test', createdAt: now.toISOString(), updatedAt: now.toISOString(), lastStudiedAt: null },
     studyHistory: [], packStates: {}, customWords: [], customPacks: [], radicalProgressById: {}, radicalStudyHistory: [],
     lessonTotals: { french: 0, japanese: 0 },
+    dayStartHour: 0,
+    kanaProgress: {},
   };
 }
 

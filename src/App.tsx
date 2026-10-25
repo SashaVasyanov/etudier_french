@@ -32,6 +32,7 @@ import {
   exportStorageSnapshot,
   importStorageSnapshot,
   restoreWordToLearning,
+  recordKanaSession,
   recordRadicalStudySession,
   saveStorage,
   setLearningLanguagePreference,
@@ -39,6 +40,7 @@ import {
   setLessonDurationPreference,
   setLessonSourcePackPreference,
   setLessonWordTargetPreference,
+  setDayStartPreference,
   setWordPackStatus,
   getWordProgress,
   getCompletedDailyLesson,
@@ -46,7 +48,7 @@ import {
   updateProfileName,
 } from './lib/storage';
 import { parseImportedPack } from './lib/importPacks';
-import { getTodayDateKey, isAnswerMatch, isJapaneseReadingMatch } from './lib/utils';
+import { getTodayDateKey, isAnswerMatch, isJapaneseReadingMatch, setDayStartHour } from './lib/utils';
 import type {
   AppStorage,
   ExerciseOutcome,
@@ -67,6 +69,7 @@ const PacksScreen = lazy(() => import('./components/PacksScreen'));
 const ProfileScreen = lazy(() => import('./components/ProfileScreen'));
 const StatisticsScreen = lazy(() => import('./components/StatisticsScreen'));
 const KanjiRadicalsScreen = lazy(() => import('./components/KanjiRadicalsScreen'));
+const KatakanaScreen = lazy(() => import('./components/KatakanaScreen'));
 
 type Screen =
   | 'home'
@@ -75,6 +78,7 @@ type Screen =
   | 'dailyComplete'
   | 'dictionary'
   | 'radicals'
+  | 'katakana'
   | 'statistics'
   | 'profile'
   | 'packs'
@@ -779,7 +783,7 @@ function App() {
     setStepIndex(nextIndex);
   }
 
-  function handleNavigate(target: 'home' | 'lesson' | 'dictionary' | 'radicals' | 'statistics' | 'profile' | 'packs') {
+  function handleNavigate(target: 'home' | 'lesson' | 'dictionary' | 'radicals' | 'katakana' | 'statistics' | 'profile' | 'packs') {
     if (target === 'lesson') {
       const dailyDraft = dailyDraftRef.current;
       const dailyDraftIsStale = Boolean(dailyDraft && isSessionFromAnotherDay(dailyDraft.session, getTodayDateKey()));
@@ -846,7 +850,7 @@ function App() {
     );
   }
 
-  const navScreen = screen === 'dictionary' || screen === 'radicals' || screen === 'statistics' || screen === 'profile' || screen === 'packs' || screen === 'lesson'
+  const navScreen = screen === 'dictionary' || screen === 'radicals' || screen === 'katakana' || screen === 'statistics' || screen === 'profile' || screen === 'packs' || screen === 'lesson'
     ? screen
     : screen === 'packDetail'
       ? 'packs'
@@ -1240,10 +1244,24 @@ function App() {
               onLessonSourcePackChange={(packId) => {
                 setStorage((currentStorage) => setLessonSourcePackPreference(currentStorage, packId));
               }}
+              dayStartHour={storage.dayStartHour}
+              onDayStartHourChange={(hour) => {
+                setStorage((currentStorage) => setDayStartPreference(currentStorage, hour));
+                setDayStartHour(hour);
+                setToday(getTodayDateKey());
+              }}
             />
           ) : null}
           {screen === 'statistics' ? (
             <StatisticsScreen learningLanguage={storage.learningLanguage} storage={storage} words={availableWords} />
+          ) : null}
+          {screen === 'katakana' && storage.learningLanguage === 'japanese' ? (
+            <KatakanaScreen
+              storage={storage}
+              onCompleteSession={(kanaOutcomes) => {
+                setStorage((currentStorage) => recordKanaSession(currentStorage, kanaOutcomes));
+              }}
+            />
           ) : null}
           {screen === 'radicals' && storage.learningLanguage === 'japanese' ? (
             <KanjiRadicalsScreen

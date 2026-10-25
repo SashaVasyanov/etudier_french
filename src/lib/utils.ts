@@ -264,6 +264,11 @@ export function isAnswerMatch(userAnswer: string, correctAnswer: string, languag
   return answerVariants.has(normalizedUserAnswer) || [...getJapaneseRomajiVariants(userAnswer)].some((variant) => answerVariants.has(variant));
 }
 
+/** Reading check for a kana word given directly (katakana practice): romaji or kana. */
+export function isKanaWordReadingMatch(userAnswer: string, kanaWord: string, romaji: string): boolean {
+  return isAnswerMatch(userAnswer, kanaWord, 'japanese', { transcription: `[${kanaWord} · ${romaji}]`, original: kanaWord } as Word);
+}
+
 export function isJapaneseReadingMatch(userAnswer: string, correctAnswer: string, word?: Word): boolean {
   const normalizedUserAnswer = katakanaToHiragana(normalizeJapaneseAnswerToken(userAnswer));
 
@@ -599,10 +604,24 @@ export function percentage(value: number, total: number): number {
   return Math.round((value / total) * 100);
 }
 
+// The study day may start after midnight (like Anki's 4:00), so a lesson at
+// 00:30 still counts for the evening before. Set from the saved preference.
+export const MAX_DAY_START_HOUR = 6;
+let dayStartHour = 0;
+
+export function setDayStartHour(hour: number): void {
+  dayStartHour = Number.isInteger(hour) && hour >= 0 && hour <= MAX_DAY_START_HOUR ? hour : 0;
+}
+
+export function getDayStartHour(): number {
+  return dayStartHour;
+}
+
 export function getTodayDateKey(now = new Date()): string {
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
+  const studyTime = new Date(now.getTime() - dayStartHour * 60 * 60 * 1000);
+  const year = studyTime.getFullYear();
+  const month = String(studyTime.getMonth() + 1).padStart(2, '0');
+  const day = String(studyTime.getDate()).padStart(2, '0');
 
   return `${year}-${month}-${day}`;
 }
@@ -623,9 +642,10 @@ export function isReviewDue(date: string | null, now = new Date()): boolean {
   return new Date(date).getTime() <= now.getTime();
 }
 
+/** When the study day containing `date` began (midnight or the chosen hour). */
 export function startOfDay(date = new Date()): Date {
-  const next = new Date(date);
-  next.setHours(0, 0, 0, 0);
+  const next = new Date(date.getTime() - dayStartHour * 60 * 60 * 1000);
+  next.setHours(dayStartHour, 0, 0, 0);
   return next;
 }
 

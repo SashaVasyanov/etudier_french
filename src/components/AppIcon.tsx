@@ -15,6 +15,7 @@ export type AppIconName =
   | 'grid'
   | 'headphones'
   | 'home'
+  | 'kana'
   | 'kanji'
   | 'layers'
   | 'leaf'
@@ -46,6 +47,7 @@ const ICON_PATHS: Record<AppIconName, ReactNode> = {
   grid: <><rect x="3" y="3" width="7" height="7" rx="2" /><rect x="14" y="3" width="7" height="7" rx="2" /><rect x="3" y="14" width="7" height="7" rx="2" /><rect x="14" y="14" width="7" height="7" rx="2" /></>,
   headphones: <><path d="M4 14v-2a8 8 0 0 1 16 0v2" /><path d="M6 13H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v-7ZM18 13h1a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2v-7Z" /></>,
   home: <><path d="m3 11 9-8 9 8" /><path d="M5 10v10h14V10M9 20v-6h6v6" /></>,
+  kana: <><path d="M5 5.5h14c-.6 4.2-3.2 7.3-7 8.6" /><path d="M11.5 9.5c0 5.2-2 8.8-6 10.5" /></>,
   kanji: <text x="12" y="17" fill="currentColor" stroke="none" textAnchor="middle" fontSize="15" fontWeight="800">部</text>,
   layers: <><path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="m3 12 9 5 9-5M3 16l9 5 9-5" /></>,
   leaf: <><path d="M20.5 3.5C12 3.7 6.2 7.1 5.2 13.1c-.7 4.1 2.4 7.2 6.2 6.4 5.7-1.2 8.6-7.3 9.1-16Z" /><path d="M4 21c2.7-5.5 6.6-9.2 12-12" /></>,

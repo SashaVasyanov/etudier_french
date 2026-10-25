@@ -53,20 +53,25 @@ describe('active dictionary words', () => {
 });
 
 describe('Japanese starter packs', () => {
-  it('offers five themed packs of twenty words with readings and examples that contain the word', async () => {
+  it('offers five themed packs and two JLPT packs with readings and examples that contain the word', async () => {
     const { getStarterPacks } = await import('../src/data/words');
     const packs = getStarterPacks('japanese');
-    expect(packs).toHaveLength(5);
+    expect(packs.map((pack) => pack.id)).toEqual([
+      'pack-ja-plants', 'pack-ja-animals', 'pack-ja-food', 'pack-ja-travel', 'pack-ja-home', 'pack-ja-n5', 'pack-ja-n4',
+    ]);
+    // Verbs and adjectives appear conjugated: 行く → 行きます, 高い → 高かった.
+    const stem = (original: string) => (/[\u3041-\u309f]$/.test(original) ? original.slice(0, -1) : original);
     for (const pack of packs) {
-      expect(pack.words).toHaveLength(20);
+      expect(pack.words.length).toBeGreaterThanOrEqual(20);
       for (const item of pack.words) {
         expect(item.language).toBe('japanese');
-        expect(item.example_original).toContain(item.original);
+        expect(item.example_original).toContain(stem(item.original));
         expect(Boolean(item.example_reading)).toBe(true);
         expect(item.transcription).toContain(' · ');
       }
     }
-    expect(new Set(packs.flatMap((pack) => pack.words.map((item) => item.id))).size).toBe(100);
+    const ids = packs.flatMap((pack) => pack.words.map((item) => item.id));
+    expect(new Set(ids).size).toBe(ids.length);
   });
 });
 

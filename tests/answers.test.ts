@@ -102,3 +102,14 @@ describe('French transcription', () => {
     expect(deriveFrenchLatinTranscription('collègue', '[kɔlɛɡ]')).toBe('[koleg]');
   });
 });
+
+describe('katakana word reading', () => {
+  it('accepts romaji with long vowels and kana, rejects a short vowel', async () => {
+    const { isKanaWordReadingMatch } = await import('../src/lib/utils');
+    expect(isKanaWordReadingMatch('koohii', 'コーヒー', 'koohii')).toBe(true);
+    expect(isKanaWordReadingMatch('こーひー', 'コーヒー', 'koohii')).toBe(true);
+    expect(isKanaWordReadingMatch('コーヒー', 'コーヒー', 'koohii')).toBe(true);
+    expect(isKanaWordReadingMatch('menyuu', 'メニュー', 'menyuu')).toBe(true);
+    expect(isKanaWordReadingMatch('sakka', 'サッカー', 'sakkaa')).toBe(false);
+  });
+});

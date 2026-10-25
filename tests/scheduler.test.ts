@@ -74,7 +74,7 @@ describe('scheduler properties', () => {
       expect(p.correct_count).toBeGreaterThanOrEqual(snapshot.progressByWordId.a.correct_count);
       expect(p.wrong_count).toBeGreaterThanOrEqual(snapshot.progressByWordId.a.wrong_count);
       expect(p.interval_days).toBeGreaterThanOrEqual(0);
-      expect(p.interval_days).toBeLessThanOrEqual(60);
+      expect(p.interval_days).toBeLessThanOrEqual(180);
       expect(new Set(p.successful_review_dates).size).toBe(p.successful_review_dates.length);
       if (snapshot.progressByWordId.a.status === 'known') expect(p.status).toBe('known');
     }
@@ -173,5 +173,65 @@ describe('streak with answers settled after the fact', () => {
     const after = applyOutcomes(before, [correct('a')], yesterday);
     expect(after.lastLessonDate).toBe(today);
     expect(after.streakDays).toBe(5);
+  });
+});
+
+describe('custom start of the study day', () => {
+  it('counts a lesson after midnight for the evening before and schedules reviews from that hour', async () => {
+    const { setDayStartHour, getTodayDateKey, startOfDay } = await import('../src/lib/utils');
+    const { getCurrentStreakDays } = await import('../src/lib/storage');
+    try {
+      setDayStartHour(4);
+      const lateNight = new Date(2026, 9, 25, 1, 30);
+      expect(getTodayDateKey(lateNight)).toBe('2026-10-24');
+      expect(getTodayDateKey(new Date(2026, 9, 25, 4, 0))).toBe('2026-10-25');
+      const start = startOfDay(lateNight);
+      expect([start.getDate(), start.getHours()]).toEqual([24, 4]);
+      const state = { ...storage(), streakDays: 3, lastLessonDate: '2026-10-23' };
+      expect(getCurrentStreakDays(state, lateNight)).toBe(3);
+    } finally {
+      setDayStartHour(0);
+    }
+  });
+});
+
+describe('SM-2 grading and long intervals', () => {
+  const dayKey = (offset: number) => localDateKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset, 12));
+  const choice = (id: string, ok: boolean, n: number) => ({ ...outcome(id, ok, n), type: 'original_to_translation_choice' as const });
+
+  it('grades a session from the first answer, slips and the kind of exercise', async () => {
+    const { gradeSession, nextEaseFactor } = await import('../src/lib/storage');
+    expect(gradeSession([correct('a', 0), correct('a', 1)])).toBe(5);
+    expect(gradeSession([choice('a', true, 0), choice('a', true, 1)])).toBe(4);
+    expect(gradeSession([correct('a', 0), correct('a', 1), correct('a', 2), wrong('a', 3)])).toBe(3);
+    expect(gradeSession([correct('a', 0), wrong('a', 1)])).toBe(2);
+    expect(gradeSession([wrong('a', 0), correct('a', 1), correct('a', 2)])).toBe(2);
+    expect(gradeSession([wrong('a', 0), wrong('a', 1), correct('a', 2)])).toBe(1);
+    expect(nextEaseFactor(2.5, 5)).toBeCloseTo(2.6);
+    expect(nextEaseFactor(2.5, 4)).toBeCloseTo(2.5);
+    expect(nextEaseFactor(2.5, 3)).toBeCloseTo(2.36);
+    expect(nextEaseFactor(1.35, 1)).toBe(1.3);
+  });
+
+  it('grows a mastered word past two months by interval × ease, spread by a few days', () => {
+    const before = storage({ a: progress('a', 'mastered', {
+      repetition_step: 6, interval_days: 30, ease_factor: 2.5,
+      next_review_at: new Date(now.getTime() - 60_000).toISOString(),
+      successful_review_dates: [dayKey(-60), dayKey(-50), dayKey(-30)],
+    }) });
+    const p = applyOutcomes(before, [correct('a', 0), correct('a', 1)], now).progressByWordId.a;
+    expect(p.ease_factor).toBeCloseTo(2.6);
+    expect(p.interval_days).toBeGreaterThanOrEqual(70);
+    expect(p.interval_days).toBeLessThanOrEqual(86);
+    expect(p.status).toBe('mastered');
+  });
+
+  it('credits half of an overdue gap and never schedules beyond half a year', () => {
+    const overdue = storage({ a: progress('a', 'mastered', {
+      repetition_step: 9, interval_days: 150, ease_factor: 3,
+      next_review_at: new Date(now.getTime() - 40 * 86_400_000).toISOString(),
+      successful_review_dates: [dayKey(-400), dayKey(-300), dayKey(-190)],
+    }) });
+    expect(applyOutcomes(overdue, [correct('a', 0)], now).progressByWordId.a.interval_days).toBe(180);
   });
 });

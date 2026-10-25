@@ -6354,3 +6354,66 @@ button:active:not(:disabled) {
   color: #c94a5e;
 }
 
+
+/* Katakana practice */
+.katakana-page .radical-catalog-panel + .radical-catalog-panel {
+  margin-top: 16px;
+}
+
+.kana-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 8px;
+}
+
+.kana-cell {
+  min-height: 74px;
+  border: 1px solid #e8ebf2;
+  border-radius: 14px;
+  background: #fbfcff;
+  color: #20243b;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+}
+
+.kana-cell strong {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.kana-cell span {
+  font-size: 0.78rem;
+  color: #6b7186;
+}
+
+.kana-cell.learning {
+  border-color: rgba(214, 140, 43, 0.35);
+  background: #fff7ea;
+}
+
+.kana-cell.learned {
+  border-color: rgba(37, 134, 99, 0.34);
+  background: #e8f7f1;
+  color: #176b4e;
+}
+
+.katakana-word-form {
+  display: flex;
+  gap: 10px;
+  width: min(460px, 100%);
+  margin: 0 auto;
+}
+
+.katakana-word-form .settings-input {
+  flex: 1;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 820px) {
+  .app-nav.has-radicals {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}

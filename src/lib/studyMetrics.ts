@@ -1,14 +1,13 @@
 import type { DailyStats, LearningLanguage, StudyHistoryEntry, WordProgress } from '../types';
-import { percentage } from './utils';
+import { addDays, getTodayDateKey, percentage, startOfDay } from './utils';
 
-function dateKey(date: Date): string {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+function dayKeyBefore(now: Date, daysBack: number): string {
+  return getTodayDateKey(addDays(startOfDay(now), -daysBack));
 }
 
 function recentHistory(history: StudyHistoryEntry[], days: number, now: Date): StudyHistoryEntry[] {
-  const firstDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() - days + 1);
-  const firstKey = dateKey(firstDay);
-  const lastKey = dateKey(now);
+  const firstKey = dayKeyBefore(now, days - 1);
+  const lastKey = getTodayDateKey(now);
 
   return history.filter((entry) => entry.date >= firstKey && entry.date <= lastKey);
 }
@@ -37,8 +36,8 @@ export function getRecentWordCounts(dailyStats: DailyStats[], language: Learning
   const weekdayLabels = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 
   return Array.from({ length: 7 }, (_, index) => {
-    const date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (6 - index));
-    const key = dateKey(date);
+    const date = addDays(startOfDay(now), -(6 - index));
+    const key = getTodayDateKey(date);
     const daily = dailyStats.find((entry) => entry.language === language && entry.date === key);
 
     return { key, label: weekdayLabels[date.getDay()], count: daily?.wordsLearned ?? 0 };

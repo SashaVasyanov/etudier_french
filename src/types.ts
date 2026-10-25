@@ -252,6 +252,18 @@ export interface AppStorage {
   radicalStudyHistory: RadicalStudyHistoryEntry[];
   /** Lessons finished per language over all time; history itself is capped. */
   lessonTotals: Record<LearningLanguage, number>;
+  /** Hour (0–6) at which a new study day starts; 0 = midnight. */
+  dayStartHour: number;
+  /** Katakana reading practice, keyed by the katakana character. */
+  kanaProgress: Record<string, KanaProgress>;
+}
+
+export interface KanaProgress {
+  correct: number;
+  wrong: number;
+  /** Correct answers in a row; three in a row = the sign is learned. */
+  streak: number;
+  lastSeenAt: string | null;
 }
 
 export interface DailyLessonCompletionPayload {

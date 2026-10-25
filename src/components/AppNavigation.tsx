@@ -1,7 +1,7 @@
 import { AppIcon, type AppIconName } from './AppIcon';
 
 interface AppNavigationProps {
-  activeScreen: 'home' | 'lesson' | 'dictionary' | 'radicals' | 'statistics' | 'profile' | 'packs';
+  activeScreen: 'home' | 'lesson' | 'dictionary' | 'radicals' | 'katakana' | 'statistics' | 'profile' | 'packs';
   lessonAvailable: boolean;
   showKanjiRadicals: boolean;
   streakDays: number;
@@ -13,13 +13,14 @@ const NAV_ITEMS: Array<{ id: AppNavigationProps['activeScreen']; label: string; 
   { id: 'lesson', label: 'Учиться', icon: 'play' },
   { id: 'dictionary', label: 'Словарь', icon: 'book-open' },
   { id: 'radicals', label: 'Ключи', icon: 'kanji' },
+  { id: 'katakana', label: 'Катакана', icon: 'kana' },
   { id: 'statistics', label: 'Прогресс', icon: 'chart' },
   { id: 'packs', label: 'Темы', icon: 'grid' },
   { id: 'profile', label: 'Профиль', icon: 'user' },
 ];
 
 export function AppNavigation({ activeScreen, lessonAvailable, showKanjiRadicals, streakDays, onNavigate }: AppNavigationProps) {
-  const visibleItems = NAV_ITEMS.filter((item) => item.id !== 'radicals' || showKanjiRadicals);
+  const visibleItems = NAV_ITEMS.filter((item) => (item.id !== 'radicals' && item.id !== 'katakana') || showKanjiRadicals);
 
   return (
     <aside className="app-sidebar" aria-label="Основная навигация">
