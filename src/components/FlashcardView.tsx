@@ -35,6 +35,25 @@ export function FlashcardView({
     setIsRevealed(false);
   }, [word.id]);
 
+  // Space shows the translation, Enter moves on once it is shown.
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.isComposing || event.metaKey || event.ctrlKey || event.altKey || event.repeat) return;
+      const target = event.target as HTMLElement | null;
+      if (target && (target.closest('button, input, textarea, select, a'))) return;
+      if (event.key === ' ') {
+        event.preventDefault();
+        setIsRevealed((value) => !value);
+      } else if (event.key === 'Enter') {
+        event.preventDefault();
+        if (isRevealed) onNext();
+        else setIsRevealed(true);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isRevealed, onNext]);
+
   return (
     <LessonCard
       className="flashcard-view"
@@ -63,7 +82,7 @@ export function FlashcardView({
               className={isRevealed ? 'ghost-button full-width' : 'primary-button full-width'}
               onClick={() => setIsRevealed((value) => !value)}
             >
-              {isRevealed ? 'Скрыть детали' : 'Показать перевод'}
+              {isRevealed ? 'Скрыть детали' : <>Показать перевод <kbd className="key-hint" aria-hidden="true">Пробел</kbd></>}
             </button>
           </div>
 
@@ -105,7 +124,7 @@ export function FlashcardView({
               Повторить позже
             </button>
             <button type="button" className="primary-button full-width" onClick={onNext}>
-              Дальше
+              Дальше <kbd className="key-hint" aria-hidden="true">Enter</kbd>
             </button>
           </>
         ) : (

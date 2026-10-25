@@ -784,6 +784,24 @@ function App() {
     setStepIndex(nextIndex);
   }
 
+  function pauseLesson() {
+    stopAudio();
+    setScreen('home');
+  }
+
+  // Esc pauses the lesson, like the close button (progress stays in the draft).
+  useEffect(() => {
+    if (screen !== 'lesson') return undefined;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || event.isComposing || event.defaultPrevented) return;
+      event.preventDefault();
+      stopAudio();
+      setScreen('home');
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [screen]);
+
   function handleNavigate(target: 'home' | 'lesson' | 'dictionary' | 'radicals' | 'katakana' | 'statistics' | 'profile' | 'packs') {
     if (target === 'lesson') {
       const dailyDraft = dailyDraftRef.current;
@@ -934,33 +952,49 @@ function App() {
           <section className="lesson-shell" lang={storage.learningLanguage === 'japanese' ? 'ja' : undefined}>
             <div className="lesson-focus-screen">
               <header className="lesson-session-progress" aria-label="Прогресс текущего урока">
-                <div className="lesson-session-topline">
-                  <span className="lesson-session-module">Модуль {currentStep.modulePosition} из {currentStep.moduleCount}</span>
-                  <span>{currentStep.indexInModule} / {currentStep.totalInModule} в модуле</span>
-                </div>
-                <div className="lesson-session-title-row">
-                  <div>
+                <div className="lesson-session-row">
+                  <button
+                    type="button"
+                    className="lesson-close-button"
+                    aria-label="Приостановить урок и вернуться на главную (Esc)"
+                    title="Приостановить урок (Esc)"
+                    onClick={pauseLesson}
+                  >
+                    <AppIcon name="close" size={20} />
+                  </button>
+                  <div className="lesson-session-heading">
                     <strong>{currentStep.moduleTitle}</strong>
-                    <small>{currentStep.moduleDescription}</small>
+                    <small>
+                      Модуль {currentStep.modulePosition} из {currentStep.moduleCount} · шаг {currentStep.indexInModule} из {currentStep.totalInModule}
+                    </small>
                   </div>
-                  <span>{lessonProgress?.completedSteps} / {session.steps.length} выполнено</span>
+                  <span className="lesson-session-count" title="Выполнено заданий за урок">
+                    {lessonProgress?.completedSteps} из {session.steps.length}
+                  </span>
                 </div>
-                <div className="lesson-session-track" role="progressbar" aria-label="Общий прогресс урока" aria-valuemin={0} aria-valuemax={100} aria-valuenow={lessonProgress?.percent ?? 0}>
-                  <span style={{ width: `${lessonProgress?.percent ?? 0}%` }} />
+                <div
+                  className="lesson-module-track"
+                  role="progressbar"
+                  aria-label={`Общий прогресс урока. Модулей завершено: ${lessonProgress?.completedModules ?? 0}, осталось: ${lessonProgress?.remainingModules ?? 0}`}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={lessonProgress?.percent ?? 0}
+                >
+                  {Array.from({ length: currentStep.moduleCount }, (_, index) => {
+                    const position = index + 1;
+                    const fill = position < currentStep.modulePosition
+                      ? 100
+                      : position === currentStep.modulePosition
+                        ? Math.round(((currentStep.indexInModule - 1) / Math.max(1, currentStep.totalInModule)) * 100)
+                        : 0;
+                    return (
+                      <span key={position} className={position === currentStep.modulePosition ? 'current' : undefined}>
+                        <i style={{ width: `${fill}%` }} />
+                      </span>
+                    );
+                  })}
                 </div>
-                <small>Модулей завершено: {lessonProgress?.completedModules} · осталось: {lessonProgress?.remainingModules}</small>
               </header>
-              <button
-                type="button"
-                className="lesson-close-button"
-                aria-label="Приостановить урок и вернуться на главную"
-                onClick={() => {
-                  stopAudio();
-                  setScreen('home');
-                }}
-              >
-                <AppIcon name="close" size={25} />
-              </button>
               {currentStep.kind === 'exercise' ? (
                 currentExercise?.type === 'memory_check' ? (
                   <MemoryCheckExercise

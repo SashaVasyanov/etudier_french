@@ -162,7 +162,7 @@ export function TextInputExercise({
             <>
               <div className={isCorrect ? 'answer-feedback success' : 'answer-feedback error'}>
                 <div>
-                  <strong>{isCorrect ? 'Верно' : 'Неправильно'}</strong>
+                  <strong>{isCorrect ? 'Верно' : 'Правильный ответ:'}</strong>
                   <AnswerWordDetails word={word} />
                 </div>
                 <button type="button" className="feedback-replay-button" onClick={onReplayAudio}>
@@ -189,7 +189,7 @@ export function TextInputExercise({
             disabled={!isSubmitted && !value.trim()}
             onClick={isSubmitted ? onNext : onSubmit}
           >
-            {isSubmitted ? 'Дальше' : 'Проверить'}
+            {isSubmitted ? 'Дальше' : 'Проверить'} <kbd className="key-hint" aria-hidden="true">Enter</kbd>
           </button>
           {onMarkKnown || onIgnoreWord ? (
             <div className="lesson-word-action-row">

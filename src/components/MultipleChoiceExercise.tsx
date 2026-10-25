@@ -174,7 +174,11 @@ export function MultipleChoiceExercise({
           {isSubmitted ? (
             <div className={selectedAnswer === exercise.correctAnswer ? 'answer-feedback success' : 'answer-feedback error'}>
               <div>
-                <strong>{selectedAnswer === exercise.correctAnswer ? 'Верно' : 'Неправильно'}</strong>
+                <strong>
+                  {selectedAnswer === exercise.correctAnswer ? 'Верно' : (
+                    <>Правильный ответ: <span lang={word.language === 'japanese' && isTranslationExercise ? 'ja' : undefined}>{exercise.correctAnswer}</span></>
+                  )}
+                </strong>
                 <AnswerWordDetails word={word} />
               </div>
               {onReplayAudio ? (
@@ -190,7 +194,7 @@ export function MultipleChoiceExercise({
         <>
           {isSubmitted ? (
             <button ref={nextButtonRef} type="button" className="primary-button full-width" onClick={onNext}>
-              Дальше
+              Дальше <kbd className="key-hint" aria-hidden="true">Enter</kbd>
             </button>
           ) : null}
           {onMarkKnown || onIgnoreWord ? (

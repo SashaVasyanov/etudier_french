@@ -130,14 +130,16 @@ h3 {
   box-shadow: none;
 }
 
+/* Selection is gray, like the Notes and Finder sidebars; the accent stays
+   for the screen's main action. */
 .nav-button.active,
 .nav-button.active:hover {
-  background: var(--accent);
-  color: var(--on-fill);
+  background: var(--fill-strong);
+  color: var(--label);
 }
 
-.nav-button.active .nav-icon {
-  color: var(--on-fill);
+.nav-button.active strong {
+  font-weight: 600;
 }
 
 .nav-button:disabled {
@@ -220,15 +222,21 @@ h3 {
 }
 
 /* Insets inside a card use the system fill instead of another card. */
-.settings-summary-panel article,
+/* Top-level stat tiles sit on the page like cards. */
 .settings-profile-overview article,
-.radical-summary-grid article,
-.progress-bento-stats > span,
-.flashcard-meta-item,
-.duration-option {
+.radical-summary-grid article {
   border-color: transparent;
   background: var(--surface);
   box-shadow: var(--shadow-card);
+}
+
+.settings-summary-panel article,
+.progress-bento-stats > span,
+.flashcard-meta-item,
+.duration-option {
+  border: 0;
+  background: var(--fill);
+  box-shadow: none;
 }
 
 .settings-overview-icon,
@@ -624,12 +632,86 @@ h3 {
   box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-float);
 }
 
-.lesson-close-button {
+/* Compact lesson header: one glass capsule — close, module, count — and a
+   bar of module segments (done / current / remaining). */
+.lesson-session-progress {
+  position: sticky;
+  top: 10px;
+  z-index: 5;
+  width: min(640px, 100%);
+  padding: 8px 14px 10px 8px;
+  display: grid;
+  gap: 8px;
+}
+
+.lesson-session-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.lesson-session-heading {
+  min-width: 0;
+  display: grid;
+  line-height: 1.2;
+}
+
+.lesson-session-heading strong {
+  overflow: hidden;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lesson-session-heading small,
+.lesson-session-count {
+  color: var(--label-2);
+  font-size: 0.8rem;
+}
+
+.lesson-session-count {
+  font-variant-numeric: tabular-nums;
+}
+
+.lesson-close-button,
+.lesson-session-progress .lesson-close-button {
+  position: static;
+  width: 32px;
+  height: 32px;
+  border: 0;
   border-radius: 50%;
-  background: var(--glass);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-edge);
+  background: var(--fill);
+  color: var(--label-2);
+}
+
+.lesson-close-button:hover {
+  background: var(--fill-strong);
+  color: var(--label);
+}
+
+.lesson-module-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 4px;
+  padding-left: 6px;
+}
+
+.lesson-module-track > span {
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--fill-strong);
+}
+
+.lesson-module-track > span > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 200ms ease;
 }
 
 .lesson-exercise-card,
@@ -775,7 +857,7 @@ h3 {
 }
 
 .lesson-session-progress {
-  border-radius: 20px;
+  border-radius: 22px;
 }
 
 /* ---------- Badges ---------- */
@@ -1040,4 +1122,244 @@ h3 {
   .learning-home-grid {
     grid-column: auto;
   }
+}
+
+/* ---------- Review fixes ---------- */
+
+/* Illustrations: quiet frame, and dimmed so they do not glare in the dark. */
+.word-image-frame,
+.lesson-choice-image.word-image-frame,
+.lesson-preview-image.word-image-frame {
+  border: 0;
+  background: var(--fill);
+}
+
+.lesson-preview-image .word-image,
+.lesson-preview-image img {
+  object-fit: contain;
+}
+
+@media (prefers-color-scheme: dark) {
+  .word-image-frame img,
+  .word-image {
+    filter: brightness(0.82) saturate(0.85);
+  }
+}
+
+/* The squared paper covers the whole window, not a framed box. */
+.lesson-shell {
+  background: none;
+}
+
+.lesson-desktop-layout {
+  min-height: 100vh;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: center top;
+}
+
+/* Lesson result. */
+.result-card > .app-card-shell,
+.result-card .hero-card,
+.mistake-card {
+  border-radius: 20px;
+}
+
+.mini-panel {
+  border: 0;
+  background: var(--surface);
+}
+
+.mistake-item-card {
+  grid-template-columns: 56px minmax(0, 1fr);
+  border: 0;
+  border-radius: 14px;
+  background: var(--fill);
+}
+
+.mistake-item-image {
+  width: 56px;
+  height: 56px;
+}
+
+.result-score {
+  color: var(--label-2);
+}
+
+/* Less accent noise. */
+.radical-status-dot.new {
+  display: none;
+}
+
+.radicals-hero .radical-primary-button {
+  box-shadow: none;
+}
+
+.danger-button.quiet-danger {
+  color: var(--label-2);
+}
+
+.danger-button.quiet-danger:hover {
+  color: var(--red);
+}
+
+/* Answer states: the check/cross replaces the number hint. */
+.choice-button.correct .choice-key,
+.choice-button.incorrect .choice-key {
+  display: none;
+}
+
+/* Statistics without data. */
+.analytics-week-chart,
+.analytics-week-chart.is-empty {
+  background: none;
+}
+
+.filter-card,
+.pack-filter-card {
+  border: 0;
+}
+
+.tag-badge,
+.status-badge {
+  font-size: 0.78rem;
+}
+
+.key-hint {
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--on-fill) 22%, transparent);
+  color: inherit;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.flashcard-image.word-image-frame,
+.flashcard-image {
+  width: min(100%, 220px);
+  max-height: 200px;
+}
+
+.flashcard-primary-actions {
+  gap: 12px;
+}
+
+.ghost-button .key-hint,
+.secondary-button .key-hint {
+  background: var(--fill);
+}
+
+.nav-group-label {
+  margin: 14px 10px 4px;
+  color: var(--label-3);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+@media (max-width: 1180px) {
+  .nav-group-label {
+    display: none;
+  }
+}
+
+/* Dictionary rows: actions centred on the row. */
+.word-card .pack-word-row-head {
+  align-items: center;
+}
+
+.katakana-tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.katakana-page .katakana-tables .radical-catalog-panel + .radical-catalog-panel {
+  margin-top: 0;
+}
+
+.duration-card-compact > .app-card-shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+}
+
+.duration-card-copy {
+  min-width: 0;
+  max-width: 520px;
+}
+
+.duration-card-copy .section-title {
+  margin: 0 0 4px;
+}
+
+.duration-card-copy .hero-text {
+  margin: 0;
+}
+
+.duration-card-control {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+}
+
+.duration-card-control small {
+  color: var(--label-2);
+}
+
+/* Today's five modules read as a progress line, not as buttons. */
+.daily-route {
+  gap: 8px;
+}
+
+.daily-route-step,
+.daily-route-step.done {
+  min-height: 0;
+  padding: 10px 2px 0;
+  border: 0;
+  border-top: 3px solid var(--fill-strong);
+  border-radius: 0;
+  background: transparent;
+  gap: 6px;
+}
+
+.daily-route-step.done {
+  border-top-color: var(--green);
+}
+
+.daily-route-step > span {
+  width: auto;
+  height: auto;
+  background: transparent;
+  color: var(--label-3);
+  font-size: 0.78rem;
+  place-items: start;
+}
+
+.daily-route-step.done > span {
+  background: transparent;
+  color: var(--green);
+}
+
+/* Pack word filters: a plain toolbar, no outlined card. */
+.pack-filter-card,
+.pack-word-toolbar {
+  border: 0;
+}
+
+.app-card .app-card-shell {
+  border-color: transparent;
+}
+
+.filter-card,
+.filter-card .app-card-shell {
+  background: var(--surface);
 }

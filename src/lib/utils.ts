@@ -725,6 +725,7 @@ export function countRu(count: number, forms: readonly [string, string, string])
 }
 
 export const RU_WORDS = ['слово', 'слова', 'слов'] as const;
+export const RU_DAYS = ['день', 'дня', 'дней'] as const;
 export const RU_LESSONS = ['урок', 'урока', 'уроков'] as const;
 export const RU_ANSWERS = ['ответ', 'ответа', 'ответов'] as const;
 export const RU_MISTAKES = ['ошибка', 'ошибки', 'ошибок'] as const;

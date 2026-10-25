@@ -20,7 +20,11 @@ function getMessage(successRate: number): string {
     return 'Хороший темп. Ещё один короткий подход отлично закрепит материал.';
   }
 
-  return 'Нормальный рабочий результат. Точечный повтор ошибок сейчас даст лучший эффект.';
+  if (successRate >= 40) {
+    return 'Часть слов ещё путается. Повторите ошибки — это займёт пару минут.';
+  }
+
+  return 'Слова пока не закрепились. Повторите ошибки сейчас, пока они свежи в памяти.';
 }
 
 export function LessonResult({
@@ -38,7 +42,7 @@ export function LessonResult({
         <div className="result-hero">
           <span className="eyebrow">Результат урока</span>
           <h2 className="result-title">Правильно: {countRu(correctAnswers, RU_ANSWERS)}</h2>
-          <p className="result-score">{successRate}% успеха</p>
+          <p className="result-score">{successRate}% верных ответов</p>
           <p className="result-message">{getMessage(successRate)}</p>
         </div>
       </AppCard>

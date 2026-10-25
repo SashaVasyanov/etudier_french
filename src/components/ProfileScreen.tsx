@@ -148,10 +148,6 @@ export default function ProfileScreen({
           </label>
           <div className="settings-mini-grid">
             <span>
-              <strong>{stats.learned}</strong>
-              Освоено
-            </span>
-            <span>
               <strong>{stats.inProgress}</strong>
               В работе
             </span>

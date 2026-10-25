@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { getTodayDateKey, percentage, countRu, RU_ANSWERS, RU_PACKS, RU_WORDS } from '../lib/utils';
+import { getTodayDateKey, percentage, countRu, RU_ANSWERS, RU_DAYS, RU_PACKS, RU_WORDS } from '../lib/utils';
 import { getCurrentStreakDays } from '../lib/storage';
 import { getPackCompletionRatio } from '../lib/packs';
 import { getLessonProgress } from '../lib/lessonSession';
@@ -113,7 +113,9 @@ export function HomeDashboard({
           <p>{isDailyComplete ? 'Дневная цель закрыта — можно закрепить результат в комфортном темпе.' : 'Сегодня достаточно одного короткого шага к уверенной речи.'}</p>
         </div>
         <div className="home-head-actions">
-          <span className="streak-chip" aria-label={`Серия: ${currentStreak} дней`}><AppIcon name="flame" size={18} /> {currentStreak || '—'} дн.</span>
+          {currentStreak > 0 ? (
+            <span className="streak-chip" aria-label={`Серия: ${countRu(currentStreak, RU_DAYS)}`}><AppIcon name="flame" size={18} /> {countRu(currentStreak, RU_DAYS)}</span>
+          ) : null}
           <button type="button" className="home-avatar-button" aria-label="Открыть профиль" onClick={onOpenProfile}>
             {displayName.slice(0, 1).toUpperCase()}
           </button>

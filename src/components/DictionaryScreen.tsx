@@ -145,14 +145,12 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
       <AppCard as="header" tone="hero" className="dictionary-hero">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Словарь</span>
-            <h1 className="hero-title compact-title">Слова, контекст и подсказки по употреблению</h1>
+            <h1 className="hero-title compact-title">Словарь</h1>
           </div>
           <div className="dictionary-hero-actions">
             <button type="button" className="primary-button" onClick={() => setShowAddForm((current) => !current)}>
               {showAddForm ? 'Скрыть форму' : 'Добавить слово'}
             </button>
-            <p className="hero-text">Ищите по слову и переводу, слушайте произношение, смотрите контекст и быстро разбирайте, как слово используется в речи.</p>
           </div>
         </div>
 
@@ -344,8 +342,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
         </div>
 
         <div className="dictionary-summary">
-          <span>Найдено карточек: {filteredWords.length}</span>
-          <span>{level !== 'all' ? `Уровень ${getStudyLevelLabel(level)}` : 'Все уровни'} · {packFilter === 'all' ? 'Все активные источники' : packFilter === 'core' ? 'Базовый курс' : packs.find((pack) => pack.id === packFilter)?.title ?? ''}</span>
+          <span>Найдено: {countRu(filteredWords.length, RU_WORDS)}</span>
         </div>
       </AppCard>
 

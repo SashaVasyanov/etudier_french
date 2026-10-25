@@ -20,33 +20,35 @@ export function LessonDurationSelector({
   title = 'Размер занятия',
   description = 'Выберите длительность до старта. Выбор сохраняется локально и влияет на объём урока.',
 }: LessonDurationSelectorProps) {
+  const active = OPTIONS.find((option) => option.value === value) ?? OPTIONS[1];
+
+  // A compact segmented control, the same one as on the home screen.
   return (
-    <AppCard as="section" tone="soft" className="duration-card">
-      <div className="section-heading">
-        <div>
-          <span className="eyebrow">Длительность</span>
-          <h2 className="section-title">{title}</h2>
-        </div>
+    <AppCard as="section" tone="soft" className="duration-card duration-card-compact">
+      <div className="duration-card-copy">
+        <h2 className="section-title">{title}</h2>
         <p className="hero-text">{description}</p>
       </div>
 
-      <div className="duration-grid" role="group" aria-label="Выбор длительности урока">
-        {OPTIONS.map((option) => {
-          const isActive = option.value === value;
+      <div className="duration-card-control">
+        <div className="duration-switch" role="group" aria-label="Выбор длительности урока">
+          {OPTIONS.map((option) => {
+            const isActive = option.value === value;
 
-          return (
-            <button
-              key={option.value}
-              type="button"
-              className={isActive ? 'duration-option active' : 'duration-option'}
-              aria-pressed={isActive}
-              onClick={() => onChange(option.value)}
-            >
-              <strong>{option.label}</strong>
-              <span>{option.hint}</span>
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={option.value}
+                type="button"
+                className={isActive ? 'active' : undefined}
+                aria-pressed={isActive}
+                onClick={() => onChange(option.value)}
+              >
+                {option.value} мин
+              </button>
+            );
+          })}
+        </div>
+        <small>{active.hint}</small>
       </div>
     </AppCard>
   );

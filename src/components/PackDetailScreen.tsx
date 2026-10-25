@@ -161,10 +161,6 @@ export function PackDetailScreen({
               </option>
             ))}
           </select>
-          <div className="pack-detail-summary">
-            <span>Статус: {{ not_added: 'не добавлен', added: 'добавлен', in_progress: 'в процессе', completed: 'завершён' }[status]}</span>
-            <span>Фильтр: {FILTERS.find((item) => item.id === filter)?.label}</span>
-          </div>
         </div>
       </AppCard>
 
@@ -190,13 +186,14 @@ export function PackDetailScreen({
                 action={
                   <button
                     type="button"
-                    className="audio-button"
+                    className="audio-button icon-button"
+                    title="Прослушать"
                     aria-label={`Прослушать слово ${getDisplayWord(word)}`}
                     onClick={() => {
                       void playWordAudio(word);
                     }}
                   >
-                    Аудио
+                    <AppIcon name="volume" size={18} />
                   </button>
                 }
                 badges={

@@ -182,7 +182,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
         </article>
         <article className="analytics-kpi-card analytics-kpi-green">
           <span className="analytics-kpi-icon"><AppIcon name="target" size={22} /></span>
-          <div><span>Точность за всё время</span><strong>{accuracy}%</strong><small>{correctAnswers} из {totalAnswers} ответов</small></div>
+          <div><span>Точность</span><strong>{accuracy}%</strong><small>{correctAnswers} из {totalAnswers} ответов за всё время</small></div>
         </article>
         <article className="analytics-kpi-card analytics-kpi-orange">
           <span className="analytics-kpi-icon"><AppIcon name="flame" size={22} /></span>

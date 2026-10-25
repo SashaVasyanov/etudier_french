@@ -66,6 +66,23 @@ function selectWords(): LoanWord[] {
   return shuffle(KATAKANA_WORDS).slice(0, WORD_QUESTIONS);
 }
 
+const VOWEL_COLUMNS: Record<string, number> = { a: 1, i: 2, u: 3, e: 4, o: 5 };
+
+/**
+ * The classic gojūon table: one consonant per row, a-i-u-e-o columns, with
+ * gaps where a sign does not exist (ヤ・ユ・ヨ, ワ…ン).
+ */
+function placeInTable(signs: KanaChar[]): Array<{ item: KanaChar; row: number; column: number }> {
+  let row = 1;
+  let previousColumn = 0;
+  return signs.map((item) => {
+    const column = item.romaji === 'n' ? 5 : VOWEL_COLUMNS[item.romaji.slice(-1)] ?? 1;
+    if (column <= previousColumn) row += 1;
+    previousColumn = column;
+    return { item, row, column };
+  });
+}
+
 export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaScreenProps) {
   const [view, setView] = useState<View>('table');
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -304,6 +321,7 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
         <article><span className="blue"><AppIcon name="book-open" size={22} /></span><div><strong>{KATAKANA_WORDS.length}</strong><small>слов для чтения</small></div></article>
       </section>
 
+      <div className="katakana-tables">
       {(['basic', 'voiced'] as const).map((group) => (
         <section key={group} className="radical-catalog-panel">
           <div className="radical-catalog-head">
@@ -312,10 +330,15 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
             </div>
           </div>
           <div className="kana-grid" lang="ja">
-            {KATAKANA.filter((item) => item.group === group).map((item) => {
+            {placeInTable(KATAKANA.filter((item) => item.group === group)).map(({ item, row, column }) => {
               const status = getKanaStatus(storage.kanaProgress[item.kana]);
               return (
-                <div key={item.kana} className={`kana-cell ${status}`} title={status === 'learned' ? 'выучено' : status === 'learning' ? 'в работе' : 'ещё не встречался'}>
+                <div
+                  key={item.kana}
+                  className={`kana-cell ${status}`}
+                  style={{ gridRow: row, gridColumn: column }}
+                  title={status === 'learned' ? 'выучено' : status === 'learning' ? 'в работе' : 'ещё не встречался'}
+                >
                   <strong>{item.kana}</strong>
                   <span>{item.romaji}</span>
                 </div>
@@ -324,6 +347,7 @@ export default function KatakanaScreen({ storage, onCompleteSession }: KatakanaS
           </div>
         </section>
       ))}
+      </div>
 
       <p className="radical-caveat" lang="ru">
         В словах встречаются и маленькие знаки: <span lang="ja">ャ ュ ョ</span> смягчают слог (<span lang="ja">ニュ</span> — nyu),{' '}
