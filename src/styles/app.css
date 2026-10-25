@@ -6322,3 +6322,35 @@ button:active:not(:disabled) {
 .contextual-empty-state p {
   margin: 0;
 }
+
+/* Backup panel in the profile */
+.settings-backup-panel {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 14px;
+}
+
+.backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.backup-text {
+  min-height: 84px;
+  width: 100%;
+  resize: vertical;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.8rem;
+}
+
+.backup-message {
+  margin: 0;
+  color: var(--accent-strong, #1f6b5d);
+  font-weight: 600;
+}
+
+.backup-message.error {
+  color: #c94a5e;
+}
+

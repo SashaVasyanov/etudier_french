@@ -561,29 +561,72 @@ export function loadStorage(): StorageLoadResult {
   }
 }
 
+/**
+ * localStorage holds about 5 MB per app. Leave room for the daily backup copy
+ * and the lesson draft: refuse growth (imports) past this estimate.
+ */
+export const STORAGE_SOFT_LIMIT_BYTES = 2_000_000;
+
+/** Rough UTF-16 size of the saved data, as localStorage counts it. */
+export function estimateStorageBytes(storage: AppStorage): number {
+  return JSON.stringify(storage).length * 2;
+}
+
+function readEnvelopeDay(raw: string | null): string | null {
+  if (!raw) return null;
+  try {
+    const value: unknown = JSON.parse(raw);
+    return isRecord(value) && typeof value.savedAt === 'string' ? getTodayDateKey(new Date(value.savedAt)) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function saveStorage(storage: AppStorage): StorageSaveResult {
+  const now = new Date();
   const envelope: StorageEnvelope = {
     version: STORAGE_VERSION,
-    savedAt: new Date().toISOString(),
+    savedAt: now.toISOString(),
     payload: storage,
   };
-  let currentRaw: string | null;
+  const serialized = JSON.stringify(envelope);
 
   try {
-    currentRaw = window.localStorage.getItem(STORAGE_KEY);
+    const currentRaw = window.localStorage.getItem(STORAGE_KEY);
     if (currentRaw) {
+      let currentIsValid = true;
       try {
         parseStoredStorage(currentRaw);
-        window.localStorage.setItem(STORAGE_BACKUP_KEY, currentRaw);
       } catch {
+        currentIsValid = false;
         const quarantineRaw = window.localStorage.getItem(STORAGE_QUARANTINE_KEY);
         const quarantineValue: unknown = quarantineRaw ? JSON.parse(quarantineRaw) : null;
         if (!isRecord(quarantineValue) || quarantineValue.raw !== currentRaw) {
           throw new Error('Primary storage was not safely quarantined.');
         }
       }
+
+      // The backup is a once-a-day snapshot (the state before today's first
+      // save), not a copy that trails the main data by one keystroke. A full
+      // quota must never block saving the main data.
+      const backupDay = readEnvelopeDay(window.localStorage.getItem(STORAGE_BACKUP_KEY));
+      if (currentIsValid && backupDay !== getTodayDateKey(now)) {
+        try {
+          window.localStorage.setItem(STORAGE_BACKUP_KEY, currentRaw);
+        } catch {
+          window.localStorage.removeItem(STORAGE_BACKUP_KEY);
+        }
+      }
     }
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(envelope));
+
+    try {
+      window.localStorage.setItem(STORAGE_KEY, serialized);
+    } catch {
+      // Make room by dropping the backup and the stale quarantine copy, then retry once.
+      window.localStorage.removeItem(STORAGE_BACKUP_KEY);
+      window.localStorage.removeItem(STORAGE_QUARANTINE_KEY);
+      window.localStorage.setItem(STORAGE_KEY, serialized);
+    }
     return { ok: true };
   } catch {
     return {
@@ -594,6 +637,20 @@ export function saveStorage(storage: AppStorage): StorageSaveResult {
         blocksSave: false,
       },
     };
+  }
+}
+
+/** A portable copy of all progress (for the «Резервная копия» panel). */
+export function exportStorageSnapshot(storage: AppStorage): string {
+  return JSON.stringify({ version: STORAGE_VERSION, savedAt: new Date().toISOString(), payload: storage });
+}
+
+/** Parses a copy made by exportStorageSnapshot; throws a readable error otherwise. */
+export function importStorageSnapshot(raw: string): AppStorage {
+  try {
+    return parseStoredStorage(raw.trim());
+  } catch (error) {
+    throw new Error(error instanceof RangeError ? error.message : 'Это не резервная копия étudier или она повреждена.');
   }
 }
 
@@ -1068,7 +1125,7 @@ export function addCustomPack(currentStorage: AppStorage, pack: import('../types
     return currentStorage;
   }
 
-  return {
+  const nextStorage: AppStorage = {
     ...currentStorage,
     customPacks: currentStorage.customPacks
       .filter((item) => item.id !== normalizedPack.id)
@@ -1083,6 +1140,12 @@ export function addCustomPack(currentStorage: AppStorage, pack: import('../types
       },
     },
   };
+
+  if (estimateStorageBytes(nextStorage) > STORAGE_SOFT_LIMIT_BYTES) {
+    throw new RangeError('Пак не поместится в локальное хранилище. Удалите ненужные паки или разделите этот на части.');
+  }
+
+  return nextStorage;
 }
 
 export function setWordPackStatus(
@@ -1162,6 +1225,24 @@ export function recordRadicalStudySession(
       .concat(historyEntry)
       .sort((left, right) => left.completedAt.localeCompare(right.completedAt))
       .slice(-120),
+  };
+}
+
+/** Removes an imported pack together with its pack state and word progress. */
+export function removeCustomPack(currentStorage: AppStorage, packId: string): AppStorage {
+  const pack = currentStorage.customPacks.find((item) => item.id === packId);
+  if (!pack) return currentStorage;
+  const wordIds = new Set(pack.words.map((item) => item.id));
+  const packStates = { ...currentStorage.packStates };
+  delete packStates[packId];
+  return {
+    ...currentStorage,
+    customPacks: currentStorage.customPacks.filter((item) => item.id !== packId),
+    packStates,
+    progressByWordId: Object.fromEntries(
+      Object.entries(currentStorage.progressByWordId).filter(([wordId]) => !wordIds.has(wordId)),
+    ),
+    lessonSourcePackId: currentStorage.lessonSourcePackId === packId ? null : currentStorage.lessonSourcePackId,
   };
 }
 

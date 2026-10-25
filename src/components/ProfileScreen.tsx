@@ -14,6 +14,7 @@ import type {
   WordProgress,
 } from '../types';
 import { AppIcon } from './AppIcon';
+import { BackupPanel } from './BackupPanel';
 
 interface ProfileScreenProps {
   learningLanguage: LearningLanguage;
@@ -31,6 +32,8 @@ interface ProfileScreenProps {
   onLessonDurationChange: (value: LessonDurationMinutes) => void;
   onLessonWordTargetChange: (value: LessonWordTarget) => void;
   onLessonSourcePackChange: (packId: string | null) => void;
+  onExportBackup: () => string;
+  onImportBackup: (raw: string) => string | null;
 }
 
 const DURATION_OPTIONS: LessonDurationMinutes[] = [10, 20, 30];
@@ -77,6 +80,8 @@ export default function ProfileScreen({
   onLessonDurationChange,
   onLessonWordTargetChange,
   onLessonSourcePackChange,
+  onExportBackup,
+  onImportBackup,
 }: ProfileScreenProps) {
   const stats = useMemo(() => countStatuses(progressList), [progressList]);
   const languageHistory = useMemo(
@@ -298,6 +303,8 @@ export default function ProfileScreen({
             </span>
           </div>
         </section>
+
+        <BackupPanel onExport={onExportBackup} onImport={onImportBackup} />
 
         <section className="settings-panel settings-history-panel">
           <div className="settings-section-title">

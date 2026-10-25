@@ -20,6 +20,8 @@ interface PackDetailScreenProps {
   onAddPack: (packId: string) => void;
   onStartPackLesson: (packId: string) => void;
   onStartPackFlashcards: (packId: string) => void;
+  /** Only for imported packs: deletes the pack and its progress. */
+  onRemovePack?: (packId: string) => void;
 }
 
 type PackStatusFilter = 'all' | 'new' | 'learning' | 'known' | 'mastered' | 'difficult';
@@ -42,8 +44,10 @@ export function PackDetailScreen({
   onAddPack,
   onStartPackLesson,
   onStartPackFlashcards,
+  onRemovePack,
 }: PackDetailScreenProps) {
   const [query, setQuery] = useState('');
+  const [confirmRemove, setConfirmRemove] = useState(false);
   const [filter, setFilter] = useState<PackStatusFilter>('all');
   const deferredQuery = useDeferredValue(query);
   const status = derivePackStatus(pack, storage);
@@ -118,6 +122,22 @@ export function PackDetailScreen({
           <button type="button" className="secondary-button" onClick={() => onStartPackFlashcards(pack.id)}>
             Карточки пака
           </button>
+          {onRemovePack ? (
+            confirmRemove ? (
+              <>
+                <button type="button" className="danger-button" onClick={() => onRemovePack(pack.id)}>
+                  Да, удалить пак и его прогресс
+                </button>
+                <button type="button" className="ghost-button" onClick={() => setConfirmRemove(false)}>
+                  Отмена
+                </button>
+              </>
+            ) : (
+              <button type="button" className="danger-button quiet-danger" onClick={() => setConfirmRemove(true)}>
+                Удалить пак
+              </button>
+            )
+          ) : null}
         </div>
       </AppCard>
 

@@ -202,3 +202,39 @@ describe('lesson size preferences', () => {
     expect(setLessonWordTargetPreference(base, 25).lessonDurationMinutes).toBe(20);
   });
 });
+
+describe('backup and storage budget', () => {
+  beforeEach(() => { installStorage(); });
+
+  it('round-trips a backup copy and rejects foreign text', async () => {
+    const { exportStorageSnapshot, importStorageSnapshot } = await import('../src/lib/storage');
+    const state = storage({ a: progress('a', 'review', { shown_count: 3 }) });
+    const restored = importStorageSnapshot(exportStorageSnapshot(state));
+    expect(restored.progressByWordId.a.status).toBe('review');
+    let message = '';
+    try { importStorageSnapshot('hello'); } catch (error) { message = (error as Error).message; }
+    expect(message).toContain('резервная копия');
+  });
+
+  it('keeps one backup snapshot per day instead of overwriting it on every save', () => {
+    const first = storage({ a: progress('a', 'learning') });
+    saveStorage(first);
+    saveStorage(storage({ a: progress('a', 'review') }));
+    saveStorage(storage({ a: progress('a', 'mastered') }));
+    const backup = JSON.parse(window.localStorage.getItem('anki-plus-storage-backup')!);
+    expect(backup.payload.progressByWordId.a.status).toBe('learning');
+  });
+
+  it('refuses an import that would overflow local storage and can remove an imported pack', async () => {
+    const { addCustomPack, removeCustomPack } = await import('../src/lib/storage');
+    const words = Array.from({ length: 1500 }, (_, index) => ({ ...word(`big-${index}`), example_original: 'x'.repeat(800), source: 'custom' as const }));
+    let message = '';
+    try { addCustomPack(storage(), { id: 'big', language: 'french', title: 'Big', description: '', accent: '#fff', words }); } catch (error) { message = (error as Error).message; }
+    expect(message).toContain('не поместится');
+    const small = addCustomPack(storage(), { id: 'small', language: 'french', title: 'Small', description: '', accent: '#fff', words: [word('s1')] });
+    expect(small.customPacks).toHaveLength(1);
+    const removed = removeCustomPack(small, 'small');
+    expect(removed.customPacks).toHaveLength(0);
+    expect(removed.packStates.small).toBeUndefined();
+  });
+});

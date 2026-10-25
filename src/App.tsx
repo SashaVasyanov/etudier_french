@@ -28,6 +28,9 @@ import {
   markWordAsIgnored,
   markWordAsKnown,
   restoreWordProgress,
+  removeCustomPack,
+  exportStorageSnapshot,
+  importStorageSnapshot,
   restoreWordToLearning,
   recordRadicalStudySession,
   saveStorage,
@@ -1139,6 +1142,13 @@ function App() {
               onAddPack={(packId) => {
                 setStorage((currentStorage) => addWordPack(currentStorage, packId));
               }}
+              onRemovePack={storage.customPacks.some((item) => item.id === selectedPack.id) ? (packId) => {
+                const updated = removeCustomPack(storageRef.current, packId);
+                storageRef.current = updated;
+                setStorage(updated);
+                setSelectedPackId(null);
+                setScreen('packs');
+              } : undefined}
               onStartPackLesson={(packId) => {
                 const pack = packs.find((item) => item.id === packId);
 
@@ -1170,6 +1180,24 @@ function App() {
               lessonDurationMinutes={storage.lessonDurationMinutes}
               lessonWordTarget={storage.lessonWordTarget}
               lessonSourcePackId={storage.lessonSourcePackId}
+              onExportBackup={() => exportStorageSnapshot(storageRef.current)}
+              onImportBackup={(raw) => {
+                try {
+                  const restored = importStorageSnapshot(raw);
+                  const saved = saveStorage(restored);
+                  if (!saved.ok) return saved.error.message;
+                  // The unload handler saves storageRef: point it at the restored
+                  // data so the reload does not write the old progress back.
+                  storageRef.current = restored;
+                  // Drafts belong to the replaced progress; start clean.
+                  saveLessonDraft('french', null);
+                  saveLessonDraft('japanese', null);
+                  window.location.reload();
+                  return null;
+                } catch (error) {
+                  return error instanceof Error ? error.message : 'Не удалось восстановить копию.';
+                }
+              }}
               onProfileNameChange={(value) => {
                 setStorage((currentStorage) => updateProfileName(currentStorage, value));
               }}
