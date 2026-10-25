@@ -678,3 +678,26 @@ export function formatDurationLabel(totalSeconds: number): string {
 
   return `${hours} ч ${minutes} мин`;
 }
+
+/** Russian plural form for a count: pluralRu(2, ['слово', 'слова', 'слов']) → 'слова'. */
+export function pluralRu(count: number, [one, few, many]: readonly [string, string, string]): string {
+  const n = Math.abs(Math.trunc(count)) % 100;
+  const last = n % 10;
+  if (n >= 11 && n <= 14) return many;
+  if (last === 1) return one;
+  if (last >= 2 && last <= 4) return few;
+  return many;
+}
+
+/** «3 слова», «11 слов», «21 урок». */
+export function countRu(count: number, forms: readonly [string, string, string]): string {
+  return `${count} ${pluralRu(count, forms)}`;
+}
+
+export const RU_WORDS = ['слово', 'слова', 'слов'] as const;
+export const RU_LESSONS = ['урок', 'урока', 'уроков'] as const;
+export const RU_ANSWERS = ['ответ', 'ответа', 'ответов'] as const;
+export const RU_MISTAKES = ['ошибка', 'ошибки', 'ошибок'] as const;
+export const RU_MODULES = ['модуль', 'модуля', 'модулей'] as const;
+export const RU_PACKS = ['пак', 'пака', 'паков'] as const;
+

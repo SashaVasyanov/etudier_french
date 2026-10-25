@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { Word } from '../types';
 import { AudioButton } from './AudioButton';
 import { JapaneseExampleReading } from './JapaneseExampleReading';
@@ -23,6 +24,19 @@ export function LessonWordPreview({
   onNext,
 }: LessonWordPreviewProps) {
   const lessonNotes = getLessonWordNotes(word);
+
+  // Enter (or Space) moves on, like the main button.
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if ((event.key !== 'Enter' && event.key !== ' ') || event.defaultPrevented || event.repeat || event.isComposing) return;
+      if (event.target instanceof Element && event.target.closest('button, input, textarea, select, a, [contenteditable="true"]')) return;
+      event.preventDefault();
+      onNext();
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onNext]);
 
   return (
     <LessonCard

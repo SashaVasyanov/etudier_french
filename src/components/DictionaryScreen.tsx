@@ -1,6 +1,7 @@
 import { useDeferredValue, useEffect, useMemo, useState } from 'react';
+import { countRu, RU_WORDS } from '../lib/utils';
 import { playWordAudio } from '../lib/audio';
-import { getLearningLanguageTitle } from '../lib/languages';
+import { getLearningLanguageLocale, getLearningLanguageTitle } from '../lib/languages';
 import { getPackByWord } from '../lib/packs';
 import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordProgress } from '../lib/storage';
@@ -40,6 +41,15 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
   const [level, setLevel] = useState<'all' | WordLevel>('all');
   const [packFilter, setPackFilter] = useState<'all' | 'core' | string>('all');
   const [visibleWordCount, setVisibleWordCount] = useState(INITIAL_VISIBLE_WORDS);
+  // Cards are compact by default; details (meaning, context, image source)
+  // open per word, so a screen shows a dozen words instead of two.
+  const [expandedWordIds, setExpandedWordIds] = useState<ReadonlySet<string>>(() => new Set());
+  const toggleExpanded = (wordId: string) => setExpandedWordIds((current) => {
+    const next = new Set(current);
+    if (next.has(wordId)) next.delete(wordId);
+    else next.add(wordId);
+    return next;
+  });
   const [showAddForm, setShowAddForm] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [newWord, setNewWord] = useState({
@@ -323,15 +333,25 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
         ) : visibleWords.map((word) => {
           const progress = getWordProgress(storage, word.id);
           const wordPacks = getPackByWord(word, packs);
+          const expanded = expandedWordIds.has(word.id);
 
           return (
-            <AppCard key={word.id} as="article" className="word-card">
+            <AppCard key={word.id} as="article" className={expanded ? 'word-card expanded' : 'word-card compact'}>
               <PackWordRow
                 media={<WordImage word={word} />}
                 title={getDisplayWord(word)}
+                titleLang={getLearningLanguageLocale(word.language)}
                 subtitle={`${word.translation} · ${word.transcription || 'транскрипция не указана'} · ${getPartOfSpeechLabel(word.part_of_speech)}`}
                 action={
                   <div className="word-card-actions">
+                    <button
+                      type="button"
+                      className="ghost-button word-details-toggle"
+                      aria-expanded={expanded}
+                      onClick={() => toggleExpanded(word.id)}
+                    >
+                      {expanded ? 'Свернуть' : 'Подробнее'}
+                    </button>
                     <button
                       type="button"
                       className="audio-button"
@@ -367,7 +387,6 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                   <>
                     <StatusBadge status={progress.status} />
                     <span className="tag-badge">{word.level}</span>
-                    <span className="tag-badge">{getPartOfSpeechLabel(word.part_of_speech)}</span>
                     {word.source === 'core' ? (
                       <span className="tag-badge">Базовый курс</span>
                     ) : word.source === 'custom' ? (
@@ -381,9 +400,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                     )}
                   </>
                 }
-                details={
-                  <WordDetailsPanel word={word} />
-                }
+                details={expanded ? <WordDetailsPanel word={word} /> : undefined}
               />
             </AppCard>
           );
@@ -395,7 +412,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
           className="secondary-button dictionary-load-more"
           onClick={() => setVisibleWordCount((count) => Math.min(count + VISIBLE_WORDS_STEP, filteredWords.length))}
         >
-          Показать ещё {Math.min(VISIBLE_WORDS_STEP, filteredWords.length - visibleWords.length)} слов
+          Показать ещё {countRu(Math.min(VISIBLE_WORDS_STEP, filteredWords.length - visibleWords.length), RU_WORDS)}
         </button>
       ) : null}
     </section>

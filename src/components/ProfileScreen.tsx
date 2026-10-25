@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { LEARNING_LANGUAGE_OPTIONS, getLearningLanguageMenuLabel } from '../lib/languages';
 import { getCurrentStreakDays } from '../lib/storage';
 import { summarizeStudyHistory } from '../lib/studyMetrics';
-import { formatDateTimeLabel, formatDurationLabel, formatLongDateLabel } from '../lib/utils';
+import { formatDateTimeLabel, formatDurationLabel, formatLongDateLabel, countRu, pluralRu, RU_LESSONS, RU_MISTAKES, RU_MODULES, RU_WORDS } from '../lib/utils';
 import type {
   AppStorage,
   LearningLanguage,
@@ -120,7 +120,7 @@ export default function ProfileScreen({
         </article>
         <article>
           <span className="settings-overview-icon blue"><AppIcon name="calendar" size={22} /></span>
-          <div><strong>{languageHistory.length}</strong><small>уроков завершено</small></div>
+          <div><strong>{languageHistory.length}</strong><small>{pluralRu(languageHistory.length, RU_LESSONS)} завершено</small></div>
         </article>
       </section>
 
@@ -274,11 +274,11 @@ export default function ProfileScreen({
           <div className="settings-summary-list">
             <span>
               <strong>{summary.weeklyLessons}</strong>
-              уроков за 7 дней
+              {pluralRu(summary.weeklyLessons, RU_LESSONS)} за 7 дней
             </span>
             <span>
               <strong>{summary.totalWeeklyWords}</strong>
-              слов за 7 дней
+              {pluralRu(summary.totalWeeklyWords, RU_WORDS)} за 7 дней
             </span>
             <span>
               <strong>{summary.weeklyAccuracy}%</strong>
@@ -286,11 +286,11 @@ export default function ProfileScreen({
             </span>
             <span>
               <strong>{summary.monthlyLessons}</strong>
-              уроков за 30 дней
+              {pluralRu(summary.monthlyLessons, RU_LESSONS)} за 30 дней
             </span>
             <span>
               <strong>{summary.totalMonthlyWords}</strong>
-              слов за 30 дней
+              {pluralRu(summary.totalMonthlyWords, RU_WORDS)} за 30 дней
             </span>
             <span>
               <strong>{summary.monthlyAccuracy}%</strong>
@@ -320,7 +320,7 @@ export default function ProfileScreen({
                   </div>
                   <span>{getModeLabel(entry.mode)}</span>
                   <p>
-                    {entry.wordsLearned} слов · {entry.mistakesMade} ошибок · {entry.modulesCompleted} модулей ·{' '}
+                    {countRu(entry.wordsLearned, RU_WORDS)} · {countRu(entry.mistakesMade, RU_MISTAKES)} · {countRu(entry.modulesCompleted, RU_MODULES)} ·{' '}
                     {entry.durationMinutes} мин · {formatDurationLabel(entry.timeSpentSeconds)}
                   </p>
                 </article>

@@ -44,6 +44,27 @@ export function MultipleChoiceExercise({
     .filter(Boolean)
     .join(' ');
 
+  // Keys 1–9 pick an answer, so a lesson can be done from the keyboard.
+  useEffect(() => {
+    if (isSubmitted || !exercise.options?.length) {
+      return undefined;
+    }
+
+    const options = exercise.options;
+    function handleDigit(event: KeyboardEvent) {
+      if (event.defaultPrevented || event.repeat || event.metaKey || event.ctrlKey || event.altKey) return;
+      if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+      const index = Number(event.key) - 1;
+      if (Number.isInteger(index) && index >= 0 && index < options.length) {
+        event.preventDefault();
+        onSelect(options[index].label);
+      }
+    }
+
+    window.addEventListener('keydown', handleDigit);
+    return () => window.removeEventListener('keydown', handleDigit);
+  }, [exercise.options, isSubmitted, onSelect]);
+
   useEffect(() => {
     if (!isSubmitted) {
       return undefined;
@@ -123,7 +144,7 @@ export function MultipleChoiceExercise({
               .filter(Boolean)
               .join(' ')}
           >
-            {exercise.options?.map((option) => {
+            {exercise.options?.map((option, optionIndex) => {
               const isCorrect = option.label === exercise.correctAnswer;
               const isSelected = option.label === selectedAnswer;
               const state = isSubmitted
@@ -144,7 +165,8 @@ export function MultipleChoiceExercise({
                   className={word.language === 'japanese' && containsJapaneseKanji(option.label) ? 'japanese-kanji-choice' : ''}
                   onClick={() => onSelect(option.label)}
                 >
-                  {option.label}
+                  {exercise.options!.length <= 9 ? <span className="choice-key" aria-hidden="true">{optionIndex + 1}</span> : null}
+                  <span lang={word.language === 'japanese' && isTranslationExercise ? 'ja' : undefined}>{option.label}</span>
                 </LessonChoiceButton>
               );
             })}

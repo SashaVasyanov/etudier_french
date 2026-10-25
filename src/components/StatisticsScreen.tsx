@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { AppStorage, LearningLanguage, Word, WordLevel } from '../types';
-import { formatDurationLabel, getTodayDateKey, percentage } from '../lib/utils';
+import { formatDurationLabel, getTodayDateKey, percentage, countRu, RU_LESSONS, RU_WORDS } from '../lib/utils';
 import { getCurrentStreakDays } from '../lib/storage';
 import { getRecentWordCounts } from '../lib/studyMetrics';
 import { getPartOfSpeechLabel } from '../lib/wordPresentation';
@@ -182,7 +182,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
         </article>
         <article className="analytics-kpi-card analytics-kpi-orange">
           <span className="analytics-kpi-icon"><AppIcon name="flame" size={22} /></span>
-          <div><span>Серия</span><strong>{currentStreak} дн.</strong><small>{completedLessons} уроков завершено</small></div>
+          <div><span>Серия</span><strong>{currentStreak} дн.</strong><small>{countRu(completedLessons, RU_LESSONS)} завершено</small></div>
         </article>
         <article className="analytics-kpi-card analytics-kpi-blue">
           <span className="analytics-kpi-icon"><AppIcon name="clock" size={22} /></span>
@@ -195,9 +195,9 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
           <div className="analytics-card-head">
             <div>
               <h2>Слова за неделю</h2>
-              <p>{wordsInProcess} слов остаётся в активном процессе.</p>
+              <p>{wordsInProcess > 0 ? `В работе сейчас ${countRu(wordsInProcess, RU_WORDS)}.` : 'Сейчас нет слов в работе.'}</p>
             </div>
-            <span className="analytics-summary-badge">+{weeklyTotal} слов</span>
+            <span className="analytics-summary-badge">+{countRu(weeklyTotal, RU_WORDS)}</span>
           </div>
           <div className={weeklyTotal === 0 ? 'analytics-week-chart is-empty' : 'analytics-week-chart'} aria-label="Количество выученных слов за последние семь дней">
             {weeklyWords.map((item) => (

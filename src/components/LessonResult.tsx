@@ -1,5 +1,5 @@
 import { getDisplayWord } from '../lib/wordPresentation';
-import { percentage } from '../lib/utils';
+import { percentage, countRu, RU_ANSWERS } from '../lib/utils';
 import type { ExerciseOutcome, Word } from '../types';
 import { AppCard } from './AppCard';
 import { WordImage } from './WordImage';
@@ -37,7 +37,7 @@ export function LessonResult({
       <AppCard as="section" tone="hero">
         <div className="result-hero">
           <span className="eyebrow">Результат урока</span>
-          <h2 className="result-title">{correctAnswers} правильных ответов</h2>
+          <h2 className="result-title">Правильно: {countRu(correctAnswers, RU_ANSWERS)}</h2>
           <p className="result-score">{successRate}% успеха</p>
           <p className="result-message">{getMessage(successRate)}</p>
         </div>

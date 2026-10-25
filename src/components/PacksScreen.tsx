@@ -85,7 +85,7 @@ export default function PacksScreen({ learningLanguage, packs, storage, onAddPac
             className="text-input"
             value={importTitle}
             maxLength={IMPORT_LIMITS.titleLength}
-            placeholder="Например, Поездка во Францию"
+            placeholder={learningLanguage === 'french' ? 'Например, Поездка во Францию' : 'Например, Поездка в Японию'}
             aria-describedby={importFeedback ? 'pack-import-message' : undefined}
             onChange={(event) => {
               setImportTitle(event.target.value);
@@ -98,7 +98,9 @@ export default function PacksScreen({ learningLanguage, packs, storage, onAddPac
             className="text-input pack-import-textarea"
             value={importText}
             maxLength={IMPORT_LIMITS.rawTextLength}
-            placeholder={'bonjour\tпривет\nmerci\tспасибо\nau revoir\tдо свидания'}
+            placeholder={learningLanguage === 'french'
+              ? 'bonjour\tпривет\nmerci\tспасибо\nau revoir\tдо свидания'
+              : 'こんにちは\tздравствуйте\nありがとう\tспасибо\nさようなら\tдо свидания'}
             aria-describedby={importFeedback ? 'pack-import-line-count pack-import-message' : 'pack-import-line-count'}
             onChange={(event) => {
               setImportText(event.target.value);

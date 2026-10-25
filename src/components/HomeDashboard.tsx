@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { getTodayDateKey, percentage } from '../lib/utils';
+import { getTodayDateKey, percentage, countRu, RU_ANSWERS, RU_PACKS, RU_WORDS } from '../lib/utils';
 import { getCurrentStreakDays } from '../lib/storage';
 import { getPackCompletionRatio } from '../lib/packs';
 import { getLessonProgress } from '../lib/lessonSession';
@@ -170,7 +170,7 @@ export function HomeDashboard({
           </div>
         ) : (
           <div className="daily-journey-footer">
-            <span className="daily-complete-meta"><AppIcon name="check-circle" size={18} /> {completedModuleCount || 5} из 5 модулей · {dailyCompletion?.totalAnswers ?? 0} ответов</span>
+            <span className="daily-complete-meta"><AppIcon name="check-circle" size={18} /> {completedModuleCount || 5} из 5 модулей · {countRu(dailyCompletion?.totalAnswers ?? 0, RU_ANSWERS)}</span>
             <button type="button" className="daily-start-button" onClick={onStartExtraLesson}>
               Продолжить практику <AppIcon name="arrow-right" size={19} />
             </button>
@@ -218,7 +218,7 @@ export function HomeDashboard({
               <h2>{activePack?.title ?? 'Выбери пак'}</h2>
             </div>
           </div>
-          <p>{activePack ? `${activePack.words.length} слов · ${packCompletion}% освоено` : `${addedPacksCount} паков уже добавлено`}</p>
+          <p>{activePack ? `${countRu(activePack.words.length, RU_WORDS)} · ${packCompletion}% освоено` : addedPacksCount > 0 ? `Добавлено: ${countRu(addedPacksCount, RU_PACKS)}` : 'Паки ещё не добавлены'}</p>
           <div className="pack-bento-progress"><span style={{ width: `${packCompletion}%` }} /></div>
           <button type="button" className="text-action-button" onClick={onOpenPacks}>Открыть паки <AppIcon name="arrow-right" size={17} /></button>
         </section>
@@ -228,7 +228,7 @@ export function HomeDashboard({
           <div>
             <span>Сегодняшний ритм</span>
             <h2>{today && today.totalAnswers > 0 ? `${todayAccuracy}% точность` : 'Первый шаг ждёт'}</h2>
-            <p>{today ? `${today.wordsLearned} слов освоено · ${today.totalAnswers} ответов` : 'Начни короткий урок — и появится твоя статистика.'}</p>
+            <p>{today ? `Освоено: ${countRu(today.wordsLearned, RU_WORDS)} · ${countRu(today.totalAnswers, RU_ANSWERS)}` : 'Начни короткий урок — и появится твоя статистика.'}</p>
           </div>
         </section>
 

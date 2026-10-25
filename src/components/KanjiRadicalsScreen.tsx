@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { countRu, RU_ANSWERS } from '../lib/utils';
 import { KANJI_RADICALS, getKanjiRadical } from '../data/kanjiRadicals';
 import { getRadicalProgress } from '../lib/storage';
 import type {
@@ -263,7 +264,7 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
 
     return (
-      <section className="radicals-page radical-study-page">
+      <section className="radicals-page radical-study-page" lang="ja">
         <header className="radical-study-progress">
           <button type="button" className="radical-back-button" onClick={() => setView('catalog')}>
             <AppIcon name="close" size={20} /> Завершить
@@ -328,7 +329,7 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
     const accuracy = Math.round((correctAnswers / Math.max(1, outcomes.length)) * 100);
 
     return (
-      <section className="radicals-page radical-result-page">
+      <section className="radicals-page radical-result-page" lang="ja">
         <article className="radical-result-card">
           <span className="radical-result-mark"><AppIcon name="sparkles" size={32} /></span>
           <span className="radical-question-kicker">Тренировка завершена</span>
@@ -355,7 +356,7 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
       : 0;
 
     return (
-      <section className="radicals-page radical-detail-page">
+      <section className="radicals-page radical-detail-page" lang="ja">
         <button type="button" className="radical-back-button" onClick={() => setView('catalog')}>
           <AppIcon name="arrow-left" size={19} /> Все ключи
         </button>
@@ -392,7 +393,7 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
             <span className="radical-info-icon blue"><AppIcon name="chart" size={21} /></span>
             <div>
               <h2>Личный прогресс</h2>
-              <p>{progress.attempts > 0 ? `${progress.attempts} ответов · ${accuracy}% точность` : 'Ещё не было ответов по этому ключу.'}</p>
+              <p>{progress.attempts > 0 ? `${countRu(progress.attempts, RU_ANSWERS)} · ${accuracy}% точность` : 'Ещё не было ответов по этому ключу.'}</p>
             </div>
           </section>
         </div>
@@ -432,7 +433,7 @@ export default function KanjiRadicalsScreen({ storage, onCompleteSession }: Kanj
   }
 
   return (
-    <section className="radicals-page">
+    <section className="radicals-page" lang="ja">
       <header className="radicals-hero">
         <div>
           <span className="radical-question-kicker">Отдельный режим · 部首</span>

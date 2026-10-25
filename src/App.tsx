@@ -262,6 +262,12 @@ function App() {
     };
   }, [storage.learningLanguage, wordsReloadKey]);
 
+  // A new screen or a new lesson step starts at the top, not where the
+  // previous page was scrolled to.
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [screen, stepIndex]);
+
   useEffect(() => {
     if (!undoExclusion) return undefined;
     const timeoutId = window.setTimeout(() => setUndoExclusion(null), 12_000);
@@ -906,7 +912,7 @@ function App() {
         ) : null}
 
         {screen === 'lesson' && currentStep && currentWord && session ? (
-          <section className="lesson-shell">
+          <section className="lesson-shell" lang={storage.learningLanguage === 'japanese' ? 'ja' : undefined}>
             <div className="lesson-focus-screen">
               <header className="lesson-session-progress" aria-label="Прогресс текущего урока">
                 <div className="lesson-session-topline">
