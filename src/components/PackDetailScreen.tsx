@@ -4,6 +4,7 @@ import { derivePackStatus, getPackCompletionRatio } from '../lib/packs';
 import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordProgress } from '../lib/storage';
 import type { AppStorage, LessonDurationMinutes, WordPack } from '../types';
+import { AppIcon } from './AppIcon';
 import { AppCard } from './AppCard';
 import { LessonDurationSelector } from './LessonDurationSelector';
 import { PackWordRow } from './PackWordRow';
@@ -80,6 +81,10 @@ export function PackDetailScreen({
 
   return (
     <section className="dashboard-shell">
+      <button type="button" className="back-link" onClick={onBack}>
+        <AppIcon name="arrow-left" size={18} /> Темы
+      </button>
+
       <AppCard as="header" tone="hero" className="pack-detail-hero">
         <div className="pack-detail-head">
           <div className="hero-copy">
@@ -99,10 +104,6 @@ export function PackDetailScreen({
             <span className="mini-stat-value">{completion}%</span>
             <span className="mini-stat-label">Освоено</span>
           </div>
-          <div className="mini-stat">
-            <span className="mini-stat-value">{filteredWords.length}</span>
-            <span className="mini-stat-label">После фильтра</span>
-          </div>
         </div>
 
         <div className="progress-track" aria-hidden="true">
@@ -110,18 +111,17 @@ export function PackDetailScreen({
         </div>
 
         <div className="result-actions">
-          <button type="button" className="ghost-button" onClick={onBack}>
-            Назад к пакам
-          </button>
-          <button type="button" className="secondary-button" disabled={status !== 'not_added'} onClick={() => onAddPack(pack.id)}>
-            {status === 'not_added' ? 'Добавить пак' : 'Пак добавлен'}
-          </button>
           <button type="button" className="primary-button" onClick={() => onStartPackLesson(pack.id)}>
             Учить этот пак
           </button>
           <button type="button" className="secondary-button" onClick={() => onStartPackFlashcards(pack.id)}>
-            Карточки пака
+            Карточки
           </button>
+          {status === 'not_added' ? (
+            <button type="button" className="secondary-button" onClick={() => onAddPack(pack.id)}>
+              Добавить в уроки
+            </button>
+          ) : null}
           {onRemovePack ? (
             confirmRemove ? (
               <>

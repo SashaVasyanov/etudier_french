@@ -15,9 +15,10 @@ interface StatisticsScreenProps {
 type DiagramMode = 'levels' | 'speech';
 
 const LEVEL_COLORS: Record<WordLevel, string> = {
-  A1: '#049d41',
-  A2: '#1a8ce2',
-  B1: '#f97316',
+  // An ordered scale: one hue, lighter for easier levels.
+  A1: 'color-mix(in srgb, var(--accent) 40%, var(--surface))',
+  A2: 'color-mix(in srgb, var(--accent) 70%, var(--surface))',
+  B1: 'var(--accent)',
 };
 
 const LEVEL_LABELS: Record<WordLevel, string> = {
@@ -26,7 +27,7 @@ const LEVEL_LABELS: Record<WordLevel, string> = {
   B1: 'Средний · B1',
 };
 
-const SPEECH_COLORS = ['#049d41', '#1a8ce2', '#f97316', '#e11d48', '#7c3aed', '#0f766e', '#ca8a04', '#475569'];
+const SPEECH_COLORS = Array.from({ length: 8 }, (_, index) => `var(--chart-${index + 1})`);
 
 function polarToCartesian(center: number, radius: number, angleInDegrees: number): { x: number; y: number } {
   const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180;
@@ -57,7 +58,7 @@ function buildDiagramSegments(items: Array<{ value: number; color: string }>): A
   const visibleItems = items.filter((item) => item.value > 0);
 
   if (total <= 0 || visibleItems.length === 0) {
-    return [{ color: '#e2e4e9', path: describeFullPie(20) }];
+    return [{ color: 'var(--fill-strong)', path: describeFullPie(20) }];
   }
 
   if (visibleItems.length === 1) {
@@ -119,7 +120,7 @@ function countSpeechTypes(words: Word[]): Array<{ label: string; value: number; 
     .map(([partOfSpeech, value], index) => ({
       label: getPartOfSpeechLabel(partOfSpeech),
       value,
-      color: SPEECH_COLORS[index % SPEECH_COLORS.length] ?? '#475569',
+      color: SPEECH_COLORS[index % SPEECH_COLORS.length] ?? 'var(--chart-8)',
     }));
 }
 
@@ -224,7 +225,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
           <div className="analytics-donut">
             <svg className="analytics-donut-svg" viewBox="0 0 42 42" role="img" aria-label="Разбивка выученных слов">
               {diagramSegments.map((segment, index) => (
-                <path key={`${segment.color}-${index}`} d={segment.path} fill={segment.color} />
+                <path key={`${segment.color}-${index}`} d={segment.path} style={{ fill: segment.color }} />
               ))}
             </svg>
             <div className="analytics-donut-inner">

@@ -1,0 +1,977 @@
+/*
+ * Liquid Glass layer, loaded after app.css.
+ *
+ * Content sits on plain grouped surfaces (like Notes and Settings); only
+ * floating chrome — the sidebar, the lesson toolbar, popovers — is glass.
+ * One accent (system blue); green and red only mean right and wrong.
+ */
+
+/* ---------- Base ---------- */
+
+.app-shell,
+.dashboard-shell {
+  background: var(--bg);
+  color: var(--label);
+}
+
+body {
+  background: var(--bg);
+}
+
+h1,
+h2,
+h3 {
+  color: var(--label);
+  letter-spacing: -0.02em;
+}
+
+:where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+/* Small headings above sections: plain secondary text, sentence case. */
+.dashboard-card-kicker,
+.daily-card-kicker,
+.home-language-chip,
+.bento-heading > div > span,
+.practice-bento-card > div > span,
+.today-bento-card > div > span,
+.radical-question-kicker,
+.settings-section-title p,
+.input-label {
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+.dashboard-card-kicker,
+.daily-card-kicker,
+.bento-heading > div > span,
+.practice-bento-card > div > span,
+.today-bento-card > div > span,
+.radical-question-kicker {
+  color: var(--label-2);
+  font-size: 0.8rem;
+}
+
+/* ---------- Glass sidebar ---------- */
+
+@media (min-width: 1181px) {
+  .desktop-app-layout:not(.lesson-desktop-layout) {
+    grid-template-columns: 236px minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 821px) {
+  .app-sidebar {
+    position: sticky;
+    top: 10px;
+    height: calc(100vh - 20px);
+    margin: 10px 0 10px 10px;
+    padding: 22px 12px 14px;
+    border-radius: 26px;
+  }
+}
+
+.app-sidebar {
+  border: 1px solid var(--glass-edge);
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-float);
+  gap: 22px;
+}
+
+.sidebar-logo {
+  padding: 0 10px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.sidebar-logo span {
+  border-radius: 9px;
+  background: var(--accent);
+  font-family: var(--font-rounded);
+  font-weight: 700;
+}
+
+.app-nav {
+  gap: 2px;
+}
+
+.nav-button {
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--label);
+  font-size: 0.92rem;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.nav-button .nav-icon {
+  color: var(--accent);
+}
+
+.nav-button strong {
+  font-weight: 500;
+}
+
+.nav-button:hover {
+  border-color: transparent;
+  background: var(--fill);
+  color: var(--label);
+  box-shadow: none;
+}
+
+.nav-button.active,
+.nav-button.active:hover {
+  background: var(--accent);
+  color: var(--on-fill);
+}
+
+.nav-button.active .nav-icon {
+  color: var(--on-fill);
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+}
+
+.sidebar-streak-card {
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--fill);
+}
+
+.sidebar-streak-card strong {
+  font-weight: 600;
+}
+
+.sidebar-streak-card p {
+  color: var(--label-2);
+}
+
+.sidebar-streak-icon {
+  background: transparent;
+  color: var(--orange);
+}
+
+/* ---------- Surfaces ---------- */
+
+.home-bento-card,
+.settings-panel,
+.analytics-card,
+.analytics-kpi-card,
+.word-card,
+.pack-card,
+.pack-import-card,
+.mistake-card,
+.result-card,
+.filter-card,
+.radical-catalog-panel,
+.radical-info-card,
+.radical-question-card,
+.radical-result-card,
+.radical-card,
+.lesson-card,
+.app-card,
+.mini-panel,
+.duration-card,
+.settings-user-card,
+.dictionary-hero,
+.pack-detail-hero,
+.completion-hero,
+.result-hero,
+.hero-card {
+  border-color: transparent;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.home-bento-card,
+.settings-panel,
+.analytics-card,
+.pack-card,
+.pack-import-card,
+.radical-catalog-panel,
+.dictionary-hero,
+.pack-detail-hero,
+.completion-hero,
+.result-hero,
+.hero-card {
+  border-radius: 20px;
+}
+
+.word-card,
+.analytics-kpi-card,
+.radical-info-card,
+.radical-card,
+.mini-panel,
+.duration-card {
+  border-radius: 16px;
+}
+
+/* Insets inside a card use the system fill instead of another card. */
+.settings-summary-panel article,
+.settings-profile-overview article,
+.radical-summary-grid article,
+.progress-bento-stats > span,
+.flashcard-meta-item,
+.duration-option {
+  border-color: transparent;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.settings-overview-icon,
+.analytics-kpi-icon,
+.radical-summary-grid article > span,
+.bento-icon,
+.settings-icon,
+.radical-info-icon {
+  background: var(--fill) !important;
+  color: var(--label-2) !important;
+}
+
+/* ---------- Buttons ---------- */
+
+.primary-button,
+.secondary-button,
+.danger-button,
+.ghost-button,
+.audio-button,
+.tab-button,
+.level-select,
+.daily-start-button,
+.radical-primary-button,
+.radical-secondary-button,
+.radical-back-button,
+.word-known-button,
+.feedback-replay-button {
+  min-height: 40px;
+  padding: 9px 18px;
+  border: 0;
+  border-radius: var(--radius-capsule);
+  font-weight: 600;
+  box-shadow: none;
+  transition: background-color 120ms ease, color 120ms ease, transform 120ms ease;
+}
+
+.primary-button:active,
+.secondary-button:active,
+.daily-start-button:active,
+.radical-primary-button:active {
+  transform: scale(0.98);
+}
+
+/* Filled: the one main action on a screen. */
+.primary-button,
+.daily-start-button,
+.radical-primary-button {
+  background: var(--accent);
+  color: var(--on-fill);
+}
+
+.primary-button:hover,
+.daily-start-button:hover,
+.radical-primary-button:hover {
+  background: var(--accent-hover);
+  box-shadow: none;
+}
+
+/* Tinted: secondary actions. */
+.secondary-button,
+.word-known-button {
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.secondary-button:hover,
+.word-known-button:hover {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  box-shadow: none;
+}
+
+/* Gray: neutral actions (back, details, audio). */
+.ghost-button,
+.audio-button,
+.tab-button,
+.level-select,
+.radical-secondary-button,
+.radical-back-button,
+.feedback-replay-button {
+  background: var(--fill);
+  color: var(--label);
+}
+
+.ghost-button:hover,
+.audio-button:hover,
+.tab-button:hover,
+.level-select:hover,
+.radical-secondary-button:hover,
+.radical-back-button:hover,
+.feedback-replay-button:hover {
+  background: var(--fill-strong);
+  box-shadow: none;
+}
+
+.danger-button {
+  background: var(--red);
+  color: var(--on-fill);
+}
+
+/* Rare destructive choices are plain red text, never a big red block. */
+.danger-button.quiet-danger {
+  border: 0;
+  background: transparent;
+  color: var(--red);
+  font-weight: 500;
+}
+
+.danger-button.quiet-danger:hover {
+  background: var(--red-tint);
+}
+
+.text-action-button {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Round icon-only buttons (audio). */
+.icon-button {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  color: var(--accent);
+}
+
+/* Back navigation, as in the title bar of an Apple app. */
+.back-link {
+  justify-self: start;
+  min-height: 32px;
+  padding: 4px 10px 4px 4px;
+  border: 0;
+  border-radius: var(--radius-capsule);
+  background: transparent;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.back-link:hover {
+  background: var(--accent-tint);
+}
+
+/* Segmented controls (tabs, filters, durations). */
+.tab-row,
+.duration-switch,
+.radical-filters {
+  padding: 2px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--fill);
+  gap: 2px;
+}
+
+.tab-button,
+.duration-switch button,
+.radical-filters button {
+  min-height: 30px;
+  padding: 5px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--label);
+  font-size: 0.86rem;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.tab-button.active,
+.duration-switch button.active,
+.radical-filters button.active {
+  background: var(--surface);
+  color: var(--label);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tab-button.active,
+  .duration-switch button.active,
+  .radical-filters button.active {
+    background: #636366;
+  }
+}
+
+/* ---------- Inputs ---------- */
+
+.text-input,
+.settings-input,
+.settings-select,
+.radical-search input,
+.dictionary-toolbar input,
+.dictionary-toolbar select {
+  min-height: 38px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--fill);
+  color: var(--label);
+  box-shadow: none;
+}
+
+.text-input:focus,
+.settings-input:focus,
+.settings-select:focus,
+.radical-search input:focus {
+  outline: 3px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  outline-offset: 0;
+}
+
+::placeholder {
+  color: var(--label-3);
+}
+
+/* ---------- Home ---------- */
+
+.learning-home h1,
+.analytics-head h1,
+.settings-head h1 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.home-language-chip {
+  min-height: 24px;
+  padding: 0 9px;
+  background: var(--fill);
+  color: var(--label-2);
+  font-size: 0.78rem;
+}
+
+.streak-chip {
+  min-height: 34px;
+  border: 0;
+  border-radius: var(--radius-capsule);
+  background: var(--fill);
+  color: var(--label);
+  font-weight: 600;
+}
+
+.home-avatar-button,
+.profile-chip span,
+.settings-user-card > span,
+.radicals-bento-glyph {
+  border-radius: 50%;
+  background: var(--fill-strong);
+  color: var(--label);
+}
+
+/* Today's lesson: a calm card, the only filled button is «Начать урок». */
+.daily-journey-card,
+.daily-journey-card.is-complete {
+  border-radius: 24px;
+  background: var(--surface);
+  color: var(--label);
+  box-shadow: var(--shadow-card);
+}
+
+.daily-journey-card h2 {
+  color: var(--label);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.daily-journey-card p,
+.daily-complete-meta {
+  color: var(--label-2);
+}
+
+.daily-route-step,
+.daily-route-step.done {
+  border: 0;
+  border-radius: 14px;
+  background: var(--fill);
+}
+
+.daily-route-step > span {
+  background: var(--surface);
+  color: var(--label-2);
+  font-weight: 600;
+}
+
+.daily-route-step.done > span {
+  background: var(--green);
+  color: var(--on-fill);
+}
+
+.daily-route-step strong {
+  font-weight: 500;
+}
+
+.duration-switch button {
+  color: var(--label);
+}
+
+.practice-bento-card,
+.today-bento-card,
+.pack-bento-card,
+.progress-bento-card,
+.radicals-bento-card {
+  background: var(--surface) !important;
+}
+
+.practice-bento-actions button {
+  border: 0;
+  border-radius: var(--radius-capsule);
+  background: var(--fill);
+  color: var(--label);
+  font-weight: 500;
+}
+
+.home-progress-track,
+.pack-bento-progress,
+.progress-track {
+  background: var(--fill);
+}
+
+.home-progress-track span,
+.pack-bento-progress span {
+  background: var(--accent);
+}
+
+/* ---------- Hero blocks of the separate modes ---------- */
+
+.radicals-hero,
+.radical-detail-hero {
+  border: 0;
+  background: var(--surface);
+  color: var(--label);
+  box-shadow: var(--shadow-card);
+}
+
+.radicals-hero h1,
+.radicals-hero p,
+.radical-detail-hero h1,
+.radical-detail-hero p {
+  color: var(--label);
+}
+
+.radicals-hero p,
+.radical-detail-hero p {
+  color: var(--label-2);
+}
+
+.radicals-hero .radical-question-kicker {
+  color: var(--label-2);
+}
+
+.radical-card {
+  border: 0;
+}
+
+.radical-card:hover {
+  background: var(--fill);
+}
+
+.radicals-hero .radical-primary-button {
+  background: var(--accent);
+  color: var(--on-fill);
+}
+
+.analytics-donut {
+  box-shadow: none;
+}
+
+.analytics-donut-inner {
+  background: var(--surface);
+}
+
+/* ---------- Lesson ---------- */
+
+/* Notes-style squared paper behind the lesson. */
+.lesson-shell {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: center top;
+}
+
+.lesson-session-progress {
+  border: 1px solid var(--glass-edge);
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-float);
+}
+
+.lesson-close-button {
+  border-radius: 50%;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-edge);
+}
+
+.lesson-exercise-card,
+.lesson-preview-card,
+.lesson-memory-card,
+.lesson-card,
+.flashcard-view {
+  border: 1px solid var(--glass-edge);
+  background: var(--surface);
+  box-shadow: var(--shadow-float);
+}
+
+.choice-button {
+  min-height: 52px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--fill);
+  color: var(--label);
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.choice-button:hover:not(:disabled) {
+  border-color: transparent;
+  background: var(--fill-strong);
+  box-shadow: none;
+}
+
+.choice-button.selected {
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.choice-button.correct {
+  background: var(--green-tint);
+  color: var(--green);
+}
+
+.choice-button.incorrect {
+  background: var(--red-tint);
+  color: var(--red);
+}
+
+.choice-key {
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--label-2);
+  font-weight: 600;
+}
+
+.answer-feedback {
+  border: 0;
+  border-radius: 16px;
+}
+
+.radical-option {
+  border: 0;
+  border-radius: 14px;
+  background: var(--fill);
+  color: var(--label);
+  font-weight: 500;
+}
+
+.radical-option:hover:not(:disabled),
+.radical-option.selected {
+  background: var(--fill-strong);
+}
+
+.radical-option.correct {
+  background: var(--green-tint);
+  color: var(--green);
+}
+
+.radical-option.incorrect {
+  background: var(--red-tint);
+  color: var(--red);
+}
+
+.radical-feedback {
+  border: 0;
+  border-radius: 16px;
+}
+
+.radical-feedback.success {
+  background: var(--green-tint);
+  color: var(--green);
+}
+
+.radical-feedback.error {
+  background: var(--red-tint);
+  color: var(--red);
+}
+
+.radical-feedback button {
+  border: 0;
+  border-radius: var(--radius-capsule);
+  background: var(--surface);
+  color: var(--label);
+  font-weight: 600;
+}
+
+.radical-progress-track,
+.home-progress-track {
+  background: var(--fill);
+}
+
+.radical-progress-track span {
+  background: var(--accent);
+}
+
+/* Answer states stay readable when the other options are dimmed. */
+.choice-button:disabled {
+  opacity: 0.5;
+}
+
+.choice-button.correct:disabled,
+.choice-button.incorrect:disabled,
+.choice-button.selected:disabled {
+  opacity: 1;
+}
+
+/* New word card: the word on a quiet panel, not on a blue block. */
+.lesson-preview-details {
+  background: var(--fill);
+  color: var(--label);
+}
+
+.lesson-preview-description,
+.lesson-preview-meta {
+  color: var(--label-2);
+  letter-spacing: 0;
+}
+
+.lesson-preview-details .audio-button,
+.lesson-preview-details button {
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.lesson-preview-example-card {
+  border: 0;
+  background: var(--fill);
+}
+
+.lesson-session-progress {
+  border-radius: 20px;
+}
+
+/* ---------- Badges ---------- */
+
+.tag-badge,
+.status-badge,
+.lesson-preview-badge,
+.analytics-summary-badge {
+  border: 0;
+  border-radius: var(--radius-capsule);
+  background: var(--fill);
+  color: var(--label-2);
+  font-weight: 500;
+}
+
+/* ---------- Katakana ---------- */
+
+.kana-cell {
+  border: 0;
+  background: var(--fill);
+  color: var(--label);
+}
+
+.kana-cell span {
+  color: var(--label-2);
+}
+
+.kana-cell.learning {
+  background: var(--orange-tint);
+  color: var(--label);
+}
+
+.kana-cell.learned {
+  background: var(--green-tint);
+  color: var(--green);
+}
+
+/* ---------- Narrow windows: the sidebar becomes a glass tab bar ---------- */
+
+@media (max-width: 820px) {
+  .app-sidebar {
+    inset: auto 10px calc(10px + env(safe-area-inset-bottom)) 10px;
+    padding: 6px;
+    border: 1px solid var(--glass-edge);
+    border-radius: 26px;
+  }
+
+  .nav-button {
+    min-height: 50px;
+    padding: 4px 2px;
+  }
+
+  .nav-button strong {
+    font-weight: 500;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .app-sidebar,
+  .lesson-session-progress,
+  .lesson-close-button {
+    background: var(--glass-strong);
+  }
+}
+
+/* ---------- Refinements ---------- */
+
+.eyebrow,
+.progress-caption,
+.stat-label,
+.progress-pill-label,
+.mini-stat-label,
+.info-label {
+  letter-spacing: 0;
+  font-weight: 500;
+  color: var(--label-2);
+}
+
+.status-badge {
+  justify-self: start;
+  align-self: start;
+  width: auto;
+  min-height: 26px;
+  padding: 0 10px;
+  border: 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-badge.new,
+.status-badge.not_added,
+.status-badge.added {
+  background: var(--fill);
+  color: var(--label-2);
+}
+
+.status-badge.learning,
+.status-badge.in_progress,
+.status-badge.review {
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.status-badge.mastered,
+.status-badge.completed,
+.status-badge.known {
+  background: var(--green-tint);
+  color: var(--green);
+}
+
+.status-badge.difficult {
+  background: var(--red-tint);
+  color: var(--red);
+}
+
+.mini-stat {
+  border: 0;
+  border-radius: 14px;
+  background: var(--fill);
+}
+
+.pack-detail-hero .result-actions,
+.result-actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pack-detail-hero .result-actions > button,
+.result-actions > button {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.practice-bento-actions button {
+  min-height: 40px;
+}
+
+.duration-option {
+  border: 0;
+  border-radius: 14px;
+  background: var(--fill);
+}
+
+.duration-option.active {
+  background: var(--accent-tint);
+  color: var(--label);
+}
+
+.duration-option.active strong {
+  color: var(--accent);
+}
+
+.pack-card-cover {
+  background: var(--fill);
+}
+
+.pack-kpi {
+  border: 0;
+  border-radius: 12px;
+  background: var(--fill);
+}
+
+.pack-card-actions {
+  align-items: center;
+}
+
+.pack-card-actions > button {
+  flex: 1 1 0;
+}
+
+.pack-card-added {
+  flex: 1 1 0;
+  color: var(--label-2);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+/* Long rows of tabs stay on one line and scroll instead of wrapping. */
+.tab-row,
+.tab-row-wide {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tab-row .tab-button {
+  flex: 1 0 auto;
+  white-space: nowrap;
+}

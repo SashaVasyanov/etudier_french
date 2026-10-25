@@ -7,6 +7,7 @@ import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordProgress } from '../lib/storage';
 import type { AppStorage, DictionaryTab, LearningLanguage, Word, WordLevel, WordPack } from '../types';
 import { AppCard } from './AppCard';
+import { AppIcon } from './AppIcon';
 import { PackWordRow } from './PackWordRow';
 import { StatusBadge } from './StatusBadge';
 import { WordDetailsPanel } from './WordDetailsPanel';
@@ -346,21 +347,22 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                   <div className="word-card-actions">
                     <button
                       type="button"
-                      className="ghost-button word-details-toggle"
-                      aria-expanded={expanded}
-                      onClick={() => toggleExpanded(word.id)}
-                    >
-                      {expanded ? 'Свернуть' : 'Подробнее'}
-                    </button>
-                    <button
-                      type="button"
-                      className="audio-button"
+                      className="audio-button icon-button"
+                      title="Прослушать"
                       aria-label={`Прослушать слово ${getDisplayWord(word)}`}
                       onClick={() => {
                         void playWordAudio(word);
                       }}
                     >
-                      Аудио
+                      <AppIcon name="volume" size={18} />
+                    </button>
+                    <button
+                      type="button"
+                      className="ghost-button word-details-toggle"
+                      aria-expanded={expanded}
+                      onClick={() => toggleExpanded(word.id)}
+                    >
+                      {expanded ? 'Свернуть' : 'Подробнее'}
                     </button>
                     {progress.status === 'known' || progress.status === 'ignored' ? (
                       <button

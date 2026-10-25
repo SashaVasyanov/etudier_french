@@ -60,9 +60,13 @@ export function PackCard({ pack, status, completion, onAdd, onOpen }: PackCardPr
         <button type="button" className="ghost-button" onClick={onOpen}>
           Открыть
         </button>
-        <button type="button" className="primary-button" disabled={status !== 'not_added'} onClick={onAdd}>
-          {status === 'not_added' ? 'Добавить пак' : 'Пак добавлен'}
-        </button>
+        {status === 'not_added' ? (
+          <button type="button" className="secondary-button" onClick={onAdd}>
+            Добавить
+          </button>
+        ) : (
+          <span className="pack-card-added">Добавлен в уроки</span>
+        )}
       </div>
     </AppCard>
   );
