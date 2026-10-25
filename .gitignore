@@ -4,3 +4,5 @@ dist
 .DS_Store
 .env
 Фотографии ошибок/
+scripts/build-mac.log
+scripts/build-mac.status
