@@ -35,12 +35,17 @@ export function MultipleChoiceExercise({
   const isAudioExercise = exercise.type === 'audio_to_translation_choice';
   const isOriginalExercise = exercise.type === 'original_to_translation_choice';
   const isTranslationExercise = exercise.type === 'translation_to_original_choice';
+  const isSentenceAudio = exercise.type === 'audio_sentence_choice';
+  const isArticle = exercise.type === 'article_choice';
+  const isReading = exercise.type === 'kanji_reading_choice';
   const copy = getExerciseCopy(exercise.type, word.language);
   const cardClassName = [
     'lesson-exercise-card',
     isTranslationExercise ? 'lesson-image-choice-card' : '',
     isOriginalExercise ? 'lesson-translation-choice-card' : '',
-    isAudioExercise ? 'lesson-audio-choice-card' : '',
+    isAudioExercise || isSentenceAudio ? 'lesson-audio-choice-card' : '',
+    isSentenceAudio ? 'lesson-sentence-choice-card' : '',
+    isArticle ? 'lesson-article-card' : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -120,6 +125,30 @@ export function MultipleChoiceExercise({
               subtitleClassName="lesson-prompt-copy"
             />
           ) : null}
+          {isArticle ? (
+            <CenteredWordBlock
+              title={exercise.prompt}
+              subtitle={`${exercise.context ?? ''} · ${copy.hint}`}
+              titleClassName="lesson-prompt-title lesson-word-title"
+              subtitleClassName="lesson-prompt-copy"
+            />
+          ) : null}
+          {isReading ? (
+            <CenteredWordBlock
+              title={exercise.prompt}
+              subtitle={`${exercise.context ?? ''} · ${copy.hint}`}
+              titleClassName="lesson-prompt-title lesson-word-title"
+              subtitleClassName="lesson-prompt-copy"
+            />
+          ) : null}
+          {isSentenceAudio ? (
+            <div className="audio-panel lesson-audio-panel">
+              <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
+                Повторить фразу
+              </button>
+              <p className="lesson-prompt-copy">{copy.hint}</p>
+            </div>
+          ) : null}
           {isAudioExercise ? (
             <div className="audio-panel lesson-audio-panel">
               <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
@@ -140,7 +169,7 @@ export function MultipleChoiceExercise({
           <div
             className={[
               'choice-list',
-              isTranslationExercise ? 'lesson-choice-grid' : 'lesson-choice-stack',
+              isTranslationExercise || isArticle || isReading ? 'lesson-choice-grid' : 'lesson-choice-stack',
             ]
               .filter(Boolean)
               .join(' ')}
@@ -167,7 +196,7 @@ export function MultipleChoiceExercise({
                   onClick={() => onSelect(option.label)}
                 >
                   {exercise.options!.length <= 9 ? <span className="choice-key" aria-hidden="true">{optionIndex + 1}</span> : null}
-                  <span lang={word.language === 'japanese' && isTranslationExercise ? 'ja' : undefined}>{option.label}</span>
+                  <span lang={word.language === 'japanese' && (isTranslationExercise || isReading) ? 'ja' : isArticle ? 'fr' : undefined}>{option.label}</span>
                 </LessonChoiceButton>
               );
             })}
@@ -181,7 +210,12 @@ export function MultipleChoiceExercise({
                   )}
                 </strong>
                 <AnswerWordDetails word={word} />
-                {word.example_original && word.example_original !== word.original ? (
+                {isSentenceAudio ? (
+                  <div className="feedback-example example-line">
+                    <span lang={word.language === 'japanese' ? 'ja' : 'fr'}>{word.example_original}</span>
+                    <SentenceAudioButton text={word.example_original} language={word.language} />
+                  </div>
+                ) : word.example_original && word.example_original !== word.original ? (
                   <div className="feedback-example example-line">
                     <span lang={word.language === 'japanese' ? 'ja' : 'fr'}>{word.example_original}</span>
                     <SentenceAudioButton text={word.example_original} language={word.language} />

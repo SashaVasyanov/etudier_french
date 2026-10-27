@@ -21,6 +21,11 @@ export function setFileStoreInvoke(invoke: Invoke | null | undefined): void {
   timer = null;
 }
 
+/** The Tauri bridge, or null outside the desktop app. */
+export function getTauriInvoke(): Invoke | null {
+  return getInvoke();
+}
+
 function getInvoke(): Invoke | null {
   if (invokeOverride !== undefined) return invokeOverride;
   if (typeof window === 'undefined') return null;

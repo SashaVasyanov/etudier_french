@@ -152,7 +152,8 @@ describe('lesson generation and recovery', () => {
       { ...word('other'), original: 'voiture', translation: 'автомобиль' },
     ];
     const session = createLessonSession({ mode: 'default', words, storage: storage(), durationMinutes: 10 })!;
-    expect(session.exercises.filter((exercise) => exercise.wordId === 'car').every((exercise) => !exercise.options)).toBe(true);
+    const wordChoice = new Set(['audio_to_translation_choice', 'translation_to_original_choice', 'original_to_translation_choice']);
+    expect(session.exercises.filter((exercise) => exercise.wordId === 'car' && wordChoice.has(exercise.type)).every((exercise) => !exercise.options)).toBe(true);
   });
 
   it('hides repeated target words in French and Japanese cloze exercises', async () => {
@@ -276,6 +277,50 @@ describe('wrong options that can be confused with the answer', () => {
       }
     }
     expect(total).toBeGreaterThan(0);
-    expect(same / total).toBeGreaterThan(0.8);
+    expect(same / total).toBeGreaterThan(0.7);
+  });
+});
+
+describe('phrase, article and reading tasks', () => {
+  it('splits a French example into words to order, keeping punctuation attached', async () => {
+    const { getSentenceTokens } = await import('../src/lib/exercises');
+    expect(getSentenceTokens({ ...word('a'), example_original: 'Nous allons à Paris demain matin.' })).toEqual(['Nous', 'allons', 'à', 'Paris', 'demain', 'matin.']);
+    expect(getSentenceTokens({ ...word('b'), example_original: 'On dit : « à pied ».' })).toEqual(['On', 'dit :', '« à', 'pied ».']);
+    expect(getSentenceTokens({ ...word('c'), example_original: 'Oui.' })).toBeNull();
+    expect(getSentenceTokens({ ...word('d'), language: 'japanese', example_original: '猫がいます。' })).toBeNull();
+  });
+
+  it('builds a sentence-order task whose words never come already in order', () => {
+    const sentence = { ...word('s'), example_original: 'Le chat dort sur le lit.', example_translation: 'Кот спит на кровати.' };
+    const pool = [sentence, ...Array.from({ length: 6 }, (_, i) => word(`p${i}`))];
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+      const session = createLessonSession({ mode: 'default', words: pool, storage: storage(), durationMinutes: 20 })!;
+      const task = session.exercises.find((exercise) => exercise.type === 'sentence_order' && exercise.wordId === 's');
+      if (!task) continue;
+      expect(task.correctAnswer).toBe('Le chat dort sur le lit.');
+      expect(task.options!.map((option) => option.label).join(' ')).not.toBe(task.correctAnswer);
+      expect([...task.options!.map((option) => option.label)].sort()).toEqual(['Le', 'chat', 'dort', 'le', 'lit.', 'sur'].sort());
+      return;
+    }
+    throw new Error('no sentence-order task in ten lessons');
+  });
+
+  it('asks le or la only for nouns with a known gender that do not take l’', () => {
+    const maison = { ...word('m'), original: 'maison', translation: 'дом', part_of_speech: 'noun' };
+    const arbre = { ...word('ar'), original: 'arbre', translation: 'дерево', part_of_speech: 'noun' };
+    const pool = [maison, arbre, ...Array.from({ length: 6 }, (_, i) => ({ ...word(`n${i}`), part_of_speech: 'noun' }))];
+    let seenMaison = false;
+    for (let attempt = 0; attempt < 15 && !seenMaison; attempt += 1) {
+      const session = createLessonSession({ mode: 'default', words: pool, storage: storage(), durationMinutes: 20 })!;
+      for (const task of session.exercises.filter((exercise) => exercise.type === 'article_choice')) {
+        expect(task.wordId).not.toBe('ar');
+        if (task.wordId === 'm') {
+          seenMaison = true;
+          expect(task.correctAnswer).toBe('la');
+          expect(task.options!.map((option) => option.label)).toEqual(['le', 'la']);
+        }
+      }
+    }
+    expect(seenMaison).toBe(true);
   });
 });

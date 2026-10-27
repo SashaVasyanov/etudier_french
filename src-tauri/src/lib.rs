@@ -45,6 +45,40 @@ fn write_progress(app: tauri::AppHandle, contents: String) -> Result<(), String>
   std::fs::rename(&temporary, &path).map_err(|error| error.to_string())
 }
 
+/// Reviews due on the Dock icon; `None` or 0 removes the badge.
+#[tauri::command]
+fn set_dock_badge(app: tauri::AppHandle, count: Option<i64>) -> Result<(), String> {
+  let window = app.get_webview_window("main").ok_or("no main window")?;
+  window.set_badge_count(count.filter(|value| *value > 0)).map_err(|error| error.to_string())
+}
+
+/// Replaces the scheduled reminder: macOS shows it at `at` (Unix seconds),
+/// even if the app has been quit by then. `None` only cancels.
+#[tauri::command]
+fn schedule_reminder(at: Option<f64>, title: String, body: String) -> Result<(), String> {
+  replace_scheduled_reminder(at, &title, &body);
+  Ok(())
+}
+
+#[cfg(target_os = "macos")]
+#[allow(deprecated)]
+fn replace_scheduled_reminder(at: Option<f64>, title: &str, body: &str) {
+  use objc2_foundation::{NSArray, NSDate, NSString, NSUserNotification, NSUserNotificationCenter};
+
+  let center = NSUserNotificationCenter::defaultUserNotificationCenter();
+  center.setScheduledNotifications(&NSArray::<NSUserNotification>::new());
+  if let Some(seconds) = at {
+    let notification = NSUserNotification::new();
+    notification.setTitle(Some(&NSString::from_str(title)));
+    notification.setInformativeText(Some(&NSString::from_str(body)));
+    notification.setDeliveryDate(Some(&NSDate::dateWithTimeIntervalSince1970(seconds)));
+    center.scheduleNotification(&notification);
+  }
+}
+
+#[cfg(not(target_os = "macos"))]
+fn replace_scheduled_reminder(_at: Option<f64>, _title: &str, _body: &str) {}
+
 fn resolve_portable_data_directory() -> Option<PathBuf> {
   #[cfg(target_os = "windows")]
   {
@@ -68,7 +102,7 @@ fn resolve_portable_data_directory() -> Option<PathBuf> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
   tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![read_progress, write_progress, progress_location])
+    .invoke_handler(tauri::generate_handler![read_progress, write_progress, progress_location, set_dock_badge, schedule_reminder])
     .setup(|app| {
       let window_config = app
         .config()

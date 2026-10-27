@@ -1,7 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { getTodayDateKey, countRu, RU_ANSWERS, RU_DAYS, RU_PACKS, RU_REVIEWS, RU_WORDS } from '../lib/utils';
 import { getCurrentStreakDays } from '../lib/storage';
 import type { DailyBalance } from '../lib/exercises';
+import type { ReadingSentence } from '../lib/reading';
+import { SentenceAudioButton } from './SentenceAudioButton';
 import { getPackCompletionRatio } from '../lib/packs';
 import { getCurrentLevel, getLevelProgress, getMemoryMilestone, isInMemory } from '../lib/milestones';
 import { getLessonProgress } from '../lib/lessonSession';
@@ -42,6 +44,11 @@ interface HomeDashboardProps {
   onOpenProfile: () => void;
   onOpenPacks: () => void;
   onOpenRadicals: () => void;
+  onOpenSpeed: () => void;
+  onOpenReading: () => void;
+  onStartListening: () => void;
+  speedBest: number;
+  phraseOfTheDay: ReadingSentence | null;
 }
 
 const DAILY_MODULES = [
@@ -77,7 +84,13 @@ export function HomeDashboard({
   onOpenProfile,
   onOpenPacks,
   onOpenRadicals,
+  onOpenSpeed,
+  onOpenReading,
+  onStartListening,
+  speedBest,
+  phraseOfTheDay,
 }: HomeDashboardProps) {
+  const [phraseRevealed, setPhraseRevealed] = useState(false);
   const today = storage.dailyStats.find(
     (item) => item.date === getTodayDateKey() && item.language === learningLanguage,
   );
@@ -246,6 +259,47 @@ export function HomeDashboard({
             <button type="button" onClick={onStartExtraLesson}><AppIcon name="sparkles" size={18} /> Микс</button>
           </div>
         </section>
+
+        <section className="home-bento-card formats-bento-card">
+          <div className="bento-heading">
+            <span className="bento-icon blue"><AppIcon name="sparkles" size={23} /></span>
+            <div>
+              <span>Для разнообразия</span>
+              <h2>Другие форматы</h2>
+            </div>
+          </div>
+          <div className="formats-actions">
+            <button type="button" disabled={!hasStudiedWords && totalWords.length < 4} onClick={onOpenSpeed}>
+              <strong>Минута на скорость</strong>
+              <small>{speedBest > 0 ? `рекорд — ${speedBest}` : 'сколько успеете за 60 секунд'}</small>
+            </button>
+            <button type="button" disabled={!hasStudiedWords} onClick={onStartListening}>
+              <strong>Только на слух</strong>
+              <small>слова и фразы без текста</small>
+            </button>
+            <button type="button" onClick={onOpenReading}>
+              <strong>Чтение</strong>
+              <small>короткие фразы из ваших слов</small>
+            </button>
+          </div>
+        </section>
+
+        {phraseOfTheDay ? (
+          <section className="home-bento-card phrase-bento-card">
+            <span className="phrase-kicker">Фраза дня</span>
+            <div className="example-line">
+              <p className="phrase-text" lang={learningLanguage === 'japanese' ? 'ja' : 'fr'}>{phraseOfTheDay.original}</p>
+              <SentenceAudioButton text={phraseOfTheDay.original} language={learningLanguage} />
+            </div>
+            {phraseRevealed ? (
+              <p className="phrase-translation">{phraseOfTheDay.translation}</p>
+            ) : (
+              <button type="button" className="text-action-button" onClick={() => setPhraseRevealed(true)}>
+                Показать перевод
+              </button>
+            )}
+          </section>
+        ) : null}
 
         <section className="home-bento-card pack-bento-card">
           <div className="bento-heading">

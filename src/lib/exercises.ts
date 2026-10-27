@@ -14,8 +14,8 @@ import type {
   WordProgress,
 } from '../types';
 import { getRecallProbability, getWordProgress, isWordDueForReview } from './storage';
-import { editDistance, isReviewDue, shuffleArray } from './utils';
-import { getJapaneseHiraganaReading } from './wordPresentation';
+import { editDistance, hasTranslatedExample, isReviewDue, shuffleArray } from './utils';
+import { containsJapaneseKanji, getFrenchArticleForWord, getFrenchGender, getJapaneseHiraganaReading } from './wordPresentation';
 
 interface LessonLimits {
   newWords: number;
@@ -48,6 +48,8 @@ interface CreateLessonSessionInput {
   title?: string;
   /** «5 минут»: only the most urgent reviews, two short tasks per word. */
   quick?: boolean;
+  /** «Только на слух»: studied words, listening tasks only. */
+  listening?: boolean;
 }
 
 interface CreateFlashcardSessionInput {
@@ -302,7 +304,46 @@ export function createSentenceCloze(word: Word): string | null {
   return pattern.test(example) ? example.replace(pattern, '$1＿＿') : null;
 }
 
+/** Words of the example sentence for «Соберите фразу»; null when the sentence
+ *  has no spaces (Japanese) or is too short or too long to be a puzzle. */
+export function getSentenceTokens(word: Word): string[] | null {
+  if (word.language !== 'french' || !hasTranslatedExample(word)) return null;
+  const tokens = word.example_original.trim().split(/\s+/).filter(Boolean);
+  if (tokens.length < 3 || tokens.length > 10) return null;
+  // Guillemets and lone punctuation stick to their neighbour.
+  const merged: string[] = [];
+  let opening = '';
+  for (const token of tokens) {
+    if (token === '«') {
+      opening = '« ';
+    } else if (/^[»:;!?.,—–-]+$/.test(token) && merged.length > 0) {
+      merged[merged.length - 1] += ` ${token}`;
+    } else {
+      merged.push(opening + token);
+      opening = '';
+    }
+  }
+  return merged.length >= 3 && new Set(merged.map((token) => token.toLocaleLowerCase())).size >= 3 ? merged : null;
+}
+
+function getArticleGender(word: Word): 'm' | 'f' | null {
+  const gender = getFrenchGender(word);
+  if (gender !== 'm' && gender !== 'f') return null;
+  // Before a vowel sound both become l', so there is nothing to choose.
+  const article = getFrenchArticleForWord(word);
+  return article === 'le' || article === 'la' ? gender : null;
+}
+
 function canCreateExercise(word: Word, type: ExerciseType): boolean {
+  if (type === 'sentence_order') return getSentenceTokens(word) !== null;
+  if (type === 'audio_sentence_choice') {
+    return hasTranslatedExample(word) && word.example_original.trim() !== word.original.trim();
+  }
+  if (type === 'article_choice') return getArticleGender(word) !== null;
+  if (type === 'kanji_reading_choice') {
+    return word.language === 'japanese' && containsJapaneseKanji(word.original) && Boolean(getJapaneseHiraganaReading(word));
+  }
+
   // «Type the hiragana reading» was dropped from lessons: it trained spelling
   // of readings rather than the word itself.
   if (type === 'kanji_to_hiragana_input') {
@@ -322,9 +363,12 @@ function getAvailableExerciseTypes(word: Word, exerciseTypes: ExerciseType[]): E
       return type;
     }
 
-    // No usable sentence for a gap: ask for the word by choice instead, so
-    // lessons do not turn into a row of typing tasks.
-    return type === 'sentence_cloze_input' ? 'translation_to_original_choice' : null;
+    // No usable sentence (or no gender, no kanji): ask for the word by choice
+    // instead, so lessons do not turn into a row of typing tasks.
+    return type === 'sentence_cloze_input' || type === 'sentence_order' || type === 'audio_sentence_choice'
+      || type === 'article_choice' || type === 'kanji_reading_choice'
+      ? 'translation_to_original_choice'
+      : null;
   });
 
   return Array.from(new Set(availableTypes.filter((type): type is ExerciseType => type !== null)));
@@ -431,6 +475,93 @@ function createExercise(word: Word, optionPool: Word[], type: ExerciseType, inde
         prompt: cloze,
         context: word.example_translation,
         correctAnswer: word.original,
+      };
+    }
+    case 'sentence_order': {
+      const tokens = getSentenceTokens(word);
+      if (!tokens) return createExercise(word, optionPool, 'translation_to_original_choice', index);
+      const order = tokens.map((label, position) => ({ id: `${word.id}-t${position}`, label }));
+      let shuffled = shuffleArray(order);
+      // Never hand out the sentence already in order.
+      for (let attempt = 0; attempt < 5 && shuffled.every((item, position) => item.label === tokens[position]); attempt += 1) {
+        shuffled = shuffleArray(order);
+      }
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: word.example_translation || word.translation,
+        correctAnswer: tokens.join(' '),
+        options: shuffled,
+      };
+    }
+    case 'audio_sentence_choice': {
+      const comparable = (value: string) => value.trim().toLocaleLowerCase();
+      const others = shuffleArray(
+        optionPool.filter((candidate) =>
+          candidate.id !== word.id &&
+          hasTranslatedExample(candidate) &&
+          comparable(candidate.example_translation) !== comparable(word.example_translation),
+        ),
+      );
+      // Sentences of a similar length are harder to tell apart.
+      const length = word.example_translation.length;
+      others.sort((left, right) => Math.abs(left.example_translation.length - length) - Math.abs(right.example_translation.length - length));
+      const seen = new Set([comparable(word.example_translation)]);
+      const distractors: ExerciseOption[] = [];
+      for (const candidate of others.slice(0, 12)) {
+        if (distractors.length >= 3) break;
+        if (seen.has(comparable(candidate.example_translation))) continue;
+        seen.add(comparable(candidate.example_translation));
+        distractors.push({ id: candidate.id, label: candidate.example_translation });
+      }
+      if (distractors.length < 2) return createExercise(word, optionPool, 'audio_to_translation_choice', index);
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: word.example_original,
+        correctAnswer: word.example_translation,
+        options: shuffleArray([{ id: word.id, label: word.example_translation }, ...distractors]),
+      };
+    }
+    case 'article_choice': {
+      const gender = getArticleGender(word);
+      if (!gender) return createExercise(word, optionPool, 'translation_to_original_choice', index);
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: word.original,
+        context: word.translation,
+        correctAnswer: gender === 'm' ? 'le' : 'la',
+        options: [{ id: `${word.id}-le`, label: 'le' }, { id: `${word.id}-la`, label: 'la' }],
+      };
+    }
+    case 'kanji_reading_choice': {
+      const reading = getJapaneseHiraganaReading(word);
+      if (!reading) return createExercise(word, optionPool, 'original_to_translation_choice', index);
+      const seen = new Set([reading]);
+      const candidates = shuffleArray(optionPool.filter((candidate) => candidate.id !== word.id && containsJapaneseKanji(candidate.original)))
+        .map((candidate) => getJapaneseHiraganaReading(candidate))
+        .filter((value): value is string => Boolean(value))
+        .sort((left, right) => Math.abs(left.length - reading.length) - Math.abs(right.length - reading.length) || (left[0] === reading[0] ? -1 : 0));
+      const distractors: ExerciseOption[] = [];
+      for (const candidate of candidates.slice(0, 20)) {
+        if (distractors.length >= 3) break;
+        if (seen.has(candidate)) continue;
+        seen.add(candidate);
+        distractors.push({ id: `${word.id}-r${distractors.length}`, label: candidate });
+      }
+      if (distractors.length < 2) return createExercise(word, optionPool, 'original_to_translation_choice', index);
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: word.original,
+        context: word.translation,
+        correctAnswer: reading,
+        options: shuffleArray([{ id: `${word.id}-reading`, label: reading }, ...distractors]),
       };
     }
     case 'memory_check':
@@ -588,6 +719,10 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       kanji_to_hiragana_input: 2,
       sentence_cloze_input: 1,
       memory_check: 4,
+      sentence_order: 2,
+      audio_sentence_choice: 1,
+      article_choice: 0,
+      kanji_reading_choice: 0,
     },
     growing: {
       original_to_translation_choice: 1,
@@ -598,6 +733,10 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       kanji_to_hiragana_input: 1,
       sentence_cloze_input: 0,
       memory_check: 3,
+      sentence_order: 0,
+      audio_sentence_choice: 1,
+      article_choice: 1,
+      kanji_reading_choice: 1,
     },
     stable: {
       original_to_translation_choice: 2,
@@ -608,6 +747,10 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       kanji_to_hiragana_input: 0,
       sentence_cloze_input: 0,
       memory_check: 0,
+      sentence_order: 0,
+      audio_sentence_choice: 1,
+      article_choice: 2,
+      kanji_reading_choice: 1,
     },
   };
 
@@ -944,7 +1087,7 @@ function createDailySession(
     introductionWords,
     // On review days module 1 already asked for the meaning; ask the other way.
     newWords.length > 0
-      ? ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_translation_choice']
+      ? ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_translation_choice', 'article_choice', 'kanji_reading_choice']
       : ['translation_to_original_choice', 'audio_to_translation_choice', 'translation_to_original_input'],
     uniqueWords(words),
     storage,
@@ -956,7 +1099,7 @@ function createDailySession(
       ? 'Возврат к словам, которые еще требуют внимания.'
       : 'Первое повторение новых слов после знакомства и тренировки.',
     reviewWords,
-    ['audio_to_translation_choice', 'translation_to_original_input', 'original_to_translation_choice', 'audio_to_original_input'],
+    ['audio_to_translation_choice', 'translation_to_original_input', 'kanji_reading_choice', 'audio_sentence_choice', 'original_to_translation_choice', 'audio_to_original_input'],
     uniqueWords(words),
     storage,
     hasScheduledReviews ? 2 : 1,
@@ -966,7 +1109,7 @@ function createDailySession(
     'Смешанное закрепление',
     'Слова возвращаются в новом порядке, чтобы проверить узнавание без заучивания по шаблону.',
     reinforcementWords,
-    ['sentence_cloze_input', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
+    ['sentence_cloze_input', 'sentence_order', 'audio_sentence_choice', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
     uniqueWords(words),
     storage,
     1,
@@ -977,7 +1120,7 @@ function createDailySession(
       'Финальная мини-проверка',
       'Короткий итоговый блок: ключевые слова дня и редкая проверка давно выученного.',
       recapWords,
-      ['translation_to_original_input', 'sentence_cloze_input', 'original_to_translation_choice'],
+      ['translation_to_original_input', 'sentence_cloze_input', 'sentence_order', 'original_to_translation_choice'],
       uniqueWords(words),
       storage,
       1,
@@ -1062,6 +1205,69 @@ function createQuickReviewSession(
   };
 }
 
+export const LISTENING_TITLE = 'Только на слух';
+const LISTENING_WORDS = 10;
+
+/** «Только на слух»: words already met, heard as words and in sentences. */
+function createListeningSession(words: Word[], storage: AppStorage, activePackIds: string[], title?: string): LessonSession | null {
+  const focus = pickExtraFocusWords(words, storage, LISTENING_WORDS);
+  if (focus.length === 0) return null;
+  const result = createExerciseModule(
+    'module-listening',
+    'Только на слух',
+    'Слова и фразы без текста: сначала услышать, потом понять.',
+    focus,
+    ['audio_to_translation_choice', 'audio_sentence_choice', 'audio_to_original_input'],
+    uniqueWords(words),
+    storage,
+  );
+  const modules = renumberModules([result.module]);
+  return {
+    id: `extra-listening-${Date.now()}`,
+    title: title ?? LISTENING_TITLE,
+    mode: 'extra',
+    presentation: 'standard',
+    durationMinutes: 10,
+    startedAt: new Date().toISOString(),
+    exerciseIds: result.exercises.map((exercise) => exercise.id),
+    exercises: result.exercises,
+    sourceWordIds: focus.map((word) => word.id),
+    modules,
+    steps: buildSteps(modules, { [result.module.id]: result.exercises }),
+    activePackIds,
+  };
+}
+
+export interface SpeedQuestion {
+  wordId: string;
+  prompt: string;
+  /** The prompt is in the learned language (shown with its lang attribute). */
+  promptIsOriginal: boolean;
+  options: string[];
+  correct: string;
+}
+
+/** Words for practice games: those already met, else the first new ones. */
+export function pickPracticeWords(words: Word[], storage: AppStorage, limit: number): Word[] {
+  const pool = getPracticePool(words, storage);
+  const met = pickExtraFocusWords(pool, storage, limit);
+  return met.length >= 8 ? met : uniqueWords([...met, ...pickNewWords(pool, storage, limit)]).slice(0, limit);
+}
+
+/** One quick question for «Минута на скорость»: word → translation or back. */
+export function createSpeedQuestion(word: Word, pool: Word[], index: number): SpeedQuestion | null {
+  const toTranslation = index % 2 === 0;
+  const options = buildChoiceOptions(word, pool, toTranslation ? 'translation' : 'original');
+  if (options.length < 3) return null;
+  return {
+    wordId: word.id,
+    prompt: toTranslation ? word.original : word.translation,
+    promptIsOriginal: toTranslation,
+    options: options.map((option) => option.label),
+    correct: toTranslation ? word.translation : word.original,
+  };
+}
+
 /** Due reviews over all active words — what «5 минут» would pick from. */
 export function countDueReviews(words: Word[], storage: AppStorage): number {
   return words.filter((word) => isWordDueForReview(getWordProgress(storage, word.id))).length;
@@ -1103,7 +1309,7 @@ function createExtraSession(
       ? 'Тренируйте слова выбранного пака вне ежедневного лимита.'
       : 'Продолжайте обучение после завершения ежедневного урока.',
     focusWords,
-    ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_translation_choice', 'translation_to_original_input'],
+    ['original_to_translation_choice', 'translation_to_original_choice', 'audio_sentence_choice', 'kanji_reading_choice', 'translation_to_original_input'],
     uniqueWords(words),
     storage,
   );
@@ -1124,7 +1330,7 @@ function createExtraSession(
       'Смешанное закрепление',
       'Финальный блок на закрепление активных, новых и давно выученных слов.',
       mixedWords,
-      ['sentence_cloze_input', 'audio_to_original_input', 'translation_to_original_choice', 'original_to_translation_choice'],
+      ['sentence_cloze_input', 'sentence_order', 'audio_to_original_input', 'article_choice', 'translation_to_original_choice', 'original_to_translation_choice'],
       uniqueWords(words),
       storage,
     ),
@@ -1461,6 +1667,7 @@ export function createLessonSession({
   activePackIds = [],
   title,
   quick = false,
+  listening = false,
 }: CreateLessonSessionInput): LessonSession | null {
   const eligibleWords = getPracticePool(words, storage);
   if (mode === 'mistakes' && wordIds?.length) {
@@ -1475,6 +1682,10 @@ export function createLessonSession({
 
   if (mode === 'extra' && quick) {
     return createQuickReviewSession(eligibleWords, storage, activePackIds, title);
+  }
+
+  if (mode === 'extra' && listening) {
+    return createListeningSession(eligibleWords, storage, activePackIds, title);
   }
 
   if (mode === 'extra' || mode === 'pack') {

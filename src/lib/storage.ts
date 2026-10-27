@@ -13,6 +13,8 @@ import type {
   RadicalStatus,
   RadicalStudyHistoryEntry,
   SpeechPreferences,
+  ComfortPreferences,
+  TextSize,
   StorageLoadResult,
   StorageSaveResult,
   StudyHistoryEntry,
@@ -490,7 +492,9 @@ function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
       japanese: Math.max(nonNegativeInteger(storedTotals.japanese), historyTotals.japanese),
     },
     speech: normalizeSpeech(parsed.speech),
+    comfort: normalizeComfort(parsed.comfort),
     memoryCalibration: normalizeCalibration(parsed.memoryCalibration),
+    speedRecords: normalizeSpeedRecords(parsed.speedRecords),
     desiredRetention: typeof parsed.desiredRetention === 'number' && Number.isFinite(parsed.desiredRetention)
       ? clamp(parsed.desiredRetention, MIN_RETENTION, MAX_RETENTION)
       : DEFAULT_RETENTION,
@@ -1674,6 +1678,49 @@ export function setSpeechPreference(
   return { ...currentStorage, speech: normalizeSpeech({ voices, rate: change.rate ?? currentStorage.speech.rate }) };
 }
 
+export const DEFAULT_COMFORT: ComfortPreferences = {
+  textSize: 'normal',
+  autoplay: true,
+  reduceMotion: false,
+  dockBadge: true,
+  reminderTime: null,
+};
+
+const TEXT_SIZES: readonly TextSize[] = ['normal', 'large', 'larger'];
+
+function isReminderTime(value: unknown): value is string {
+  if (typeof value !== 'string') return false;
+  const match = /^(\d{2}):(\d{2})$/.exec(value);
+  return Boolean(match) && Number(match?.[1]) < 24 && Number(match?.[2]) < 60;
+}
+
+/** Stored only when something differs from the defaults. */
+function normalizeComfort(value: unknown): ComfortPreferences | undefined {
+  if (!isRecord(value)) return undefined;
+  const comfort: ComfortPreferences = {
+    textSize: TEXT_SIZES.includes(value.textSize as TextSize) ? value.textSize as TextSize : DEFAULT_COMFORT.textSize,
+    autoplay: typeof value.autoplay === 'boolean' ? value.autoplay : DEFAULT_COMFORT.autoplay,
+    reduceMotion: typeof value.reduceMotion === 'boolean' ? value.reduceMotion : DEFAULT_COMFORT.reduceMotion,
+    dockBadge: typeof value.dockBadge === 'boolean' ? value.dockBadge : DEFAULT_COMFORT.dockBadge,
+    reminderTime: isReminderTime(value.reminderTime) ? value.reminderTime : null,
+  };
+  const isDefault = (Object.keys(DEFAULT_COMFORT) as Array<keyof ComfortPreferences>)
+    .every((key) => comfort[key] === DEFAULT_COMFORT[key]);
+  return isDefault ? undefined : comfort;
+}
+
+export function getComfort(currentStorage: AppStorage): ComfortPreferences {
+  return currentStorage.comfort ?? DEFAULT_COMFORT;
+}
+
+export function setComfortPreference(currentStorage: AppStorage, change: Partial<ComfortPreferences>): AppStorage {
+  const comfort = normalizeComfort({ ...getComfort(currentStorage), ...change });
+  const next = { ...currentStorage };
+  if (comfort) next.comfort = comfort;
+  else delete next.comfort;
+  return next;
+}
+
 export const KANA_LEARNED_STREAK = 3;
 
 export type KanaStatus = 'new' | 'learning' | 'learned';
@@ -1705,4 +1752,22 @@ export function recordKanaSession(
 
 export function setDesiredRetention(currentStorage: AppStorage, retention: number): AppStorage {
   return { ...currentStorage, desiredRetention: clamp(retention, MIN_RETENTION, MAX_RETENTION) };
+}
+
+function normalizeSpeedRecords(value: unknown): AppStorage['speedRecords'] {
+  if (!isRecord(value)) return undefined;
+  const result: NonNullable<AppStorage['speedRecords']> = {};
+  for (const language of ['french', 'japanese'] as const) {
+    const score = value[language];
+    if (typeof score === 'number' && Number.isFinite(score) && score > 0) result[language] = Math.floor(score);
+  }
+  return Object.keys(result).length > 0 ? result : undefined;
+}
+
+/** Keeps the best «Минута на скорость» score of the current language. */
+export function recordSpeedScore(currentStorage: AppStorage, score: number): AppStorage {
+  const language = currentStorage.learningLanguage;
+  const best = currentStorage.speedRecords?.[language] ?? 0;
+  if (score <= best) return currentStorage;
+  return { ...currentStorage, speedRecords: { ...currentStorage.speedRecords, [language]: Math.floor(score) } };
 }

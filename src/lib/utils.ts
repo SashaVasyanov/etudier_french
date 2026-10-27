@@ -857,3 +857,38 @@ export function getSearchRank(entry: { primary: string; secondary: string }, que
   }
   return entry.secondary.includes(query) ? 3 : null;
 }
+
+// Some generated examples carry a note about usage instead of a translation
+// («Такую фразу используют…»). They are fine on a word card but not where the
+// learner has to match or read the sentence by its meaning.
+const EXPLANATORY_TRANSLATION = /^(Эту фразу используют|Такую фразу используют|Такую конструкцию используют|Эту модель используют|Это выражение используют|Это устойчивое выражение|Выражение «|Предлог «|Определитель «|Местоимение «|Союз «|Наречие «|Значение слова «|Так говорят, когда)/;
+
+/** The example sentence comes with a real translation of itself. */
+export function hasTranslatedExample(example: { example_original: string; example_translation: string }): boolean {
+  const translation = example.example_translation.trim();
+  return Boolean(example.example_original.trim() && translation) && !EXPLANATORY_TRANSLATION.test(translation);
+}
+
+/**
+ * A word copied from elsewhere: «bonjour — привет», «bonjour\tпривет», a
+ * word and its translation on two lines, or just the word. Surrounding
+ * quotes and a trailing full stop are dropped.
+ */
+export function parseClipboardWord(text: string): { original: string; translation: string } | null {
+  const clean = (value: string) => value.trim().replace(/^[«"“'„]+|[»"”']+$/g, '').replace(/[.;,]+$/, '').trim();
+  const lines = text.replace(/\r/g, '').split('\n').map((line) => line.trim()).filter(Boolean);
+  if (lines.length === 0) return null;
+  const first = lines[0];
+  const separator = /\t|\s+[—–=-]\s+|\s*:\s+/.exec(first);
+  let original = first;
+  let translation = '';
+  if (separator) {
+    original = first.slice(0, separator.index);
+    translation = first.slice(separator.index + separator[0].length);
+  } else if (lines.length > 1) {
+    translation = lines[1];
+  }
+  original = clean(original).slice(0, 240);
+  translation = clean(translation).slice(0, 400);
+  return original ? { original, translation } : null;
+}

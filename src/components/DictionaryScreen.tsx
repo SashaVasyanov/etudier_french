@@ -1,5 +1,5 @@
 import { useDeferredValue, useEffect, useMemo, useState } from 'react';
-import { countRu, getSearchRank, normalizeSearchText, RU_WORDS } from '../lib/utils';
+import { countRu, getSearchRank, normalizeSearchText, parseClipboardWord, RU_WORDS } from '../lib/utils';
 import { playWordAudio } from '../lib/audio';
 import { getLearningLanguageLocale, getLearningLanguageTitle } from '../lib/languages';
 import { getPackByWord } from '../lib/packs';
@@ -54,6 +54,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
   });
   const [showAddForm, setShowAddForm] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [clipboardNotice, setClipboardNotice] = useState<string | null>(null);
   const [newWord, setNewWord] = useState({
     original: '',
     translation: '',
@@ -155,6 +156,37 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
     });
   }
 
+  // «bonjour — привет» copied anywhere becomes a filled-in form; a word that
+  // is already in the dictionary is shown instead of being added twice.
+  async function addFromClipboard() {
+    let text = '';
+    try {
+      text = await navigator.clipboard.readText();
+    } catch {
+      text = '';
+    }
+    const parsed = parseClipboardWord(text);
+    if (!parsed) {
+      setClipboardNotice('В буфере обмена нет текста. Скопируйте слово (можно с переводом через тире) и нажмите ещё раз.');
+      return;
+    }
+    const key = normalizeSearchText(parsed.original);
+    const existing = words.find((word) => normalizeSearchText(word.original) === key);
+    if (existing) {
+      setTab('all');
+      setLevel('all');
+      setPackFilter('all');
+      setQuery(existing.original);
+      setShowAddForm(false);
+      setClipboardNotice(`«${existing.original}» уже есть в словаре — вот оно.`);
+      return;
+    }
+    setNewWord((current) => ({ ...current, original: parsed.original, translation: parsed.translation || current.translation }));
+    setFormError(null);
+    setShowAddForm(true);
+    setClipboardNotice(parsed.translation ? 'Слово и перевод вставлены — проверьте и добавьте.' : 'Слово вставлено — допишите перевод.');
+  }
+
   return (
     <section className="dashboard-shell">
       <AppCard as="header" tone="hero" className="dictionary-hero">
@@ -163,11 +195,16 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
             <h1 className="hero-title compact-title">Словарь</h1>
           </div>
           <div className="dictionary-hero-actions">
-            <button type="button" className="primary-button" onClick={() => setShowAddForm((current) => !current)}>
+            <button type="button" className="secondary-button" onClick={() => void addFromClipboard()}>
+              Из буфера обмена
+            </button>
+            <button type="button" className="primary-button" onClick={() => { setShowAddForm((current) => !current); setClipboardNotice(null); }}>
               {showAddForm ? 'Скрыть форму' : 'Добавить слово'}
             </button>
           </div>
         </div>
+
+        {clipboardNotice ? <p className="form-inline-message dictionary-clipboard-notice" role="status">{clipboardNotice}</p> : null}
 
         {showAddForm ? (
           <form
@@ -202,6 +239,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
               }
               resetNewWordForm();
               setShowAddForm(false);
+              setClipboardNotice(null);
             }}
           >
             {formError ? <p className="form-inline-message" role="alert">{formError}</p> : null}

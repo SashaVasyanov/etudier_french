@@ -20,7 +20,15 @@ export type ExerciseType =
   | 'translation_to_original_input'
   | 'kanji_to_hiragana_input'
   | 'sentence_cloze_input'
-  | 'memory_check';
+  | 'memory_check'
+  /** Put the words of the example sentence in order (options are the words). */
+  | 'sentence_order'
+  /** Hear the example sentence and choose its translation. */
+  | 'audio_sentence_choice'
+  /** French noun: choose le or la. */
+  | 'article_choice'
+  /** Japanese word with kanji: choose its reading. */
+  | 'kanji_reading_choice';
 
 export interface Word {
   id: string;
@@ -279,6 +287,10 @@ export interface AppStorage {
   speech: SpeechPreferences;
   /** Target chance of recalling a word at its review (FSRS), 0.8–0.97. */
   desiredRetention: number;
+  /** Best «Минута на скорость» score per language. */
+  speedRecords?: Partial<Record<LearningLanguage, number>>;
+  /** Reading comfort, sound and reminders; defaults when absent. */
+  comfort?: ComfortPreferences;
   /** How this learner's lapses compare with the FSRS forecast, per language. */
   memoryCalibration?: Partial<Record<LearningLanguage, MemoryCalibration>>;
 }
@@ -291,6 +303,20 @@ export interface MemoryCalibration {
   reviews: number;
   /** Faded count of the same reviews (for the recent recall rate). */
   weight?: number;
+}
+
+export type TextSize = 'normal' | 'large' | 'larger';
+
+export interface ComfortPreferences {
+  textSize: TextSize;
+  /** Say words aloud by themselves (word cards, answers). Listening tasks always play. */
+  autoplay: boolean;
+  /** Calm the interface: no animations or transitions. */
+  reduceMotion: boolean;
+  /** Number of reviews due on the Dock icon. */
+  dockBadge: boolean;
+  /** Daily reminder at this local time («HH:MM»), or off. */
+  reminderTime: string | null;
 }
 
 export interface SpeechPreferences {

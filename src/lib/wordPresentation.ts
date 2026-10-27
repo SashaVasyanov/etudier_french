@@ -395,6 +395,30 @@ export function getExerciseCopy(
         title: 'Заполните пропуск',
         hint: 'Вспомните слово по смыслу предложения.',
       };
+    case 'sentence_order':
+      return {
+        eyebrow: 'Фраза целиком',
+        title: 'Соберите фразу',
+        hint: 'Нажимайте на слова по порядку — или цифры на клавиатуре.',
+      };
+    case 'audio_sentence_choice':
+      return {
+        eyebrow: 'Фраза на слух',
+        title: 'Что сказано?',
+        hint: 'Прослушайте фразу и выберите её перевод.',
+      };
+    case 'article_choice':
+      return {
+        eyebrow: 'Род слова',
+        title: 'Le или la?',
+        hint: 'Выберите артикль: от него зависит форма прилагательных.',
+      };
+    case 'kanji_reading_choice':
+      return {
+        eyebrow: 'Чтение кандзи',
+        title: 'Как это читается?',
+        hint: 'Выберите чтение слова.',
+      };
     case 'memory_check':
       return {
         eyebrow: 'Вспоминание',

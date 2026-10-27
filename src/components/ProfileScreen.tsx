@@ -5,6 +5,7 @@ import { getCurrentStreakDays } from '../lib/storage';
 import { summarizeStudyHistory, summarizeWordStatuses } from '../lib/studyMetrics';
 import { formatDateTimeLabel, formatDurationLabel, formatLongDateLabel, countRu, pluralRu, RU_LESSONS, RU_MISTAKES, RU_MODULES, RU_WORDS } from '../lib/utils';
 import type {
+  ComfortPreferences,
   AppStorage,
   LearningLanguage,
   LessonDurationMinutes,
@@ -16,6 +17,7 @@ import type {
 } from '../types';
 import { AppIcon } from './AppIcon';
 import { BackupPanel } from './BackupPanel';
+import { ComfortPanel } from './ComfortPanel';
 import { SpeechSettingsPanel } from './SpeechSettingsPanel';
 
 const RETENTION_OPTIONS = [
@@ -45,6 +47,8 @@ interface ProfileScreenProps {
   desiredRetention: number;
   onDesiredRetentionChange: (retention: number) => void;
   onSpeechChange: (change: { language?: LearningLanguage; voiceId?: string | null; rate?: number }) => void;
+  comfort: ComfortPreferences;
+  onComfortChange: (change: Partial<ComfortPreferences>) => void;
   onExportBackup: () => string;
   onImportBackup: (raw: string) => string | null;
 }
@@ -92,6 +96,8 @@ export default function ProfileScreen({
   desiredRetention,
   onDesiredRetentionChange,
   onSpeechChange,
+  comfort,
+  onComfortChange,
 }: ProfileScreenProps) {
   const stats = useMemo(() => summarizeWordStatuses(progressList), [progressList]);
   const inMemory = useMemo(() => progressList.filter((progress) => isInMemory(progress)).length, [progressList]);
@@ -347,6 +353,8 @@ export default function ProfileScreen({
             </span>
           </div>
         </section>
+
+        <ComfortPanel comfort={comfort} onChange={onComfortChange} />
 
         <SpeechSettingsPanel language={learningLanguage} speech={storage.speech} onChange={onSpeechChange} />
 

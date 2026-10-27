@@ -9,10 +9,13 @@ import { HomeDashboard } from './components/HomeDashboard';
 import { LessonResult } from './components/LessonResult';
 import { LessonWordPreview } from './components/LessonWordPreview';
 import { MemoryCheckExercise } from './components/MemoryCheckExercise';
+import { SentenceOrderExercise } from './components/SentenceOrderExercise';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
 import { getLessonPoolWords, getStarterPacks, loadWords } from './data/words';
-import { playWordAudio, setSpeechPreferences, stopAudio } from './lib/audio';
-import { createFlashcardSession, createLessonSession, getDailyBalance, QUICK_REVIEW_TITLE, scheduleExerciseRetry } from './lib/exercises';
+import { playTextAudio, playWordAudio, setSpeechPreferences, stopAudio } from './lib/audio';
+import { createFlashcardSession, createLessonSession, getDailyBalance, LISTENING_TITLE, pickPracticeWords, QUICK_REVIEW_TITLE, scheduleExerciseRetry } from './lib/exercises';
+import { getPhraseOfTheDay } from './lib/reading';
+import { getNextReminderAt, getReminderText, scheduleReminder, setDockBadge } from './lib/desktop';
 import {
   getLearningLanguageProductTitle,
   getLearningLanguageTitle,
@@ -45,9 +48,13 @@ import {
   setSpeechPreference,
   setWordPackStatus,
   getWordProgress,
+  getComfort,
+  isWordDueForReview,
+  setComfortPreference,
   getCompletedDailyLesson,
   getStreakSummary,
   reconcileWithProgressFile,
+  recordSpeedScore,
   updateProfileName,
 } from './lib/storage';
 import { parseImportedPack } from './lib/importPacks';
@@ -73,6 +80,8 @@ const ProfileScreen = lazy(() => import('./components/ProfileScreen'));
 const StatisticsScreen = lazy(() => import('./components/StatisticsScreen'));
 const KanjiRadicalsScreen = lazy(() => import('./components/KanjiRadicalsScreen'));
 const KatakanaScreen = lazy(() => import('./components/KatakanaScreen'));
+const SpeedRoundScreen = lazy(() => import('./components/SpeedRoundScreen'));
+const ReadingScreen = lazy(() => import('./components/ReadingScreen'));
 
 type Screen =
   | 'home'
@@ -85,7 +94,9 @@ type Screen =
   | 'statistics'
   | 'profile'
   | 'packs'
-  | 'packDetail';
+  | 'packDetail'
+  | 'speed'
+  | 'reading';
 
 const LATE_FINISH_NOTICE = 'Урок был начат в предыдущий день: ответы сохранены, а сегодняшний урок ещё впереди.';
 const STALE_DRAFT_NOTICE = 'Урок прошлого дня остался незавершённым: ваши ответы сохранены. Сегодня начинается новый урок.';
@@ -249,6 +260,13 @@ function App() {
     });
   }, [availableWords, lessonPoolWords, selectedLessonSourceWords, storage]);
   const progressList = useMemo(() => availableWords.map((word) => getWordProgress(storage, word.id)), [storage, availableWords]);
+  const phraseOfTheDay = useMemo(() => getPhraseOfTheDay(availableWords, storage, today), [availableWords, storage, today]);
+  // Fixed while the speed round is open, so its questions do not reshuffle.
+  const speedWords = useMemo(
+    () => (screen === 'speed' ? pickPracticeWords(availableWords, storage, 40) : []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [screen, availableWords],
+  );
   // How today's lesson splits into new words and reviews (shown on Home).
   const dailyBalance = useMemo(
     () => getDailyBalance(
@@ -269,6 +287,39 @@ function App() {
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
   const currentWord = currentStep ? wordsById.get(currentStep.wordId) ?? null : null;
   const dailyCompletion = getCompletedDailyLesson(storage, today);
+  const comfort = getComfort(storage);
+  const autoplayEnabled = comfort.autoplay;
+
+  // Text size and calmer motion apply to the whole window.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.textSize = comfort.textSize;
+    if (comfort.reduceMotion) root.dataset.motion = 'reduced';
+    else delete root.dataset.motion;
+  }, [comfort.reduceMotion, comfort.textSize]);
+
+  // Dock badge: reviews due now. Reminder: the next chosen time, skipping
+  // today once today's lesson is done. Both refresh every few minutes too,
+  // as words come due.
+  const hasDailyCompletion = Boolean(dailyCompletion);
+  useEffect(() => {
+    if (isLoadingWords) return undefined;
+    const refresh = () => {
+      const now = new Date();
+      const dueNow = progressList.filter((progress) => isWordDueForReview(progress, now)).length;
+      setDockBadge(comfort.dockBadge ? dueNow : null);
+      if (!comfort.reminderTime) {
+        scheduleReminder(null);
+        return;
+      }
+      const at = getNextReminderAt(comfort.reminderTime, now, hasDailyCompletion);
+      const dueThen = progressList.filter((progress) => isWordDueForReview(progress, at)).length;
+      scheduleReminder({ at, ...getReminderText(dueThen, storage.streakDays) });
+    };
+    refresh();
+    const timer = window.setInterval(refresh, 5 * 60_000);
+    return () => window.clearInterval(timer);
+  }, [comfort.dockBadge, comfort.reminderTime, hasDailyCompletion, isLoadingWords, progressList, storage.streakDays]);
   const lessonProgress = session ? getLessonProgress(session, stepIndex) : null;
   const currentLessonDraft = session ? { session, stepIndex, outcomes, knownWordIds, selectedAnswer, typedAnswer, isSubmitted } : null;
   const pausedDailyDraft = session?.mode === 'default' ? currentLessonDraft : dailyDraftRef.current;
@@ -407,10 +458,17 @@ function App() {
       return undefined;
     }
 
-    const shouldAutoplay =
-      currentStep.kind === 'preview' ||
-      currentStep.exercise.type === 'audio_to_translation_choice' ||
-      currentStep.exercise.type === 'audio_to_original_input';
+    if (currentStep.kind === 'exercise' && currentStep.exercise.type === 'audio_sentence_choice') {
+      void playTextAudio(currentWord.example_original, currentWord.language);
+      return () => {
+        stopAudio();
+      };
+    }
+
+    // Listening tasks always play; the word card only when autoplay is on.
+    const shouldAutoplay = currentStep.kind === 'preview'
+      ? autoplayEnabled
+      : currentStep.exercise.type === 'audio_to_translation_choice' || currentStep.exercise.type === 'audio_to_original_input';
 
     if (!shouldAutoplay) {
       return undefined;
@@ -421,7 +479,7 @@ function App() {
     return () => {
       stopAudio();
     };
-  }, [currentStep, currentWord, screen]);
+  }, [autoplayEnabled, currentStep, currentWord, screen]);
 
   const mistakeWords = useMemo(() => {
     const incorrectWordIds = Array.from(
@@ -510,7 +568,7 @@ function App() {
     return true;
   }
 
-  function startLesson(mode: LessonMode, options?: { wordIds?: string[]; title?: string; packId?: string; quick?: boolean }) {
+  function startLesson(mode: LessonMode, options?: { wordIds?: string[]; title?: string; packId?: string; quick?: boolean; listening?: boolean }) {
     let currentStorage = storageRef.current;
     let settledStaleDraft = false;
     if (mode === 'default' && dailyDraftRef.current && isSessionFromAnotherDay(dailyDraftRef.current.session, getTodayDateKey())) {
@@ -536,7 +594,8 @@ function App() {
     if (mode === 'default' && dailyDraftRef.current && resumeDraft(dailyDraftRef.current)) return;
     // An unfinished practice of the same kind is resumed («5 минут» and the
     // regular extra lesson are different kinds).
-    const sameKind = (session?.title === QUICK_REVIEW_TITLE) === Boolean(options?.quick);
+    const kindOf = (title?: string) => (title === QUICK_REVIEW_TITLE ? 'quick' : title === LISTENING_TITLE ? 'listening' : 'extra');
+    const sameKind = kindOf(session?.title) === (options?.quick ? 'quick' : options?.listening ? 'listening' : 'extra');
     if (session?.mode === mode && session.presentation === 'standard' && mode !== 'pack' && mode !== 'default' && sameKind) {
       if (currentLessonDraft && resumeDraft(currentLessonDraft)) return;
     }
@@ -552,7 +611,7 @@ function App() {
     }
 
     const lessonWordsBase =
-      (options?.wordIds && options.wordIds.length > 0) || options?.quick
+      (options?.wordIds && options.wordIds.length > 0) || options?.quick || options?.listening
         ? words
         : mode === 'default'
           ? dailyLessonWords
@@ -581,6 +640,7 @@ function App() {
       activePackIds,
       title: options?.title ?? (mode === 'default' && selectedLessonSourcePack ? `Урок: ${selectedLessonSourcePack.title}` : undefined),
       quick: options?.quick,
+      listening: options?.listening,
     });
 
     if (!nextSession) {
@@ -588,7 +648,7 @@ function App() {
         // No new quota and no scheduled reviews: show an honest no-due state,
         // but do not create a completion/history/streak record.
         setScreen('dailyComplete');
-      } else if (options?.quick) {
+      } else if (options?.quick || options?.listening) {
         setLessonNotice('Пока нечего повторять — начните с урока дня.');
       } else {
         setLessonNotice('Все слова в этой подборке уже известны или исключены. Выберите другую тему в разделе «Темы».');
@@ -717,7 +777,12 @@ function App() {
         : null;
     const resultAudioWord = selectedOriginalWord ?? currentWord;
 
-    if (resultAudioWord) {
+    // With autoplay off, sound plays only on request (R or the speaker buttons).
+    if (!autoplayEnabled) return;
+    if (currentWord && (currentExercise.type === 'sentence_order' || currentExercise.type === 'audio_sentence_choice')) {
+      // The whole sentence was the task: hear it again, not the single word.
+      void playTextAudio(currentWord.example_original, currentWord.language);
+    } else if (resultAudioWord) {
       void playWordAudio(resultAudioWord, { force: true });
     }
   }
@@ -1027,6 +1092,11 @@ function App() {
               setScreen('packs');
             }}
             onOpenRadicals={() => setScreen('radicals')}
+            onOpenSpeed={() => setScreen('speed')}
+            onOpenReading={() => setScreen('reading')}
+            onStartListening={() => startLesson('extra', { listening: true })}
+            speedBest={storage.speedRecords?.[storage.learningLanguage] ?? 0}
+            phraseOfTheDay={phraseOfTheDay}
           />
         ) : null}
 
@@ -1116,6 +1186,18 @@ function App() {
                     onIgnoreWord={handleIgnoreWord}
                     onNext={goToNextStep}
                   />
+                ) : currentExercise?.type === 'sentence_order' ? (
+                  <SentenceOrderExercise
+                    key={currentStep.id}
+                    exercise={currentExercise}
+                    word={currentWord}
+                    isSubmitted={isSubmitted}
+                    selectedAnswer={selectedAnswer}
+                    onSubmit={(answer) => handleSubmit(answer)}
+                    onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
+                    onIgnoreWord={handleIgnoreWord}
+                    onNext={goToNextStep}
+                  />
                 ) : currentExercise?.options ? (
                   <MultipleChoiceExercise
                     key={currentStep.id}
@@ -1128,7 +1210,8 @@ function App() {
                       handleSubmit(answer);
                     }}
                     onReplayAudio={() => {
-                      void playWordAudio(currentWord);
+                      if (currentExercise.type === 'audio_sentence_choice') void playTextAudio(currentWord.example_original, currentWord.language);
+                      else void playWordAudio(currentWord);
                     }}
                     onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
                     onIgnoreWord={handleIgnoreWord}
@@ -1385,6 +1468,10 @@ function App() {
               onSpeechChange={(change) => {
                 setStorage((currentStorage) => setSpeechPreference(currentStorage, change));
               }}
+              comfort={comfort}
+              onComfortChange={(change) => {
+                setStorage((currentStorage) => setComfortPreference(currentStorage, change));
+              }}
               dayStartHour={storage.dayStartHour}
               desiredRetention={storage.desiredRetention}
               onDesiredRetentionChange={(retention) => {
@@ -1407,6 +1494,19 @@ function App() {
                 setStorage((currentStorage) => recordKanaSession(currentStorage, kanaOutcomes));
               }}
             />
+          ) : null}
+          {screen === 'speed' ? (
+            <SpeedRoundScreen
+              words={speedWords}
+              pool={availableWords}
+              best={storage.speedRecords?.[storage.learningLanguage] ?? 0}
+              language={storage.learningLanguage}
+              onFinish={(score) => setStorage((currentStorage) => recordSpeedScore(currentStorage, score))}
+              onClose={() => setScreen('home')}
+            />
+          ) : null}
+          {screen === 'reading' ? (
+            <ReadingScreen words={availableWords} storage={storage} onClose={() => setScreen('home')} />
           ) : null}
           {screen === 'radicals' && storage.learningLanguage === 'japanese' ? (
             <KanjiRadicalsScreen
