@@ -4,7 +4,14 @@ import { AudioButton } from './AudioButton';
 import { JapaneseExampleReading } from './JapaneseExampleReading';
 import { LessonCard } from './LessonCard';
 import { WordImage } from './WordImage';
-import { getDisplayWord, getLessonWordBadge, getLessonWordNotes, getPartOfSpeechLabel } from '../lib/wordPresentation';
+import {
+  FRENCH_GENDER_LABELS,
+  getDisplayWord,
+  getFrenchGender,
+  getLessonWordNotes,
+  getPartOfSpeechLabel,
+  splitExampleAroundWord,
+} from '../lib/wordPresentation';
 import { getWordLevelLabel } from '../lib/levels';
 import { SentenceAudioButton } from './SentenceAudioButton';
 
@@ -26,6 +33,8 @@ export function LessonWordPreview({
   onNext,
 }: LessonWordPreviewProps) {
   const lessonNotes = getLessonWordNotes(word);
+  const gender = getFrenchGender(word);
+  const exampleParts = splitExampleAroundWord(word.example_original, word);
 
   // Enter (or Space) moves on, like the main button.
   useEffect(() => {
@@ -57,14 +66,15 @@ export function LessonWordPreview({
                 <AudioButton label="Прослушать" onClick={onReplayAudio} />
               </div>
               <p className="lesson-preview-description">{word.transcription || 'Транскрипция уточняется'}</p>
-              <span className="lesson-preview-meta">{getPartOfSpeechLabel(word.part_of_speech)} · {getWordLevelLabel(word)}</span>
+              <span className="lesson-preview-meta">
+                {getPartOfSpeechLabel(word.part_of_speech)}
+                {gender ? <> · <span className={`gender-mark gender-${gender}`}>{FRENCH_GENDER_LABELS[gender]}</span></> : null}
+                {' · '}{getWordLevelLabel(word)}
+              </span>
             </div>
           </div>
 
           <div className="lesson-preview-content">
-            <div className="lesson-preview-badge-row">
-              <span className="lesson-preview-badge">{getLessonWordBadge(word)}</span>
-            </div>
             <ul className="lesson-preview-note-list">
               {lessonNotes.map((note) => (
                 <li key={note} className="lesson-preview-note-item">
@@ -74,7 +84,9 @@ export function LessonWordPreview({
             </ul>
             <div className="lesson-preview-example-card">
               <div className="example-line">
-                <p className="lesson-preview-example">{word.example_original}</p>
+                <p className="lesson-preview-example" lang={word.language === 'japanese' ? 'ja' : 'fr'}>
+                  {exampleParts ? <>{exampleParts.before}<mark>{exampleParts.match}</mark>{exampleParts.after}</> : word.example_original}
+                </p>
                 <SentenceAudioButton text={word.example_original} language={word.language} />
               </div>
               <JapaneseExampleReading word={word} />

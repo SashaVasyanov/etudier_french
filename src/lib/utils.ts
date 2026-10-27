@@ -636,6 +636,13 @@ export function getTodayDateKey(now = new Date()): string {
   return `${year}-${month}-${day}`;
 }
 
+/** The date key `days` calendar days from `dateKey` (no time zone involved). */
+export function shiftDateKey(dateKey: string, days: number): string {
+  const [year, month, day] = dateKey.split('-').map(Number);
+  const date = new Date(year, month - 1, day + days);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
 export function formatRussianPercent(value: number): string {
   return `${value}%`;
 }
@@ -731,4 +738,5 @@ export const RU_ANSWERS = ['ответ', 'ответа', 'ответов'] as co
 export const RU_MISTAKES = ['ошибка', 'ошибки', 'ошибок'] as const;
 export const RU_MODULES = ['модуль', 'модуля', 'модулей'] as const;
 export const RU_PACKS = ['пак', 'пака', 'паков'] as const;
+export const RU_REVIEWS = ['повторение', 'повторения', 'повторений'] as const;
 

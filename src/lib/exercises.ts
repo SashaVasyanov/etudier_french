@@ -46,6 +46,8 @@ interface CreateLessonSessionInput {
   newWordIds?: string[];
   activePackIds?: string[];
   title?: string;
+  /** «5 минут»: only the most urgent reviews, two short tasks per word. */
+  quick?: boolean;
 }
 
 interface CreateFlashcardSessionInput {
@@ -61,6 +63,39 @@ interface CreateFlashcardSessionInput {
 
 function getNewWordsQuota(target: number): number {
   return Math.max(3, Math.round(target * 0.34));
+}
+
+export interface DailyBalance {
+  /** Words whose review is due now. */
+  dueCount: number;
+  /** New words the daily lesson will introduce. */
+  newWords: number;
+  /** New words held back today because reviews piled up. */
+  deferredNewWords: number;
+  /** Review slots in the lesson after the balance. */
+  reviewSlots: number;
+}
+
+/**
+ * New words give way to reviews when reviews pile up (after a break): with
+ * more due words than review slots the lesson takes half the new words, with
+ * twice as many it takes none, and the freed slots go to reviews. The most
+ * urgent reviews come first, so a backlog is worked off over a few days
+ * instead of in one exhausting session.
+ */
+export function getDailyBalance(
+  words: Word[],
+  storage: AppStorage,
+  durationMinutes: LessonDurationMinutes,
+  wordTarget?: number,
+  useFullPool = false,
+): DailyBalance {
+  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool, words.length);
+  const dueCount = words.filter((word) => isWordDueForReview(getWordProgress(storage, word.id))).length;
+  const slots = limits.activeWords;
+  const newWords = dueCount >= slots * 2 ? 0 : dueCount > slots ? Math.max(1, Math.floor(limits.newWords / 2)) : limits.newWords;
+  const deferredNewWords = limits.newWords - newWords;
+  return { dueCount, newWords, deferredNewWords, reviewSlots: slots + deferredNewWords };
 }
 
 function getLessonLimits(
@@ -787,11 +822,13 @@ function createDailySession(
   useFullPool = false,
   newWordIds?: string[],
 ): LessonSession | null {
-  const limits = getLessonLimits(durationMinutes, wordTarget, useFullPool, words.length);
+  const balance = getDailyBalance(words, storage, durationMinutes, wordTarget, useFullPool);
+  const baseLimits = getLessonLimits(durationMinutes, wordTarget, useFullPool, words.length);
+  const limits = { ...baseLimits, newWords: balance.newWords, activeWords: balance.reviewSlots };
   const newWordIdSet = newWordIds ? new Set(newWordIds) : null;
   const newWords = pickNewWords(newWordIdSet ? words.filter((word) => newWordIdSet.has(word.id)) : words, storage, limits.newWords);
   const learningWords = pickLearningWords(words, storage, limits.activeWords);
-  const introductionWords = newWords.length > 0 ? newWords : learningWords.slice(0, Math.max(1, limits.newWords));
+  const introductionWords = newWords.length > 0 ? newWords : learningWords.slice(0, Math.max(1, baseLimits.newWords));
   const scheduledReviewWords = learningWords;
   // A daily lesson always has five meaningful modules. On a learner's first
   // day there are no previously scheduled reviews, so the same new words are
@@ -926,6 +963,58 @@ function createDailySession(
     steps,
     activePackIds,
   };
+}
+
+/** Words in a «5 минут» session: two tasks each, about 15–20 seconds a task. */
+export const QUICK_REVIEW_WORDS = 8;
+export const QUICK_REVIEW_TITLE = 'Пять минут';
+
+/**
+ * A short session for a busy day: the most urgent due reviews (they advance
+ * the schedule like any review), or, when nothing is due, the weakest words
+ * for practice. No new words.
+ */
+function createQuickReviewSession(
+  words: Word[],
+  storage: AppStorage,
+  activePackIds: string[],
+  title?: string,
+): LessonSession | null {
+  const due = pickLearningWords(words, storage, QUICK_REVIEW_WORDS);
+  const focus = due.length > 0 ? due : pickExtraFocusWords(words, storage, QUICK_REVIEW_WORDS);
+  if (focus.length === 0) return null;
+
+  const result = createExerciseModule(
+    'module-quick-review',
+    due.length > 0 ? 'Срочные повторения' : 'Слабые слова',
+    due.length > 0
+      ? 'Слова, которые пора повторить сегодня, — самые забываемые первыми.'
+      : 'Повторений на сегодня нет — короткая практика самых трудных слов.',
+    focus,
+    ['original_to_translation_choice', 'translation_to_original_input', 'audio_to_translation_choice'],
+    uniqueWords(words),
+    storage,
+  );
+  const modules = renumberModules([result.module]);
+  return {
+    id: `extra-quick-${Date.now()}`,
+    title: title ?? QUICK_REVIEW_TITLE,
+    mode: 'extra',
+    presentation: 'standard',
+    durationMinutes: 10,
+    startedAt: new Date().toISOString(),
+    exerciseIds: result.exercises.map((exercise) => exercise.id),
+    exercises: result.exercises,
+    sourceWordIds: focus.map((word) => word.id),
+    modules,
+    steps: buildSteps(modules, { [result.module.id]: result.exercises }),
+    activePackIds,
+  };
+}
+
+/** Due reviews over all active words — what «5 минут» would pick from. */
+export function countDueReviews(words: Word[], storage: AppStorage): number {
+  return words.filter((word) => isWordDueForReview(getWordProgress(storage, word.id))).length;
 }
 
 function createExtraSession(
@@ -1321,6 +1410,7 @@ export function createLessonSession({
   newWordIds,
   activePackIds = [],
   title,
+  quick = false,
 }: CreateLessonSessionInput): LessonSession | null {
   const eligibleWords = getPracticePool(words, storage);
   if (mode === 'mistakes' && wordIds?.length) {
@@ -1331,6 +1421,10 @@ export function createLessonSession({
   if (mode === 'default') {
     const session = createDailySession(eligibleWords, storage, activePackIds, durationMinutes, wordTarget, useFullPool, newWordIds);
     return session && title ? { ...session, title } : session;
+  }
+
+  if (mode === 'extra' && quick) {
+    return createQuickReviewSession(eligibleWords, storage, activePackIds, title);
   }
 
   if (mode === 'extra' || mode === 'pack') {

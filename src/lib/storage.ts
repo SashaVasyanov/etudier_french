@@ -21,7 +21,7 @@ import type {
   WordProgress,
   WordStatus,
 } from '../types';
-import { addDays, clamp, deriveFrenchLatinTranscription, getTodayDateKey, MAX_DAY_START_HOUR, normalizeTranscription, setDayStartHour, startOfDay } from './utils';
+import { addDays, clamp, deriveFrenchLatinTranscription, getTodayDateKey, MAX_DAY_START_HOUR, normalizeTranscription, setDayStartHour, shiftDateKey, startOfDay } from './utils';
 
 const STORAGE_KEY = 'anki-plus-storage';
 const STORAGE_BACKUP_KEY = `${STORAGE_KEY}-backup`;
@@ -91,6 +91,7 @@ function createDefaultStorage(): AppStorage {
     completedDailyLessons: [],
     streakDays: 0,
     lastLessonDate: null,
+    streakFreezeDates: [],
     lessonDurationEnabled: true,
     lessonDurationMinutes: 20,
     lessonWordTarget: 20,
@@ -427,6 +428,9 @@ function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
     learningLanguage: parsed.learningLanguage === 'japanese' ? 'japanese' : 'french',
     streakDays: nonNegativeInteger(parsed.streakDays),
     lastLessonDate: isValidDateKey(parsed.lastLessonDate) ? parsed.lastLessonDate : null,
+    streakFreezeDates: Array.isArray(parsed.streakFreezeDates)
+      ? Array.from(new Set(parsed.streakFreezeDates.filter(isValidDateKey))).sort().slice(-STREAK_FREEZE_HISTORY)
+      : [],
     progressByWordId: Object.fromEntries(
       progressEntries
         .filter((entry): entry is [string, Partial<WordProgress>] => isRecord(entry[1]))
@@ -731,6 +735,9 @@ export function importStorageSnapshot(raw: string): AppStorage {
 
 const SCHEDULED_WORD_STATUSES = new Set<WordStatus>(['learning', 'difficult', 'review', 'mastered']);
 const MASTERY_REVIEW_DAYS = 3;
+/** A word counts as learned only once it is recalled after a gap this long:
+ *  three good days in the first week show the start of memory, not memory. */
+export const MASTERY_INTERVAL_DAYS = 21;
 const SUCCESSFUL_SESSION_RATIO = 0.75;
 const DIFFICULT_SESSION_MISTAKES = 2;
 const NEW_WORD_DIFFICULT_MISTAKES = 3;
@@ -888,7 +895,8 @@ function buildAggregatedProgress(
     : [...existing.successful_review_dates, reviewDate].sort().slice(-MAX_SUCCESSFUL_REVIEW_DATES);
   const intervalDays = nextSuccessfulInterval(existing, successfulReviewDates.length, easeFactor, now);
   const status: WordStatus =
-    existing.status === 'mastered' || successfulReviewDates.length >= MASTERY_REVIEW_DAYS
+    existing.status === 'mastered'
+    || (successfulReviewDates.length >= MASTERY_REVIEW_DAYS && existing.interval_days >= MASTERY_INTERVAL_DAYS)
       ? 'mastered'
       : 'review';
   const becameMastered = existing.status !== 'mastered' && status === 'mastered';
@@ -914,30 +922,88 @@ function buildAggregatedProgress(
   };
 }
 
-function getUpdatedStreak(storage: AppStorage, now: Date): Pick<AppStorage, 'lastLessonDate' | 'streakDays'> {
+/** One missed day per this many days is forgiven and keeps the streak. */
+export const STREAK_FREEZE_PERIOD_DAYS = 7;
+const STREAK_FREEZE_HISTORY = 12;
+
+/** Whether missing `missedDate` can be forgiven: no other day was forgiven in
+ *  the seven days before it. */
+function canForgiveMissedDay(storage: AppStorage, missedDate: string): boolean {
+  const windowStart = shiftDateKey(missedDate, -(STREAK_FREEZE_PERIOD_DAYS - 1));
+  return !(storage.streakFreezeDates ?? []).some((date) => date >= windowStart && date < missedDate);
+}
+
+function getUpdatedStreak(storage: AppStorage, now: Date): Pick<AppStorage, 'lastLessonDate' | 'streakDays' | 'streakFreezeDates'> {
   const today = getTodayDateKey(now);
-  if (storage.lastLessonDate === today) return { lastLessonDate: today, streakDays: storage.streakDays };
+  const freezeDates = storage.streakFreezeDates ?? [];
+  if (storage.lastLessonDate === today) return { lastLessonDate: today, streakDays: storage.streakDays, streakFreezeDates: freezeDates };
   // Answers settled after the fact (a previous day's draft) must not move the
   // streak backwards past a later study day.
   if (storage.lastLessonDate && storage.lastLessonDate > today) {
-    return { lastLessonDate: storage.lastLessonDate, streakDays: storage.streakDays };
+    return { lastLessonDate: storage.lastLessonDate, streakDays: storage.streakDays, streakFreezeDates: freezeDates };
   }
-  if (!storage.lastLessonDate) return { lastLessonDate: today, streakDays: 1 };
+  if (!storage.lastLessonDate) return { lastLessonDate: today, streakDays: 1, streakFreezeDates: freezeDates };
 
-  const previousDate = new Date(`${storage.lastLessonDate}T00:00:00`);
-  const currentDate = new Date(`${today}T00:00:00`);
-  const differenceInDays = Math.round((currentDate.getTime() - previousDate.getTime()) / (24 * 60 * 60 * 1000));
-  return { lastLessonDate: today, streakDays: differenceInDays === 1 ? storage.streakDays + 1 : 1 };
+  if (storage.lastLessonDate === shiftDateKey(today, -1)) {
+    return { lastLessonDate: today, streakDays: storage.streakDays + 1, streakFreezeDates: freezeDates };
+  }
+  // Exactly one missed day: forgiven once a week, the streak goes on.
+  const missedDate = shiftDateKey(today, -1);
+  if (storage.lastLessonDate === shiftDateKey(today, -2) && canForgiveMissedDay(storage, missedDate)) {
+    return {
+      lastLessonDate: today,
+      streakDays: storage.streakDays + 1,
+      streakFreezeDates: [...freezeDates, missedDate].slice(-STREAK_FREEZE_HISTORY),
+    };
+  }
+  return { lastLessonDate: today, streakDays: 1, streakFreezeDates: freezeDates };
 }
 
 export function getCurrentStreakDays(storage: AppStorage, now = new Date()): number {
   if (!storage.lastLessonDate) return 0;
   const today = getTodayDateKey(now);
   if (storage.lastLessonDate === today) return storage.streakDays;
-  const yesterday = getTodayDateKey(addDays(startOfDay(now), -1));
+  const yesterday = shiftDateKey(today, -1);
   // «>=» also keeps the streak when the start of the day was moved later and
   // the last lesson now counts as «tomorrow».
-  return storage.lastLessonDate >= yesterday ? storage.streakDays : 0;
+  if (storage.lastLessonDate >= yesterday) return storage.streakDays;
+  // Yesterday was missed, but a lesson today will be forgiven it.
+  if (storage.lastLessonDate === shiftDateKey(today, -2) && canForgiveMissedDay(storage, yesterday)) return storage.streakDays;
+  return 0;
+}
+
+export interface StreakSummary {
+  days: number;
+  studiedToday: boolean;
+  /** Yesterday was missed; a lesson today keeps the streak. */
+  atRisk: boolean;
+  /** A missed day would be forgiven now. */
+  freezeAvailable: boolean;
+  /** Study flags for the last seven days, oldest first, today last. */
+  week: boolean[];
+  /** Days studied out of the last seven. */
+  weekDays: number;
+}
+
+export function getStreakSummary(storage: AppStorage, now = new Date()): StreakSummary {
+  const today = getTodayDateKey(now);
+  const studied = new Set(storage.dailyStats.map((item) => item.date));
+  if (storage.lastLessonDate) studied.add(storage.lastLessonDate);
+  const week = Array.from({ length: 7 }, (_, index) => studied.has(shiftDateKey(today, index - 6)));
+  const days = getCurrentStreakDays(storage, now);
+  const studiedToday = storage.lastLessonDate === today;
+  const atRisk = days > 0 && !studiedToday && storage.lastLessonDate === shiftDateKey(today, -2);
+  // The next day that could be missed: yesterday (being forgiven right now),
+  // tomorrow after today's lesson, otherwise today.
+  const nextMiss = atRisk ? shiftDateKey(today, -1) : studiedToday ? shiftDateKey(today, 1) : today;
+  return {
+    days,
+    studiedToday,
+    atRisk,
+    freezeAvailable: canForgiveMissedDay(storage, nextMiss),
+    week,
+    weekDays: week.filter(Boolean).length,
+  };
 }
 
 export function applyOutcomes(currentStorage: AppStorage, outcomes: ExerciseOutcome[], now = new Date()): AppStorage {

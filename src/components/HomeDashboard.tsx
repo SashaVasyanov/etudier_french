@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { getTodayDateKey, percentage, countRu, RU_ANSWERS, RU_DAYS, RU_PACKS, RU_WORDS } from '../lib/utils';
+import { getTodayDateKey, percentage, countRu, RU_ANSWERS, RU_DAYS, RU_PACKS, RU_REVIEWS, RU_WORDS } from '../lib/utils';
 import { getCurrentStreakDays } from '../lib/storage';
+import type { DailyBalance } from '../lib/exercises';
 import { getPackCompletionRatio } from '../lib/packs';
 import { getLessonProgress } from '../lib/lessonSession';
 import { getAnswerAccuracy, summarizeWordStatuses } from '../lib/studyMetrics';
@@ -32,6 +33,8 @@ interface HomeDashboardProps {
   dailyCompletion: DailyLessonRecord | null;
   onStartLesson: () => void;
   onStartExtraLesson: () => void;
+  onStartQuickReview: () => void;
+  dailyBalance: DailyBalance;
   onStartFlashcards: () => void;
   onLessonDurationChange: (value: LessonDurationMinutes) => void;
   onOpenStatistics: () => void;
@@ -65,6 +68,8 @@ export function HomeDashboard({
   dailyCompletion,
   onStartLesson,
   onStartExtraLesson,
+  onStartQuickReview,
+  dailyBalance,
   onStartFlashcards,
   onLessonDurationChange,
   onOpenStatistics,
@@ -78,6 +83,7 @@ export function HomeDashboard({
   const todayAccuracy = getAnswerAccuracy(storage.dailyStats, learningLanguage, getTodayDateKey()).accuracy;
   const wordStats = summarizeWordStatuses(progressList);
   const wordsInProcess = wordStats.inProgress;
+  const hasStudiedWords = wordsInProcess + wordStats.difficult + wordStats.learned > 0;
   const selectedLessonPack = packs.find((pack) => pack.id === lessonSourcePackId) ?? null;
   const lessonPackLabel = selectedLessonPack ? selectedLessonPack.title : 'Все слова';
   const displayName = storage.profile.displayName.trim() || 'Ученик';
@@ -127,6 +133,11 @@ export function HomeDashboard({
           <span className="daily-card-kicker">Твоя программа на сегодня</span>
           <h2>{isDailyComplete ? 'На сегодня заданий нет' : `${learningLanguageLabel} — по чуть-чуть, но каждый день`}</h2>
           <p>{isDailyComplete ? 'Все 5 модулей завершены. Выбирай лёгкую дополнительную практику или возвращайся к словам.' : dailyDraft ? `Урок сохранён · выполнено ${draftProgress?.completedSteps} из ${dailyDraft.session.steps.length} шагов · осталось модулей: ${draftProgress?.remainingModules}` : `${durationMeta} · тема: ${lessonPackLabel}`}</p>
+          {!isDailyComplete && !dailyDraft && dailyBalance.deferredNewWords > 0 ? (
+            <p className="daily-backlog-note">
+              {`Накопилось ${countRu(dailyBalance.dueCount, RU_REVIEWS)} — ${dailyBalance.newWords === 0 ? 'сегодня без новых слов' : 'новых слов сегодня меньше'}, сначала самое забываемое.`}
+            </p>
+          ) : null}
         </div>
 
         <div className="daily-route" aria-label={`Прогресс дня: ${completedModuleCount} из 5 модулей`}>
@@ -202,10 +213,18 @@ export function HomeDashboard({
           <div>
             <span>Когда есть пара минут</span>
             <h2>Быстрая практика</h2>
+            <p className="practice-quick-note">
+              {dailyBalance.dueCount > 0
+                ? `Ждут ${countRu(dailyBalance.dueCount, RU_REVIEWS)} — за 5 минут самые срочные.`
+                : hasStudiedWords
+                  ? 'Повторений сейчас нет — 5 минут на самые трудные слова.'
+                  : 'Повторять пока нечего — начните с урока дня.'}
+            </p>
           </div>
           <div className="practice-bento-actions">
+            <button type="button" className="practice-quick-button" disabled={!hasStudiedWords} onClick={onStartQuickReview}><AppIcon name="play" size={18} /> 5 минут</button>
             <button type="button" onClick={onStartFlashcards}><AppIcon name="cards" size={18} /> Карточки</button>
-            <button type="button" onClick={onStartExtraLesson}><AppIcon name="sparkles" size={18} /> Микс заданий</button>
+            <button type="button" onClick={onStartExtraLesson}><AppIcon name="sparkles" size={18} /> Микс</button>
           </div>
         </section>
 

@@ -193,6 +193,32 @@ export function getFrenchArticleForWord(word: Word): string | null {
   return isLikelyFeminineNoun(original) ? 'la' : 'le';
 }
 
+/** Grammatical gender of a French noun from the gender list; null when the
+ *  word is not a noun or its gender is not known for sure. */
+export function getFrenchGender(word: Word): 'm' | 'f' | 'pl' | null {
+  if (word.language !== 'french' || word.part_of_speech !== 'noun') return null;
+  return FRENCH_NOUN_GENDERS[word.original.trim().toLowerCase()] ?? null;
+}
+
+export const FRENCH_GENDER_LABELS = { m: 'муж. род', f: 'жен. род', pl: 'мн. число' } as const;
+
+/**
+ * Splits an example sentence around the studied word so it can be marked.
+ * Matching ignores case; when the word is not found as written the sentence
+ * comes back whole.
+ */
+export function splitExampleAroundWord(sentence: string, word: Word): { before: string; match: string; after: string } | null {
+  const target = word.original.trim();
+  if (!sentence || !target) return null;
+  const index = sentence.toLocaleLowerCase().indexOf(target.toLocaleLowerCase());
+  if (index < 0) return null;
+  return {
+    before: sentence.slice(0, index),
+    match: sentence.slice(index, index + target.length),
+    after: sentence.slice(index + target.length),
+  };
+}
+
 export function getDisplayWord(word: Word): string {
   if (word.language !== 'french') {
     return word.original;
@@ -311,14 +337,6 @@ export function getWordDescription(word: Word): string {
 
 export function getWordExampleLabel(word: Word): string {
   return isUsageFocusedWord(word) ? 'Фраза с контекстом' : 'Контекст';
-}
-
-export function getLessonWordBadge(word: Word): string {
-  if (word.language === 'japanese') {
-    return word.part_of_speech === 'expression' ? 'Базовое японское выражение' : 'Базовое японское слово';
-  }
-
-  return word.part_of_speech === 'expression' ? 'Распространённое выражение' : 'Распространённое слово';
 }
 
 export function getLessonWordNotes(word: Word): string[] {

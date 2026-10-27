@@ -1,6 +1,6 @@
 [package]
 name = "etudier"
-version = "0.3.1"
+version = "0.3.2"
 description = "Desktop shell for the étudier app"
 authors = ["Codex"]
 license = ""
@@ -19,3 +19,12 @@ tauri-build = { version = "2.5.6", features = [] }
 
 [dependencies]
 tauri = { version = "2.10.3", features = [] }
+
+# Smaller, faster release binary: one codegen unit with LTO, size-tuned code,
+# no unwinding tables and no debug symbols.
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true

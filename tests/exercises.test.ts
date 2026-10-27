@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createFlashcardSession, createLessonSession, createSentenceCloze, scheduleExerciseRetry } from '../src/lib/exercises';
+import { createFlashcardSession, createLessonSession, getDailyBalance, createSentenceCloze, scheduleExerciseRetry } from '../src/lib/exercises';
 import { applyOutcomes, setLessonDurationPreference } from '../src/lib/storage';
 import type { LessonDurationMinutes, LessonSession, Word } from '../src/types';
 import { now, outcome, progress, storage, word } from './fixtures';
@@ -192,5 +192,61 @@ describe('Japanese sentence cloze', () => {
     expect(clozeFor(jaWord('shonen', '少年', '青少年と少年が来た。'))).toBe('青少年と＿＿が来た。');
     expect(clozeFor(jaWord('mokuteki', '目的', '盲目的に従う。'))).toBeNull();
     expect(clozeFor(jaWord('kazu', '数', '１０まで数えなさい。'))).toBeNull();
+  });
+});
+
+describe('daily balance of new words and reviews', () => {
+  const pool = Array.from({ length: 80 }, (_, i) => word(`w${i}`));
+  const dueProgress = (id: string) => progress(id, 'review', {
+    interval_days: 4, next_review_at: new Date(now.getTime() - 86_400_000).toISOString(),
+  });
+  const withDue = (count: number) => storage(Object.fromEntries(pool.slice(0, count).map((w) => [w.id, dueProgress(w.id)])));
+
+  it('keeps the full new-word quota while reviews fit the lesson', () => {
+    const balance = getDailyBalance(pool, withDue(3), 20);
+    expect(balance.deferredNewWords).toBe(0);
+    expect(balance.newWords).toBeGreaterThan(0);
+  });
+
+  it('halves new words when reviews exceed the slots and drops them at twice the slots', () => {
+    const base = getDailyBalance(pool, withDue(0), 20);
+    const over = getDailyBalance(pool, withDue(base.reviewSlots + 2), 20);
+    expect(over.newWords).toBe(Math.max(1, Math.floor(base.newWords / 2)));
+    expect(over.reviewSlots).toBe(base.reviewSlots + over.deferredNewWords);
+    const backlog = getDailyBalance(pool, withDue(base.reviewSlots * 2), 20);
+    expect(backlog.newWords).toBe(0);
+    expect(backlog.reviewSlots).toBe(base.reviewSlots + base.newWords);
+  });
+
+  it('builds a review-only daily lesson after a long break', () => {
+    const state = withDue(60);
+    const session = createLessonSession({ mode: 'default', words: pool, storage: state, durationMinutes: 20 });
+    const introduced = new Set(session?.exercises.map((exercise) => exercise.wordId));
+    const newIntroduced = [...introduced].filter((id) => !state.progressByWordId[id]);
+    expect(newIntroduced).toHaveLength(0);
+  });
+});
+
+describe('«5 минут» quick review', () => {
+  const pool = Array.from({ length: 30 }, (_, i) => word(`q${i}`));
+
+  it('takes only due reviews, most urgent first, two tasks each', () => {
+    const due = (id: string, days: number) => progress(id, 'review', {
+      interval_days: 4, next_review_at: new Date(now.getTime() - days * 86_400_000).toISOString(),
+    });
+    const state = storage(Object.fromEntries(pool.slice(0, 12).map((w, i) => [w.id, due(w.id, i + 1)])));
+    const session = createLessonSession({ mode: 'extra', quick: true, words: pool, storage: state, durationMinutes: 10 });
+    expect(session?.title).toBe('Пять минут');
+    const ids = new Set(session?.exercises.map((exercise) => exercise.wordId));
+    expect(ids.size).toBe(8);
+    expect([...ids].every((id) => state.progressByWordId[id]?.status === 'review')).toBe(true);
+    expect(session?.exercises).toHaveLength(16);
+  });
+
+  it('falls back to the weakest words when nothing is due and never adds new words', () => {
+    const state = storage({ q1: progress('q1', 'difficult', { wrong_count: 3, shown_count: 4 }) });
+    const session = createLessonSession({ mode: 'extra', quick: true, words: pool, storage: state, durationMinutes: 10 });
+    expect(new Set(session?.exercises.map((exercise) => exercise.wordId))).toEqual(new Set(['q1']));
+    expect(createLessonSession({ mode: 'extra', quick: true, words: pool, storage: storage(), durationMinutes: 10 })).toBeNull();
   });
 });

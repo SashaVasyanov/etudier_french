@@ -28,7 +28,7 @@ export function progress(wordId: string, status: WordProgress['status'] = 'new',
 export function storage(entries: Record<string, WordProgress> = {}): AppStorage {
   return {
     learningLanguage: 'french', progressByWordId: entries, dailyStats: [], completedDailyLessons: [],
-    streakDays: 0, lastLessonDate: null, lessonDurationEnabled: true, lessonDurationMinutes: 20,
+    streakDays: 0, lastLessonDate: null, streakFreezeDates: [], lessonDurationEnabled: true, lessonDurationMinutes: 20,
     lessonWordTarget: 20, lessonSourcePackId: null,
     profile: { displayName: 'Test', createdAt: now.toISOString(), updatedAt: now.toISOString(), lastStudiedAt: null },
     studyHistory: [], packStates: {}, customWords: [], customPacks: [], radicalProgressById: {}, radicalStudyHistory: [],

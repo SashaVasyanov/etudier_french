@@ -176,6 +176,52 @@ describe('streak with answers settled after the fact', () => {
   });
 });
 
+describe('streak with one forgiven missed day a week', () => {
+  const at = (day: number) => new Date(2026, 9, day, 12);
+
+  it('keeps the streak over one missed day and records it', async () => {
+    const { getCurrentStreakDays } = await import('../src/lib/storage');
+    const before = { ...storage(), lastLessonDate: '2026-10-20', streakDays: 4 };
+    expect(getCurrentStreakDays(before, at(22))).toBe(4);
+    const after = applyOutcomes(before, [correct('a')], at(22));
+    expect(after.streakDays).toBe(5);
+    expect(after.streakFreezeDates).toEqual(['2026-10-21']);
+  });
+
+  it('forgives only one missed day in seven', async () => {
+    const { getCurrentStreakDays, getStreakSummary } = await import('../src/lib/storage');
+    const before = { ...storage(), lastLessonDate: '2026-10-24', streakDays: 6, streakFreezeDates: ['2026-10-21'] };
+    expect(getCurrentStreakDays(before, at(26))).toBe(0);
+    expect(applyOutcomes(before, [correct('a')], at(26)).streakDays).toBe(1);
+    const later = { ...before, streakFreezeDates: ['2026-10-17'] };
+    expect(applyOutcomes(later, [correct('a')], at(26)).streakDays).toBe(7);
+    expect(getStreakSummary(before, at(24 + 0)).freezeAvailable).toBe(false);
+  });
+
+  it('breaks the streak after two missed days', () => {
+    const before = { ...storage(), lastLessonDate: '2026-10-20', streakDays: 4 };
+    expect(applyOutcomes(before, [correct('a')], at(23)).streakDays).toBe(1);
+  });
+
+  it('summarises the last seven days', async () => {
+    const { getStreakSummary } = await import('../src/lib/storage');
+    const state = {
+      ...storage(),
+      lastLessonDate: '2026-10-24',
+      streakDays: 2,
+      dailyStats: ['2026-10-19', '2026-10-23', '2026-10-24'].map((date) => ({
+        date, language: 'french' as const, completedLessons: 1, correctAnswers: 1, totalAnswers: 1, wordsLearned: 0, reviewsCompleted: 0,
+      })),
+    };
+    const summary = getStreakSummary(state, at(25));
+    expect(summary.week).toEqual([true, false, false, false, true, true, false]);
+    expect(summary.weekDays).toBe(3);
+    expect(summary.studiedToday).toBe(false);
+    expect(summary.atRisk).toBe(false);
+    expect(getStreakSummary(state, at(26)).atRisk).toBe(true);
+  });
+});
+
 describe('custom start of the study day', () => {
   it('counts a lesson after midnight for the evening before and schedules reviews from that hour', async () => {
     const { setDayStartHour, getTodayDateKey, startOfDay } = await import('../src/lib/utils');

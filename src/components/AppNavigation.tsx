@@ -1,3 +1,4 @@
+import type { StreakSummary } from '../lib/storage';
 import { countRu, RU_DAYS } from '../lib/utils';
 import { AppIcon, type AppIconName } from './AppIcon';
 
@@ -5,7 +6,7 @@ interface AppNavigationProps {
   activeScreen: 'home' | 'lesson' | 'dictionary' | 'radicals' | 'katakana' | 'statistics' | 'profile' | 'packs';
   lessonAvailable: boolean;
   showKanjiRadicals: boolean;
-  streakDays: number;
+  streak: StreakSummary;
   onNavigate: (screen: AppNavigationProps['activeScreen']) => void;
 }
 
@@ -24,7 +25,7 @@ const JAPANESE_ITEMS: typeof NAV_ITEMS = [
   { id: 'katakana', label: 'Катакана', icon: 'kana' },
 ];
 
-export function AppNavigation({ activeScreen, lessonAvailable, showKanjiRadicals, streakDays, onNavigate }: AppNavigationProps) {
+export function AppNavigation({ activeScreen, lessonAvailable, showKanjiRadicals, streak, onNavigate }: AppNavigationProps) {
   function renderItem(item: (typeof NAV_ITEMS)[number]) {
     const isActive = item.id === activeScreen;
 
@@ -64,9 +65,22 @@ export function AppNavigation({ activeScreen, lessonAvailable, showKanjiRadicals
 
       <div className="sidebar-streak-card">
         <span className="sidebar-streak-icon"><AppIcon name="flame" size={22} /></span>
-        <strong>{streakDays > 0 ? `${countRu(streakDays, RU_DAYS)} подряд` : 'Серия не начата'}</strong>
-        <p>{streakDays > 0 ? 'Не прерывайте серию.' : 'Один урок сегодня начнёт серию.'}</p>
+        <strong>{streak.days > 0 ? `${countRu(streak.days, RU_DAYS)} подряд` : 'Серия не начата'}</strong>
+        <p>{getStreakNote(streak)}</p>
+        <div className="sidebar-week" aria-label={`Занятия за 7 дней: ${streak.weekDays} из 7`}>
+          {streak.week.map((studied, index) => (
+            <i key={index} className={[studied ? 'done' : '', index === 6 ? 'today' : ''].filter(Boolean).join(' ')} />
+          ))}
+          <small>{streak.weekDays} из 7</small>
+        </div>
       </div>
     </aside>
   );
+}
+
+function getStreakNote(streak: StreakSummary): string {
+  if (streak.days === 0) return 'Один урок сегодня начнёт серию.';
+  if (streak.atRisk) return 'Вчера пропуск — урок сегодня сохранит серию.';
+  if (streak.studiedToday) return streak.freezeAvailable ? 'Сегодня готово. Один пропуск в неделю не прервёт серию.' : 'Сегодня готово.';
+  return streak.freezeAvailable ? 'Один пропуск в неделю не прервёт серию.' : 'Пропуск на этой неделе уже прощён.';
 }

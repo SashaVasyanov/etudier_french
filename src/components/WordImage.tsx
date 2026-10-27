@@ -15,7 +15,7 @@ export const WordImage = memo(function WordImage({ word, size = 'medium', classN
     return word.language === 'japanese'
       ? {
           ...semanticFallback,
-          src: '/generated-word-images/ja-association-matter.jpg',
+          src: '/generated-word-images/ja-association-matter.webp',
           illustrationType: 'photo-association',
         }
       : semanticFallback;

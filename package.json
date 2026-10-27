@@ -1,7 +1,7 @@
 {
   "name": "etudier",
   "private": true,
-  "version": "0.3.1",
+  "version": "0.3.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,6 +14,8 @@
     "images:audit:japanese": "node scripts/audit-japanese-word-images.mjs",
     "images:audit": "node scripts/audit-generated-word-images.mjs --check",
     "images:cleanup": "node scripts/audit-generated-word-images.mjs --delete --check",
+    "images:optimize": "python3 scripts/optimize_word_images.py",
+    "size": "node scripts/check-size.mjs",
     "japanese:examples": "node scripts/build_japanese_examples.mjs",
     "preview": "vite preview",
     "preview:host": "vite preview --host 127.0.0.1 --port 4173",

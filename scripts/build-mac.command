@@ -31,6 +31,9 @@ npm run tauri -- build --bundles app || fail "сборка не удалась"
 APP="src-tauri/target/release/bundle/macos/étudier.app"
 [ -d "$APP" ] || fail "не найден $APP"
 
+echo "\n— Размер"
+node scripts/check-size.mjs "$APP"
+
 echo "\n— Установка в /Applications"
 if [ -d "/Applications/étudier.app" ]; then
   mv "/Applications/étudier.app" "$HOME/.Trash/étudier-$(date '+%Y%m%d-%H%M%S').app" || fail "не удалось убрать старую версию"

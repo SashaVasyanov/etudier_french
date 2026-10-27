@@ -12,7 +12,7 @@ import { MemoryCheckExercise } from './components/MemoryCheckExercise';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
 import { getLessonPoolWords, getStarterPacks, loadWords } from './data/words';
 import { playWordAudio, setSpeechPreferences, stopAudio } from './lib/audio';
-import { createFlashcardSession, createLessonSession, scheduleExerciseRetry } from './lib/exercises';
+import { createFlashcardSession, createLessonSession, getDailyBalance, QUICK_REVIEW_TITLE, scheduleExerciseRetry } from './lib/exercises';
 import {
   getLearningLanguageProductTitle,
   getLearningLanguageTitle,
@@ -45,7 +45,7 @@ import {
   setWordPackStatus,
   getWordProgress,
   getCompletedDailyLesson,
-  getCurrentStreakDays,
+  getStreakSummary,
   updateProfileName,
 } from './lib/storage';
 import { parseImportedPack } from './lib/importPacks';
@@ -143,6 +143,9 @@ function App() {
   const initialStorageLoad = initialState.storageLoad;
   const initialDraft = initialState.draft;
   const dailyDraftRef = useRef<LessonDraft | null>(initialDraft);
+  const [showShortcuts, setShowShortcuts] = useState(false);
+  const showShortcutsRef = useRef(showShortcuts);
+  showShortcutsRef.current = showShortcuts;
   const [lessonNotice, setLessonNotice] = useState<string | null>(
     initialState.settledStaleDraft ? STALE_DRAFT_NOTICE : null,
   );
@@ -232,6 +235,17 @@ function App() {
     });
   }, [availableWords, lessonPoolWords, selectedLessonSourceWords, storage]);
   const progressList = useMemo(() => availableWords.map((word) => getWordProgress(storage, word.id)), [storage, availableWords]);
+  // How today's lesson splits into new words and reviews (shown on Home).
+  const dailyBalance = useMemo(
+    () => getDailyBalance(
+      dailyLessonWords.filter((word) => getWordProgress(storage, word.id).status !== 'known'),
+      storage,
+      storage.lessonDurationMinutes,
+      storage.lessonWordTarget,
+      !storage.lessonDurationEnabled,
+    ),
+    [dailyLessonWords, storage],
+  );
   const currentStep = session?.steps[stepIndex] ?? null;
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
   const currentWord = currentStep ? wordsById.get(currentStep.wordId) ?? null : null;
@@ -477,7 +491,7 @@ function App() {
     return true;
   }
 
-  function startLesson(mode: LessonMode, options?: { wordIds?: string[]; title?: string; packId?: string }) {
+  function startLesson(mode: LessonMode, options?: { wordIds?: string[]; title?: string; packId?: string; quick?: boolean }) {
     let currentStorage = storageRef.current;
     let settledStaleDraft = false;
     if (mode === 'default' && dailyDraftRef.current && isSessionFromAnotherDay(dailyDraftRef.current.session, getTodayDateKey())) {
@@ -501,7 +515,10 @@ function App() {
     }
 
     if (mode === 'default' && dailyDraftRef.current && resumeDraft(dailyDraftRef.current)) return;
-    if (session?.mode === mode && session.presentation === 'standard' && mode !== 'pack' && mode !== 'default') {
+    // An unfinished practice of the same kind is resumed («5 минут» and the
+    // regular extra lesson are different kinds).
+    const sameKind = (session?.title === QUICK_REVIEW_TITLE) === Boolean(options?.quick);
+    if (session?.mode === mode && session.presentation === 'standard' && mode !== 'pack' && mode !== 'default' && sameKind) {
       if (currentLessonDraft && resumeDraft(currentLessonDraft)) return;
     }
     if (!settledStaleDraft) setLessonNotice(null);
@@ -516,7 +533,7 @@ function App() {
     }
 
     const lessonWordsBase =
-      options?.wordIds && options.wordIds.length > 0
+      (options?.wordIds && options.wordIds.length > 0) || options?.quick
         ? words
         : mode === 'default'
           ? dailyLessonWords
@@ -544,6 +561,7 @@ function App() {
       newWordIds: mode === 'default' && selectedLessonSourceWords ? lessonPoolWords.map((word) => word.id) : undefined,
       activePackIds,
       title: options?.title ?? (mode === 'default' && selectedLessonSourcePack ? `Урок: ${selectedLessonSourcePack.title}` : undefined),
+      quick: options?.quick,
     });
 
     if (!nextSession) {
@@ -551,6 +569,8 @@ function App() {
         // No new quota and no scheduled reviews: show an honest no-due state,
         // but do not create a completion/history/streak record.
         setScreen('dailyComplete');
+      } else if (options?.quick) {
+        setLessonNotice('Пока нечего повторять — начните с урока дня.');
       } else {
         setLessonNotice('Все слова в этой подборке уже известны или исключены. Выберите другую тему в разделе «Темы».');
       }
@@ -795,14 +815,40 @@ function App() {
     setScreen('home');
   }
 
-  // Esc pauses the lesson, like the close button (progress stays in the draft).
+  // Lesson keys: Esc pauses (progress stays in the draft), R plays the word
+  // again, ? shows the list of keys. Letters are matched by physical key so
+  // they work in the Russian layout too, and never while typing an answer.
+  const currentWordRef = useRef(currentWord);
+  currentWordRef.current = currentWord;
   useEffect(() => {
-    if (screen !== 'lesson') return undefined;
+    if (screen !== 'lesson') {
+      setShowShortcuts(false);
+      return undefined;
+    }
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape' || event.isComposing || event.defaultPrevented) return;
-      event.preventDefault();
-      stopAudio();
-      setScreen('home');
+      if (event.isComposing || event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        if (showShortcutsRef.current) {
+          setShowShortcuts(false);
+          return;
+        }
+        stopAudio();
+        setScreen('home');
+        return;
+      }
+      const typing = event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable="true"]');
+      if (typing) return;
+      if (event.code === 'KeyR' && !event.repeat) {
+        event.preventDefault();
+        const word = currentWordRef.current;
+        if (word) void playWordAudio(word, { force: true });
+        return;
+      }
+      if (event.key === '?' || (event.code === 'Slash' && event.shiftKey)) {
+        event.preventDefault();
+        setShowShortcuts((value) => !value);
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
@@ -888,7 +934,7 @@ function App() {
           activeScreen={navScreen}
           lessonAvailable={lessonPoolWords.length > 0 || Boolean(session)}
           showKanjiRadicals={storage.learningLanguage === 'japanese'}
-          streakDays={getCurrentStreakDays(storage)}
+          streak={getStreakSummary(storage)}
           onNavigate={handleNavigate}
         />
 
@@ -940,6 +986,8 @@ function App() {
             packs={packs}
             onStartLesson={() => startLesson('default')}
             onStartExtraLesson={() => startLesson('extra')}
+            onStartQuickReview={() => startLesson('extra', { quick: true })}
+            dailyBalance={dailyBalance}
             onStartFlashcards={() => startFlashcards('extra')}
             onLessonDurationChange={(value) => {
               setStorage((currentStorage) => setLessonDurationPreference(currentStorage, value));
@@ -977,7 +1025,27 @@ function App() {
                   <span className="lesson-session-count" title="Выполнено заданий за урок">
                     {lessonProgress?.completedSteps} из {session.steps.length}
                   </span>
+                  <button
+                    type="button"
+                    className={showShortcuts ? 'lesson-keys-button active' : 'lesson-keys-button'}
+                    aria-label="Клавиши"
+                    aria-expanded={showShortcuts}
+                    title="Клавиши (?)"
+                    onClick={() => setShowShortcuts((value) => !value)}
+                  >
+                    ?
+                  </button>
                 </div>
+                {showShortcuts ? (
+                  <dl className="lesson-keys-sheet" aria-label="Клавиши в уроке">
+                    <div><dt><kbd>1</kbd>–<kbd>4</kbd></dt><dd>выбрать ответ</dd></div>
+                    <div><dt><kbd>Enter</kbd></dt><dd>проверить, дальше</dd></div>
+                    <div><dt><kbd>Пробел</kbd></dt><dd>дальше на карточке слова</dd></div>
+                    <div><dt><kbd>R</kbd></dt><dd>прослушать слово ещё раз</dd></div>
+                    <div><dt><kbd>Esc</kbd></dt><dd>пауза, урок сохранится</dd></div>
+                    <div><dt><kbd>?</kbd></dt><dd>показать или скрыть подсказку</dd></div>
+                  </dl>
+                ) : null}
                 <div
                   className="lesson-module-track"
                   role="progressbar"

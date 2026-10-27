@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createLessonSession } from '../src/lib/exercises';
 import { applyOutcomes } from '../src/lib/storage';
-import { localDateKey, now, outcome, progress, storage, word } from './fixtures';
+import { now, outcome, progress, storage, word } from './fixtures';
 
 const pool = Array.from({ length: 24 }, (_, i) => word(String(i + 1)));
 
@@ -48,22 +48,24 @@ describe('lesson integration', () => {
     expect(session?.exercises.every((exercise) => exercise.type.endsWith('_input'))).toBe(true);
   });
 
-  it('reaches mastered only on the third distinct due date', () => {
-    const firstReview = new Date(2026, 0, 10, 12);
-    const secondReview = new Date(2026, 0, 12, 12);
-    const thirdReview = new Date(2026, 0, 16, 12);
-    let state = storage({ a: progress('a', 'learning', { next_review_at: new Date(firstReview.getTime() - 86_400_000).toISOString() }) });
-    state = applyOutcomes(state, [outcome('a')], firstReview);
-    expect(state.progressByWordId.a.status).not.toBe('mastered');
-    state = applyOutcomes(state, [outcome('a')], secondReview);
-    expect(state.progressByWordId.a.status).not.toBe('mastered');
-    state = applyOutcomes(state, [outcome('a')], thirdReview);
-    expect(state.progressByWordId.a.status).toBe('mastered');
-    expect(state.progressByWordId.a.successful_review_dates).toEqual([
-      localDateKey(firstReview),
-      localDateKey(secondReview),
-      localDateKey(thirdReview),
-    ]);
+  it('reaches mastered only after a recall across a gap of three weeks or more', () => {
+    let state = storage({ a: progress('a', 'learning', { next_review_at: new Date(2026, 0, 9, 12).toISOString() }) });
+    let reviewAt = new Date(2026, 0, 10, 12);
+    const intervals: number[] = [];
+    // Review on each due date: 2 → 4 → 10 → ~25 days; three good days in the
+    // first week are not enough, the recall after the long gap is.
+    for (let review = 1; review <= 5; review += 1) {
+      const before = state.progressByWordId.a;
+      state = applyOutcomes(state, [outcome('a')], reviewAt);
+      const after = state.progressByWordId.a;
+      intervals.push(after.interval_days);
+      expect(after.status).toBe(review === 5 ? 'mastered' : 'review');
+      if (review === 5) expect(before.interval_days).toBeGreaterThanOrEqual(21);
+      const due = new Date(after.next_review_at as string);
+      reviewAt = new Date(due.getFullYear(), due.getMonth(), due.getDate(), 12);
+    }
+    expect(intervals.slice(0, 3)).toEqual([2, 4, 10]);
+    expect(state.progressByWordId.a.successful_review_dates).toHaveLength(5);
   });
 
   it('does not master after eight correct answers in one session/date', () => {

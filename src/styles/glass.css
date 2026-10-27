@@ -1118,6 +1118,10 @@ h3 {
     place-items: center;
   }
 
+  .sidebar-week {
+    display: none;
+  }
+
   /* The inner home grid must not become a column of the page grid. */
   .learning-home-grid {
     grid-column: auto;
@@ -1832,4 +1836,156 @@ h3 {
   border-radius: 14px;
   background: var(--fill);
   box-shadow: none;
+}
+
+/* Last seven days under the streak: a dot per day, today outlined. */
+.sidebar-week {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sidebar-week i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--fill-strong);
+}
+
+.sidebar-week i.done {
+  background: var(--orange);
+}
+
+.sidebar-week i.today {
+  box-shadow: 0 0 0 1.5px var(--bg), 0 0 0 3px var(--label-3);
+}
+
+.sidebar-week small {
+  margin-left: auto;
+  color: var(--label-2);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* «5 минут» leads the quick-practice card; the other two are quieter. */
+.practice-bento-actions {
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 8px;
+}
+
+.practice-bento-actions .practice-quick-button {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.practice-bento-actions .practice-quick-button:hover {
+  background: var(--accent-hover);
+}
+
+.practice-bento-actions .practice-quick-button .app-icon-svg {
+  color: currentColor;
+}
+
+.practice-quick-note,
+.daily-backlog-note {
+  margin: 4px 0 0;
+  color: var(--label-2);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.daily-backlog-note {
+  color: var(--orange);
+}
+
+.practice-bento-actions .practice-quick-button:disabled {
+  background: var(--fill);
+  color: var(--label-3);
+}
+
+.progress-bento-stats > span {
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+/* «?» in the lesson header: the list of keys. */
+.lesson-session-row {
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+}
+
+.lesson-keys-button {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--fill);
+  color: var(--label-2);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lesson-keys-button:hover,
+.lesson-keys-button.active {
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.lesson-keys-sheet {
+  margin: 2px 0 0 6px;
+  padding: 10px 0 2px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 16px;
+  border-top: 1px solid var(--separator);
+  font-size: 0.82rem;
+}
+
+.lesson-keys-sheet div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.lesson-keys-sheet dt {
+  flex: 0 0 auto;
+  color: var(--label-2);
+}
+
+.lesson-keys-sheet dd {
+  margin: 0;
+  color: var(--label);
+}
+
+.lesson-keys-sheet kbd {
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: var(--fill);
+  color: var(--label);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* Gender of a French noun: a quiet colour cue next to the part of speech. */
+.gender-mark {
+  font-weight: 600;
+}
+
+.gender-mark.gender-m {
+  color: var(--accent);
+}
+
+.gender-mark.gender-f {
+  color: var(--orange);
+}
+
+/* The studied word inside its example sentence. */
+.lesson-preview-example mark {
+  padding: 0 2px;
+  border-radius: 4px;
+  background: var(--accent-tint);
+  color: inherit;
 }

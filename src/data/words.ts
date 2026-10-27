@@ -1057,7 +1057,7 @@ function normalizeWord(word: Word): Word {
       ? null
       : word.language === 'japanese'
         ? {
-            src: '/generated-word-images/ja-association-matter.jpg',
+            src: '/generated-word-images/ja-association-matter.webp',
             alt: `Ассоциативное изображение: ${word.translation}`,
             category: 'japanese',
             illustrationType: 'photo-association',

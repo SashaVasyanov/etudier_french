@@ -980,8 +980,8 @@ function applyCuratedImageOverrides(words, manifest) {
     const word = wordsById.get(wordId);
     if (!word) continue;
     manifest[wordId] = {
-      imagePath: '/generated-word-images/ja-association-one-person.jpg',
-      imageUrl: '/generated-word-images/ja-association-one-person.jpg',
+      imagePath: '/generated-word-images/ja-association-one-person.webp',
+      imageUrl: '/generated-word-images/ja-association-one-person.webp',
       imageAlt: `${word.translation}: ${word.original}`,
       imagePrompt: 'Exactly one Japanese adult walking alone in a quiet park.',
       imageSource: 'generated:openai-imagegen',

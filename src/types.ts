@@ -243,6 +243,8 @@ export interface AppStorage {
   completedDailyLessons: DailyLessonRecord[];
   streakDays: number;
   lastLessonDate: string | null;
+  /** Missed days that did not break the streak (one per seven days). */
+  streakFreezeDates: string[];
   lessonDurationEnabled: boolean;
   lessonDurationMinutes: LessonDurationMinutes;
   lessonWordTarget: LessonWordTarget;
