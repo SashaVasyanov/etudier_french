@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { AppStorage, LearningLanguage, Word, WordLevel } from '../types';
-import { formatDurationLabel, getTodayDateKey, countRu, pluralRu, RU_WORDS } from '../lib/utils';
-import { getCurrentStreakDays, getWordProgress } from '../lib/storage';
+import { formatDurationLabel, getTodayDateKey, countRu, pluralRu, RU_REVIEWS, RU_WORDS } from '../lib/utils';
+import { getCurrentStreakDays, getMemoryStrength, getRecentRecallRate, getReviewForecast, getWordProgress } from '../lib/storage';
 import { getAnswerAccuracy, getRecentWordCounts, summarizeWordStatuses } from '../lib/studyMetrics';
 import { isInMemory } from '../lib/milestones';
 import { getPartOfSpeechLabel } from '../lib/wordPresentation';
@@ -153,6 +153,19 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
     [storage, words],
   );
   const wordsInProcess = wordStats.inProgress;
+  const progressList = useMemo(() => words.map((word) => getWordProgress(storage, word.id)), [storage, words]);
+  const forecast = useMemo(() => getReviewForecast(progressList), [progressList]);
+  const forecastTotal = forecast.reduce((sum, count) => sum + count, 0);
+  const maxForecast = Math.max(1, ...forecast);
+  const strength = useMemo(() => getMemoryStrength(progressList), [progressList]);
+  const recallRate = getRecentRecallRate(storage.memoryCalibration?.[learningLanguage]);
+  const forecastLabels = forecast.map((_, index) => {
+    if (index === 0) return 'Сегодня';
+    if (index === 1) return 'Завтра';
+    const day = new Date();
+    day.setDate(day.getDate() + index);
+    return day.toLocaleDateString('ru-RU', { weekday: 'short' });
+  });
   const currentStreak = getCurrentStreakDays(storage);
   const { correctAnswers, totalAnswers, accuracy } = getAnswerAccuracy(storage.dailyStats, learningLanguage);
   const studyTimeSeconds = languageHistory.reduce((sum, item) => sum + item.timeSpentSeconds, 0);
@@ -200,6 +213,41 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
       </section>
 
       <div className="analytics-grid">
+        <section className="analytics-card analytics-forecast-card">
+          <div className="analytics-card-head">
+            <div>
+              <h2>Повторения на неделю</h2>
+              <p>
+                {forecastTotal > 0
+                  ? `Сегодня — ${countRu(forecast[0], RU_REVIEWS)}, за 7 дней — ${forecastTotal}. Повтор приходит, когда слово начинает забываться.`
+                  : 'Повторений пока нет: они появятся после первых уроков.'}
+              </p>
+            </div>
+            {recallRate !== null ? (
+              <span className="analytics-summary-badge" title="Доля слов, которые вы вспомнили на последних повторениях">
+                вспоминаете {Math.round(recallRate * 100)}%
+              </span>
+            ) : null}
+          </div>
+          <div className="analytics-week-chart" aria-label="Повторения по дням на неделю вперёд">
+            {forecast.map((count, index) => (
+              <div key={index} className={index === 0 ? 'analytics-week-bar today' : 'analytics-week-bar'}>
+                <span style={{ height: count === 0 ? '3px' : `${Math.max(12, (count / maxForecast) * 100)}%` }} />
+                <strong>{count}</strong>
+                <small>{forecastLabels[index]}</small>
+              </div>
+            ))}
+          </div>
+          {strength.fresh + strength.weeks + strength.months + strength.long > 0 ? (
+            <div className="analytics-strength" aria-label="Прочность памяти изученных слов">
+              <span><strong>{strength.fresh}</strong> держатся меньше недели</span>
+              <span><strong>{strength.weeks}</strong> — до месяца</span>
+              <span><strong>{strength.months}</strong> — до трёх месяцев</span>
+              <span><strong>{strength.long}</strong> — дольше</span>
+            </div>
+          ) : null}
+        </section>
+
         <section className="analytics-card analytics-chart-card">
           <div className="analytics-card-head">
             <div>

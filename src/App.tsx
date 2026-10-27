@@ -47,6 +47,7 @@ import {
   getWordProgress,
   getCompletedDailyLesson,
   getStreakSummary,
+  reconcileWithProgressFile,
   updateProfileName,
 } from './lib/storage';
 import { parseImportedPack } from './lib/importPacks';
@@ -62,7 +63,6 @@ import type {
   WordProgress,
 } from './types';
 import './styles/app.css';
-import './styles/glass.css';
 
 const DictionaryScreen = lazy(() => import('./components/DictionaryScreen'));
 const PackDetailScreen = lazy(() =>
@@ -160,6 +160,19 @@ function App() {
   }, []);
   const [storage, setStorage] = useState<AppStorage>(initialStorageLoad.storage);
   const [storageError, setStorageError] = useState<StorageError | null>(initialStorageLoad.error);
+  // The desktop app keeps a file copy of progress; a newer file (for example
+  // after the WebView data was cleared) replaces what localStorage had.
+  useEffect(() => {
+    let cancelled = false;
+    void reconcileWithProgressFile().then((restored) => {
+      if (cancelled || !restored) return;
+      setStorage(restored);
+      setStorageError(null);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const [baseWords, setBaseWords] = useState<Word[]>([]);
   const [session, setSession] = useState<LessonSession | null>(initialDraft?.session ?? null);
   const [stepIndex, setStepIndex] = useState(initialDraft?.stepIndex ?? 0);

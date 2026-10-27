@@ -1,5 +1,5 @@
 import { useDeferredValue, useEffect, useMemo, useState } from 'react';
-import { countRu, RU_WORDS } from '../lib/utils';
+import { countRu, getSearchRank, normalizeSearchText, RU_WORDS } from '../lib/utils';
 import { playWordAudio } from '../lib/audio';
 import { getLearningLanguageLocale, getLearningLanguageTitle } from '../lib/languages';
 import { getPackByWord } from '../lib/packs';
@@ -34,7 +34,7 @@ const TABS: Array<{ id: DictionaryFilterTab; label: string }> = [
   { id: 'difficult', label: 'Сложные' },
   { id: 'excluded', label: 'Исключённые' },
 ];
-const INITIAL_VISIBLE_WORDS = 80;
+const INITIAL_VISIBLE_WORDS = 40;
 const VISIBLE_WORDS_STEP = 80;
 
 export default function DictionaryScreen({ learningLanguage, words, storage, packs, onMarkWordKnown, onRestoreWord, onAddWord }: DictionaryScreenProps) {
@@ -66,12 +66,17 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
   });
   const deferredQuery = useDeferredValue(query);
   const languageTitle = getLearningLanguageTitle(learningLanguage);
+  // Search ignores case, accents and ё (ecole finds école); the word and its
+  // translation are matched first, examples and tags after.
   const searchIndexByWordId = useMemo(
     () =>
       new Map(
         words.map((word) => [
           word.id,
-          [word.original, word.translation, word.example_original, ...word.tags].join(' ').toLocaleLowerCase(),
+          {
+            primary: normalizeSearchText([word.original, word.translation, word.transcription].join(' | ')),
+            secondary: normalizeSearchText([word.example_original, word.example_translation, ...word.tags].join(' | ')),
+          },
         ]),
       ),
     [words],
@@ -83,9 +88,10 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
   );
 
   const filteredWords = useMemo(() => {
-    const normalizedQuery = deferredQuery.trim().toLocaleLowerCase();
+    const normalizedQuery = normalizeSearchText(deferredQuery.trim());
+    const rank = new Map<string, number>();
 
-    return words.filter((word) => {
+    const matches = words.filter((word) => {
       const status = storage.progressByWordId[word.id]?.status ?? 'new';
       const matchesTab =
         tab === 'all'
@@ -102,13 +108,22 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
       const matchesLevel = level === 'all' ? true : getStudyLevel(word) === level;
       const matchesPack =
         packFilter === 'all' ? true : packFilter === 'core' ? word.source === 'core' : word.packIds.includes(packFilter);
-      const matchesQuery =
-        normalizedQuery.length === 0
-          ? true
-          : searchIndexByWordId.get(word.id)?.includes(normalizedQuery) ?? false;
+      let matchesQuery = normalizedQuery.length === 0;
+      if (!matchesQuery) {
+        const entry = searchIndexByWordId.get(word.id);
+        const score = entry ? getSearchRank(entry, normalizedQuery) : null;
+        matchesQuery = score !== null;
+        if (score !== null) rank.set(word.id, score);
+      }
 
       return matchesTab && matchesLevel && matchesPack && matchesQuery;
     });
+    return normalizedQuery.length === 0
+      ? matches
+      : matches
+          .map((word, index) => ({ word, index }))
+          .sort((left, right) => (rank.get(left.word.id) ?? 9) - (rank.get(right.word.id) ?? 9) || left.index - right.index)
+          .map(({ word }) => word);
   }, [deferredQuery, level, packFilter, searchIndexByWordId, storage.progressByWordId, tab, words]);
   const visibleWords = useMemo(
     () => filteredWords.slice(0, visibleWordCount),
@@ -427,7 +442,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                     )}
                   </>
                 }
-                details={expanded ? <WordDetailsPanel word={word} /> : undefined}
+                details={expanded ? <WordDetailsPanel word={word} progress={progress} /> : undefined}
               />
             </AppCard>
           );

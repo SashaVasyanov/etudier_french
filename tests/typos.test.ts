@@ -31,3 +31,17 @@ describe('typos and answer comparison', () => {
     expect(diffAnswer('Paris', 'paris').correct).toEqual([{ text: 'paris', kind: 'same' }]);
   });
 });
+
+describe('dictionary search', () => {
+  it('ignores case, accents and ё and ranks whole words first', async () => {
+    const { getSearchRank, normalizeSearchText } = await import('../src/lib/utils');
+    const entry = (primary: string, secondary = '') => ({ primary: normalizeSearchText(primary), secondary: normalizeSearchText(secondary) });
+    expect(normalizeSearchText('École Œuf Ёлка')).toBe('ecole oeuf елка');
+    expect(getSearchRank(entry("l'école | школа"), 'ecole')).toBe(0);
+    expect(getSearchRank(entry('maison | дом'), 'mai')).toBe(1);
+    expect(getSearchRank(entry('demain | завтра'), 'mai')).toBe(2);
+    expect(getSearchRank(entry('chat | кот', 'Il fait beau en mai.'), 'mai')).toBe(3);
+    expect(getSearchRank(entry('chat | кот'), 'mai')).toBeNull();
+    expect(getSearchRank(entry('ёлка | ель'), 'елка')).toBe(0);
+  });
+});

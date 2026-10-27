@@ -22,6 +22,7 @@ import type {
   WordProgress,
   WordStatus,
 } from '../types';
+import { flushProgressFile, hasFileStore, readProgressFile, scheduleProgressFileWrite } from './fileStore';
 import { DEFAULT_RETENTION, initialState, intervalForRetention, MAX_RETENTION, MIN_RETENTION, nextState, retrievability, stateFromLegacy, type Grade, type MemoryState } from './fsrs';
 import { addDays, clamp, deriveFrenchLatinTranscription, getTodayDateKey, MAX_DAY_START_HOUR, normalizeTranscription, setDayStartHour, shiftDateKey, startOfDay } from './utils';
 
@@ -695,6 +696,8 @@ export function saveStorage(storage: AppStorage): StorageSaveResult {
       }
     }
 
+    // The file copy is written whatever happens to localStorage below.
+    scheduleProgressFileWrite(serialized);
     try {
       window.localStorage.setItem(STORAGE_KEY, serialized);
     } catch {
@@ -705,6 +708,10 @@ export function saveStorage(storage: AppStorage): StorageSaveResult {
     }
     return { ok: true };
   } catch {
+    if (hasFileStore()) {
+      // localStorage is full or unavailable, but the file holds this save.
+      return { ok: true };
+    }
     return {
       ok: false,
       error: {
@@ -714,6 +721,62 @@ export function saveStorage(storage: AppStorage): StorageSaveResult {
       },
     };
   }
+}
+
+function readEnvelopeTime(raw: string | null): number {
+  if (!raw) return -Infinity;
+  try {
+    const value: unknown = JSON.parse(raw);
+    const savedAt = isRecord(value) ? new Date(String(value.savedAt)).getTime() : NaN;
+    return Number.isFinite(savedAt) ? savedAt : -Infinity;
+  } catch {
+    return -Infinity;
+  }
+}
+
+/**
+ * Start-up check against the file copy. When the file is newer than
+ * localStorage (cleared WebView data, a save that did not fit the quota) its
+ * progress is returned and written back; otherwise the current data is
+ * mirrored to the file. Returns null when nothing has to change.
+ */
+export async function reconcileWithProgressFile(): Promise<AppStorage | null> {
+  if (!hasFileStore()) return null;
+  const fileRaw = await readProgressFile();
+  let localRaw: string | null = null;
+  try {
+    localRaw = window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    localRaw = null;
+  }
+  let localValid = false;
+  if (localRaw) {
+    try {
+      parseStoredStorage(localRaw);
+      localValid = true;
+    } catch {
+      localValid = false;
+    }
+  }
+  if (fileRaw && (!localValid || readEnvelopeTime(fileRaw) > readEnvelopeTime(localRaw))) {
+    try {
+      const restored = parseStoredStorage(fileRaw);
+      try {
+        window.localStorage.setItem(STORAGE_KEY, fileRaw);
+      } catch {
+        // The file stays the source until localStorage has room again.
+      }
+      setDayStartHour(restored.dayStartHour);
+      return restored;
+    } catch {
+      // A damaged file is ignored; it is overwritten by the next save.
+    }
+  }
+  if (localRaw && localValid && localRaw !== fileRaw) {
+    scheduleProgressFileWrite(localRaw);
+    await flushProgressFile();
+  }
+  return null;
 }
 
 /** A portable copy of all progress (for the «Резервная копия» panel). */
@@ -877,7 +940,13 @@ function normalizeCalibration(value: unknown): AppStorage['memoryCalibration'] {
     const expected = finiteNumber(entry.expectedLapses, NaN);
     const actual = finiteNumber(entry.actualLapses, NaN);
     if (!Number.isFinite(expected) || !Number.isFinite(actual) || expected < 0 || actual < 0) continue;
-    result[language] = { expectedLapses: expected, actualLapses: actual, reviews: Math.max(0, Math.floor(finiteNumber(entry.reviews, 0))) };
+    const weight = finiteNumber(entry.weight, NaN);
+    result[language] = {
+      expectedLapses: expected,
+      actualLapses: actual,
+      reviews: Math.max(0, Math.floor(finiteNumber(entry.reviews, 0))),
+      ...(Number.isFinite(weight) ? { weight } : {}),
+    };
   }
   return Object.keys(result).length > 0 ? result : undefined;
 }
@@ -894,7 +963,42 @@ function updateCalibration(calibration: MemoryCalibration | undefined, predicted
     expectedLapses: base.expectedLapses * CALIBRATION_FADE + (1 - predictedRecall),
     actualLapses: base.actualLapses * CALIBRATION_FADE + (recalled ? 0 : 1),
     reviews: base.reviews + 1,
+    weight: (base.weight ?? base.reviews) * CALIBRATION_FADE + 1,
   };
+}
+
+/** Share of recent due reviews that were recalled; null with too few reviews. */
+export function getRecentRecallRate(calibration: MemoryCalibration | undefined): number | null {
+  if (!calibration || calibration.reviews < 10) return null;
+  const weight = calibration.weight ?? calibration.reviews;
+  return weight > 0 ? clamp(1 - calibration.actualLapses / weight, 0, 1) : null;
+}
+
+/** Due reviews per day for the coming days; today includes overdue words. */
+export function getReviewForecast(progressList: WordProgress[], now = new Date(), days = 7): number[] {
+  const counts = new Array<number>(days).fill(0);
+  const today = startOfDay(now).getTime();
+  for (const progress of progressList) {
+    if (!SCHEDULED_WORD_STATUSES.has(progress.status)) continue;
+    const due = progress.next_review_at ? startOfDay(new Date(progress.next_review_at)).getTime() : today;
+    const index = Math.max(0, Math.round((due - today) / DAY_MS));
+    if (index < days) counts[index] += 1;
+  }
+  return counts;
+}
+
+/** Studied words by how long they are expected to last (FSRS stability). */
+export function getMemoryStrength(progressList: WordProgress[], now = new Date()): { fresh: number; weeks: number; months: number; long: number } {
+  const result = { fresh: 0, weeks: 0, months: 0, long: 0 };
+  for (const progress of progressList) {
+    const state = getMemoryState(progress, now);
+    if (!state) continue;
+    if (state.stability < 7) result.fresh += 1;
+    else if (state.stability < 30) result.weeks += 1;
+    else if (state.stability < 90) result.months += 1;
+    else result.long += 1;
+  }
+  return result;
 }
 
 function scheduleFromState(

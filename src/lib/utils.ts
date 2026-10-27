@@ -830,3 +830,30 @@ export function diffAnswer(userAnswer: string, correctAnswer: string): { user: D
 export function stripFrenchArticleForDisplay(value: string): string {
   return value.replace(/^(l['’]\s*|le\s+|la\s+|les\s+|un\s+|une\s+|des\s+|du\s+|de la\s+|de l['’]\s*)/i, '').trim();
 }
+
+/** Text for search: lower case, no accents, ё → е, œ → oe, single spaces. */
+export function normalizeSearchText(value: string): string {
+  return value
+    .toLocaleLowerCase()
+    .replace(/œ/g, 'oe')
+    .replace(/æ/g, 'ae')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ё/g, 'е')
+    .replace(/[’`]/g, "'")
+    .replace(/\s+/g, ' ');
+}
+
+/** 0 — a whole word of the entry, 1 — the start of one, 2 — inside the word
+ *  or translation, 3 — only in the example or tags; null — no match. */
+export function getSearchRank(entry: { primary: string; secondary: string }, query: string): number | null {
+  const at = entry.primary.indexOf(query);
+  if (at >= 0) {
+    const before = at === 0 ? ' ' : entry.primary[at - 1];
+    const after = entry.primary[at + query.length] ?? ' ';
+    const wordStart = /[\s|'(-]/.test(before);
+    if (wordStart && /[\s|,')-]/.test(after)) return 0;
+    return wordStart ? 1 : 2;
+  }
+  return entry.secondary.includes(query) ? 3 : null;
+}

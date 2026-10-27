@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getProgressFileStatus, type ProgressFileStatus } from '../lib/fileStore';
 import { AppIcon } from './AppIcon';
 
 const COPY_SHORTCUT = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent) ? '⌘C' : 'Ctrl+C';
@@ -20,6 +21,17 @@ export function BackupPanel({ onExport, onImport }: BackupPanelProps) {
   const [restoreText, setRestoreText] = useState('');
   const [message, setMessage] = useState<{ tone: 'success' | 'error'; text: string } | null>(null);
   const [confirmRestore, setConfirmRestore] = useState(false);
+  const [fileStatus, setFileStatus] = useState<ProgressFileStatus | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void getProgressFileStatus().then((status) => {
+      if (!cancelled) setFileStatus(status);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   async function handleExport() {
     const snapshot = onExport();
@@ -54,6 +66,14 @@ export function BackupPanel({ onExport, onImport }: BackupPanelProps) {
         <div>
           <h2>Резервная копия</h2>
           <p>Прогресс хранится только на этом компьютере. Сохраните копию, чтобы не потерять его.</p>
+          {fileStatus?.path ? (
+            <p className="backup-file-status">
+              {fileStatus.failed
+                ? 'Не удалось обновить файл-копию — попробуем при следующем ответе.'
+                : `Приложение само держит копию в файле${fileStatus.lastWriteAt ? `, обновлена в ${fileStatus.lastWriteAt.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}` : ''}:`}
+              <code>{fileStatus.path.replace(/^\/Users\/[^/]+/, '~')}</code>
+            </p>
+          ) : null}
         </div>
       </div>
 

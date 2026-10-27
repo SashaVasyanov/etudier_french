@@ -289,6 +289,8 @@ export interface MemoryCalibration {
   /** Faded count of real lapses at the same reviews. */
   actualLapses: number;
   reviews: number;
+  /** Faded count of the same reviews (for the recent recall rate). */
+  weight?: number;
 }
 
 export interface SpeechPreferences {

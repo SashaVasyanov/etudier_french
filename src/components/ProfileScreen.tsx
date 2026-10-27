@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { isInMemory } from '../lib/milestones';
 import { LEARNING_LANGUAGE_OPTIONS, getLearningLanguageMenuLabel } from '../lib/languages';
 import { getCurrentStreakDays } from '../lib/storage';
 import { summarizeStudyHistory, summarizeWordStatuses } from '../lib/studyMetrics';
@@ -93,6 +94,7 @@ export default function ProfileScreen({
   onSpeechChange,
 }: ProfileScreenProps) {
   const stats = useMemo(() => summarizeWordStatuses(progressList), [progressList]);
+  const inMemory = useMemo(() => progressList.filter((progress) => isInMemory(progress)).length, [progressList]);
   const languageHistory = useMemo(
     () => storage.studyHistory.filter((entry) => entry.language === learningLanguage),
     [learningLanguage, storage.studyHistory],
@@ -127,7 +129,7 @@ export default function ProfileScreen({
         </article>
         <article>
           <span className="settings-overview-icon green"><AppIcon name="check-circle" size={22} /></span>
-          <div><strong>{stats.learned}</strong><small>{pluralRu(stats.learned, ['слово освоено', 'слова освоено', 'слов освоено'])}</small></div>
+          <div><strong>{inMemory}</strong><small>{pluralRu(inMemory, ['слово в памяти', 'слова в памяти', 'слов в памяти'])}</small></div>
         </article>
         <article>
           <span className="settings-overview-icon orange"><AppIcon name="flame" size={22} /></span>
