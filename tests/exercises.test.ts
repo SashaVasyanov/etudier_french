@@ -96,7 +96,7 @@ describe('lesson generation and recovery', () => {
     const state = storage(Object.fromEntries(dueWords.map((item) => [item.id, progress(item.id, 'learning', { next_review_at: due })])));
     const session = createLessonSession({ mode: 'default', words: [...words, ...dueWords], storage: state, durationMinutes: 10, wordTarget: 10, useFullPool: true })!;
     const newIds = session.sourceWordIds.filter((id) => !id.startsWith('due-'));
-    expect(newIds).toHaveLength(3);
+    expect(newIds).toHaveLength(4);
     expect(dueWords.every((item) => session.sourceWordIds.includes(item.id))).toBe(true);
     for (const mode of ['extra', 'pack'] as const) {
       expect(createLessonSession({ mode, words, storage: storage(), durationMinutes: 10, useFullPool: true })!.sourceWordIds.length).toBeLessThan(words.length);
@@ -248,5 +248,34 @@ describe('«5 минут» quick review', () => {
     const session = createLessonSession({ mode: 'extra', quick: true, words: pool, storage: state, durationMinutes: 10 });
     expect(new Set(session?.exercises.map((exercise) => exercise.wordId))).toEqual(new Set(['q1']));
     expect(createLessonSession({ mode: 'extra', quick: true, words: pool, storage: storage(), durationMinutes: 10 })).toBeNull();
+  });
+});
+
+describe('wrong options that can be confused with the answer', () => {
+  it('prefers the same part of speech and similar spelling', async () => {
+    const { scoreDistractor } = await import('../src/lib/exercises');
+    const base = { ...word('a'), original: 'maison', translation: 'дом', part_of_speech: 'noun' };
+    const close = { ...word('b'), original: 'raison', translation: 'причина', part_of_speech: 'noun' };
+    const far = { ...word('c'), original: 'courir', translation: 'бегать', part_of_speech: 'verb' };
+    expect(scoreDistractor(base, close, 'original')).toBeGreaterThan(scoreDistractor(base, far, 'original') + 3);
+  });
+
+  it('builds choice tasks whose wrong options mostly share the part of speech', () => {
+    const nouns = Array.from({ length: 30 }, (_, i) => ({ ...word(`n${i}`), part_of_speech: 'noun' }));
+    const verbs = Array.from({ length: 30 }, (_, i) => ({ ...word(`v${i}`), part_of_speech: 'verb' }));
+    const pool = [...nouns, ...verbs];
+    const session = createLessonSession({ mode: 'default', words: pool, storage: storage(), durationMinutes: 20 })!;
+    const byId = new Map(pool.map((item) => [item.id, item]));
+    let same = 0;
+    let total = 0;
+    for (const exercise of session.exercises.filter((item) => item.options)) {
+      const pos = byId.get(exercise.wordId)!.part_of_speech;
+      for (const option of exercise.options!.filter((item) => item.id !== exercise.wordId)) {
+        total += 1;
+        if (byId.get(option.id)?.part_of_speech === pos) same += 1;
+      }
+    }
+    expect(total).toBeGreaterThan(0);
+    expect(same / total).toBeGreaterThan(0.8);
   });
 });

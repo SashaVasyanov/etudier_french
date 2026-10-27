@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { getLearningLanguageAdverb, getLearningLanguageTitle } from '../lib/languages';
+import { diffAnswer, editDistance, stripFrenchArticleForDisplay } from '../lib/utils';
 import { getExerciseCopy } from '../lib/wordPresentation';
 import type { Exercise, Word } from '../types';
 import { AnswerWordDetails } from './AnswerWordDetails';
@@ -14,6 +15,8 @@ interface TextInputExerciseProps {
   value: string;
   isSubmitted: boolean;
   isCorrect?: boolean;
+  /** Accepted with a one-letter typo. */
+  nearMiss?: boolean;
   onChange: (value: string) => void;
   onSubmit: () => void;
   onReplayAudio: () => void;
@@ -28,6 +31,7 @@ export function TextInputExercise({
   value,
   isSubmitted,
   isCorrect,
+  nearMiss = false,
   onChange,
   onSubmit,
   onReplayAudio,
@@ -84,6 +88,17 @@ export function TextInputExercise({
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [exercise.id, isSubmitted, onNext]);
+
+  // Letter-by-letter comparison when the typed answer is close to the
+  // dictionary form but not equal: a typo, a missing accent or a near guess.
+  const answerDiff = (() => {
+    if (!isSubmitted || !value.trim() || word.language !== 'french') return null;
+    const typed = stripFrenchArticleForDisplay(value.trim());
+    const expected = stripFrenchArticleForDisplay(exercise.correctAnswer.trim());
+    if (typed.toLocaleLowerCase() === expected.toLocaleLowerCase()) return null;
+    const close = editDistance(typed.toLocaleLowerCase(), expected.toLocaleLowerCase()) <= Math.max(2, Math.ceil(expected.length / 2));
+    return isCorrect || nearMiss || close ? diffAnswer(typed, expected) : null;
+  })();
 
   return (
     <LessonCard
@@ -161,10 +176,30 @@ export function TextInputExercise({
 
           {isSubmitted ? (
             <>
-              <div className={isCorrect ? 'answer-feedback success' : 'answer-feedback error'}>
+              <div className={nearMiss ? 'answer-feedback near' : isCorrect ? 'answer-feedback success' : 'answer-feedback error'}>
                 <div>
-                  <strong>{isCorrect ? 'Верно' : 'Правильный ответ:'}</strong>
+                  <strong>{nearMiss ? 'Почти верно — опечатка' : isCorrect ? 'Верно' : 'Правильный ответ:'}</strong>
                   <AnswerWordDetails word={word} />
+                  {answerDiff ? (
+                    <div className="answer-diff" aria-label="Сравнение с правильным ответом">
+                      <span className="answer-diff-row">
+                        <small>Вы</small>
+                        <span lang={word.language === 'japanese' ? 'ja' : 'fr'}>
+                          {answerDiff.user.map((segment, index) => (
+                            <span key={index} className={segment.kind === 'changed' ? 'diff-wrong' : undefined}>{segment.text}</span>
+                          ))}
+                        </span>
+                      </span>
+                      <span className="answer-diff-row">
+                        <small>Надо</small>
+                        <span lang={word.language === 'japanese' ? 'ja' : 'fr'}>
+                          {answerDiff.correct.map((segment, index) => (
+                            <span key={index} className={segment.kind === 'changed' ? 'diff-right' : undefined}>{segment.text}</span>
+                          ))}
+                        </span>
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
                 <button type="button" className="feedback-replay-button" onClick={onReplayAudio}>
                   Прослушать ещё раз

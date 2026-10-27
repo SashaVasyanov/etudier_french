@@ -13,8 +13,8 @@ import type {
   Word,
   WordProgress,
 } from '../types';
-import { getWordProgress, isWordDueForReview } from './storage';
-import { isReviewDue, shuffleArray } from './utils';
+import { getRecallProbability, getWordProgress, isWordDueForReview } from './storage';
+import { editDistance, isReviewDue, shuffleArray } from './utils';
 import { getJapaneseHiraganaReading } from './wordPresentation';
 
 interface LessonLimits {
@@ -62,7 +62,7 @@ interface CreateFlashcardSessionInput {
 }
 
 function getNewWordsQuota(target: number): number {
-  return Math.max(3, Math.round(target * 0.34));
+  return Math.max(3, Math.round(target * 0.4));
 }
 
 export interface DailyBalance {
@@ -134,32 +134,87 @@ function getLessonLimits(
   };
 }
 
+/**
+ * How good a wrong option is: one that could really be confused with the
+ * answer (same part of speech and level, similar spelling) makes the learner
+ * recall the word instead of ruling out the odd ones. A random term keeps the
+ * sets varied from one lesson to the next.
+ */
+function scoreCategory(word: Word, candidate: Word): number {
+  let score = 0;
+  if (candidate.part_of_speech === word.part_of_speech) score += 3;
+  if (candidate.level === word.level) score += 1;
+  if (candidate.packIds.some((id) => word.packIds.includes(id))) score += 1;
+  return score;
+}
+
+export function scoreDistractor(word: Word, candidate: Word, mode: 'translation' | 'original'): number {
+  let score = scoreCategory(word, candidate);
+  const shown = (item: Word) => (mode === 'original' ? item.original : item.translation).toLocaleLowerCase().trim();
+  const a = shown(word);
+  const b = shown(candidate);
+  if (a && b) {
+    const similarity = 1 - editDistance(a, b) / Math.max(a.length, b.length);
+    // Close spelling (maison / raison) is the classic confusion.
+    if (similarity >= 0.5) score += 3 * similarity;
+    if (a[0] === b[0]) score += 0.5;
+    if (Math.abs(a.length - b.length) <= 2) score += 0.5;
+  }
+  return score;
+}
+
+function comparableText(value: string): string {
+  return value.normalize('NFKC').trim().toLocaleLowerCase().replace(/\s+/g, ' ');
+}
+
+// Normalised forms per word, computed once: option building compares every
+// candidate in the dictionary for each choice task.
+const comparableCache = new WeakMap<Word, { original: string; translation: string }>();
+function comparableWord(word: Word): { original: string; translation: string } {
+  let keys = comparableCache.get(word);
+  if (!keys) {
+    keys = { original: comparableText(word.original), translation: comparableText(word.translation) };
+    comparableCache.set(word, keys);
+  }
+  return keys;
+}
+
 function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'original'): ExerciseOption[] {
   const correctLabel = mode === 'translation' ? word.translation : word.original;
-  const comparable = (value: string) => value.normalize('NFKC').trim().toLocaleLowerCase().replace(/\s+/g, ' ');
+  const comparable = comparableText;
+  const own = comparableWord(word);
   // Duplicate dictionary entries and synonyms must not become competing
   // answers to the same prompt.
-  const pool = words.filter((candidate) =>
-    candidate.id !== word.id &&
-    comparable(candidate.original) !== comparable(word.original) &&
-    comparable(candidate.translation) !== comparable(word.translation),
-  );
+  const pool = words.filter((candidate) => {
+    if (candidate.id === word.id) return false;
+    const keys = comparableWord(candidate);
+    return keys.original !== own.original && keys.translation !== own.translation;
+  });
   const distractors: ExerciseOption[] = [];
   const seen = new Set<string>([comparable(correctLabel)]);
 
-  shuffleArray(pool).forEach((candidate) => {
+  // Spelling similarity is only computed for a shortlist: the dictionary has
+  // well over a thousand words and a lesson builds dozens of choice tasks.
+  const shortlist = shuffleArray(pool)
+    .map((candidate) => ({ candidate, score: scoreCategory(word, candidate) + Math.random() }))
+    .sort((left, right) => right.score - left.score)
+    .slice(0, 40);
+  shortlist
+    .map(({ candidate }) => ({ candidate, score: scoreDistractor(word, candidate, mode) + Math.random() * 2 }))
+    .sort((left, right) => right.score - left.score)
+    .forEach(({ candidate }) => {
     const label = mode === 'translation' ? candidate.translation : candidate.original;
 
-    if (seen.has(comparable(label)) || distractors.length >= 3) {
-      return;
-    }
+      if (seen.has(comparable(label)) || distractors.length >= 3) {
+        return;
+      }
 
-    seen.add(comparable(label));
-    distractors.push({
-      id: candidate.id,
-      label,
+      seen.add(comparable(label));
+      distractors.push({
+        id: candidate.id,
+        label,
+      });
     });
-  });
 
   return shuffleArray([
     {
@@ -406,23 +461,9 @@ function getProgressAccuracy(progress: WordProgress): number {
   return progress.shown_count > 0 ? progress.correct_count / progress.shown_count : 0;
 }
 
-function getElapsedDaysSinceLastSeen(progress: WordProgress): number {
-  if (!progress.last_seen_at) {
-    return 0;
-  }
-
-  return Math.max(0, (Date.now() - new Date(progress.last_seen_at).getTime()) / DAY_IN_MS);
-}
-
 function getRetrievabilityScore(progress: WordProgress): number {
-  if (!progress.last_seen_at || progress.interval_days <= 0) {
-    return progress.status === 'new' ? 0.45 : 0.7;
-  }
-
-  const stabilityDays = Math.max(1, progress.interval_days * progress.ease_factor);
-  const elapsedDays = getElapsedDaysSinceLastSeen(progress);
-
-  return Math.exp(-elapsedDays / stabilityDays);
+  // FSRS chance of recall now; unseen words get a neutral middle value.
+  return getRecallProbability(progress) ?? (progress.status === 'new' ? 0.45 : 0.7);
 }
 
 function getStudyUrgency(progress: WordProgress): number {
@@ -672,12 +713,13 @@ function pickReinforcementWords(newWords: Word[], reviewWords: Word[], limit: nu
 }
 
 function pickRecapWords(newWords: Word[], reviewWords: Word[], reinforcementWords: Word[], limit: number): Word[] {
-  return interleaveWordGroups(
+  // Every new word of the day gets its final check; reviews fill the rest.
+  const rest = interleaveWordGroups(
     reviewWords,
-    newWords,
     reinforcementWords,
     reviewWords.filter((word) => !reinforcementWords.some((item) => item.id === word.id)),
-  ).slice(0, limit);
+  ).filter((word) => !newWords.some((item) => item.id === word.id));
+  return [...newWords, ...rest].slice(0, Math.max(limit, newWords.length));
 }
 
 function getPoolFromIds(words: Word[], wordIds: string[]): Word[] {
@@ -837,8 +879,13 @@ function createDailySession(
     scheduledReviewWords.length > 0
       ? scheduledReviewWords
       : introductionWords.slice(0, Math.max(1, Math.min(introductionWords.length, limits.activeWords)));
+  // A new word is met three times in a lesson (twice in training, once in the
+  // final check): more repetitions on the same day add little to memory.
+  // Mixed reinforcement is for reviews; only on a day without reviews do the
+  // new words fill it, once each.
+  const hasScheduledReviews = scheduledReviewWords.length > 0;
   const selectedReinforcementWords = pickReinforcementWords(
-    introductionWords,
+    hasScheduledReviews ? [] : introductionWords,
     reviewWords,
     limits.reinforcementWords,
   );
@@ -846,7 +893,7 @@ function createDailySession(
     selectedReinforcementWords.length > 0
       ? selectedReinforcementWords
       : uniqueWords([...introductionWords, ...reviewWords]).slice(0, Math.max(1, limits.reinforcementWords));
-  const selectedRecapWords = pickRecapWords(introductionWords, reviewWords, reinforcementWords, limits.recapWords);
+  const selectedRecapWords = pickRecapWords(newWords, reviewWords, reinforcementWords, limits.recapWords);
   const recapWords =
     selectedRecapWords.length > 0
       ? selectedRecapWords
@@ -912,6 +959,7 @@ function createDailySession(
     ['audio_to_translation_choice', 'translation_to_original_input', 'original_to_translation_choice', 'audio_to_original_input'],
     uniqueWords(words),
     storage,
+    hasScheduledReviews ? 2 : 1,
   );
   const module4 = createExerciseModule(
     'module-reinforcement',
@@ -921,6 +969,7 @@ function createDailySession(
     ['sentence_cloze_input', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
     uniqueWords(words),
     storage,
+    1,
   );
   const module5 = addMemoryCheckExercises(
     createExerciseModule(
@@ -931,6 +980,7 @@ function createDailySession(
       ['translation_to_original_input', 'sentence_cloze_input', 'original_to_translation_choice'],
       uniqueWords(words),
       storage,
+      1,
     ),
     memoryCheckWords,
     uniqueWords(words),

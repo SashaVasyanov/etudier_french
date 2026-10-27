@@ -3,6 +3,7 @@ import type { AppStorage, LearningLanguage, Word, WordLevel } from '../types';
 import { formatDurationLabel, getTodayDateKey, countRu, pluralRu, RU_WORDS } from '../lib/utils';
 import { getCurrentStreakDays, getWordProgress } from '../lib/storage';
 import { getAnswerAccuracy, getRecentWordCounts, summarizeWordStatuses } from '../lib/studyMetrics';
+import { isInMemory } from '../lib/milestones';
 import { getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { AppIcon } from './AppIcon';
 import { getLevelOptions, getStudyLevel } from '../lib/levels';
@@ -143,6 +144,10 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
     [storage.progressByWordId, words],
   );
   const learnedWords = learnedWordList.length;
+  const inMemoryWords = useMemo(
+    () => words.filter((word) => isInMemory(storage.progressByWordId[word.id])).length,
+    [storage.progressByWordId, words],
+  );
   const wordStats = useMemo(
     () => summarizeWordStatuses(words.map((word) => getWordProgress(storage, word.id))),
     [storage, words],
@@ -178,7 +183,7 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
       <section className="analytics-kpi-grid" aria-label="Ключевые показатели">
         <article className="analytics-kpi-card analytics-kpi-violet">
           <span className="analytics-kpi-icon"><AppIcon name="book-open" size={22} /></span>
-          <div><span>Слов выучено</span><strong>{learnedWords}</strong><small>из {words.length} в словаре</small></div>
+          <div><span>Слов в памяти</span><strong>{inMemoryWords}</strong><small>{learnedWords > 0 ? `надолго — ${learnedWords}, ` : ''}из {words.length} в словаре</small></div>
         </article>
         <article className="analytics-kpi-card analytics-kpi-green">
           <span className="analytics-kpi-icon"><AppIcon name="target" size={22} /></span>

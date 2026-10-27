@@ -17,6 +17,12 @@ import { AppIcon } from './AppIcon';
 import { BackupPanel } from './BackupPanel';
 import { SpeechSettingsPanel } from './SpeechSettingsPanel';
 
+const RETENTION_OPTIONS = [
+  { value: 0.85, label: '85 % — меньше повторений' },
+  { value: 0.9, label: '90 % — рекомендуется' },
+  { value: 0.95, label: '95 % — надёжнее, но дольше' },
+];
+
 interface ProfileScreenProps {
   learningLanguage: LearningLanguage;
   profile: UserProfile;
@@ -35,6 +41,8 @@ interface ProfileScreenProps {
   onLessonSourcePackChange: (packId: string | null) => void;
   dayStartHour: number;
   onDayStartHourChange: (hour: number) => void;
+  desiredRetention: number;
+  onDesiredRetentionChange: (retention: number) => void;
   onSpeechChange: (change: { language?: LearningLanguage; voiceId?: string | null; rate?: number }) => void;
   onExportBackup: () => string;
   onImportBackup: (raw: string) => string | null;
@@ -80,6 +88,8 @@ export default function ProfileScreen({
   onImportBackup,
   dayStartHour,
   onDayStartHourChange,
+  desiredRetention,
+  onDesiredRetentionChange,
   onSpeechChange,
 }: ProfileScreenProps) {
   const stats = useMemo(() => summarizeWordStatuses(progressList), [progressList]);
@@ -257,6 +267,24 @@ export default function ProfileScreen({
               {DAY_START_OPTIONS.map((hour) => (
                 <option key={hour} value={hour}>
                   {hour === 0 ? 'в полночь' : `в ${hour}:00`}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="settings-row">
+            <span>
+              Запоминание
+              <small>Доля слов, которые вы вспомните на повторении. Выше — повторений больше, ниже — меньше, но чаще забываете.</small>
+            </span>
+            <select
+              className="settings-select"
+              value={RETENTION_OPTIONS.reduce((best, option) => (Math.abs(option.value - desiredRetention) < Math.abs(best.value - desiredRetention) ? option : best)).value}
+              onChange={(event) => onDesiredRetentionChange(Number(event.target.value))}
+            >
+              {RETENTION_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
                 </option>
               ))}
             </select>

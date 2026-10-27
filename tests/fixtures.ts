@@ -36,6 +36,7 @@ export function storage(entries: Record<string, WordProgress> = {}): AppStorage 
     dayStartHour: 0,
     kanaProgress: {},
     speech: { voices: {}, rate: 0.9 },
+    desiredRetention: 0.9,
   };
 }
 

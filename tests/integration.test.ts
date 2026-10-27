@@ -49,23 +49,25 @@ describe('lesson integration', () => {
   });
 
   it('reaches mastered only after a recall across a gap of three weeks or more', () => {
-    let state = storage({ a: progress('a', 'learning', { next_review_at: new Date(2026, 0, 9, 12).toISOString() }) });
+    let state = storage({ a: progress('a', 'new') });
     let reviewAt = new Date(2026, 0, 10, 12);
-    const intervals: number[] = [];
-    // Review on each due date: 2 → 4 → 10 → ~25 days; three good days in the
-    // first week are not enough, the recall after the long gap is.
-    for (let review = 1; review <= 5; review += 1) {
-      const before = state.progressByWordId.a;
+    let previous = reviewAt;
+    let reviews = 0;
+    // Review on each due date with a correct answer until the word is mastered.
+    while (state.progressByWordId.a.status !== 'mastered' && reviews < 10) {
       state = applyOutcomes(state, [outcome('a')], reviewAt);
+      reviews += 1;
       const after = state.progressByWordId.a;
-      intervals.push(after.interval_days);
-      expect(after.status).toBe(review === 5 ? 'mastered' : 'review');
-      if (review === 5) expect(before.interval_days).toBeGreaterThanOrEqual(21);
+      const gapDays = (reviewAt.getTime() - previous.getTime()) / 86_400_000;
+      if (after.status === 'mastered') expect(gapDays).toBeGreaterThanOrEqual(21);
+      else expect(gapDays < 21 || after.successful_review_dates.length < 3).toBe(true);
+      previous = reviewAt;
       const due = new Date(after.next_review_at as string);
       reviewAt = new Date(due.getFullYear(), due.getMonth(), due.getDate(), 12);
     }
-    expect(intervals.slice(0, 3)).toEqual([2, 4, 10]);
-    expect(state.progressByWordId.a.successful_review_dates).toHaveLength(5);
+    expect(state.progressByWordId.a.status).toBe('mastered');
+    // The first meeting plus at least three good review days.
+    expect(reviews).toBeGreaterThanOrEqual(4);
   });
 
   it('does not master after eight correct answers in one session/date', () => {

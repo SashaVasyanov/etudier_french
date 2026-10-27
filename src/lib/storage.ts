@@ -5,6 +5,7 @@ import type {
   ExerciseOutcome,
   KanaProgress,
   LearningLanguage,
+  MemoryCalibration,
   LessonDurationMinutes,
   LessonWordTarget,
   RadicalExerciseOutcome,
@@ -21,6 +22,7 @@ import type {
   WordProgress,
   WordStatus,
 } from '../types';
+import { DEFAULT_RETENTION, initialState, intervalForRetention, MAX_RETENTION, MIN_RETENTION, nextState, retrievability, stateFromLegacy, type Grade, type MemoryState } from './fsrs';
 import { addDays, clamp, deriveFrenchLatinTranscription, getTodayDateKey, MAX_DAY_START_HOUR, normalizeTranscription, setDayStartHour, shiftDateKey, startOfDay } from './utils';
 
 const STORAGE_KEY = 'anki-plus-storage';
@@ -107,6 +109,7 @@ function createDefaultStorage(): AppStorage {
     dayStartHour: 0,
     kanaProgress: {},
     speech: { voices: {}, rate: 0.9 },
+    desiredRetention: DEFAULT_RETENTION,
   };
 }
 
@@ -265,6 +268,15 @@ function normalizeProgress(progress: Partial<WordProgress>, wordId: string): Wor
     learned_at: isValidDateString(progress.learned_at) ? progress.learned_at : null,
     status: normalizedStatus && VALID_WORD_STATUSES.has(normalizedStatus) ? normalizedStatus : base.status,
     successful_review_dates: successfulReviewDates,
+    ...(typeof progress.stability === 'number' && Number.isFinite(progress.stability) && progress.stability > 0
+      && typeof progress.difficulty === 'number' && Number.isFinite(progress.difficulty)
+      ? {
+          stability: clamp(progress.stability, 0.001, 36500),
+          difficulty: clamp(progress.difficulty, 1, 10),
+          last_review_at: isValidDateString(progress.last_review_at) ? progress.last_review_at : null,
+        }
+      : {}),
+    ...(typeof progress.lapses === 'number' && Number.isFinite(progress.lapses) ? { lapses: Math.max(0, Math.floor(progress.lapses)) } : {}),
   };
 }
 
@@ -477,6 +489,10 @@ function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
       japanese: Math.max(nonNegativeInteger(storedTotals.japanese), historyTotals.japanese),
     },
     speech: normalizeSpeech(parsed.speech),
+    memoryCalibration: normalizeCalibration(parsed.memoryCalibration),
+    desiredRetention: typeof parsed.desiredRetention === 'number' && Number.isFinite(parsed.desiredRetention)
+      ? clamp(parsed.desiredRetention, MIN_RETENTION, MAX_RETENTION)
+      : DEFAULT_RETENTION,
     kanaProgress: Object.fromEntries(
       (isRecord(parsed.kanaProgress) ? Object.entries(parsed.kanaProgress as Record<string, unknown>) : [])
         .filter((entry): entry is [string, Record<string, unknown>] => entry[0].length <= 2 && isRecord(entry[1]))
@@ -743,7 +759,8 @@ const DIFFICULT_SESSION_MISTAKES = 2;
 const NEW_WORD_DIFFICULT_MISTAKES = 3;
 const MIN_EASE = 1.3;
 const MAX_EASE = 3.4;
-const MAX_INTERVAL_DAYS = 180;
+const MAX_INTERVAL_DAYS = 365;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 // Exercises where the learner produces the answer rather than recognizing it.
 const RECALL_EXERCISES = new Set<ExerciseOutcome['type']>([
@@ -754,30 +771,43 @@ const RECALL_EXERCISES = new Set<ExerciseOutcome['type']>([
   'memory_check',
 ]);
 
-/**
- * SM-2 quality (0–5) of one word in one session. The first answer of the day
- * is the real recall signal; later slips lower the grade but do not fail it.
- * 5 — all correct with at least one recall exercise; 4 — all correct with
- * only recognition, or one slip; 3 — first answer correct, several slips
- * (still ≥ 75 % right);
- * 2 — failed after a correct start or one wrong first answer; 1 — mostly wrong.
- */
-export function gradeSession(outcomes: ExerciseOutcome[]): number {
-  if (outcomes.length === 0) return 3;
-  const correctAnswers = outcomes.filter((outcome) => outcome.isCorrect).length;
-  const wrongAnswers = outcomes.length - correctAnswers;
-  if (!outcomes[0].isCorrect) return wrongAnswers >= DIFFICULT_SESSION_MISTAKES && correctAnswers < wrongAnswers ? 1 : 2;
-  if (correctAnswers / outcomes.length < SUCCESSFUL_SESSION_RATIO) return 2;
-  // A single slip after a correct first answer is usually a typo.
-  if (wrongAnswers >= 2) return 3;
-  if (wrongAnswers === 1) return 4;
-  return outcomes.some((outcome) => RECALL_EXERCISES.has(outcome.type)) ? 5 : 4;
+/** Time a first answer may take before it counts as «с трудом». */
+function slowAnswerMs(type: ExerciseOutcome['type']): number {
+  const audio = type === 'audio_to_translation_choice' || type === 'audio_to_original_input' ? 3000 : 0;
+  return (RECALL_EXERCISES.has(type) ? 15000 : 9000) + audio;
 }
 
-/** The SM-2 ease update: EF' = EF + 0.1 − (5 − q)(0.08 + (5 − q)·0.02). */
-export function nextEaseFactor(easeFactor: number, quality: number): number {
-  const miss = 5 - quality;
-  return clamp(easeFactor + 0.1 - miss * (0.08 + miss * 0.02), MIN_EASE, MAX_EASE);
+/** Time a first answer must beat to count as «легко». */
+function quickAnswerMs(type: ExerciseOutcome['type']): number {
+  const audio = type === 'audio_to_translation_choice' || type === 'audio_to_original_input' ? 2000 : 0;
+  return (RECALL_EXERCISES.has(type) ? 5000 : 2500) + audio;
+}
+
+/**
+ * FSRS grade of one word in one session. The first answer of the day is the
+ * real recall signal: wrong → «забыл». A correct but slow first answer, a
+ * one-letter typo or several later slips → «с трудом». All correct with a
+ * quick typed (or spoken) recall → «легко». Otherwise «вспомнил».
+ */
+export function gradeReview(outcomes: ExerciseOutcome[]): Grade {
+  if (outcomes.length === 0) return 3;
+  const first = outcomes[0];
+  const correctAnswers = outcomes.filter((outcome) => outcome.isCorrect).length;
+  const wrongAnswers = outcomes.length - correctAnswers;
+  if (!first.isCorrect) return 1;
+  if (correctAnswers / outcomes.length < SUCCESSFUL_SESSION_RATIO) return 1;
+  const slow = typeof first.responseMs === 'number' && first.responseMs > slowAnswerMs(first.type);
+  if (wrongAnswers >= 2 || first.nearMiss || slow) return 2;
+  const recall = outcomes.find((outcome) => RECALL_EXERCISES.has(outcome.type));
+  const quickRecall =
+    wrongAnswers === 0 &&
+    !outcomes.some((outcome) => outcome.nearMiss) &&
+    recall !== undefined &&
+    typeof recall.responseMs === 'number' &&
+    recall.responseMs < quickAnswerMs(recall.type) &&
+    typeof first.responseMs === 'number' &&
+    first.responseMs < quickAnswerMs(first.type);
+  return quickRecall ? 4 : 3;
 }
 
 export function isWordDueForReview(progress: WordProgress, now = new Date()): boolean {
@@ -803,42 +833,99 @@ function spreadInterval(seed: string, intervalDays: number): number {
 }
 
 /**
- * Early steps follow a fixed ladder (2 → 4 → 10 days) so a new word is seen
- * three times in its first two weeks; after that the SM-2 rule applies:
- * previous interval × ease, plus half of the days the review was overdue
- * (the word was remembered for that long anyway). The due date is then
- * spread by ±10 % (see below).
+ * The word's memory state and the time of its last graded review. Words
+ * scheduled before FSRS have no state yet: it is derived from their SM-2
+ * interval and ease, with the review taken as one interval before the due date.
  */
-function nextSuccessfulInterval(progress: WordProgress, successfulReviewDays: number, easeFactor: number, now: Date): number {
-  if (successfulReviewDays <= 1) return 2;
-  if (successfulReviewDays === 2) return 4;
-  if (successfulReviewDays === 3) return 10;
+export function getMemoryState(progress: WordProgress, now = new Date()): (MemoryState & { lastReviewAt: Date }) | null {
+  if (!SCHEDULED_WORD_STATUSES.has(progress.status)) return null;
+  if (typeof progress.stability === 'number' && typeof progress.difficulty === 'number') {
+    const last = progress.last_review_at ?? progress.last_seen_at;
+    return { stability: progress.stability, difficulty: progress.difficulty, lastReviewAt: last ? new Date(last) : now };
+  }
+  const legacy = stateFromLegacy(progress.interval_days, progress.ease_factor, progress.status === 'difficult');
+  const due = progress.next_review_at ? new Date(progress.next_review_at).getTime() : NaN;
+  const fromDue = Number.isFinite(due) ? due - Math.max(1, progress.interval_days) * DAY_MS : NaN;
+  const seen = progress.last_seen_at ? new Date(progress.last_seen_at).getTime() : NaN;
+  const lastReview = Number.isFinite(fromDue) ? fromDue : Number.isFinite(seen) ? seen : now.getTime();
+  return { ...legacy, lastReviewAt: new Date(Math.min(lastReview, now.getTime())) };
+}
 
-  const previous = Math.max(10, progress.interval_days);
-  const overdueDays = progress.next_review_at
-    ? Math.max(0, Math.floor((now.getTime() - new Date(progress.next_review_at).getTime()) / (24 * 60 * 60 * 1000)))
-    : 0;
-  const interval = Math.round((previous + Math.min(overdueDays, previous) / 2) * easeFactor);
-  return clamp(interval, 10, MAX_INTERVAL_DAYS);
+/** Chance (0–1) that the word is remembered right now; null for unseen words. */
+export function getRecallProbability(progress: WordProgress, now = new Date()): number | null {
+  const state = getMemoryState(progress, now);
+  if (!state) return null;
+  return retrievability((now.getTime() - state.lastReviewAt.getTime()) / DAY_MS, state.stability);
+}
+
+/**
+ * The FSRS weights describe an average learner. This learner's own memory is
+ * measured by comparing how often words were expected to be forgotten at
+ * their reviews with how often they really were; the ratio scales the
+ * intervals (fewer lapses than expected → longer gaps, more → shorter).
+ * Sums fade with every review, so the factor follows the learner over time.
+ */
+const CALIBRATION_PRIOR_LAPSES = 5;
+const CALIBRATION_FADE = 0.995;
+
+function normalizeCalibration(value: unknown): AppStorage['memoryCalibration'] {
+  if (!isRecord(value)) return undefined;
+  const result: NonNullable<AppStorage['memoryCalibration']> = {};
+  for (const language of ['french', 'japanese'] as const) {
+    const entry = value[language];
+    if (!isRecord(entry)) continue;
+    const expected = finiteNumber(entry.expectedLapses, NaN);
+    const actual = finiteNumber(entry.actualLapses, NaN);
+    if (!Number.isFinite(expected) || !Number.isFinite(actual) || expected < 0 || actual < 0) continue;
+    result[language] = { expectedLapses: expected, actualLapses: actual, reviews: Math.max(0, Math.floor(finiteNumber(entry.reviews, 0))) };
+  }
+  return Object.keys(result).length > 0 ? result : undefined;
+}
+
+export function getCalibrationFactor(calibration: MemoryCalibration | undefined): number {
+  if (!calibration) return 1;
+  const factor = (calibration.expectedLapses + CALIBRATION_PRIOR_LAPSES) / (calibration.actualLapses + CALIBRATION_PRIOR_LAPSES);
+  return clamp(factor, 0.25, 2.5);
+}
+
+function updateCalibration(calibration: MemoryCalibration | undefined, predictedRecall: number, recalled: boolean): MemoryCalibration {
+  const base = calibration ?? { expectedLapses: 0, actualLapses: 0, reviews: 0 };
+  return {
+    expectedLapses: base.expectedLapses * CALIBRATION_FADE + (1 - predictedRecall),
+    actualLapses: base.actualLapses * CALIBRATION_FADE + (recalled ? 0 : 1),
+    reviews: base.reviews + 1,
+  };
+}
+
+function scheduleFromState(
+  state: MemoryState,
+  retention: number,
+  seed: string,
+  now: Date,
+  calibrationFactor = 1,
+): { intervalDays: number; nextReviewAt: string } {
+  const intervalDays = clamp(Math.round(intervalForRetention(state.stability * calibrationFactor, retention)), 1, MAX_INTERVAL_DAYS);
+  const spread = Math.min(MAX_INTERVAL_DAYS, spreadInterval(seed, intervalDays));
+  return { intervalDays, nextReviewAt: addDays(startOfDay(now), spread).toISOString() };
 }
 
 function buildAggregatedProgress(
   existing: WordProgress,
   outcomes: ExerciseOutcome[],
   now: Date,
-): { progress: WordProgress; completedDueReview: boolean; becameMastered: boolean } {
+  retention = DEFAULT_RETENTION,
+  calibrationFactor = 1,
+): { progress: WordProgress; completedDueReview: boolean; becameMastered: boolean; review?: { predictedRecall: number; recalled: boolean } } {
   if (outcomes.length === 0 || existing.status === 'ignored' || existing.status === 'known') {
     return { progress: existing, completedDueReview: false, becameMastered: false };
   }
 
   const correctAnswers = outcomes.filter((outcome) => outcome.isCorrect).length;
   const wrongAnswers = outcomes.length - correctAnswers;
-  // A daily lesson shows the same word 4–6 times. The first answer of the day is
-  // the real recall signal; a later slip (typo) must not fail the whole review,
-  // but repeated mistakes still do.
-  const quality = gradeSession(outcomes);
-  const isSuccessfulSession = quality >= 3;
-  const easeFactor = nextEaseFactor(existing.ease_factor, quality);
+  // A daily lesson shows the same word several times. The first answer of the
+  // day is the real recall signal; a later slip (typo) must not fail the whole
+  // review, but repeated mistakes still do.
+  const grade = gradeReview(outcomes);
   const wasDue = isWordDueForReview(existing, now);
   const base: WordProgress = {
     ...existing,
@@ -847,17 +934,25 @@ function buildAggregatedProgress(
     wrong_count: existing.wrong_count + wrongAnswers,
     last_seen_at: now.toISOString(),
   };
+  const seed = `${existing.word_id}:${existing.repetition_step}`;
 
   if (existing.status === 'new') {
+    // Mistakes on a word seen for the first time are not forgetting: at worst
+    // it starts as «с трудом» and comes back tomorrow.
+    const state = initialState(grade === 1 ? 2 : grade === 4 ? 3 : grade);
+    const firstState = wrongAnswers >= NEW_WORD_DIFFICULT_MISTAKES ? initialState(1) : state;
+    const schedule = scheduleFromState(firstState, retention, seed, now, calibrationFactor);
     return {
       progress: {
         ...base,
         status: wrongAnswers >= NEW_WORD_DIFFICULT_MISTAKES ? 'difficult' : 'learning',
-        // Mistakes on a word seen for the first time are not forgetting.
-        ease_factor: existing.ease_factor,
         repetition_step: 1,
-        interval_days: 1,
-        next_review_at: addDays(startOfDay(now), 1).toISOString(),
+        interval_days: schedule.intervalDays,
+        next_review_at: schedule.nextReviewAt,
+        stability: firstState.stability,
+        difficulty: firstState.difficulty,
+        last_review_at: now.toISOString(),
+        lapses: 0,
       },
       completedDueReview: false,
       becameMastered: false,
@@ -870,22 +965,35 @@ function buildAggregatedProgress(
     return { progress: base, completedDueReview: false, becameMastered: false };
   }
 
-  if (!isSuccessfulSession) {
-    // A lapse restarts the ladder: earlier successful days no longer count
-    // towards mastery, and the word comes back on short intervals (1 → 2 → 4).
+  const memory = getMemoryState(existing, now) ?? { ...initialState(3), lastReviewAt: now };
+  const elapsedDays = Math.max(0, (now.getTime() - memory.lastReviewAt.getTime()) / DAY_MS);
+  const nextMemory = nextState(memory, elapsedDays, grade);
+  const schedule = scheduleFromState(nextMemory, retention, seed, now, calibrationFactor);
+  const review = { predictedRecall: retrievability(elapsedDays, memory.stability), recalled: grade !== 1 };
+  const memoryFields = {
+    stability: nextMemory.stability,
+    difficulty: nextMemory.difficulty,
+    last_review_at: now.toISOString(),
+    interval_days: schedule.intervalDays,
+    next_review_at: schedule.nextReviewAt,
+  };
+
+  if (grade === 1) {
+    // A lapse restarts the count of good days: earlier successful days no
+    // longer count towards mastery, and the word comes back soon.
     const forgotKnownWord = existing.status === 'mastered' || existing.status === 'difficult';
     return {
       progress: {
         ...base,
+        ...memoryFields,
         status: forgotKnownWord || wrongAnswers >= DIFFICULT_SESSION_MISTAKES ? 'difficult' : 'learning',
-        ease_factor: easeFactor,
         repetition_step: 1,
-        interval_days: 1,
-        next_review_at: addDays(startOfDay(now), 1).toISOString(),
         successful_review_dates: [],
+        lapses: (existing.lapses ?? 0) + 1,
       },
       completedDueReview: true,
       becameMastered: false,
+      review,
     };
   }
 
@@ -893,10 +1001,9 @@ function buildAggregatedProgress(
   const successfulReviewDates = existing.successful_review_dates.includes(reviewDate)
     ? existing.successful_review_dates
     : [...existing.successful_review_dates, reviewDate].sort().slice(-MAX_SUCCESSFUL_REVIEW_DATES);
-  const intervalDays = nextSuccessfulInterval(existing, successfulReviewDates.length, easeFactor, now);
   const status: WordStatus =
     existing.status === 'mastered'
-    || (successfulReviewDates.length >= MASTERY_REVIEW_DAYS && existing.interval_days >= MASTERY_INTERVAL_DAYS)
+    || (successfulReviewDates.length >= MASTERY_REVIEW_DAYS && elapsedDays >= MASTERY_INTERVAL_DAYS - 0.5)
       ? 'mastered'
       : 'review';
   const becameMastered = existing.status !== 'mastered' && status === 'mastered';
@@ -904,21 +1011,15 @@ function buildAggregatedProgress(
   return {
     progress: {
       ...base,
+      ...memoryFields,
       status,
-      ease_factor: easeFactor,
       repetition_step: existing.repetition_step + 1,
-      interval_days: intervalDays,
-      // The stored interval stays exact; only the due date is spread, with a
-      // seed that changes every review so no word drifts one way.
-      next_review_at: addDays(
-        startOfDay(now),
-        Math.min(MAX_INTERVAL_DAYS, spreadInterval(`${existing.word_id}:${existing.repetition_step}`, intervalDays)),
-      ).toISOString(),
       learned_at: becameMastered ? now.toISOString() : existing.learned_at,
       successful_review_dates: successfulReviewDates,
     },
     completedDueReview: true,
     becameMastered,
+    review,
   };
 }
 
@@ -1017,16 +1118,19 @@ export function applyOutcomes(currentStorage: AppStorage, outcomes: ExerciseOutc
   const progressByWordId = { ...currentStorage.progressByWordId };
   let wordsLearned = 0;
   let reviewsCompleted = 0;
+  const language = currentStorage.learningLanguage;
+  let calibration = currentStorage.memoryCalibration?.[language];
+  const calibrationFactor = getCalibrationFactor(calibration);
   grouped.forEach((wordOutcomes, wordId) => {
     const existing = currentStorage.progressByWordId[wordId] ?? createInitialProgress(wordId);
-    const update = buildAggregatedProgress(existing, wordOutcomes, now);
+    const update = buildAggregatedProgress(existing, wordOutcomes, now, currentStorage.desiredRetention ?? DEFAULT_RETENTION, calibrationFactor);
+    if (update.review) calibration = updateCalibration(calibration, update.review.predictedRecall, update.review.recalled);
     progressByWordId[wordId] = update.progress;
     wordsLearned += update.becameMastered ? 1 : 0;
     reviewsCompleted += update.completedDueReview ? 1 : 0;
   });
 
   const today = getTodayDateKey(now);
-  const language = currentStorage.learningLanguage;
   const existingStat = currentStorage.dailyStats.find((item) => item.date === today && item.language === language);
   const correctAnswers = outcomes.filter((outcome) => outcome.isCorrect).length;
   const nextStat = existingStat
@@ -1044,6 +1148,7 @@ export function applyOutcomes(currentStorage: AppStorage, outcomes: ExerciseOutc
     ...currentStorage,
     ...getUpdatedStreak(currentStorage, now),
     progressByWordId,
+    ...(calibration ? { memoryCalibration: { ...currentStorage.memoryCalibration, [language]: calibration } } : {}),
     dailyStats: capPerLanguage([
       ...currentStorage.dailyStats.filter((item) => !(item.date === today && item.language === language)),
       nextStat,
@@ -1492,4 +1597,8 @@ export function recordKanaSession(
     };
   });
   return { ...currentStorage, kanaProgress };
+}
+
+export function setDesiredRetention(currentStorage: AppStorage, retention: number): AppStorage {
+  return { ...currentStorage, desiredRetention: clamp(retention, MIN_RETENTION, MAX_RETENTION) };
 }

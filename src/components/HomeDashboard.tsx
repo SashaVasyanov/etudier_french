@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import { getTodayDateKey, percentage, countRu, RU_ANSWERS, RU_DAYS, RU_PACKS, RU_REVIEWS, RU_WORDS } from '../lib/utils';
+import { getTodayDateKey, countRu, RU_ANSWERS, RU_DAYS, RU_PACKS, RU_REVIEWS, RU_WORDS } from '../lib/utils';
 import { getCurrentStreakDays } from '../lib/storage';
 import type { DailyBalance } from '../lib/exercises';
 import { getPackCompletionRatio } from '../lib/packs';
+import { getCurrentLevel, getLevelProgress, getMemoryMilestone, isInMemory } from '../lib/milestones';
 import { getLessonProgress } from '../lib/lessonSession';
 import { getAnswerAccuracy, summarizeWordStatuses } from '../lib/studyMetrics';
 import type { LessonDraft } from '../lib/lessonDraft';
@@ -94,7 +95,9 @@ export function HomeDashboard({
         .sort((left, right) => getPackCompletionRatio(right, storage) - getPackCompletionRatio(left, storage))[0] ?? null,
     [packs, selectedLessonPack, storage],
   );
-  const overallProgress = percentage(wordStats.learned, Math.max(1, totalWords.length));
+  const levels = useMemo(() => getLevelProgress(totalWords, storage), [totalWords, storage]);
+  const currentLevel = getCurrentLevel(levels);
+  const milestone = getMemoryMilestone(progressList.filter((progress) => isInMemory(progress)).length);
   const isDailyComplete = Boolean(dailyCompletion);
   const draftProgress = dailyDraft ? getLessonProgress(dailyDraft.session, dailyDraft.stepIndex) : null;
   const completedModuleCount = dailyCompletion?.completedModules ?? draftProgress?.completedModules ?? 0;
@@ -194,14 +197,30 @@ export function HomeDashboard({
             <span className="bento-icon blue"><AppIcon name="trend-up" size={23} /></span>
             <div>
               <span>Твой прогресс</span>
-              <h2>{overallProgress}% пути</h2>
+              <h2>{countRu(milestone.count, RU_WORDS)} в памяти</h2>
             </div>
           </div>
-          <div className="home-progress-track" aria-label={`Освоено ${overallProgress}%`}>
-            <span style={{ width: `${overallProgress}%` }} />
+          <div
+            className="home-progress-track"
+            role="progressbar"
+            aria-label={milestone.next ? `До ${milestone.next} слов: ${Math.round(milestone.progress * 100)}%` : 'Все вехи пройдены'}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(milestone.progress * 100)}
+          >
+            <span style={{ width: `${Math.round(milestone.progress * 100)}%` }} />
           </div>
+          <p className="milestone-note">
+            {milestone.next
+              ? `До отметки ${milestone.next} — ещё ${countRu(milestone.next - milestone.count, RU_WORDS)}${milestone.reached ? ` · ${milestone.reached} уже позади` : ''}`
+              : 'Все отметки пройдены — дальше только вперёд.'}
+          </p>
           <div className="progress-bento-stats">
-            <span><strong>{wordStats.learned}</strong> освоено</span>
+            {currentLevel ? (
+              <span title="Слова уровня, которые вы вспомнили на повторении">
+                <strong>{currentLevel.inMemory} из {currentLevel.total}</strong> уровень {currentLevel.label}
+              </span>
+            ) : null}
             <span><strong>{wordsInProcess}</strong> в работе</span>
             <span><strong>{difficultCount}</strong> требуют внимания</span>
           </div>

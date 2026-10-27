@@ -41,6 +41,7 @@ import {
   setLessonSourcePackPreference,
   setLessonWordTargetPreference,
   setDayStartPreference,
+  setDesiredRetention,
   setSpeechPreference,
   setWordPackStatus,
   getWordProgress,
@@ -49,7 +50,7 @@ import {
   updateProfileName,
 } from './lib/storage';
 import { parseImportedPack } from './lib/importPacks';
-import { getTodayDateKey, isAnswerMatch, isJapaneseReadingMatch, setDayStartHour } from './lib/utils';
+import { getTodayDateKey, isAnswerMatch, isFrenchNearMiss, isJapaneseReadingMatch, setDayStartHour } from './lib/utils';
 import type {
   AppStorage,
   ExerciseOutcome,
@@ -247,6 +248,11 @@ function App() {
     [dailyLessonWords, storage],
   );
   const currentStep = session?.steps[stepIndex] ?? null;
+  // When the current task appeared: the time to answer feeds the grade.
+  const stepShownAtRef = useRef(Date.now());
+  useEffect(() => {
+    stepShownAtRef.current = Date.now();
+  }, [currentStep?.id, screen]);
   const currentExercise = currentStep?.kind === 'exercise' ? currentStep.exercise : null;
   const currentWord = currentStep ? wordsById.get(currentStep.wordId) ?? null : null;
   const dailyCompletion = getCompletedDailyLesson(storage, today);
@@ -654,12 +660,19 @@ function App() {
       currentExercise.type === 'audio_to_original_input' ||
       currentExercise.type === 'translation_to_original_input' ||
       currentExercise.type === 'sentence_cloze_input';
-    const isCorrect =
+    const isExactMatch =
       currentExercise.type === 'kanji_to_hiragana_input'
         ? isJapaneseReadingMatch(answer, currentExercise.correctAnswer, currentWord ?? undefined)
         : isWordInputExercise
           ? isAnswerMatch(answer, currentExercise.correctAnswer, currentWord?.language ?? 'french', currentWord ?? undefined)
           : answer === currentExercise.correctAnswer;
+    // A one-letter typo in a longer French word counts, as «почти верно».
+    const nearMiss =
+      !isExactMatch &&
+      isWordInputExercise &&
+      (currentWord?.language ?? 'french') === 'french' &&
+      isFrenchNearMiss(answer, currentExercise.correctAnswer);
+    const isCorrect = isExactMatch || nearMiss;
 
     const outcome: ExerciseOutcome = {
       exerciseId: currentExercise.id,
@@ -668,6 +681,8 @@ function App() {
       userAnswer: answer,
       correctAnswer: currentExercise.correctAnswer,
       isCorrect,
+      responseMs: Math.max(0, Date.now() - stepShownAtRef.current),
+      ...(nearMiss ? { nearMiss: true } : {}),
     };
 
     setOutcomes((current) => [...current, outcome]);
@@ -1114,6 +1129,7 @@ function App() {
                     value={typedAnswer}
                     isSubmitted={isSubmitted}
                     isCorrect={latestOutcome?.isCorrect}
+                    nearMiss={latestOutcome?.nearMiss}
                     onChange={setTypedAnswer}
                     onSubmit={() => handleSubmit(typedAnswer)}
                     onReplayAudio={() => {
@@ -1357,6 +1373,10 @@ function App() {
                 setStorage((currentStorage) => setSpeechPreference(currentStorage, change));
               }}
               dayStartHour={storage.dayStartHour}
+              desiredRetention={storage.desiredRetention}
+              onDesiredRetentionChange={(retention) => {
+                setStorage((currentStorage) => setDesiredRetention(currentStorage, retention));
+              }}
               onDayStartHourChange={(hour) => {
                 setStorage((currentStorage) => setDayStartPreference(currentStorage, hour));
                 setDayStartHour(hour);

@@ -740,3 +740,93 @@ export const RU_MODULES = ['модуль', 'модуля', 'модулей'] as 
 export const RU_PACKS = ['пак', 'пака', 'паков'] as const;
 export const RU_REVIEWS = ['повторение', 'повторения', 'повторений'] as const;
 
+
+/** Edit distance with transpositions (optimal string alignment). */
+export function editDistance(left: string, right: string): number {
+  const a = [...left];
+  const b = [...right];
+  const rows = Array.from({ length: a.length + 1 }, (_, i) => Array.from({ length: b.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0)));
+  for (let i = 1; i <= a.length; i += 1) {
+    for (let j = 1; j <= b.length; j += 1) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      let best = Math.min(rows[i - 1][j] + 1, rows[i][j - 1] + 1, rows[i - 1][j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) best = Math.min(best, rows[i - 2][j - 2] + 1);
+      rows[i][j] = best;
+    }
+  }
+  return rows[a.length][b.length];
+}
+
+/**
+ * A French answer off by one letter (a typo, a missing or swapped letter) in
+ * a word of five letters or more: accepted as «почти верно». Short words are
+ * not forgiven — one letter changes them into another word.
+ */
+export function isFrenchNearMiss(userAnswer: string, correctAnswer: string): boolean {
+  const userVariants = [...getFrenchAnswerVariants(userAnswer)];
+  const correctVariants = [...getFrenchAnswerVariants(correctAnswer)];
+  return correctVariants.some((correct) =>
+    [...correct.replace(/[\s'-]/g, '')].length >= 5 &&
+    userVariants.some((user) => user.length > 0 && editDistance(user, correct) === 1),
+  );
+}
+
+export interface DiffSegment {
+  text: string;
+  /** same — matches; changed — differs from the other answer. */
+  kind: 'same' | 'changed';
+}
+
+/**
+ * Letter-by-letter comparison of a typed answer with the correct one, for
+ * showing what exactly was wrong. Case is ignored, accents are not: a
+ * missing accent is shown as a difference to learn.
+ */
+export function diffAnswer(userAnswer: string, correctAnswer: string): { user: DiffSegment[]; correct: DiffSegment[] } {
+  const a = [...userAnswer.trim()];
+  const b = [...correctAnswer.trim()];
+  const same = (x: string, y: string) => x.toLocaleLowerCase() === y.toLocaleLowerCase();
+  // Longest common subsequence table.
+  const lcs = Array.from({ length: a.length + 1 }, () => new Array<number>(b.length + 1).fill(0));
+  for (let i = a.length - 1; i >= 0; i -= 1) {
+    for (let j = b.length - 1; j >= 0; j -= 1) {
+      lcs[i][j] = same(a[i], b[j]) ? lcs[i + 1][j + 1] + 1 : Math.max(lcs[i + 1][j], lcs[i][j + 1]);
+    }
+  }
+  const userMarks: boolean[] = [];
+  const correctMarks: boolean[] = [];
+  let i = 0;
+  let j = 0;
+  while (i < a.length && j < b.length) {
+    if (same(a[i], b[j])) {
+      userMarks.push(false);
+      correctMarks.push(false);
+      i += 1;
+      j += 1;
+    } else if (lcs[i + 1][j] >= lcs[i][j + 1]) {
+      userMarks.push(true);
+      i += 1;
+    } else {
+      correctMarks.push(true);
+      j += 1;
+    }
+  }
+  while (i < a.length) { userMarks.push(true); i += 1; }
+  while (j < b.length) { correctMarks.push(true); j += 1; }
+  const group = (chars: string[], marks: boolean[]): DiffSegment[] => {
+    const segments: DiffSegment[] = [];
+    chars.forEach((char, index) => {
+      const kind = marks[index] ? 'changed' : 'same';
+      const last = segments[segments.length - 1];
+      if (last && last.kind === kind) last.text += char;
+      else segments.push({ text: char, kind });
+    });
+    return segments;
+  };
+  return { user: group(a, userMarks), correct: group(b, correctMarks) };
+}
+
+/** The word without a leading French article, as written (for display). */
+export function stripFrenchArticleForDisplay(value: string): string {
+  return value.replace(/^(l['’]\s*|le\s+|la\s+|les\s+|un\s+|une\s+|des\s+|du\s+|de la\s+|de l['’]\s*)/i, '').trim();
+}

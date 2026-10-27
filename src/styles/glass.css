@@ -1989,3 +1989,53 @@ h3 {
   background: var(--accent-tint);
   color: inherit;
 }
+
+/* «Почти верно»: a typo was accepted, shown in orange. */
+.answer-feedback.near {
+  background: var(--orange-tint);
+  color: var(--orange);
+}
+
+/* What was typed against what was expected, letter by letter. */
+.answer-diff {
+  margin-top: 8px;
+  display: grid;
+  gap: 2px;
+  color: var(--label);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.answer-diff-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.answer-diff-row small {
+  min-width: 34px;
+  color: var(--label-2);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.answer-diff .diff-wrong {
+  border-radius: 3px;
+  background: var(--red-tint);
+  color: var(--red);
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+}
+
+.answer-diff .diff-right {
+  border-radius: 3px;
+  background: var(--green-tint);
+  color: var(--green);
+  font-weight: 700;
+}
+
+.milestone-note {
+  margin: 6px 0 0;
+  color: var(--label-2);
+  font-size: 0.82rem;
+}

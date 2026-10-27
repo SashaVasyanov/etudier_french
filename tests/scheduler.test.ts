@@ -113,15 +113,16 @@ describe('scheduler lapses and grading', () => {
     expect(recovered.interval_days).toBe(2);
   });
 
-  it('a forgotten mastered word becomes difficult and returns on a short interval', () => {
+  it('a forgotten mastered word becomes difficult and returns within a few days', () => {
     const before = storage({ a: progress('a', 'mastered', {
       repetition_step: 6, interval_days: 28, ease_factor: 3, next_review_at: due(),
       successful_review_dates: [dayKey(-60), dayKey(-40), dayKey(-30)],
     }) });
     const p = applyOutcomes(before, [wrong('a')], now).progressByWordId.a;
     expect(p.status).toBe('difficult');
-    expect(p.interval_days).toBe(1);
-    expect(p.ease_factor).toBeLessThan(3);
+    expect(p.interval_days).toBeLessThanOrEqual(3);
+    expect(p.stability).toBeLessThan(5);
+    expect(p.lapses).toBe(1);
     expect(p.successful_review_dates).toEqual([]);
   });
 
@@ -241,47 +242,45 @@ describe('custom start of the study day', () => {
   });
 });
 
-describe('SM-2 grading and long intervals', () => {
+describe('grading and long intervals', () => {
   const dayKey = (offset: number) => localDateKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset, 12));
   const choice = (id: string, ok: boolean, n: number) => ({ ...outcome(id, ok, n), type: 'original_to_translation_choice' as const });
 
-  it('grades a session from the first answer, slips and the kind of exercise', async () => {
-    const { gradeSession, nextEaseFactor } = await import('../src/lib/storage');
-    expect(gradeSession([correct('a', 0), correct('a', 1)])).toBe(5);
-    expect(gradeSession([choice('a', true, 0), choice('a', true, 1)])).toBe(4);
-    expect(gradeSession([correct('a', 0), correct('a', 1), correct('a', 2), wrong('a', 3)])).toBe(4);
-    expect(gradeSession([...[0, 1, 2, 3, 4, 5].map((n) => correct('a', n)), wrong('a', 6), wrong('a', 7)])).toBe(3);
-    expect(gradeSession([correct('a', 0), wrong('a', 1)])).toBe(2);
-    expect(gradeSession([wrong('a', 0), correct('a', 1), correct('a', 2)])).toBe(2);
-    expect(gradeSession([wrong('a', 0), wrong('a', 1), correct('a', 2)])).toBe(1);
-    expect(nextEaseFactor(2.5, 5)).toBeCloseTo(2.6);
-    expect(nextEaseFactor(2.5, 4)).toBeCloseTo(2.5);
-    expect(nextEaseFactor(2.5, 3)).toBeCloseTo(2.36);
-    expect(nextEaseFactor(1.35, 1)).toBe(1.3);
+  it('grades a session from the first answer, its speed, typos and slips', async () => {
+    const { gradeReview } = await import('../src/lib/storage');
+    const timed = <T extends ReturnType<typeof correct>>(o: T, responseMs: number, nearMiss = false) => ({ ...o, responseMs, nearMiss });
+    expect(gradeReview([timed(correct('a', 0), 3000), timed(correct('a', 1), 2500)])).toBe(4);
+    expect(gradeReview([correct('a', 0), correct('a', 1)])).toBe(3);
+    expect(gradeReview([timed(choice('a', true, 0), 1500), timed(choice('a', true, 1), 1500)])).toBe(3);
+    expect(gradeReview([correct('a', 0), correct('a', 1), correct('a', 2), wrong('a', 3)])).toBe(3);
+    expect(gradeReview([...[0, 1, 2, 3, 4, 5].map((n) => correct('a', n)), wrong('a', 6), wrong('a', 7)])).toBe(2);
+    expect(gradeReview([timed(correct('a', 0), 20000), correct('a', 1)])).toBe(2);
+    expect(gradeReview([timed(correct('a', 0), 3000, true), correct('a', 1)])).toBe(2);
+    expect(gradeReview([correct('a', 0), wrong('a', 1)])).toBe(1);
+    expect(gradeReview([wrong('a', 0), correct('a', 1), correct('a', 2)])).toBe(1);
   });
 
-  it('grows a mastered word past two months by interval × ease, spread by a few days', () => {
+  it('turns an SM-2 word into an FSRS memory on its next review and grows it past two months', () => {
     const before = storage({ a: progress('a', 'mastered', {
       repetition_step: 6, interval_days: 30, ease_factor: 2.5,
       next_review_at: new Date(now.getTime() - 60_000).toISOString(),
       successful_review_dates: [dayKey(-60), dayKey(-50), dayKey(-30)],
     }) });
     const p = applyOutcomes(before, [correct('a', 0), correct('a', 1)], now).progressByWordId.a;
-    expect(p.ease_factor).toBeCloseTo(2.6);
-    expect(p.interval_days).toBe(78);
-    const dueInDays = Math.round((new Date(p.next_review_at!).getTime() - now.getTime()) / 86_400_000);
-    expect(dueInDays).toBeGreaterThanOrEqual(69);
-    expect(dueInDays).toBeLessThanOrEqual(87);
+    expect(p.stability).toBeGreaterThan(60);
+    expect(p.difficulty).toBeGreaterThanOrEqual(1);
+    expect(p.last_review_at).toBe(now.toISOString());
+    expect(p.interval_days).toBeGreaterThan(60);
     expect(p.status).toBe('mastered');
   });
 
-  it('credits half of an overdue gap and never schedules beyond half a year', () => {
+  it('never schedules beyond a year', () => {
     const overdue = storage({ a: progress('a', 'mastered', {
-      repetition_step: 9, interval_days: 150, ease_factor: 3,
+      repetition_step: 9, interval_days: 300, ease_factor: 3,
       next_review_at: new Date(now.getTime() - 40 * 86_400_000).toISOString(),
       successful_review_dates: [dayKey(-400), dayKey(-300), dayKey(-190)],
     }) });
-    expect(applyOutcomes(overdue, [correct('a', 0)], now).progressByWordId.a.interval_days).toBe(180);
+    expect(applyOutcomes(overdue, [correct('a', 0)], now).progressByWordId.a.interval_days).toBe(365);
   });
 });
 

@@ -68,6 +68,15 @@ export interface WordProgress {
   learned_at: string | null;
   /** Distinct local calendar days on which a due review was passed. */
   successful_review_dates: string[];
+  /** FSRS memory: days until recall falls to 90 %. Absent on words scheduled
+   *  before FSRS; derived from interval and ease on their next review. */
+  stability?: number;
+  /** FSRS difficulty, 1 (easy) … 10 (hard). */
+  difficulty?: number;
+  /** When the last graded review took place. */
+  last_review_at?: string | null;
+  /** Times the word was forgotten at a due review. */
+  lapses?: number;
 }
 
 export type StorageErrorKind = 'read' | 'corrupt' | 'unsupported_version' | 'write';
@@ -111,6 +120,10 @@ export interface ExerciseOutcome {
   userAnswer: string;
   correctAnswer: string;
   isCorrect: boolean;
+  /** Time from showing the task to the answer, ms. */
+  responseMs?: number;
+  /** Accepted with a one-letter typo («почти верно»). */
+  nearMiss?: boolean;
 }
 
 export interface LessonSession {
@@ -264,6 +277,18 @@ export interface AppStorage {
   kanaProgress: Record<string, KanaProgress>;
   /** Voice per language (speechSynthesis voiceURI) and speaking rate. */
   speech: SpeechPreferences;
+  /** Target chance of recalling a word at its review (FSRS), 0.8–0.97. */
+  desiredRetention: number;
+  /** How this learner's lapses compare with the FSRS forecast, per language. */
+  memoryCalibration?: Partial<Record<LearningLanguage, MemoryCalibration>>;
+}
+
+export interface MemoryCalibration {
+  /** Faded sum of forecast lapse chances at due reviews. */
+  expectedLapses: number;
+  /** Faded count of real lapses at the same reviews. */
+  actualLapses: number;
+  reviews: number;
 }
 
 export interface SpeechPreferences {
