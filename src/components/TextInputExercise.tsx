@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { getLearningLanguageAdverb, getLearningLanguageTitle } from '../lib/languages';
-import { diffAnswer, editDistance, stripFrenchArticleForDisplay } from '../lib/utils';
-import { getExerciseCopy } from '../lib/wordPresentation';
+import { diffAnswer, editDistance, normalizeDictation, stripFrenchArticleForDisplay } from '../lib/utils';
+import { getExerciseCopy, getJapaneseExampleReading } from '../lib/wordPresentation';
 import type { Exercise, Word } from '../types';
 import { AnswerWordDetails } from './AnswerWordDetails';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { JapaneseExampleReading } from './JapaneseExampleReading';
 import { LessonCard } from './LessonCard';
 import { SentenceAudioButton } from './SentenceAudioButton';
+import { JapaneseSentence } from './JapaneseSentence';
 
 interface TextInputExerciseProps {
   exercise: Exercise;
@@ -44,15 +45,20 @@ export function TextInputExercise({
   const copy = getExerciseCopy(exercise.type, word.language);
   const languageAdverb = getLearningLanguageAdverb(word.language);
   const languageTitle = getLearningLanguageTitle(word.language);
-  const isAudioExercise = exercise.type === 'audio_to_original_input';
+  const isDictation = exercise.type === 'sentence_dictation';
+  const isAudioExercise = exercise.type === 'audio_to_original_input' || isDictation;
   const isReadingExercise = exercise.type === 'kanji_to_hiragana_input';
   const isClozeExercise = exercise.type === 'sentence_cloze_input';
-  const answerFormatHint = isReadingExercise
+  const answerFormatHint = isDictation
+    ? 'Заглавные буквы и знаки препинания не проверяются'
+    : isReadingExercise
     ? 'Хирагана обязательна; катакана тоже будет распознана'
     : word.language === 'japanese'
       ? 'Подойдут кандзи, хирагана, катакана или ромадзи'
       : `Ответ должен быть на ${languageTitle} языке; артикль можно не писать`;
-  const placeholder = isReadingExercise
+  const placeholder = isDictation
+    ? 'Напишите фразу, которую услышали'
+    : isReadingExercise
     ? 'Введите чтение хираганой'
     : `Напишите слово ${languageAdverb}`;
 
@@ -93,8 +99,9 @@ export function TextInputExercise({
   // dictionary form but not equal: a typo, a missing accent or a near guess.
   const answerDiff = (() => {
     if (!isSubmitted || !value.trim() || word.language !== 'french') return null;
-    const typed = stripFrenchArticleForDisplay(value.trim());
-    const expected = stripFrenchArticleForDisplay(exercise.correctAnswer.trim());
+    // A dictation is compared as heard: without case and punctuation.
+    const typed = isDictation ? normalizeDictation(value) : stripFrenchArticleForDisplay(value.trim());
+    const expected = isDictation ? normalizeDictation(exercise.correctAnswer) : stripFrenchArticleForDisplay(exercise.correctAnswer.trim());
     if (typed.toLocaleLowerCase() === expected.toLocaleLowerCase()) return null;
     const close = editDistance(typed.toLocaleLowerCase(), expected.toLocaleLowerCase()) <= Math.max(2, Math.ceil(expected.length / 2));
     return isCorrect || nearMiss || close ? diffAnswer(typed, expected) : null;
@@ -179,7 +186,14 @@ export function TextInputExercise({
               <div className={nearMiss ? 'answer-feedback near' : isCorrect ? 'answer-feedback success' : 'answer-feedback error'}>
                 <div>
                   <strong>{nearMiss ? 'Почти верно — опечатка' : isCorrect ? 'Верно' : 'Правильный ответ:'}</strong>
-                  <AnswerWordDetails word={word} />
+                  {isDictation ? (
+                    <span className="answer-dictation">
+                      <span lang="fr">{exercise.correctAnswer}</span>
+                      <span className="answer-feedback-translation" lang="ru">{exercise.prompt}</span>
+                    </span>
+                  ) : (
+                    <AnswerWordDetails word={word} />
+                  )}
                   {answerDiff ? (
                     <div className="answer-diff" aria-label="Сравнение с правильным ответом">
                       <span className="answer-diff-row">
@@ -208,7 +222,7 @@ export function TextInputExercise({
               {isClozeExercise ? (
                 <div className="cloze-answer-context">
                   <div className="example-line">
-                    <p className="example-original" lang={word.language === 'japanese' ? 'ja' : 'fr'}>{word.example_original}</p>
+                    <p className="example-original" lang={word.language === 'japanese' ? 'ja' : 'fr'}><JapaneseSentence text={word.example_original} reading={getJapaneseExampleReading(word)} /></p>
                     <SentenceAudioButton text={word.example_original} language={word.language} />
                   </div>
                   {word.language === 'japanese' ? <JapaneseExampleReading word={word} /> : null}

@@ -28,7 +28,8 @@ export type ExerciseType =
   /** French noun: choose le or la. */
   | 'article_choice'
   /** Japanese word with kanji: choose its reading. */
-  | 'kanji_reading_choice';
+  | 'kanji_reading_choice'
+  | 'sentence_dictation';
 
 export interface Word {
   id: string;
@@ -317,6 +318,10 @@ export interface ComfortPreferences {
   dockBadge: boolean;
   /** Daily reminder at this local time («HH:MM»), or off. */
   reminderTime: string | null;
+  /** Japanese: readings over the kanji of example sentences. */
+  furigana: boolean;
+  /** Japanese: romaji next to the kana reading of a word. */
+  romaji: boolean;
 }
 
 export interface SpeechPreferences {

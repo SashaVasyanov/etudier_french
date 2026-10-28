@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { hasFileStore } from '../lib/fileStore';
-import type { ComfortPreferences, TextSize } from '../types';
+import type { ComfortPreferences, LearningLanguage, TextSize } from '../types';
 import { AppIcon } from './AppIcon';
 
 interface ComfortPanelProps {
   comfort: ComfortPreferences;
+  language: LearningLanguage;
   onChange: (change: Partial<ComfortPreferences>) => void;
 }
 
@@ -17,7 +18,7 @@ const TEXT_SIZES: Array<{ value: TextSize; label: string }> = [
 const DEFAULT_REMINDER = '19:00';
 
 /** Text size, sound, motion, the Dock badge and the daily reminder. */
-export function ComfortPanel({ comfort, onChange }: ComfortPanelProps) {
+export function ComfortPanel({ comfort, language, onChange }: ComfortPanelProps) {
   const desktop = hasFileStore();
   // Remembers the last chosen time while the reminder is off.
   const [reminderDraft, setReminderDraft] = useState(comfort.reminderTime ?? DEFAULT_REMINDER);
@@ -58,6 +59,31 @@ export function ComfortPanel({ comfort, onChange }: ComfortPanelProps) {
           <span>{comfort.autoplay ? 'Включено' : 'Выключено'}</span>
         </label>
       </div>
+
+      {language === 'japanese' ? (
+        <>
+          <div className="settings-row">
+            <span>
+              Фуригана
+              <small>Чтение над кандзи в примерах и в чтении вместо отдельной строки хираганы.</small>
+            </span>
+            <label className="settings-toggle">
+              <input type="checkbox" checked={comfort.furigana} onChange={(event) => onChange({ furigana: event.target.checked })} />
+              <span>{comfort.furigana ? 'Включена' : 'Выключена'}</span>
+            </label>
+          </div>
+          <div className="settings-row">
+            <span>
+              Ромадзи
+              <small>Латиница рядом с чтением слова: [たべる · taberu]. Без неё — только кана.</small>
+            </span>
+            <label className="settings-toggle">
+              <input type="checkbox" checked={comfort.romaji} onChange={(event) => onChange({ romaji: event.target.checked })} />
+              <span>{comfort.romaji ? 'Показывать' : 'Скрывать'}</span>
+            </label>
+          </div>
+        </>
+      ) : null}
 
       <div className="settings-row">
         <span>

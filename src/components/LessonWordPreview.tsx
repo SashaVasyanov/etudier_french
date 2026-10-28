@@ -4,16 +4,11 @@ import { AudioButton } from './AudioButton';
 import { JapaneseExampleReading } from './JapaneseExampleReading';
 import { LessonCard } from './LessonCard';
 import { WordImage } from './WordImage';
-import {
-  FRENCH_GENDER_LABELS,
-  getDisplayWord,
-  getFrenchGender,
-  getLessonWordNotes,
-  getPartOfSpeechLabel,
-  splitExampleAroundWord,
-} from '../lib/wordPresentation';
+import { FRENCH_GENDER_LABELS, getDisplayWord, getFrenchGender, getJapaneseExampleReading, getLessonWordNotes, getPartOfSpeechLabel, splitExampleAroundWord } from '../lib/wordPresentation';
 import { getWordLevelLabel } from '../lib/levels';
 import { SentenceAudioButton } from './SentenceAudioButton';
+import { JapaneseSentence } from './JapaneseSentence';
+import { formatTranscription } from '../lib/readingPrefs';
 
 interface LessonWordPreviewProps {
   word: Word;
@@ -65,7 +60,7 @@ export function LessonWordPreview({
                 </div>
                 <AudioButton label="Прослушать" onClick={onReplayAudio} />
               </div>
-              <p className="lesson-preview-description">{word.transcription || 'Транскрипция уточняется'}</p>
+              <p className="lesson-preview-description">{formatTranscription(word.transcription, word.language) || 'Транскрипция уточняется'}</p>
               <span className="lesson-preview-meta">
                 {getPartOfSpeechLabel(word.part_of_speech)}
                 {gender ? <> · <span className={`gender-mark gender-${gender}`}>{FRENCH_GENDER_LABELS[gender]}</span></> : null}
@@ -85,7 +80,11 @@ export function LessonWordPreview({
             <div className="lesson-preview-example-card">
               <div className="example-line">
                 <p className="lesson-preview-example" lang={word.language === 'japanese' ? 'ja' : 'fr'}>
-                  {exampleParts ? <>{exampleParts.before}<mark>{exampleParts.match}</mark>{exampleParts.after}</> : word.example_original}
+                  <JapaneseSentence
+                    text={word.example_original}
+                    reading={getJapaneseExampleReading(word)}
+                    highlight={exampleParts ? { start: exampleParts.before.length, end: exampleParts.before.length + exampleParts.match.length } : null}
+                  />
                 </p>
                 <SentenceAudioButton text={word.example_original} language={word.language} />
               </div>

@@ -1,12 +1,14 @@
 import { useEffect, useRef } from 'react';
 import type { Exercise, Word } from '../types';
-import { containsJapaneseKanji, getDisplayWord, getExerciseCopy } from '../lib/wordPresentation';
+import { containsJapaneseKanji, getDisplayWord, getExerciseCopy, getJapaneseExampleReading } from '../lib/wordPresentation';
 import { AnswerWordDetails } from './AnswerWordDetails';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
 import { LessonChoiceButton } from './LessonChoiceButton';
 import { WordImage } from './WordImage';
 import { SentenceAudioButton } from './SentenceAudioButton';
+import { JapaneseSentence } from './JapaneseSentence';
+import { formatTranscription } from '../lib/readingPrefs';
 
 interface MultipleChoiceExerciseProps {
   exercise: Exercise;
@@ -113,7 +115,7 @@ export function MultipleChoiceExercise({
           {isOriginalExercise ? (
             <CenteredWordBlock
               title={getDisplayWord(word)}
-              subtitle={word.transcription || copy.hint}
+              subtitle={formatTranscription(word.transcription, word.language) || copy.hint}
               titleClassName="lesson-prompt-title lesson-word-title"
             />
           ) : null}
@@ -212,12 +214,12 @@ export function MultipleChoiceExercise({
                 <AnswerWordDetails word={word} />
                 {isSentenceAudio ? (
                   <div className="feedback-example example-line">
-                    <span lang={word.language === 'japanese' ? 'ja' : 'fr'}>{word.example_original}</span>
+                    <span lang={word.language === 'japanese' ? 'ja' : 'fr'}><JapaneseSentence text={word.example_original} reading={getJapaneseExampleReading(word)} /></span>
                     <SentenceAudioButton text={word.example_original} language={word.language} />
                   </div>
                 ) : word.example_original && word.example_original !== word.original ? (
                   <div className="feedback-example example-line">
-                    <span lang={word.language === 'japanese' ? 'ja' : 'fr'}>{word.example_original}</span>
+                    <span lang={word.language === 'japanese' ? 'ja' : 'fr'}><JapaneseSentence text={word.example_original} reading={getJapaneseExampleReading(word)} /></span>
                     <SentenceAudioButton text={word.example_original} language={word.language} />
                   </div>
                 ) : null}

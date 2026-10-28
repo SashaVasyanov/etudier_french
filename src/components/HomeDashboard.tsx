@@ -20,6 +20,7 @@ import type {
   WordProgress,
 } from '../types';
 import { AppIcon } from './AppIcon';
+import { hasFurigana, JapaneseSentence } from './JapaneseSentence';
 
 interface HomeDashboardProps {
   totalWords: Word[];
@@ -288,11 +289,16 @@ export function HomeDashboard({
           <section className="home-bento-card phrase-bento-card">
             <span className="phrase-kicker">Фраза дня</span>
             <div className="example-line">
-              <p className="phrase-text" lang={learningLanguage === 'japanese' ? 'ja' : 'fr'}>{phraseOfTheDay.original}</p>
+              <p className="phrase-text" lang={learningLanguage === 'japanese' ? 'ja' : 'fr'}><JapaneseSentence text={phraseOfTheDay.original} reading={phraseOfTheDay.reading} /></p>
               <SentenceAudioButton text={phraseOfTheDay.original} language={learningLanguage} />
             </div>
             {phraseRevealed ? (
-              <p className="phrase-translation">{phraseOfTheDay.translation}</p>
+              <>
+                {phraseOfTheDay.reading && !hasFurigana(phraseOfTheDay.original, phraseOfTheDay.reading) ? (
+                  <p className="reading-kana" lang="ja">{phraseOfTheDay.reading}</p>
+                ) : null}
+                <p className="phrase-translation">{phraseOfTheDay.translation}</p>
+              </>
             ) : (
               <button type="button" className="text-action-button" onClick={() => setPhraseRevealed(true)}>
                 Показать перевод

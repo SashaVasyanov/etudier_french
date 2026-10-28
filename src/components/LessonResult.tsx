@@ -3,6 +3,7 @@ import { percentage, countRu, RU_ANSWERS } from '../lib/utils';
 import type { ExerciseOutcome, Word } from '../types';
 import { AppCard } from './AppCard';
 import { WordImage } from './WordImage';
+import { formatTranscription } from '../lib/readingPrefs';
 
 interface LessonResultProps {
   outcomes: ExerciseOutcome[];
@@ -70,7 +71,7 @@ export function LessonResult({
                 <div className="mistake-item-copy">
                   <strong>{getDisplayWord(word)}</strong>
                   <p className="info-subtle">{word.translation}</p>
-                  <small>{word.transcription}</small>
+                  <small>{formatTranscription(word.transcription, word.language)}</small>
                 </div>
               </article>
             ))}

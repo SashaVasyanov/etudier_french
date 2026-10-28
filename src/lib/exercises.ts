@@ -336,6 +336,10 @@ function getArticleGender(word: Word): 'm' | 'f' | null {
 
 function canCreateExercise(word: Word, type: ExerciseType): boolean {
   if (type === 'sentence_order') return getSentenceTokens(word) !== null;
+  if (type === 'sentence_dictation') {
+    const tokens = getSentenceTokens(word);
+    return tokens !== null && tokens.length <= 8 && word.example_original.length <= 60;
+  }
   if (type === 'audio_sentence_choice') {
     return hasTranslatedExample(word) && word.example_original.trim() !== word.original.trim();
   }
@@ -365,7 +369,7 @@ function getAvailableExerciseTypes(word: Word, exerciseTypes: ExerciseType[]): E
 
     // No usable sentence (or no gender, no kanji): ask for the word by choice
     // instead, so lessons do not turn into a row of typing tasks.
-    return type === 'sentence_cloze_input' || type === 'sentence_order' || type === 'audio_sentence_choice'
+    return type === 'sentence_cloze_input' || type === 'sentence_order' || type === 'audio_sentence_choice' || type === 'sentence_dictation'
       || type === 'article_choice' || type === 'kanji_reading_choice'
       ? 'translation_to_original_choice'
       : null;
@@ -493,6 +497,16 @@ function createExercise(word: Word, optionPool: Word[], type: ExerciseType, inde
         prompt: word.example_translation || word.translation,
         correctAnswer: tokens.join(' '),
         options: shuffled,
+      };
+    }
+    case 'sentence_dictation': {
+      if (!canCreateExercise(word, type)) return createExercise(word, optionPool, 'audio_to_original_input', index);
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: word.example_translation,
+        correctAnswer: word.example_original.trim(),
       };
     }
     case 'audio_sentence_choice': {
@@ -723,6 +737,7 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       audio_sentence_choice: 1,
       article_choice: 0,
       kanji_reading_choice: 0,
+      sentence_dictation: 3,
     },
     growing: {
       original_to_translation_choice: 1,
@@ -737,6 +752,7 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       audio_sentence_choice: 1,
       article_choice: 1,
       kanji_reading_choice: 1,
+      sentence_dictation: 1,
     },
     stable: {
       original_to_translation_choice: 2,
@@ -751,6 +767,7 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       audio_sentence_choice: 1,
       article_choice: 2,
       kanji_reading_choice: 1,
+      sentence_dictation: 0,
     },
   };
 
@@ -1109,7 +1126,7 @@ function createDailySession(
     'Смешанное закрепление',
     'Слова возвращаются в новом порядке, чтобы проверить узнавание без заучивания по шаблону.',
     reinforcementWords,
-    ['sentence_cloze_input', 'sentence_order', 'audio_sentence_choice', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
+    ['sentence_cloze_input', 'sentence_order', 'audio_sentence_choice', 'sentence_dictation', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
     uniqueWords(words),
     storage,
     1,
@@ -1217,7 +1234,7 @@ function createListeningSession(words: Word[], storage: AppStorage, activePackId
     'Только на слух',
     'Слова и фразы без текста: сначала услышать, потом понять.',
     focus,
-    ['audio_to_translation_choice', 'audio_sentence_choice', 'audio_to_original_input'],
+    ['audio_to_translation_choice', 'audio_sentence_choice', 'audio_to_original_input', 'sentence_dictation'],
     uniqueWords(words),
     storage,
   );

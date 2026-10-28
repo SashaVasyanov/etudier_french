@@ -12,6 +12,7 @@ import { StatusBadge } from './StatusBadge';
 import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
 import { getWordLevelLabel } from '../lib/levels';
+import { formatTranscription } from '../lib/readingPrefs';
 
 interface PackDetailScreenProps {
   pack: WordPack;
@@ -182,7 +183,7 @@ export function PackDetailScreen({
               <PackWordRow
                 media={<WordImage word={word} />}
                 title={getDisplayWord(word)}
-                subtitle={`${word.translation} · ${word.transcription || 'транскрипция не указана'} · ${getPartOfSpeechLabel(word.part_of_speech)}`}
+                subtitle={`${word.translation} · ${formatTranscription(word.transcription, word.language) || 'транскрипция не указана'} · ${getPartOfSpeechLabel(word.part_of_speech)}`}
                 action={
                   <button
                     type="button"

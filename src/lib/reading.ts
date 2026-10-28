@@ -8,6 +8,8 @@ export interface ReadingSentence {
   translation: string;
   /** The studied word, to mark it in the sentence. */
   word: string;
+  /** Japanese: the sentence in hiragana. */
+  reading?: string;
 }
 
 function hashString(value: string): number {
@@ -22,7 +24,14 @@ function usableSentence(word: Word): boolean {
 }
 
 function toSentence(word: Word): ReadingSentence {
-  return { wordId: word.id, original: word.example_original.trim(), translation: word.example_translation.trim(), word: word.original };
+  const reading = word.language === 'japanese' ? word.example_reading?.trim() : undefined;
+  return {
+    wordId: word.id,
+    original: word.example_original.trim(),
+    translation: word.example_translation.trim(),
+    word: word.original,
+    ...(reading ? { reading } : {}),
+  };
 }
 
 /** Words the learner has met (not new, not excluded), with an example. */

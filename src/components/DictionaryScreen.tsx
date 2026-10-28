@@ -13,6 +13,7 @@ import { PackWordRow } from './PackWordRow';
 import { StatusBadge } from './StatusBadge';
 import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
+import { formatTranscription } from '../lib/readingPrefs';
 
 interface DictionaryScreenProps {
   learningLanguage: LearningLanguage;
@@ -420,7 +421,7 @@ export default function DictionaryScreen({ learningLanguage, words, storage, pac
                 media={<WordImage word={word} />}
                 title={getDisplayWord(word)}
                 titleLang={getLearningLanguageLocale(word.language)}
-                subtitle={`${word.translation} · ${word.transcription || 'транскрипция не указана'} · ${getPartOfSpeechLabel(word.part_of_speech)}`}
+                subtitle={`${word.translation} · ${formatTranscription(word.transcription, word.language) || 'транскрипция не указана'} · ${getPartOfSpeechLabel(word.part_of_speech)}`}
                 action={
                   <div className="word-card-actions">
                     <button

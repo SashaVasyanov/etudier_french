@@ -16,6 +16,7 @@ import { playTextAudio, playWordAudio, setSpeechPreferences, stopAudio } from '.
 import { createFlashcardSession, createLessonSession, getDailyBalance, LISTENING_TITLE, pickPracticeWords, QUICK_REVIEW_TITLE, scheduleExerciseRetry } from './lib/exercises';
 import { getPhraseOfTheDay } from './lib/reading';
 import { getNextReminderAt, getReminderText, scheduleReminder, setDockBadge } from './lib/desktop';
+import { setReadingPreferences } from './lib/readingPrefs';
 import {
   getLearningLanguageProductTitle,
   getLearningLanguageTitle,
@@ -58,7 +59,7 @@ import {
   updateProfileName,
 } from './lib/storage';
 import { parseImportedPack } from './lib/importPacks';
-import { getTodayDateKey, isAnswerMatch, isFrenchNearMiss, isJapaneseReadingMatch, setDayStartHour } from './lib/utils';
+import { checkDictation, getTodayDateKey, isAnswerMatch, isFrenchNearMiss, isJapaneseReadingMatch, setDayStartHour } from './lib/utils';
 import type {
   AppStorage,
   ExerciseOutcome,
@@ -289,6 +290,8 @@ function App() {
   const dailyCompletion = getCompletedDailyLesson(storage, today);
   const comfort = getComfort(storage);
   const autoplayEnabled = comfort.autoplay;
+  // Read by the components that print Japanese readings, during this render.
+  setReadingPreferences({ furigana: comfort.furigana, romaji: comfort.romaji });
 
   // Text size and calmer motion apply to the whole window.
   useEffect(() => {
@@ -458,7 +461,7 @@ function App() {
       return undefined;
     }
 
-    if (currentStep.kind === 'exercise' && currentStep.exercise.type === 'audio_sentence_choice') {
+    if (currentStep.kind === 'exercise' && (currentStep.exercise.type === 'audio_sentence_choice' || currentStep.exercise.type === 'sentence_dictation')) {
       void playTextAudio(currentWord.example_original, currentWord.language);
       return () => {
         stopAudio();
@@ -733,18 +736,20 @@ function App() {
       currentExercise.type === 'audio_to_original_input' ||
       currentExercise.type === 'translation_to_original_input' ||
       currentExercise.type === 'sentence_cloze_input';
-    const isExactMatch =
-      currentExercise.type === 'kanji_to_hiragana_input'
+    const dictation = currentExercise.type === 'sentence_dictation' ? checkDictation(answer, currentExercise.correctAnswer) : null;
+    const isExactMatch = dictation
+      ? dictation === 'exact'
+      : currentExercise.type === 'kanji_to_hiragana_input'
         ? isJapaneseReadingMatch(answer, currentExercise.correctAnswer, currentWord ?? undefined)
         : isWordInputExercise
           ? isAnswerMatch(answer, currentExercise.correctAnswer, currentWord?.language ?? 'french', currentWord ?? undefined)
           : answer === currentExercise.correctAnswer;
     // A one-letter typo in a longer French word counts, as «почти верно».
-    const nearMiss =
+    const nearMiss = dictation === 'near' || (
       !isExactMatch &&
       isWordInputExercise &&
       (currentWord?.language ?? 'french') === 'french' &&
-      isFrenchNearMiss(answer, currentExercise.correctAnswer);
+      isFrenchNearMiss(answer, currentExercise.correctAnswer));
     const isCorrect = isExactMatch || nearMiss;
 
     const outcome: ExerciseOutcome = {
@@ -779,7 +784,7 @@ function App() {
 
     // With autoplay off, sound plays only on request (R or the speaker buttons).
     if (!autoplayEnabled) return;
-    if (currentWord && (currentExercise.type === 'sentence_order' || currentExercise.type === 'audio_sentence_choice')) {
+    if (currentWord && (currentExercise.type === 'sentence_order' || currentExercise.type === 'audio_sentence_choice' || currentExercise.type === 'sentence_dictation')) {
       // The whole sentence was the task: hear it again, not the single word.
       void playTextAudio(currentWord.example_original, currentWord.language);
     } else if (resultAudioWord) {
@@ -1229,7 +1234,8 @@ function App() {
                     onChange={setTypedAnswer}
                     onSubmit={() => handleSubmit(typedAnswer)}
                     onReplayAudio={() => {
-                      void playWordAudio(currentWord);
+                      if (currentExercise.type === 'sentence_dictation') void playTextAudio(currentWord.example_original, currentWord.language);
+                      else void playWordAudio(currentWord);
                     }}
                     onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
                     onIgnoreWord={handleIgnoreWord}
@@ -1506,7 +1512,7 @@ function App() {
             />
           ) : null}
           {screen === 'reading' ? (
-            <ReadingScreen words={availableWords} storage={storage} onClose={() => setScreen('home')} />
+            <ReadingScreen words={availableWords} dictionaryWords={words} storage={storage} onClose={() => setScreen('home')} />
           ) : null}
           {screen === 'radicals' && storage.learningLanguage === 'japanese' ? (
             <KanjiRadicalsScreen

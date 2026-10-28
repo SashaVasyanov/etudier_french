@@ -354,7 +354,7 @@ export default function ProfileScreen({
           </div>
         </section>
 
-        <ComfortPanel comfort={comfort} onChange={onComfortChange} />
+        <ComfortPanel comfort={comfort} language={learningLanguage} onChange={onComfortChange} />
 
         <SpeechSettingsPanel language={learningLanguage} speech={storage.speech} onChange={onSpeechChange} />
 

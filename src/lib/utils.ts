@@ -892,3 +892,32 @@ export function parseClipboardWord(text: string): { original: string; translatio
   translation = clean(translation).slice(0, 400);
   return original ? { original, translation } : null;
 }
+
+/** A sentence as heard: case, punctuation and apostrophe style do not matter. */
+export function normalizeDictation(value: string): string {
+  return value
+    .normalize('NFC')
+    .toLocaleLowerCase('fr')
+    .replace(/[’`´]/g, "'")
+    .replace(/[«»"“”.,!?;:…()—–]/g, ' ')
+    .replace(/\s*'\s*/g, "'")
+    .replace(/\s*-\s*/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Dictation check: «exact» when the words match, «near» for a slip that does
+ * not change what was heard (a missing accent, one or two letters in a long
+ * sentence), «wrong» otherwise.
+ */
+export function checkDictation(userAnswer: string, correctAnswer: string): 'exact' | 'near' | 'wrong' {
+  const user = normalizeDictation(userAnswer);
+  const correct = normalizeDictation(correctAnswer);
+  if (!user) return 'wrong';
+  if (user === correct) return 'exact';
+  const bare = (value: string) => value.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+  if (bare(user) === bare(correct)) return 'near';
+  const allowed = correct.length >= 24 ? 2 : correct.length >= 10 ? 1 : 0;
+  return editDistance(user, correct) <= allowed ? 'near' : 'wrong';
+}

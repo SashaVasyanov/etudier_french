@@ -3,11 +3,8 @@ import { getMemoryState, getRecallProbability } from '../lib/storage';
 import { countRu, RU_DAYS } from '../lib/utils';
 import { JapaneseExampleReading } from './JapaneseExampleReading';
 import { SentenceAudioButton } from './SentenceAudioButton';
-import {
-  getPartOfSpeechLabel,
-  getWordDescription,
-  getWordExampleLabel,
-} from '../lib/wordPresentation';
+import { getJapaneseExampleReading, getPartOfSpeechLabel, getWordDescription, getWordExampleLabel } from '../lib/wordPresentation';
+import { JapaneseSentence } from './JapaneseSentence';
 
 interface WordDetailsPanelProps {
   word: Word;
@@ -69,7 +66,7 @@ export function WordDetailsPanel({ word, progress }: WordDetailsPanelProps) {
       <div className="flashcard-meta-item">
         <span className="eyebrow">{getWordExampleLabel(word)}</span>
         <div className="example-line">
-          <strong>{word.example_original}</strong>
+          <strong><JapaneseSentence text={word.example_original} reading={getJapaneseExampleReading(word)} /></strong>
           <SentenceAudioButton text={word.example_original} language={word.language} />
         </div>
         <JapaneseExampleReading word={word} />

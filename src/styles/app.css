@@ -6757,3 +6757,210 @@ h3 {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Furigana over kanji (Japanese example sentences and reading). */
+ruby rt {
+  font-size: 0.52em;
+  font-weight: 600;
+  color: var(--label-2);
+  letter-spacing: 0;
+}
+
+[lang='ja']:has(ruby) {
+  line-height: 2.15;
+}
+
+.reading-kana {
+  margin: 6px 0 0;
+  color: var(--label-2);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.answer-dictation {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.answer-dictation > span[lang='fr'] {
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+/* Reading: phrases / texts switch and short texts. */
+.tab-row.reading-mode {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 320px;
+  margin-top: 16px;
+}
+
+.mini-text-list {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.mini-text-card {
+  padding: 16px 18px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  display: grid;
+  gap: 6px;
+  text-align: left;
+  font: inherit;
+  color: var(--label);
+  cursor: pointer;
+}
+
+.mini-text-card:hover {
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+}
+
+.mini-text-card strong {
+  font-size: 1.05rem;
+}
+
+.mini-text-level {
+  justify-self: start;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--fill);
+  color: var(--label-2);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mini-text-preview {
+  color: var(--label-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mini-text-meta {
+  color: var(--label-3);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mini-text-reader {
+  margin-top: 16px;
+  padding: 20px 22px;
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  display: grid;
+  gap: 12px;
+}
+
+.mini-text-reader-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+
+.mini-text-reader-head h2 {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: 1.35rem;
+}
+
+.mini-text-reader-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mini-text-hint {
+  margin: 0;
+  color: var(--label-2);
+  font-size: 14px;
+}
+
+.mini-text-sentences {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+
+.mini-text-original {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.mini-word {
+  padding: 0 1px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.mini-word:hover,
+.mini-word.selected {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.mini-word-new {
+  text-decoration: underline 2px color-mix(in srgb, var(--accent) 70%, transparent);
+  text-underline-offset: 4px;
+}
+
+.mini-word-learning {
+  text-decoration: underline 1px dotted var(--label-3);
+  text-underline-offset: 4px;
+}
+
+.mini-word-outside {
+  text-decoration: underline 1px dotted color-mix(in srgb, var(--label-3) 60%, transparent);
+  text-underline-offset: 4px;
+}
+
+.mini-word-panel {
+  position: sticky;
+  bottom: 12px;
+  min-height: 52px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--fill);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.mini-word-panel.empty {
+  color: var(--label-3);
+  font-size: 14px;
+}
+
+.mini-word-panel strong {
+  font-size: 1.1rem;
+}
+
+.mini-word-reading {
+  color: var(--label-2);
+}
+
+.mini-word-state {
+  margin-left: auto;
+  color: var(--label-3);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mini-word-state-new {
+  color: var(--accent);
+}

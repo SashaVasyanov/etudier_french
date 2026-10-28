@@ -1,5 +1,6 @@
 import type { Word } from '../types';
 import { getJapaneseExampleReading } from '../lib/wordPresentation';
+import { hasFurigana } from './JapaneseSentence';
 
 interface JapaneseExampleReadingProps {
   word: Word;
@@ -8,7 +9,8 @@ interface JapaneseExampleReadingProps {
 export function JapaneseExampleReading({ word }: JapaneseExampleReadingProps) {
   const reading = getJapaneseExampleReading(word);
 
-  if (!reading) {
+  // With furigana the reading sits over the sentence itself.
+  if (!reading || hasFurigana(word.example_original, reading)) {
     return null;
   }
 

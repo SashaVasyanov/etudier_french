@@ -22,7 +22,7 @@ const keyFor = (language: LearningLanguage) => `anki-plus-daily-draft-${language
 const exerciseTypes = new Set([
   'audio_to_translation_choice', 'translation_to_original_choice', 'original_to_translation_choice',
   'audio_to_original_input', 'translation_to_original_input', 'kanji_to_hiragana_input',
-  'sentence_cloze_input', 'memory_check', 'sentence_order', 'audio_sentence_choice', 'article_choice', 'kanji_reading_choice',
+  'sentence_cloze_input', 'memory_check', 'sentence_order', 'audio_sentence_choice', 'article_choice', 'kanji_reading_choice', 'sentence_dictation',
 ]);
 const themes = new Set(['new', 'practice', 'review', 'reinforcement', 'recap', 'mistakes']);
 const record = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === 'object' && !Array.isArray(value);

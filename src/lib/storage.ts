@@ -835,12 +835,13 @@ const RECALL_EXERCISES = new Set<ExerciseOutcome['type']>([
   'audio_to_original_input',
   'kanji_to_hiragana_input',
   'sentence_cloze_input',
+  'sentence_dictation',
   'memory_check',
 ]);
 
 /** Time a first answer may take before it counts as «с трудом». */
 function slowAnswerMs(type: ExerciseOutcome['type']): number {
-  const audio = type === 'audio_to_translation_choice' || type === 'audio_to_original_input' ? 3000 : 0;
+  const audio = type === 'audio_to_translation_choice' || type === 'audio_to_original_input' ? 3000 : type === 'sentence_dictation' ? 15000 : 0;
   return (RECALL_EXERCISES.has(type) ? 15000 : 9000) + audio;
 }
 
@@ -1684,6 +1685,8 @@ export const DEFAULT_COMFORT: ComfortPreferences = {
   reduceMotion: false,
   dockBadge: true,
   reminderTime: null,
+  furigana: false,
+  romaji: true,
 };
 
 const TEXT_SIZES: readonly TextSize[] = ['normal', 'large', 'larger'];
@@ -1703,6 +1706,8 @@ function normalizeComfort(value: unknown): ComfortPreferences | undefined {
     reduceMotion: typeof value.reduceMotion === 'boolean' ? value.reduceMotion : DEFAULT_COMFORT.reduceMotion,
     dockBadge: typeof value.dockBadge === 'boolean' ? value.dockBadge : DEFAULT_COMFORT.dockBadge,
     reminderTime: isReminderTime(value.reminderTime) ? value.reminderTime : null,
+    furigana: typeof value.furigana === 'boolean' ? value.furigana : DEFAULT_COMFORT.furigana,
+    romaji: typeof value.romaji === 'boolean' ? value.romaji : DEFAULT_COMFORT.romaji,
   };
   const isDefault = (Object.keys(DEFAULT_COMFORT) as Array<keyof ComfortPreferences>)
     .every((key) => comfort[key] === DEFAULT_COMFORT[key]);

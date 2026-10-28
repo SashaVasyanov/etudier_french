@@ -413,6 +413,12 @@ export function getExerciseCopy(
         title: 'Le или la?',
         hint: 'Выберите артикль: от него зависит форма прилагательных.',
       };
+    case 'sentence_dictation':
+      return {
+        eyebrow: 'Диктант',
+        title: 'Запишите фразу',
+        hint: 'Прослушайте и напишите фразу целиком. Знаки препинания и заглавные буквы не важны.',
+      };
     case 'kanji_reading_choice':
       return {
         eyebrow: 'Чтение кандзи',

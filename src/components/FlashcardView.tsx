@@ -7,6 +7,7 @@ import { WordDetailsPanel } from './WordDetailsPanel';
 import { WordImage } from './WordImage';
 import { getDisplayWord, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordLevelLabel } from '../lib/levels';
+import { formatTranscription } from '../lib/readingPrefs';
 
 interface FlashcardViewProps {
   word: Word;
@@ -96,7 +97,7 @@ export function FlashcardView({
                   </div>
                   <div className="flashcard-meta-item">
                     <span className="eyebrow">Транскрипция</span>
-                    <strong>{word.transcription || '—'}</strong>
+                    <strong>{formatTranscription(word.transcription, word.language) || '—'}</strong>
                   </div>
                 </div>
                 <WordDetailsPanel word={word} />

@@ -45,3 +45,15 @@ describe('dictionary search', () => {
     expect(getSearchRank(entry('ёлка | ель'), 'елка')).toBe(0);
   });
 });
+
+describe('dictation', () => {
+  it('ignores case and punctuation, forgives a slip, not a different sentence', async () => {
+    const { checkDictation } = await import('../src/lib/utils');
+    expect(checkDictation("il fait beau aujourd'hui", "Il fait beau aujourd’hui.")).toBe('exact');
+    expect(checkDictation('Nous allons a Paris demain matin', 'Nous allons à Paris demain matin.')).toBe('near');
+    expect(checkDictation('Nous alons à Paris demain matin', 'Nous allons à Paris demain matin.')).toBe('near');
+    expect(checkDictation('Nous allons à Lyon demain matin', 'Nous allons à Paris demain matin.')).toBe('wrong');
+    expect(checkDictation('', 'Il pleut.')).toBe('wrong');
+    expect(checkDictation('il pleu', 'Il pleut.')).toBe('wrong');
+  });
+});
