@@ -177,7 +177,7 @@ function getLastRomajiVowel(value: string): string {
   return [...value].reverse().find((char) => /[aeiou]/.test(char)) ?? '';
 }
 
-function kanaToRomaji(value: string): string {
+export function kanaToRomaji(value: string): string {
   const kana = katakanaToHiragana(normalizeJapaneseAnswerToken(value));
   let result = '';
   let isGeminated = false;

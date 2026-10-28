@@ -41,6 +41,11 @@ function startsWithVowelSound(value: string): boolean {
   return /^[aeiouyhàâæéèêëîïôœùûü]/.test(word);
 }
 
+const WITHOUT_ARTICLE: ReadonlySet<string> = new Set([
+  'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
+  'noël', 'monsieur', 'madame', 'mademoiselle', 'maman', 'papa',
+]);
+
 const ARTICLE_EXCEPTIONS: Record<string, string> = {
   cafe: 'le',
   the: 'le',
@@ -164,6 +169,9 @@ export function getFrenchArticleForWord(word: Word): string | null {
   if (!original) {
     return null;
   }
+
+  // Months, holidays and forms of address are used without an article.
+  if (WITHOUT_ARTICLE.has(original.toLowerCase())) return null;
 
   // The gender list is the source of truth; examples and endings are only a
   // fallback for words outside it (imported or custom words).

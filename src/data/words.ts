@@ -5,7 +5,9 @@ import { createFallbackWordImage } from '../lib/wordImages';
 import { deriveFrenchLatinTranscription } from '../lib/utils';
 import { FRENCH_H_ASPIRE, FRENCH_NOUN_GENDERS } from './frenchNounGenders';
 
-const DATASET_URLS = ['/data/words_a1.json', '/data/words_a2.json', '/data/words_b1.json'] as const;
+// words_basics.json: numbers, days, months, seasons and other everyday words
+// the generated lists missed; written by hand, with real examples.
+const DATASET_URLS = ['/data/words_a1.json', '/data/words_a2.json', '/data/words_b1.json', '/data/words_basics.json'] as const;
 const FETCH_TIMEOUT_MS = 10_000;
 const LEVEL_ORDER: Record<WordLevel, number> = {
   A1: 0,
@@ -1033,7 +1035,8 @@ function buildLexicalExample(word: Word): { example_original: string; example_tr
 function improveWordExamples(word: Word): Pick<Word, 'example_original' | 'example_translation'> {
   // Pack and custom words come with hand-written examples: keep them. Only the
   // generated core dataset gets template sentences.
-  if (word.source !== 'core' && word.example_original.trim() && !isGenericExample(word.example_original)) {
+  const handWritten = word.source !== 'core' || (word.tags ?? []).includes('curated');
+  if (handWritten && word.example_original.trim() && !isGenericExample(word.example_original)) {
     return {
       example_original: word.example_original.trim(),
       example_translation: word.example_translation.trim(),
@@ -1138,7 +1141,10 @@ async function fetchJson<T>(url: string): Promise<T> {
 
 function frequencyRank(word: Word): number {
   const match = /^ja-(\d+)$/.exec(word.id);
-  return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
+  if (match) return Number(match[1]);
+  // The everyday N5 basics are spread evenly among the frequency list.
+  const basic = /^ja-n5-(\d+)$/.exec(word.id);
+  return basic ? Number(basic[1]) * 2.2 + 0.5 : Number.MAX_SAFE_INTEGER;
 }
 
 function sortWordsByCurriculum(words: Word[], language: LearningLanguage): Word[] {
@@ -1181,11 +1187,13 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
         { JAPANESE_CORE_WORDS },
         { applyJapaneseWordCorrection, JAPANESE_EXCLUDED_WORDS, cleanJapaneseEntry },
         { JAPANESE_JLPT_LEVELS },
+        { JAPANESE_BASIC_WORDS },
         wordImageManifest,
       ] = await Promise.all([
         import('./japaneseWords'),
         import('./japaneseWordCorrections'),
         import('./japaneseJlpt'),
+        import('./japaneseBasics'),
         wordImageManifestPromise,
       ]);
 
@@ -1194,6 +1202,7 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
           ...JAPANESE_CORE_WORDS.filter((word) => !JAPANESE_EXCLUDED_WORDS.has(word.original)).map((word) =>
             normalizeWord(cleanJapaneseEntry(applyJapaneseWordCorrection({ ...word, ...wordImageManifest[word.id] }))),
           ),
+          ...JAPANESE_BASIC_WORDS.map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
           ...getPackWords('japanese').map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
         ].map((word) => withJlptLevel(word, JAPANESE_JLPT_LEVELS)),
         language,

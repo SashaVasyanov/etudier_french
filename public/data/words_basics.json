@@ -1,0 +1,1786 @@
+[
+ {
+  "id": "a1-zero-b001",
+  "original": "zéro",
+  "translation": "ноль",
+  "transcription": "[zero]",
+  "audio_original": "",
+  "example_original": "Il fait zéro degré ce matin.",
+  "example_translation": "Сегодня утром ноль градусов.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-deux-b002",
+  "original": "deux",
+  "translation": "два",
+  "transcription": "[deu]",
+  "audio_original": "",
+  "example_original": "Nous avons deux enfants.",
+  "example_translation": "У нас двое детей.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-trois-b003",
+  "original": "trois",
+  "translation": "три",
+  "transcription": "[trwa]",
+  "audio_original": "",
+  "example_original": "Le film dure trois heures.",
+  "example_translation": "Фильм идёт три часа.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-quatre-b004",
+  "original": "quatre",
+  "translation": "четыре",
+  "transcription": "[katr]",
+  "audio_original": "",
+  "example_original": "La table a quatre chaises.",
+  "example_translation": "У стола четыре стула.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-cinq-b005",
+  "original": "cinq",
+  "translation": "пять",
+  "transcription": "[sank]",
+  "audio_original": "",
+  "example_original": "Le magasin ferme à cinq heures.",
+  "example_translation": "Магазин закрывается в пять часов.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-six-b006",
+  "original": "six",
+  "translation": "шесть",
+  "transcription": "[sis]",
+  "audio_original": "",
+  "example_original": "Je me lève à six heures.",
+  "example_translation": "Я встаю в шесть часов.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-sept-b007",
+  "original": "sept",
+  "translation": "семь",
+  "transcription": "[set]",
+  "audio_original": "",
+  "example_original": "Il y a sept jours dans une semaine.",
+  "example_translation": "В неделе семь дней.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-huit-b008",
+  "original": "huit",
+  "translation": "восемь",
+  "transcription": "[uit]",
+  "audio_original": "",
+  "example_original": "Le cours commence à huit heures.",
+  "example_translation": "Занятие начинается в восемь часов.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-neuf-b009",
+  "original": "neuf",
+  "translation": "девять",
+  "transcription": "[neuf]",
+  "audio_original": "",
+  "example_original": "Ma fille a neuf ans.",
+  "example_translation": "Моей дочери девять лет.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-dix-b010",
+  "original": "dix",
+  "translation": "десять",
+  "transcription": "[dis]",
+  "audio_original": "",
+  "example_original": "J'attends depuis dix minutes.",
+  "example_translation": "Я жду уже десять минут.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-onze-b011",
+  "original": "onze",
+  "translation": "одиннадцать",
+  "transcription": "[onz]",
+  "audio_original": "",
+  "example_original": "Le train part à onze heures.",
+  "example_translation": "Поезд отправляется в одиннадцать часов.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-douze-b012",
+  "original": "douze",
+  "translation": "двенадцать",
+  "transcription": "[duz]",
+  "audio_original": "",
+  "example_original": "Il y a douze mois dans une année.",
+  "example_translation": "В году двенадцать месяцев.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-treize-b013",
+  "original": "treize",
+  "translation": "тринадцать",
+  "transcription": "[trez]",
+  "audio_original": "",
+  "example_original": "Mon frère a treize ans.",
+  "example_translation": "Моему брату тринадцать лет.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-quatorze-b014",
+  "original": "quatorze",
+  "translation": "четырнадцать",
+  "transcription": "[katorz]",
+  "audio_original": "",
+  "example_original": "Nous sommes quatorze dans la classe.",
+  "example_translation": "Нас в классе четырнадцать человек.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-quinze-b015",
+  "original": "quinze",
+  "translation": "пятнадцать",
+  "transcription": "[kanz]",
+  "audio_original": "",
+  "example_original": "Le bus arrive dans quinze minutes.",
+  "example_translation": "Автобус придёт через пятнадцать минут.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-seize-b016",
+  "original": "seize",
+  "translation": "шестнадцать",
+  "transcription": "[sez]",
+  "audio_original": "",
+  "example_original": "Elle a seize ans.",
+  "example_translation": "Ей шестнадцать лет.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-dix-sept-b017",
+  "original": "dix-sept",
+  "translation": "семнадцать",
+  "transcription": "[di-set]",
+  "audio_original": "",
+  "example_original": "Il est dix-sept heures.",
+  "example_translation": "Сейчас семнадцать часов.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-dix-huit-b018",
+  "original": "dix-huit",
+  "translation": "восемнадцать",
+  "transcription": "[diz-uit]",
+  "audio_original": "",
+  "example_original": "Il a dix-huit ans aujourd'hui.",
+  "example_translation": "Ему сегодня восемнадцать лет.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-dix-neuf-b019",
+  "original": "dix-neuf",
+  "translation": "девятнадцать",
+  "transcription": "[diz-neuf]",
+  "audio_original": "",
+  "example_original": "Le livre coûte dix-neuf euros.",
+  "example_translation": "Книга стоит девятнадцать евро.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-vingt-b020",
+  "original": "vingt",
+  "translation": "двадцать",
+  "transcription": "[van]",
+  "audio_original": "",
+  "example_original": "Il fait vingt degrés.",
+  "example_translation": "Сейчас двадцать градусов.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-trente-b021",
+  "original": "trente",
+  "translation": "тридцать",
+  "transcription": "[trant]",
+  "audio_original": "",
+  "example_original": "Le mois de juin a trente jours.",
+  "example_translation": "В июне тридцать дней.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-quarante-b022",
+  "original": "quarante",
+  "translation": "сорок",
+  "transcription": "[karant]",
+  "audio_original": "",
+  "example_original": "Mon père a quarante ans.",
+  "example_translation": "Моему отцу сорок лет.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-cinquante-b023",
+  "original": "cinquante",
+  "translation": "пятьдесят",
+  "transcription": "[sankant]",
+  "audio_original": "",
+  "example_original": "Le billet coûte cinquante euros.",
+  "example_translation": "Билет стоит пятьдесят евро.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-soixante-b024",
+  "original": "soixante",
+  "translation": "шестьдесят",
+  "transcription": "[swasant]",
+  "audio_original": "",
+  "example_original": "Une heure, c'est soixante minutes.",
+  "example_translation": "Час — это шестьдесят минут.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a2-soixante-dix-b025",
+  "original": "soixante-dix",
+  "translation": "семьдесят",
+  "transcription": "[swasant-dis]",
+  "audio_original": "",
+  "example_original": "Ma grand-mère a soixante-dix ans.",
+  "example_translation": "Моей бабушке семьдесят лет.",
+  "part_of_speech": "determiner",
+  "level": "A2",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a2-quatre-vingts-b026",
+  "original": "quatre-vingts",
+  "translation": "восемьдесят",
+  "transcription": "[katr-van]",
+  "audio_original": "",
+  "example_original": "Il y a quatre-vingts places dans la salle.",
+  "example_translation": "В зале восемьдесят мест.",
+  "part_of_speech": "determiner",
+  "level": "A2",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a2-quatre-vingt-dix-b027",
+  "original": "quatre-vingt-dix",
+  "translation": "девяносто",
+  "transcription": "[katr-van-dis]",
+  "audio_original": "",
+  "example_original": "Mon grand-père a quatre-vingt-dix ans.",
+  "example_translation": "Моему дедушке девяносто лет.",
+  "part_of_speech": "determiner",
+  "level": "A2",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-cent-b028",
+  "original": "cent",
+  "translation": "сто",
+  "transcription": "[san]",
+  "audio_original": "",
+  "example_original": "Il y a cent pages dans ce livre.",
+  "example_translation": "В этой книге сто страниц.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-mille-b029",
+  "original": "mille",
+  "translation": "тысяча",
+  "transcription": "[mil]",
+  "audio_original": "",
+  "example_original": "Cette ville a mille habitants.",
+  "example_translation": "В этом городе тысяча жителей.",
+  "part_of_speech": "determiner",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated",
+   "numbers"
+  ]
+ },
+ {
+  "id": "a1-premier-b030",
+  "original": "premier",
+  "translation": "первый",
+  "transcription": "[premie]",
+  "audio_original": "",
+  "example_original": "C'est mon premier jour au travail.",
+  "example_translation": "Это мой первый день на работе.",
+  "part_of_speech": "adjective",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-lundi-b031",
+  "original": "lundi",
+  "translation": "понедельник",
+  "transcription": "[lendi]",
+  "audio_original": "",
+  "example_original": "Le lundi, je vais au bureau.",
+  "example_translation": "По понедельникам я хожу в офис.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-mardi-b032",
+  "original": "mardi",
+  "translation": "вторник",
+  "transcription": "[mardi]",
+  "audio_original": "",
+  "example_original": "Nous avons cours de français mardi.",
+  "example_translation": "Во вторник у нас урок французского.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-mercredi-b033",
+  "original": "mercredi",
+  "translation": "среда",
+  "transcription": "[merkredi]",
+  "audio_original": "",
+  "example_original": "Le mercredi, les enfants n'ont pas école.",
+  "example_translation": "По средам у детей нет школы.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-jeudi-b034",
+  "original": "jeudi",
+  "translation": "четверг",
+  "transcription": "[zheudi]",
+  "audio_original": "",
+  "example_original": "On se voit jeudi soir ?",
+  "example_translation": "Увидимся в четверг вечером?",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-vendredi-b035",
+  "original": "vendredi",
+  "translation": "пятница",
+  "transcription": "[vandredi]",
+  "audio_original": "",
+  "example_original": "Vendredi, nous allons au cinéma.",
+  "example_translation": "В пятницу мы идём в кино.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-samedi-b036",
+  "original": "samedi",
+  "translation": "суббота",
+  "transcription": "[samdi]",
+  "audio_original": "",
+  "example_original": "Le samedi, je fais les courses.",
+  "example_translation": "По субботам я хожу за покупками.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-dimanche-b037",
+  "original": "dimanche",
+  "translation": "воскресенье",
+  "transcription": "[dimansh]",
+  "audio_original": "",
+  "example_original": "Le dimanche, toute la famille déjeune ensemble.",
+  "example_translation": "По воскресеньям вся семья обедает вместе.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-janvier-b038",
+  "original": "janvier",
+  "translation": "январь",
+  "transcription": "[zhanvie]",
+  "audio_original": "",
+  "example_original": "Il fait très froid en janvier.",
+  "example_translation": "В январе очень холодно.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-fevrier-b039",
+  "original": "février",
+  "translation": "февраль",
+  "transcription": "[fevrie]",
+  "audio_original": "",
+  "example_original": "Février est le mois le plus court.",
+  "example_translation": "Февраль — самый короткий месяц.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-mars-b040",
+  "original": "mars",
+  "translation": "март",
+  "transcription": "[mars]",
+  "audio_original": "",
+  "example_original": "Le printemps commence en mars.",
+  "example_translation": "Весна начинается в марте.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-avril-b041",
+  "original": "avril",
+  "translation": "апрель",
+  "transcription": "[avril]",
+  "audio_original": "",
+  "example_original": "En avril, il pleut souvent.",
+  "example_translation": "В апреле часто идёт дождь.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-mai-b042",
+  "original": "mai",
+  "translation": "май",
+  "transcription": "[me]",
+  "audio_original": "",
+  "example_original": "Mon anniversaire est en mai.",
+  "example_translation": "Мой день рождения в мае.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-juin-b043",
+  "original": "juin",
+  "translation": "июнь",
+  "transcription": "[zhuan]",
+  "audio_original": "",
+  "example_original": "L'école finit en juin.",
+  "example_translation": "Учебный год заканчивается в июне.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-juillet-b044",
+  "original": "juillet",
+  "translation": "июль",
+  "transcription": "[zhuie]",
+  "audio_original": "",
+  "example_original": "Nous partons en vacances en juillet.",
+  "example_translation": "В июле мы уезжаем в отпуск.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-aout-b045",
+  "original": "août",
+  "translation": "август",
+  "transcription": "[ut]",
+  "audio_original": "",
+  "example_original": "En août, la ville est très calme.",
+  "example_translation": "В августе в городе очень спокойно.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-septembre-b046",
+  "original": "septembre",
+  "translation": "сентябрь",
+  "transcription": "[septanbr]",
+  "audio_original": "",
+  "example_original": "Les cours reprennent en septembre.",
+  "example_translation": "Занятия возобновляются в сентябре.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-octobre-b047",
+  "original": "octobre",
+  "translation": "октябрь",
+  "transcription": "[oktobr]",
+  "audio_original": "",
+  "example_original": "Les feuilles tombent en octobre.",
+  "example_translation": "В октябре опадают листья.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-novembre-b048",
+  "original": "novembre",
+  "translation": "ноябрь",
+  "transcription": "[novanbr]",
+  "audio_original": "",
+  "example_original": "Il fait gris en novembre.",
+  "example_translation": "В ноябре пасмурно.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-decembre-b049",
+  "original": "décembre",
+  "translation": "декабрь",
+  "transcription": "[desanbr]",
+  "audio_original": "",
+  "example_original": "Noël est en décembre.",
+  "example_translation": "Рождество в декабре.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-printemps-b050",
+  "original": "printemps",
+  "translation": "весна",
+  "transcription": "[prantan]",
+  "audio_original": "",
+  "example_original": "Au printemps, les fleurs s'ouvrent.",
+  "example_translation": "Весной распускаются цветы.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-ete-b051",
+  "original": "été",
+  "translation": "лето",
+  "transcription": "[ete]",
+  "audio_original": "",
+  "example_original": "Cet été, nous allons à la mer.",
+  "example_translation": "Этим летом мы поедем на море.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-automne-b052",
+  "original": "automne",
+  "translation": "осень",
+  "transcription": "[oton]",
+  "audio_original": "",
+  "example_original": "J'aime les couleurs de l'automne.",
+  "example_translation": "Я люблю краски осени.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-hiver-b053",
+  "original": "hiver",
+  "translation": "зима",
+  "transcription": "[iver]",
+  "audio_original": "",
+  "example_original": "En hiver, il neige à la montagne.",
+  "example_translation": "Зимой в горах идёт снег.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-saison-b054",
+  "original": "saison",
+  "translation": "время года, сезон",
+  "transcription": "[sezon]",
+  "audio_original": "",
+  "example_original": "Quelle est ta saison préférée ?",
+  "example_translation": "Какое твоё любимое время года?",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-an-b055",
+  "original": "an",
+  "translation": "год",
+  "transcription": "[an]",
+  "audio_original": "",
+  "example_original": "J'habite ici depuis deux ans.",
+  "example_translation": "Я живу здесь уже два года.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-journee-b056",
+  "original": "journée",
+  "translation": "день (как отрезок времени)",
+  "transcription": "[zhurne]",
+  "audio_original": "",
+  "example_original": "Bonne journée !",
+  "example_translation": "Хорошего дня!",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-midi-b057",
+  "original": "midi",
+  "translation": "полдень",
+  "transcription": "[midi]",
+  "audio_original": "",
+  "example_original": "Nous mangeons à midi.",
+  "example_translation": "Мы обедаем в полдень.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-minuit-b058",
+  "original": "minuit",
+  "translation": "полночь",
+  "transcription": "[minui]",
+  "audio_original": "",
+  "example_original": "Il rentre à la maison à minuit.",
+  "example_translation": "Он возвращается домой в полночь.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-seconde-b059",
+  "original": "seconde",
+  "translation": "секунда",
+  "transcription": "[segond]",
+  "audio_original": "",
+  "example_original": "Attends une seconde, s'il te plaît.",
+  "example_translation": "Подожди секунду, пожалуйста.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-week-end-b060",
+  "original": "week-end",
+  "translation": "выходные",
+  "transcription": "[uikend]",
+  "audio_original": "",
+  "example_original": "Bon week-end !",
+  "example_translation": "Хороших выходных!",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-apres-midi-b061",
+  "original": "après-midi",
+  "translation": "вторая половина дня",
+  "transcription": "[apre-midi]",
+  "audio_original": "",
+  "example_original": "Cet après-midi, je travaille à la maison.",
+  "example_translation": "Сегодня днём я работаю дома.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-vite-b062",
+  "original": "vite",
+  "translation": "быстро",
+  "transcription": "[vit]",
+  "audio_original": "",
+  "example_original": "Il parle trop vite.",
+  "example_translation": "Он говорит слишком быстро.",
+  "part_of_speech": "adverb",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-gens-b063",
+  "original": "gens",
+  "translation": "люди",
+  "transcription": "[zhan]",
+  "audio_original": "",
+  "example_original": "Les gens sont gentils ici.",
+  "example_translation": "Здесь люди приветливые.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-monsieur-b064",
+  "original": "monsieur",
+  "translation": "господин, мужчина",
+  "transcription": "[mesieu]",
+  "audio_original": "",
+  "example_original": "Bonjour, monsieur !",
+  "example_translation": "Здравствуйте, месье!",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-madame-b065",
+  "original": "madame",
+  "translation": "госпожа, женщина",
+  "transcription": "[madam]",
+  "audio_original": "",
+  "example_original": "Merci, madame.",
+  "example_translation": "Спасибо, мадам.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a2-mademoiselle-b066",
+  "original": "mademoiselle",
+  "translation": "барышня, девушка",
+  "transcription": "[madmwazel]",
+  "audio_original": "",
+  "example_original": "Mademoiselle, vous avez oublié votre sac.",
+  "example_translation": "Девушка, вы забыли сумку.",
+  "part_of_speech": "noun",
+  "level": "A2",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-maman-b067",
+  "original": "maman",
+  "translation": "мама",
+  "transcription": "[maman]",
+  "audio_original": "",
+  "example_original": "Maman prépare le dîner.",
+  "example_translation": "Мама готовит ужин.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-papa-b068",
+  "original": "papa",
+  "translation": "папа",
+  "transcription": "[papa]",
+  "audio_original": "",
+  "example_original": "Papa travaille dans une banque.",
+  "example_translation": "Папа работает в банке.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-fils-b069",
+  "original": "fils",
+  "translation": "сын",
+  "transcription": "[fis]",
+  "audio_original": "",
+  "example_original": "Leur fils étudie à Paris.",
+  "example_translation": "Их сын учится в Париже.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-docteur-b070",
+  "original": "docteur",
+  "translation": "врач, доктор",
+  "transcription": "[dokteur]",
+  "audio_original": "",
+  "example_original": "Je dois appeler le docteur.",
+  "example_translation": "Мне нужно позвонить врачу.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-police-b071",
+  "original": "police",
+  "translation": "полиция",
+  "transcription": "[polis]",
+  "audio_original": "",
+  "example_original": "Appelez la police !",
+  "example_translation": "Вызовите полицию!",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-pays-b072",
+  "original": "pays",
+  "translation": "страна",
+  "transcription": "[pei]",
+  "audio_original": "",
+  "example_original": "La France est un beau pays.",
+  "example_translation": "Франция — красивая страна.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-chanson-b073",
+  "original": "chanson",
+  "translation": "песня",
+  "transcription": "[shanson]",
+  "audio_original": "",
+  "example_original": "J'aime cette chanson.",
+  "example_translation": "Мне нравится эта песня.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-cadeau-b074",
+  "original": "cadeau",
+  "translation": "подарок",
+  "transcription": "[kado]",
+  "audio_original": "",
+  "example_original": "Merci pour le cadeau !",
+  "example_translation": "Спасибо за подарок!",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-fete-b075",
+  "original": "fête",
+  "translation": "праздник, вечеринка",
+  "transcription": "[fet]",
+  "audio_original": "",
+  "example_original": "Nous faisons une fête samedi.",
+  "example_translation": "В субботу мы устраиваем вечеринку.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-anniversaire-b076",
+  "original": "anniversaire",
+  "translation": "день рождения",
+  "transcription": "[aniverser]",
+  "audio_original": "",
+  "example_original": "Joyeux anniversaire !",
+  "example_translation": "С днём рождения!",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-noel-b077",
+  "original": "Noël",
+  "translation": "Рождество",
+  "transcription": "[noel]",
+  "audio_original": "",
+  "example_original": "Nous passons Noël en famille.",
+  "example_translation": "Мы проводим Рождество в кругу семьи.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a2-mariage-b078",
+  "original": "mariage",
+  "translation": "свадьба, брак",
+  "transcription": "[mariazh]",
+  "audio_original": "",
+  "example_original": "Le mariage est en juin.",
+  "example_translation": "Свадьба в июне.",
+  "part_of_speech": "noun",
+  "level": "A2",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-jeu-b079",
+  "original": "jeu",
+  "translation": "игра",
+  "transcription": "[zheu]",
+  "audio_original": "",
+  "example_original": "Les enfants jouent à un jeu.",
+  "example_translation": "Дети играют в игру.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-match-b080",
+  "original": "match",
+  "translation": "матч",
+  "transcription": "[match]",
+  "audio_original": "",
+  "example_original": "On regarde le match ce soir ?",
+  "example_translation": "Посмотрим матч сегодня вечером?",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-football-b081",
+  "original": "football",
+  "translation": "футбол",
+  "transcription": "[futbol]",
+  "audio_original": "",
+  "example_original": "Il joue au football le samedi.",
+  "example_translation": "По субботам он играет в футбол.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-tennis-b082",
+  "original": "tennis",
+  "translation": "теннис",
+  "transcription": "[tenis]",
+  "audio_original": "",
+  "example_original": "Elle joue au tennis avec son père.",
+  "example_translation": "Она играет в теннис с отцом.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-tele-b083",
+  "original": "télé",
+  "translation": "телевизор",
+  "transcription": "[tele]",
+  "audio_original": "",
+  "example_original": "Le soir, nous regardons la télé.",
+  "example_translation": "Вечером мы смотрим телевизор.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-cheveux-b084",
+  "original": "cheveux",
+  "translation": "волосы",
+  "transcription": "[sheveu]",
+  "audio_original": "",
+  "example_original": "Elle a les cheveux longs.",
+  "example_translation": "У неё длинные волосы.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-bain-b085",
+  "original": "bain",
+  "translation": "ванна, купание",
+  "transcription": "[ban]",
+  "audio_original": "",
+  "example_original": "Le bébé prend un bain.",
+  "example_translation": "Малыш купается в ванне.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-salle-de-bains-b086",
+  "original": "salle de bains",
+  "translation": "ванная комната",
+  "transcription": "[sal de ban]",
+  "audio_original": "",
+  "example_original": "La salle de bains est à côté de la chambre.",
+  "example_translation": "Ванная рядом со спальней.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-nord-b087",
+  "original": "nord",
+  "translation": "север",
+  "transcription": "[nor]",
+  "audio_original": "",
+  "example_original": "Lille est dans le nord de la France.",
+  "example_translation": "Лилль находится на севере Франции.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-sud-b088",
+  "original": "sud",
+  "translation": "юг",
+  "transcription": "[sud]",
+  "audio_original": "",
+  "example_original": "Il fait chaud dans le sud.",
+  "example_translation": "На юге жарко.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a2-est-b089",
+  "original": "est",
+  "translation": "восток",
+  "transcription": "[est]",
+  "audio_original": "",
+  "example_original": "Strasbourg est dans l'est de la France.",
+  "example_translation": "Страсбург находится на востоке Франции.",
+  "part_of_speech": "noun",
+  "level": "A2",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a2-ouest-b090",
+  "original": "ouest",
+  "translation": "запад",
+  "transcription": "[uest]",
+  "audio_original": "",
+  "example_original": "Le soleil se couche à l'ouest.",
+  "example_translation": "Солнце садится на западе.",
+  "part_of_speech": "noun",
+  "level": "A2",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-gauche-b091",
+  "original": "gauche",
+  "translation": "левый; слева",
+  "transcription": "[gosh]",
+  "audio_original": "",
+  "example_original": "Tournez à gauche après la banque.",
+  "example_translation": "После банка поверните налево.",
+  "part_of_speech": "adjective",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-droite-b092",
+  "original": "droite",
+  "translation": "правая сторона; справа",
+  "transcription": "[drwat]",
+  "audio_original": "",
+  "example_original": "La pharmacie est sur votre droite.",
+  "example_translation": "Аптека справа от вас.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-cote-b093",
+  "original": "côté",
+  "translation": "сторона, бок",
+  "transcription": "[kote]",
+  "audio_original": "",
+  "example_original": "Le café est à côté de la gare.",
+  "example_translation": "Кафе рядом с вокзалом.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-jaune-b094",
+  "original": "jaune",
+  "translation": "жёлтый",
+  "transcription": "[zhon]",
+  "audio_original": "",
+  "example_original": "Le taxi est jaune.",
+  "example_translation": "Такси жёлтое.",
+  "part_of_speech": "adjective",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-gris-b095",
+  "original": "gris",
+  "translation": "серый",
+  "transcription": "[gri]",
+  "audio_original": "",
+  "example_original": "Le ciel est gris aujourd'hui.",
+  "example_translation": "Сегодня небо серое.",
+  "part_of_speech": "adjective",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-marron-b096",
+  "original": "marron",
+  "translation": "коричневый",
+  "transcription": "[maron]",
+  "audio_original": "",
+  "example_original": "Il porte des chaussures marron.",
+  "example_translation": "Он в коричневых ботинках.",
+  "part_of_speech": "adjective",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-violet-b097",
+  "original": "violet",
+  "translation": "фиолетовый",
+  "transcription": "[viole]",
+  "audio_original": "",
+  "example_original": "Elle a une robe violette.",
+  "example_translation": "У неё фиолетовое платье.",
+  "part_of_speech": "adjective",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-fatigue-b098",
+  "original": "fatigué",
+  "translation": "уставший",
+  "transcription": "[fatige]",
+  "audio_original": "",
+  "example_original": "Je suis fatigué ce soir.",
+  "example_translation": "Я сегодня вечером устал.",
+  "part_of_speech": "adjective",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-desole-b099",
+  "original": "désolé",
+  "translation": "извините, мне жаль",
+  "transcription": "[dezole]",
+  "audio_original": "",
+  "example_original": "Désolé, je suis en retard.",
+  "example_translation": "Извините, я опоздал.",
+  "part_of_speech": "adjective",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-bienvenue-b100",
+  "original": "bienvenue",
+  "translation": "добро пожаловать",
+  "transcription": "[bienvenu]",
+  "audio_original": "",
+  "example_original": "Bienvenue à Paris !",
+  "example_translation": "Добро пожаловать в Париж!",
+  "part_of_speech": "interjection",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-bonsoir-b101",
+  "original": "bonsoir",
+  "translation": "добрый вечер",
+  "transcription": "[bonswar]",
+  "audio_original": "",
+  "example_original": "Bonsoir, madame !",
+  "example_translation": "Добрый вечер, мадам!",
+  "part_of_speech": "interjection",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-voila-b102",
+  "original": "voilà",
+  "translation": "вот (там)",
+  "transcription": "[vwala]",
+  "audio_original": "",
+  "example_original": "Voilà ton café.",
+  "example_translation": "Вот твой кофе.",
+  "part_of_speech": "adverb",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-voici-b103",
+  "original": "voici",
+  "translation": "вот (здесь)",
+  "transcription": "[vwasi]",
+  "audio_original": "",
+  "example_original": "Voici mon ami Paul.",
+  "example_translation": "Это мой друг Поль.",
+  "part_of_speech": "adverb",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-super-b104",
+  "original": "super",
+  "translation": "отлично, супер",
+  "transcription": "[super]",
+  "audio_original": "",
+  "example_original": "Le film était super !",
+  "example_translation": "Фильм был отличный!",
+  "part_of_speech": "adjective",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-genial-b105",
+  "original": "génial",
+  "translation": "классный, гениальный",
+  "transcription": "[zhenial]",
+  "audio_original": "",
+  "example_original": "C'est une idée géniale !",
+  "example_translation": "Это классная идея!",
+  "part_of_speech": "adjective",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-pleuvoir-b106",
+  "original": "pleuvoir",
+  "translation": "идти (о дожде)",
+  "transcription": "[pleuvwar]",
+  "audio_original": "",
+  "example_original": "Il va pleuvoir demain.",
+  "example_translation": "Завтра пойдёт дождь.",
+  "part_of_speech": "verb",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-neiger-b107",
+  "original": "neiger",
+  "translation": "идти (о снеге)",
+  "transcription": "[nezhe]",
+  "audio_original": "",
+  "example_original": "Il neige depuis ce matin.",
+  "example_translation": "Снег идёт с утра.",
+  "part_of_speech": "verb",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-parapluie-b108",
+  "original": "parapluie",
+  "translation": "зонт",
+  "transcription": "[paraplui]",
+  "audio_original": "",
+  "example_original": "N'oublie pas ton parapluie !",
+  "example_translation": "Не забудь зонт!",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a2-briller-b109",
+  "original": "briller",
+  "translation": "сиять, светить",
+  "transcription": "[brie]",
+  "audio_original": "",
+  "example_original": "Le soleil brille aujourd'hui.",
+  "example_translation": "Сегодня светит солнце.",
+  "part_of_speech": "verb",
+  "level": "A2",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-combien-b110",
+  "original": "combien",
+  "translation": "сколько",
+  "transcription": "[kombian]",
+  "audio_original": "",
+  "example_original": "Combien coûte ce pain ?",
+  "example_translation": "Сколько стоит этот хлеб?",
+  "part_of_speech": "adverb",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-euro-b111",
+  "original": "euro",
+  "translation": "евро",
+  "transcription": "[euro]",
+  "audio_original": "",
+  "example_original": "Le café coûte deux euros.",
+  "example_translation": "Кофе стоит два евро.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-lycee-b112",
+  "original": "lycée",
+  "translation": "лицей, старшая школа",
+  "transcription": "[lise]",
+  "audio_original": "",
+  "example_original": "Ma sœur va au lycée.",
+  "example_translation": "Моя сестра ходит в лицей.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-s-appeler-b113",
+  "original": "s'appeler",
+  "translation": "называться, зваться",
+  "transcription": "[saple]",
+  "audio_original": "",
+  "example_original": "Mon chat s'appelle Minou.",
+  "example_translation": "Моего кота зовут Мину.",
+  "part_of_speech": "verb",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a2-embrasser-b114",
+  "original": "embrasser",
+  "translation": "целовать, обнимать",
+  "transcription": "[anbrase]",
+  "audio_original": "",
+  "example_original": "Elle embrasse sa mère.",
+  "example_translation": "Она целует маму.",
+  "part_of_speech": "verb",
+  "level": "A2",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-devoirs-b115",
+  "original": "devoirs",
+  "translation": "домашнее задание",
+  "transcription": "[devwar]",
+  "audio_original": "",
+  "example_original": "Je fais mes devoirs après l'école.",
+  "example_translation": "Я делаю уроки после школы.",
+  "part_of_speech": "noun",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-mais-b116",
+  "original": "mais",
+  "translation": "но",
+  "transcription": "[me]",
+  "audio_original": "",
+  "example_original": "Il est petit, mais il est fort.",
+  "example_translation": "Он маленький, но сильный.",
+  "part_of_speech": "conjunction",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ },
+ {
+  "id": "a1-ou-b117",
+  "original": "ou",
+  "translation": "или",
+  "transcription": "[u]",
+  "audio_original": "",
+  "example_original": "Tu veux du thé ou du café ?",
+  "example_translation": "Ты хочешь чай или кофе?",
+  "part_of_speech": "conjunction",
+  "level": "A1",
+  "tags": [
+   "basics",
+   "curated"
+  ]
+ }
+]
