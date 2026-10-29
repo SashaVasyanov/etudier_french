@@ -15,6 +15,8 @@ interface PackWordSeed {
   partOfSpeech: string;
   tags: string[];
   illustrationType?: string;
+  /** A homonym of a dictionary word: kept apart from it. */
+  sense?: string;
 }
 
 function getDefaultIllustrationType(category: PackCategory): string {
@@ -46,6 +48,7 @@ function createPackWordFactory(packId: string, category: PackCategory, accent: s
     partOfSpeech,
     tags,
     illustrationType,
+    sense,
   }: PackWordSeed): Word => ({
     id: `${packId}-${id}`,
     language,
@@ -61,6 +64,7 @@ function createPackWordFactory(packId: string, category: PackCategory, accent: s
     tags,
     packIds: [packId],
     source: 'pack',
+    ...(sense ? { sense } : {}),
     ...createWordImage(category, original, translation, illustrationType ?? getDefaultIllustrationType(category), accent),
   });
 }
@@ -251,13 +255,13 @@ export const STARTER_PACKS: WordPack[] = [
     { id: 'pharmacie', original: 'pharmacie', translation: 'аптека', transcription: '[faʁmasi]', exampleOriginal: 'La pharmacie est au coin de la rue.', exampleTranslation: 'Аптека на углу улицы.', partOfSpeech: 'noun', tags: ['город'] },
     { id: 'boulangerie', original: 'boulangerie', translation: 'булочная', transcription: '[bulɑ̃ʒʁi]', exampleOriginal: 'La boulangerie ouvre tôt.', exampleTranslation: 'Булочная открывается рано.', partOfSpeech: 'noun', tags: ['город'] },
     { id: 'supermarché', original: 'supermarché', translation: 'супермаркет', transcription: '[sypɛʁmaʁʃe]', exampleOriginal: 'Le supermarché est grand.', exampleTranslation: 'Супермаркет большой.', partOfSpeech: 'noun', tags: ['город'] },
-    { id: 'poste', original: 'poste', translation: 'почта', transcription: '[pɔst]', exampleOriginal: 'La poste est près de la mairie.', exampleTranslation: 'Почта рядом с мэрией.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'poste', original: 'poste', translation: 'почта', transcription: '[pɔst]', exampleOriginal: 'La poste est près de la mairie.', exampleTranslation: 'Почта рядом с мэрией.', partOfSpeech: 'noun', tags: ['город'] , sense: 'city' },
     { id: 'mairie', original: 'mairie', translation: 'мэрия', transcription: '[mɛʁi]', exampleOriginal: 'La mairie est au centre.', exampleTranslation: 'Мэрия в центре.', partOfSpeech: 'noun', tags: ['город'] },
     { id: 'bibliothèque', original: 'bibliothèque', translation: 'библиотека', transcription: '[biblijɔtɛk]', exampleOriginal: 'La bibliothèque est silencieuse.', exampleTranslation: 'В библиотеке тихо.', partOfSpeech: 'noun', tags: ['город'] },
     { id: 'parc', original: 'parc', translation: 'парк', transcription: '[paʁk]', exampleOriginal: 'Les enfants jouent dans le parc.', exampleTranslation: 'Дети играют в парке.', partOfSpeech: 'noun', tags: ['город'] },
     { id: 'pont', original: 'pont', translation: 'мост', transcription: '[pɔ̃]', exampleOriginal: 'Le pont traverse la rivière.', exampleTranslation: 'Мост пересекает реку.', partOfSpeech: 'noun', tags: ['город'] },
-    { id: 'place', original: 'place', translation: 'площадь', transcription: '[plas]', exampleOriginal: 'La place est pleine de monde.', exampleTranslation: 'Площадь полна людей.', partOfSpeech: 'noun', tags: ['город'] },
-    { id: 'feu', original: 'feu', translation: 'светофор', transcription: '[fø]', exampleOriginal: 'Le feu passe au vert.', exampleTranslation: 'Светофор переключается на зелёный.', partOfSpeech: 'noun', tags: ['город'] },
+    { id: 'place', original: 'place', translation: 'площадь', transcription: '[plas]', exampleOriginal: 'La place est pleine de monde.', exampleTranslation: 'Площадь полна людей.', partOfSpeech: 'noun', tags: ['город'] , sense: 'city' },
+    { id: 'feu', original: 'feu', translation: 'светофор', transcription: '[fø]', exampleOriginal: 'Le feu passe au vert.', exampleTranslation: 'Светофор переключается на зелёный.', partOfSpeech: 'noun', tags: ['город'] , sense: 'city' },
     { id: 'trottoir', original: 'trottoir', translation: 'тротуар', transcription: '[tʁɔtwaʁ]', exampleOriginal: 'Le trottoir est étroit ici.', exampleTranslation: 'Здесь тротуар узкий.', partOfSpeech: 'noun', tags: ['город'] },
     { id: 'croisement', original: 'croisement', translation: 'перекрёсток', transcription: '[kʁwazmɑ̃]', exampleOriginal: 'Tourne au croisement.', exampleTranslation: 'Поверни на перекрёстке.', partOfSpeech: 'noun', tags: ['город'] },
     { id: 'arrêt', original: 'arrêt', translation: 'остановка', transcription: '[aʁɛ]', exampleOriginal: "L'arrêt de bus est là-bas.", exampleTranslation: 'Автобусная остановка там.', partOfSpeech: 'noun', tags: ['транспорт'] },

@@ -44,7 +44,8 @@ export function mergeTranslations(primary: string, secondary: string): string {
  * the reading too: 実 [じつ] «правда» and 実 [み] «плод» are different words.
  */
 function getMergeKey(word: Word): string {
-  const base = `${word.language}:${normalizeWordKey(word.original)}`;
+  // A homonym in a pack (la poste «почта» vs le poste «должность») stays its own word.
+  const base = `${word.language}:${normalizeWordKey(word.original)}${word.sense ? `#${word.sense}` : ''}`;
   if (word.language !== 'japanese') return base;
   const reading = (word.transcription ?? '').replace(/^\[|\]$/g, '').split(/[·・]/)[0]?.trim() ?? '';
   const hiragana = reading.replace(/[\u30a1-\u30f6]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0x60));

@@ -88,6 +88,8 @@ export interface Word {
   definition_translation?: string;
   /** Two or three examples; the first one is also `example_original`. */
   examples?: WordExample[];
+  /** Set on a pack word that only shares its spelling with a dictionary word. */
+  sense?: string;
 }
 
 export interface WordProgress {

@@ -5336,13 +5336,11 @@
     "imagePath": "/generated-word-images/a1-ceinture-695.webp",
     "imageUrl": "/generated-word-images/a1-ceinture-695.webp",
     "imageAlt": "ремень: ceinture",
-    "imagePrompt": "Real associative image for \"ceinture\" (ремень). Query: ceinture.",
-    "imageSource": "https://www.flickr.com/photos/28853433@N02/7195942678",
-    "imageSourceTitle": "Queen Elizabeth wearing gown, sash and crown with Prince Philip in doorway / La Reine Élizabeth portant la toge, la ceinture et la couronne avec le prince Philipe dans une entrée de porte",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Queen Elizabeth wearing gown, sash and crown with Prince Philip in doorway / La Reine Élizabeth portant la toge, la ceinture et la couronne avec le prince Philipe dans une entrée de porte\" by BiblioArchives / LibraryArchives is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A brown leather belt with a metal buckle coiled on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ceinture",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-bagage-696": {
     "imagePath": "/generated-word-images/a1-bagage-696.webp",
@@ -7002,33 +7000,31 @@
     "imagePath": "/generated-word-images/a1-manteau-837.webp",
     "imageUrl": "/generated-word-images/a1-manteau-837.webp",
     "imageAlt": "пальто: manteau",
-    "imagePrompt": "Real associative image for \"manteau\" (пальто). Query: manteau.",
-    "imageSource": "https://www.flickr.com/photos/62202285@N00/8213941820",
-    "imageSourceTitle": "Manteau de gel... silence de mort au marais... je médite...!!!",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Manteau de gel... silence de mort au marais... je médite...!!!\" by Denis Collette...!!! is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A warm long wool coat hanging on a coat rack in a French apartment entryway, winter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: manteau",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-veste-838": {
     "imagePath": "/generated-word-images/a1-veste-838.webp",
     "imageUrl": "/generated-word-images/a1-veste-838.webp",
     "imageAlt": "куртка: veste",
-    "imagePrompt": "Real associative image for \"veste\" (куртка). Query: veste.",
-    "imageSource": "https://www.flickr.com/photos/69488503@N00/60102399",
-    "imageSourceTitle": "hairy chest vests",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"hairy chest vests\" by EricBartholemew is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A person putting on a casual jacket by the front door before going out, French apartment hallway, fully clothed. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: veste",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-pull-839": {
     "imagePath": "/generated-word-images/a1-pull-839.webp",
     "imageUrl": "/generated-word-images/a1-pull-839.webp",
     "imageAlt": "свитер: pull",
-    "imagePrompt": "Real associative image for \"pull\" (свитер). Query: pull.",
-    "imageSource": "https://commons.wikimedia.org/wiki/File:Stroop_Report_-_Warsaw_Ghetto_Uprising_06b.jpg",
-    "imageSourceTitle": "File:Stroop Report - Warsaw Ghetto Uprising 06b.jpg"
+    "imagePrompt": "A cozy knitted wool sweater folded on a bed in a French bedroom, soft daylight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: pull",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-tee-shirt-840": {
     "imagePath": "/generated-word-images/a1-tee-shirt-840.webp",
@@ -7046,25 +7042,21 @@
     "imagePath": "/generated-word-images/a1-robe-841.webp",
     "imageUrl": "/generated-word-images/a1-robe-841.webp",
     "imageAlt": "платье: robe",
-    "imagePrompt": "Real associative image for \"robe\" (платье). Query: paying by card.",
-    "imageSource": "https://www.flickr.com/photos/105673978@N08/35190659352",
-    "imageSourceTitle": "Payed with card! HSS!",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Payed with card! HSS!\" by The Manic Macrographer is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "An elegant dress hanging on a hanger in a Paris boutique, soft daylight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: robe",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-jupe-842": {
     "imagePath": "/generated-word-images/a1-jupe-842.webp",
     "imageUrl": "/generated-word-images/a1-jupe-842.webp",
     "imageAlt": "юбка: jupe",
-    "imagePrompt": "Real associative image for \"jupe\" (юбка). Query: jupe.",
-    "imageSource": "https://www.flickr.com/photos/25406124@N05/10809671396",
-    "imageSourceTitle": "Sous les jupes des filles",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Sous les jupes des filles\" by laurent.breillat is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A black skirt hanging on a hanger against a light wall, soft daylight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: jupe",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-costume-843": {
     "imagePath": "/generated-word-images/a1-costume-843.webp",
@@ -7114,13 +7106,11 @@
     "imagePath": "/generated-word-images/a1-botte-847.webp",
     "imageUrl": "/generated-word-images/a1-botte-847.webp",
     "imageAlt": "сапог: botte",
-    "imagePrompt": "Real associative image for \"botte\" (сапог). Query: botte.",
-    "imageSource": "https://www.flickr.com/photos/62243473@N05/14648925990",
-    "imageSourceTitle": "Chateau de Cros Loupiac Bottle and Half Botte Bordeaux Dessert Wine",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Chateau de Cros Loupiac Bottle and Half Botte Bordeaux Dessert Wine\" by Fareham Wine is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A pair of rubber boots standing in a puddle on a rainy day in France. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: botte",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-chapeau-848": {
     "imagePath": "/generated-word-images/a1-chapeau-848.webp",
@@ -7146,13 +7136,11 @@
     "imagePath": "/generated-word-images/a1-echarpe-850.webp",
     "imageUrl": "/generated-word-images/a1-echarpe-850.webp",
     "imageAlt": "шарф: écharpe",
-    "imagePrompt": "Real associative image for \"écharpe\" (шарф). Query: écharpe.",
-    "imageSource": "https://www.flickr.com/photos/69184488@N06/8467630291",
-    "imageSourceTitle": "L'Oiseau d'Argent - Robe du soir, composée d'une écharpe enveloppant le buste [The Silver Bird - Evening dress, made with a scarf enveloping the bust]",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"L'Oiseau d'Argent - Robe du soir, composée d'une écharpe enveloppant le buste [The Silver Bird - Evening dress, made with a scarf enveloping the bust]\" by MCAD Library is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A soft knitted scarf draped over a chair, autumn light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: écharpe",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-gant-851": {
     "imagePath": "/generated-word-images/a1-gant-851.webp",
@@ -10647,22 +10635,31 @@
     "imagePath": "/generated-word-images/a2-chemise-121.webp",
     "imageUrl": "/generated-word-images/a2-chemise-121.webp",
     "imageAlt": "рубашка: chemise",
-    "imagePrompt": "Create a single clear educational image for the French vocabulary word \"chemise\". Meaning in Russian: \"рубашка\". Context sentence: \"Je vois la chemise aujourd'hui.\". Show the most direct visual association for memorization. One main subject, centered composition, no text, no labels, no watermark, light clean background. The image should help a student remember the meaning immediately.",
-    "imageSource": "https://fr.wikipedia.org/wiki/Chemise"
+    "imagePrompt": "A neatly ironed white shirt on a hanger in a French bedroom. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: chemise",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a2-pantalon-122": {
     "imagePath": "/generated-word-images/a2-pantalon-122.webp",
     "imageUrl": "/generated-word-images/a2-pantalon-122.webp",
     "imageAlt": "брюки: pantalon",
-    "imagePrompt": "Create a single clear educational image for the French vocabulary word \"pantalon\". Meaning in Russian: \"брюки\". Context sentence: \"Je vois le pantalon aujourd'hui.\". Show the most direct visual association for memorization. One main subject, centered composition, no text, no labels, no watermark, light clean background. The image should help a student remember the meaning immediately.",
-    "imageSource": "https://fr.wikipedia.org/wiki/Pantalon"
+    "imagePrompt": "A pair of trousers folded on a chair in a French bedroom. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: pantalon",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a2-chaussure-123": {
     "imagePath": "/generated-word-images/a2-chaussure-123.webp",
     "imageUrl": "/generated-word-images/a2-chaussure-123.webp",
     "imageAlt": "обувь: chaussure",
-    "imagePrompt": "Create a single clear educational image for the French vocabulary word \"chaussure\". Meaning in Russian: \"обувь\". Context sentence: \"Je vois la chaussure aujourd'hui.\". Show the most direct visual association for memorization. One main subject, centered composition, no text, no labels, no watermark, light clean background. The image should help a student remember the meaning immediately.",
-    "imageSource": "https://fr.wikipedia.org/wiki/Chaussure"
+    "imagePrompt": "A pair of leather shoes under a wooden chair in a French home. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: chaussure",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a2-serie-130": {
     "imagePath": "/generated-word-images/a2-serie-130.webp",
@@ -34103,6 +34100,166 @@
     "imagePrompt": "A guilty-looking puppy sitting next to a chewed-up slipper on the floor. Photorealistic, no text, no letters, no numbers, no logos.",
     "imageSource": "generated:openai-imagegen",
     "imageSourceTitle": "Generated association: 悪い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-animals": {
+    "imagePath": "/generated-word-images/cover-pack-animals.webp",
+    "imageUrl": "/generated-word-images/cover-pack-animals.webp",
+    "imageAlt": "Животные",
+    "imagePrompt": "A peaceful Normandy countryside farmyard in France with a horse, a cow, a few sheep, a rabbit and a dog near a half-timbered barn, small birds on a wooden fence, golden afternoon light, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Животные",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-city": {
+    "imagePath": "/generated-word-images/cover-pack-city.webp",
+    "imageUrl": "/generated-word-images/cover-pack-city.webp",
+    "imageAlt": "Город и сервисы",
+    "imagePrompt": "A charming French town street on a sunny day with shopfronts of a bakery with bread in the window, a pharmacy, a café, a small park with trees and an old town hall with a French flag, passers-by seen from afar, no readable signs, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Город и сервисы",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-clothes": {
+    "imagePath": "/generated-word-images/cover-pack-clothes.webp",
+    "imageUrl": "/generated-word-images/cover-pack-clothes.webp",
+    "imageAlt": "Одежда",
+    "imagePrompt": "A stylish Paris boutique interior with a clothing rack of coats, sweaters, dresses, shirts and trousers, a pair of shoes and a handbag on a wooden bench, soft daylight from a tall window, no signage, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Одежда",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-food": {
+    "imagePath": "/generated-word-images/cover-pack-food.webp",
+    "imageUrl": "/generated-word-images/cover-pack-food.webp",
+    "imageAlt": "Еда",
+    "imagePrompt": "A rustic wooden table in a French country kitchen laid with a crusty baguette, a wheel of cheese, a dish of butter, a bowl of soup, a green salad, apples, pears and grapes, warm natural window light, wide landscape still life. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Еда",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-home": {
+    "imagePath": "/generated-word-images/cover-pack-home.webp",
+    "imageUrl": "/generated-word-images/cover-pack-home.webp",
+    "imageAlt": "Дом и быт",
+    "imagePrompt": "A cozy Parisian apartment living room with an open kitchen corner, a wooden dining table and chairs, a sofa with cushions, tall windows with wrought-iron balconies, houseplants, warm afternoon light, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Дом и быт",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-ja-animals": {
+    "imagePath": "/generated-word-images/cover-pack-ja-animals.webp",
+    "imageUrl": "/generated-word-images/cover-pack-ja-animals.webp",
+    "imageAlt": "Животные",
+    "imagePrompt": "A Japanese countryside scene with green rice fields and a traditional farmhouse, a Shiba Inu dog and a cat resting on the wooden veranda, birds in the sky, cows and a horse grazing in the distance, warm afternoon light, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Животные",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-ja-food": {
+    "imagePath": "/generated-word-images/cover-pack-ja-food.webp",
+    "imageUrl": "/generated-word-images/cover-pack-ja-food.webp",
+    "imageAlt": "Еда",
+    "imagePrompt": "A Japanese home dining table with a bowl of steamed rice, miso soup, eggs, grilled fish, vegetables, fresh fruit, soft bread rolls and a cup of green tea, chopsticks on a rest, soft natural light, wide landscape still life. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Еда",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-ja-home": {
+    "imagePath": "/generated-word-images/cover-pack-ja-home.webp",
+    "imageUrl": "/generated-word-images/cover-pack-ja-home.webp",
+    "imageAlt": "Дом и быт",
+    "imagePrompt": "A cozy Japanese home interior with a tatami room, sliding shoji doors, a low wooden table, a desk and chair by a window, a futon bed visible in the next room, warm natural light, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Дом и быт",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-ja-n4": {
+    "imagePath": "/generated-word-images/cover-pack-ja-n4.webp",
+    "imageUrl": "/generated-word-images/cover-pack-ja-n4.webp",
+    "imageAlt": "JLPT N4: следующий шаг",
+    "imagePrompt": "A focused Japanese study setup on a wooden desk: a thick closed dictionary, a planner with blank pages, a laptop with a dark screen, blank sticky notes, a cup of matcha, the window overlooking a busy Tokyo street at dusk with glowing city lights, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: JLPT N4: следующий шаг",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-ja-n5": {
+    "imagePath": "/generated-word-images/cover-pack-ja-n5.webp",
+    "imageUrl": "/generated-word-images/cover-pack-ja-n5.webp",
+    "imageAlt": "JLPT N5: основа",
+    "imagePrompt": "A Japanese study desk by a window with open notebooks with blank pages, pencils, a stack of closed books, a cup of green tea, the window looking onto a quiet Tokyo residential street with small houses and power lines, soft morning light, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: JLPT N5: основа",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-ja-plants": {
+    "imagePath": "/generated-word-images/cover-pack-ja-plants.webp",
+    "imageUrl": "/generated-word-images/cover-pack-ja-plants.webp",
+    "imageAlt": "Растения",
+    "imagePrompt": "A traditional Japanese garden in Kyoto with maple trees, moss-covered stones, a pruned pine, a bamboo fence, blooming flowers and a small wooden bridge over a pond, soft sunlight filtering through the leaves, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Растения",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-ja-travel": {
+    "imagePath": "/generated-word-images/cover-pack-ja-travel.webp",
+    "imageUrl": "/generated-word-images/cover-pack-ja-travel.webp",
+    "imageAlt": "Путешествия",
+    "imagePrompt": "A Japanese travel scene on a modern train station platform with a sleek bullet train, a suitcase and a backpack in the foreground, Mount Fuji faintly visible in the distance, bright daylight, no signs, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Путешествия",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-plants": {
+    "imagePath": "/generated-word-images/cover-pack-plants.webp",
+    "imageUrl": "/generated-word-images/cover-pack-plants.webp",
+    "imageAlt": "Растения",
+    "imagePrompt": "A sunny windowsill of a Provençal stone house in France crowded with potted herbs, roses, tulips and a small olive tree, open wooden shutters revealing a blooming garden with trees beyond, warm morning light, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Растения",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-travel": {
+    "imagePath": "/generated-word-images/cover-pack-travel.webp",
+    "imageUrl": "/generated-word-images/cover-pack-travel.webp",
+    "imageAlt": "Путешествия",
+    "imagePrompt": "A travel still life on a café table inside a Paris railway station: a vintage leather suitcase, a closed passport with a plain cover, sunglasses and a cup of coffee, a blurred high-speed train at the platform in the background, no signs, warm light, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Путешествия",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "cover-pack-work-study": {
+    "imagePath": "/generated-word-images/cover-pack-work-study.webp",
+    "imageUrl": "/generated-word-images/cover-pack-work-study.webp",
+    "imageAlt": "Учёба и работа",
+    "imagePrompt": "A bright desk by a window overlooking Paris Haussmann rooftops: a laptop with a dark screen, a keyboard, paper folders, an open notebook with blank pages, a pen and a cup of coffee, morning light, wide landscape composition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: Учёба и работа",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-food-poisson-grill": {
+    "imagePath": "/generated-word-images/pack-food-poisson-grill.webp",
+    "imageUrl": "/generated-word-images/pack-food-poisson-grill.webp",
+    "imageAlt": "жареная рыба: poisson grillé",
+    "imagePrompt": "A plate of whole grilled fish with lemon slices and herbs on a terrace table of a seaside restaurant in Marseille, France. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: poisson grillé",
     "imageProvider": "openai-imagegen",
     "imageAttribution": "Создано специально для étudier"
   }
