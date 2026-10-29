@@ -12,7 +12,7 @@ const MB = 1024 * 1024;
 const KB = 1024;
 const BUDGET = {
   appBundle: 50 * MB,
-  images: 40 * MB,
+  images: 45 * MB, // grown with the 0.8–0.9 vocabulary: ~2100 pictures
   javascript: 1.6 * MB,
   largestChunk: 420 * KB,
   css: 220 * KB,
