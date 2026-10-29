@@ -30,10 +30,6 @@ function looseKey(value: string): string {
   return toHiragana(value).replace(/[\s、。，．,.!?！？「」『』（）()・…〜~―-]/g, '');
 }
 
-function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 /**
  * Splits `text` into plain parts and kanji runs with their readings, or
  * returns null when the reading does not line up (then show it separately).
@@ -57,17 +53,46 @@ export function alignFurigana(text: string, reading: string): FuriganaPart[] | n
       return null;
     }
   }
-  const pattern = parts.map((part) => (part.reading !== undefined ? '(.+?)' : escapeRegExp(looseKey(part.text)))).join('');
-  const match = new RegExp(`^${pattern}$`, 'u').exec(looseKey(reading));
-  if (!match) return null;
-  let group = 1;
+  // Several splits can fit (母は / ははは: は|はは or はは|は). Try them all
+  // and keep the one where every kanji gets about two kana, the usual length.
+  const key = looseKey(reading);
+  const literals = parts.map((part) => (part.reading === undefined ? looseKey(part.text) : null));
+  const kanjiCounts = parts.map((part) => [...part.text].length);
+  const saneReading = (value: string) => /^[\u3041-\u3096ー]+$/.test(value) && !/^[ぁぃぅぇぉっゃゅょゎんー]/.test(value);
+  let best: { score: number; readings: string[] } | null = null;
+  let tried = 0;
+  const walk = (index: number, at: number, readings: string[], score: number) => {
+    if (tried > 5000) return;
+    if (index === parts.length) {
+      tried += 1;
+      if (at === key.length && (!best || score < best.score)) best = { score, readings: [...readings] };
+      return;
+    }
+    const literal = literals[index];
+    if (literal !== null) {
+      if (key.startsWith(literal, at)) walk(index + 1, at + literal.length, readings, score);
+      return;
+    }
+    for (let end = at + 1; end <= key.length; end += 1) {
+      const value = key.slice(at, end);
+      if (!saneReading(value)) {
+        if (!/^[\u3041-\u3096ー]+$/.test(value)) break;
+        continue;
+      }
+      const perKanji = value.length / kanjiCounts[index];
+      readings.push(value);
+      walk(index + 1, end, readings, score + (perKanji - 2) ** 2);
+      readings.pop();
+    }
+  };
+  walk(0, 0, [], 0);
+  const chosen = best as { score: number; readings: string[] } | null;
+  if (!chosen) return null;
+  let group = 0;
   for (const part of parts) {
     if (part.reading !== undefined) {
-      const value = match[group];
+      part.reading = chosen.readings[group];
       group += 1;
-      // A sane reading is hiragana only (ー for long vowels).
-      if (!/^[\u3041-\u3096ー]+$/.test(value) || /^[ぁぃぅぇぉっゃゅょゎんー]/.test(value)) return null;
-      part.reading = value;
     }
   }
   return parts;

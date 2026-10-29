@@ -277,6 +277,10 @@ function canCreateExercise(word: Word, type: ExerciseType): boolean {
     return false;
   }
 
+  if (type === 'definition_choice') {
+    return Boolean(word.definition) && !word.definition!.includes(word.original);
+  }
+
   // «Заполните пропуск» was dropped: the blank was guessed from the shape of
   // the sentence rather than recalled. The type stays only in old history.
   if (type === 'sentence_cloze_input') {
@@ -294,7 +298,7 @@ function getAvailableExerciseTypes(word: Word, exerciseTypes: ExerciseType[]): E
 
     // No usable sentence (or no gender, no kanji): ask for the word by choice
     // instead, so lessons do not turn into a row of typing tasks.
-    return type === 'sentence_order' || type === 'audio_sentence_choice' || type === 'sentence_dictation'
+    return type === 'definition_choice' || type === 'sentence_order' || type === 'audio_sentence_choice' || type === 'sentence_dictation'
       || type === 'article_choice' || type === 'kanji_reading_choice'
       ? 'translation_to_original_choice'
       : null;
@@ -342,6 +346,19 @@ function createExercise(word: Word, optionPool: Word[], type: ExerciseType, inde
         options,
       };
       }
+    case 'definition_choice': {
+      const options = buildChoiceOptions(word, optionPool, 'original');
+      if (!word.definition || options.length < 2) return createExercise(word, optionPool, 'translation_to_original_choice', index);
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: word.definition,
+        context: word.definition_translation,
+        correctAnswer: word.original,
+        options,
+      };
+    }
     case 'original_to_translation_choice':
       {
         const options = buildChoiceOptions(word, optionPool, 'translation');
@@ -649,6 +666,7 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       article_choice: 0,
       kanji_reading_choice: 0,
       sentence_dictation: 3,
+      definition_choice: 2,
     },
     growing: {
       original_to_translation_choice: 1,
@@ -664,6 +682,7 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       article_choice: 1,
       kanji_reading_choice: 1,
       sentence_dictation: 1,
+      definition_choice: 0,
     },
     stable: {
       original_to_translation_choice: 2,
@@ -679,6 +698,7 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       article_choice: 2,
       kanji_reading_choice: 1,
       sentence_dictation: 0,
+      definition_choice: 0,
     },
   };
 
@@ -1027,7 +1047,7 @@ function createDailySession(
       ? 'Возврат к словам, которые еще требуют внимания.'
       : 'Первое повторение новых слов после знакомства и тренировки.',
     reviewWords,
-    ['audio_to_translation_choice', 'translation_to_original_input', 'kanji_reading_choice', 'audio_sentence_choice', 'original_to_translation_choice', 'audio_to_original_input'],
+    ['audio_to_translation_choice', 'translation_to_original_input', 'definition_choice', 'kanji_reading_choice', 'audio_sentence_choice', 'original_to_translation_choice', 'audio_to_original_input'],
     uniqueWords(words),
     storage,
     hasScheduledReviews ? 2 : 1,
@@ -1037,7 +1057,7 @@ function createDailySession(
     'Смешанное закрепление',
     'Слова возвращаются в новом порядке, чтобы проверить узнавание без заучивания по шаблону.',
     reinforcementWords,
-    ['sentence_order', 'audio_sentence_choice', 'sentence_dictation', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
+    ['sentence_order', 'definition_choice', 'audio_sentence_choice', 'sentence_dictation', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
     uniqueWords(words),
     storage,
     1,
@@ -1258,7 +1278,7 @@ function createExtraSession(
       'Смешанное закрепление',
       'Финальный блок на закрепление активных, новых и давно выученных слов.',
       mixedWords,
-      ['sentence_order', 'audio_to_original_input', 'article_choice', 'translation_to_original_choice', 'original_to_translation_choice'],
+      ['sentence_order', 'definition_choice', 'audio_to_original_input', 'article_choice', 'translation_to_original_choice', 'original_to_translation_choice'],
       uniqueWords(words),
       storage,
     ),

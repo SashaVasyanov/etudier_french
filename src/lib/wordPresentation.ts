@@ -1,5 +1,5 @@
 import { FRENCH_H_ASPIRE, FRENCH_NOUN_GENDERS } from '../data/frenchNounGenders';
-import type { ExerciseType, LearningLanguage, Word } from '../types';
+import type { ExerciseType, LearningLanguage, Word, WordExample, WordFrequency } from '../types';
 
 const PART_OF_SPEECH_LABELS: Record<string, string> = {
   noun: 'существительное',
@@ -12,8 +12,32 @@ const PART_OF_SPEECH_LABELS: Record<string, string> = {
   conjunction: 'союз',
   expression: 'выражение',
   interjection: 'междометие',
+  particle: 'частица',
+  counter: 'счётный суффикс',
   word: 'слово',
 };
+
+export const FREQUENCY_LABELS: Record<WordFrequency, string> = {
+  high: 'Очень частое слово',
+  mid: 'Частое слово',
+  low: 'Встречается реже',
+};
+
+/** The word's examples; a word without written context has its one example. */
+export function getWordExamples(word: Word): WordExample[] {
+  if (word.examples?.length) return word.examples;
+  const original = word.example_original.trim();
+  if (!original) return [];
+  const match = splitExampleAroundWord(original, word)?.match ?? '';
+  return [{ original, reading: word.example_reading, translation: word.example_translation, form: match }];
+}
+
+/** Where the studied word sits in an example, for marking it. */
+export function getExampleHighlight(example: WordExample): { start: number; end: number } | null {
+  if (!example.form) return null;
+  const start = example.original.indexOf(example.form);
+  return start < 0 ? null : { start, end: start + example.form.length };
+}
 
 export function getPartOfSpeechLabel(partOfSpeech: string): string {
   return PART_OF_SPEECH_LABELS[partOfSpeech] ?? partOfSpeech;
@@ -366,6 +390,12 @@ export function getExerciseCopy(
         eyebrow: 'Слушание',
         title: 'Что вы слышите?',
         hint: 'Прослушайте слово и выберите точный перевод.',
+      };
+    case 'definition_choice':
+      return {
+        eyebrow: 'Определение',
+        title: 'Какое слово подходит?',
+        hint: `Прочитайте определение на ${targetLanguageLabel} и выберите слово.`,
       };
     case 'translation_to_original_choice':
       return {

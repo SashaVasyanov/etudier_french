@@ -14,6 +14,11 @@ describe('furigana', () => {
     expect(show('ケンはテニスが好きです。', 'けんはてにすがすきです。')).toBe('ケンはテニスが好(す)きです。');
   });
 
+  it('picks the split where each kanji gets a natural share of the reading', () => {
+    expect(show('母は元気です。', 'はははげんきです。')).toBe('母(はは)は元気(げんき)です。');
+    expect(show('命の源です。', 'いのちのみなもとです。')).toBe('命(いのち)の源(みなもと)です。');
+  });
+
   it('gives up rather than guess', () => {
     // Numbers are read in ways that cannot be matched letter by letter.
     expect(show('3年前です。', 'さんねんまえです。')).toBeNull();

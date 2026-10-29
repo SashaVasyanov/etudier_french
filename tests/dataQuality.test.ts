@@ -45,13 +45,18 @@ describe('dictionary data quality', () => {
 
   it('uses the studied word in every example sentence', async () => {
     const { french, japanese } = await loadAll();
+    // Written examples mark the form they use (sois, sais, sors); only the
+    // generated ones are checked against the dictionary form.
     const frenchMisses = french.filter((item) => {
+      if (item.examples?.length) return !item.examples.every((example) => example.original.includes(example.form));
       const word = stripAccents(item.original).replace(/^(le|la|les|l')\s*/, '');
       const stem = word.slice(0, Math.max(3, word.length - 2));
       return !stripAccents(item.example_original).includes(stem);
     });
     expect(frenchMisses.map((item) => `${item.original}: ${item.example_original}`)).toEqual([]);
-    const japaneseMisses = japanese.filter((item) => !item.example_original.includes(japaneseStem(item.original)));
+    const japaneseMisses = japanese.filter((item) => item.examples?.length
+      ? !item.examples.every((example) => example.original.includes(example.form))
+      : !item.example_original.includes(japaneseStem(item.original)));
     expect(japaneseMisses.map((item) => `${item.original}: ${item.example_original}`)).toEqual([]);
   });
 

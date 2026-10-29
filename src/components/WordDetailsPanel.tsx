@@ -1,10 +1,10 @@
 import type { Word, WordProgress } from '../types';
 import { getMemoryState, getRecallProbability } from '../lib/storage';
 import { countRu, RU_DAYS } from '../lib/utils';
-import { JapaneseExampleReading } from './JapaneseExampleReading';
-import { SentenceAudioButton } from './SentenceAudioButton';
-import { getJapaneseExampleReading, getPartOfSpeechLabel, getWordDescription, getWordExampleLabel } from '../lib/wordPresentation';
+import { getPartOfSpeechLabel, getWordDescription, getWordExampleLabel } from '../lib/wordPresentation';
 import { JapaneseSentence } from './JapaneseSentence';
+import { WordExamplesList } from './WordExamplesList';
+import { WordFrequencyBadge } from './WordFrequencyBadge';
 
 interface WordDetailsPanelProps {
   word: Word;
@@ -61,16 +61,21 @@ export function WordDetailsPanel({ word, progress }: WordDetailsPanelProps) {
       <div className="flashcard-meta-item">
         <span className="eyebrow">Что это</span>
         <strong>{getPartOfSpeechLabel(word.part_of_speech)}</strong>
-        <p className="detail-copy">{getWordDescription(word)}</p>
+        {word.definition ? (
+          <>
+            <p className="detail-copy word-definition" lang={word.language === 'japanese' ? 'ja' : 'fr'}>
+              <JapaneseSentence text={word.definition} reading={word.definition_reading} />
+            </p>
+            {word.definition_translation ? <p className="detail-copy word-definition-translation">{word.definition_translation}</p> : null}
+          </>
+        ) : (
+          <p className="detail-copy">{getWordDescription(word)}</p>
+        )}
+        <WordFrequencyBadge frequency={word.frequency} />
       </div>
       <div className="flashcard-meta-item">
-        <span className="eyebrow">{getWordExampleLabel(word)}</span>
-        <div className="example-line">
-          <strong><JapaneseSentence text={word.example_original} reading={getJapaneseExampleReading(word)} /></strong>
-          <SentenceAudioButton text={word.example_original} language={word.language} />
-        </div>
-        <JapaneseExampleReading word={word} />
-        {word.example_translation ? <p className="detail-copy word-example-translation">{word.example_translation}</p> : null}
+        <span className="eyebrow">{word.examples && word.examples.length > 1 ? 'Примеры' : getWordExampleLabel(word)}</span>
+        <WordExamplesList word={word} />
       </div>
       {showImageCredit ? (
         <div className="flashcard-meta-item image-credit-panel">

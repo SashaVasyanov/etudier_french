@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import type { Word } from '../types';
-import { AudioButton } from './AudioButton';
-import { JapaneseExampleReading } from './JapaneseExampleReading';
+import { AppIcon } from './AppIcon';
 import { LessonCard } from './LessonCard';
 import { WordImage } from './WordImage';
-import { FRENCH_GENDER_LABELS, getDisplayWord, getFrenchGender, getJapaneseExampleReading, getLessonWordNotes, getPartOfSpeechLabel, splitExampleAroundWord } from '../lib/wordPresentation';
-import { getWordLevelLabel } from '../lib/levels';
-import { SentenceAudioButton } from './SentenceAudioButton';
+import { WordExamplesList } from './WordExamplesList';
+import { WordFrequencyBadge } from './WordFrequencyBadge';
 import { JapaneseSentence } from './JapaneseSentence';
+import { FRENCH_GENDER_LABELS, getDisplayWord, getFrenchGender, getLessonWordNotes, getPartOfSpeechLabel } from '../lib/wordPresentation';
+import { getWordLevelLabel } from '../lib/levels';
 import { formatTranscription } from '../lib/readingPrefs';
+import '../styles/word-card.css';
 
 interface LessonWordPreviewProps {
   word: Word;
@@ -20,6 +21,11 @@ interface LessonWordPreviewProps {
   onNext: () => void;
 }
 
+/**
+ * A new word, the way a learner's dictionary shows it: the picture, the word
+ * with its translation and sound, pronunciation and how common it is, a short
+ * definition in the studied language and two examples with the word marked.
+ */
 export function LessonWordPreview({
   word,
   onReplayAudio,
@@ -27,9 +33,9 @@ export function LessonWordPreview({
   onIgnoreWord,
   onNext,
 }: LessonWordPreviewProps) {
-  const lessonNotes = getLessonWordNotes(word);
   const gender = getFrenchGender(word);
-  const exampleParts = splitExampleAroundWord(word.example_original, word);
+  const transcription = formatTranscription(word.transcription, word.language);
+  const lang = word.language === 'japanese' ? 'ja' : 'fr';
 
   // Enter (or Space) moves on, like the main button.
   useEffect(() => {
@@ -46,69 +52,64 @@ export function LessonWordPreview({
 
   return (
     <LessonCard
-      className="lesson-study-view"
+      className="lesson-study-view word-card-view"
       header={<></>}
       body={
-        <div className="lesson-preview-shell">
-          <div className="lesson-preview-card">
-            <WordImage word={word} size="large" className="lesson-word-image lesson-preview-image" />
-            <div className="lesson-preview-details">
-              <div className="lesson-preview-topline">
-                <div className="lesson-preview-copy">
-                  <h2 className="lesson-preview-title">{getDisplayWord(word)}</h2>
-                  <p className="lesson-preview-translation">{word.translation}</p>
-                </div>
-                <AudioButton label="Прослушать" onClick={onReplayAudio} />
+        <article className="word-card">
+          <div className="word-card-hero">
+            <WordImage word={word} size="large" className="word-card-image" />
+            <div className="word-card-banner">
+              <div className="word-card-title-row">
+                <h2 className="word-card-word" lang={lang}>{getDisplayWord(word)}</h2>
+                <button type="button" className="word-card-sound" onClick={onReplayAudio} aria-label="Прослушать слово" title="Прослушать слово">
+                  <AppIcon name="volume" size={22} />
+                </button>
               </div>
-              <p className="lesson-preview-description">{formatTranscription(word.transcription, word.language) || 'Транскрипция уточняется'}</p>
-              <span className="lesson-preview-meta">
-                {getPartOfSpeechLabel(word.part_of_speech)}
-                {gender ? <> · <span className={`gender-mark gender-${gender}`}>{FRENCH_GENDER_LABELS[gender]}</span></> : null}
-                {' · '}{getWordLevelLabel(word)}
-              </span>
+              <p className="word-card-translation">{word.translation}</p>
             </div>
           </div>
 
-          <div className="lesson-preview-content">
-            <ul className="lesson-preview-note-list">
-              {lessonNotes.map((note) => (
-                <li key={note} className="lesson-preview-note-item">
-                  {note}
-                </li>
-              ))}
-            </ul>
-            <div className="lesson-preview-example-card">
-              <div className="example-line">
-                <p className="lesson-preview-example" lang={word.language === 'japanese' ? 'ja' : 'fr'}>
-                  <JapaneseSentence
-                    text={word.example_original}
-                    reading={getJapaneseExampleReading(word)}
-                    highlight={exampleParts ? { start: exampleParts.before.length, end: exampleParts.before.length + exampleParts.match.length } : null}
-                  />
-                </p>
-                <SentenceAudioButton text={word.example_original} language={word.language} />
-              </div>
-              <JapaneseExampleReading word={word} />
-              {word.example_translation ? <p className="lesson-preview-example-translation">{word.example_translation}</p> : null}
-            </div>
+          <div className="word-card-meta">
+            <WordFrequencyBadge frequency={word.frequency} />
+            <span className="word-card-facts">
+              {transcription ? <span className="word-card-ipa" lang={lang}>{transcription}</span> : null}
+              <span>{getPartOfSpeechLabel(word.part_of_speech)}</span>
+              {gender ? <span className={`gender-mark gender-${gender}`}>{FRENCH_GENDER_LABELS[gender]}</span> : null}
+              <span>{getWordLevelLabel(word)}</span>
+            </span>
           </div>
 
-          <div className="lesson-preview-toolbar">
-            <button type="button" className="primary-button full-width" onClick={onNext}>
-              Понял, дальше
+          {word.definition ? (
+            <div className="word-card-definition">
+              <p className="word-card-definition-text" lang={lang}>
+                <JapaneseSentence text={word.definition} reading={word.definition_reading} />
+              </p>
+              {word.definition_translation ? <p className="word-card-definition-translation" lang="ru">{word.definition_translation}</p> : null}
+            </div>
+          ) : (
+            getLessonWordNotes(word).map((note) => <p key={note} className="word-card-note">{note}</p>)
+          )}
+
+          <WordExamplesList word={word} />
+
+          <div className="word-card-actions">
+            <div className="word-card-secondary">
+              {onMarkKnown ? (
+                <button type="button" className="word-card-link word-card-known" onClick={onMarkKnown}>
+                  <AppIcon name="check" size={18} /> Уже знаю это слово
+                </button>
+              ) : null}
+              {onIgnoreWord ? (
+                <button type="button" className="word-card-link word-card-ignore" onClick={onIgnoreWord}>
+                  <AppIcon name="close" size={18} /> Не хочу учить
+                </button>
+              ) : null}
+            </div>
+            <button type="button" className="primary-button word-card-next" onClick={onNext}>
+              Далее
             </button>
-            {onMarkKnown ? (
-              <button type="button" className="secondary-button full-width" onClick={onMarkKnown}>
-                Уже знаю это слово
-              </button>
-            ) : null}
-            {onIgnoreWord ? (
-              <button type="button" className="danger-button quiet-danger full-width" onClick={onIgnoreWord}>
-                Не хочу учить
-              </button>
-            ) : null}
           </div>
-        </div>
+        </article>
       }
     />
   );

@@ -29,7 +29,22 @@ export type ExerciseType =
   | 'article_choice'
   /** Japanese word with kanji: choose its reading. */
   | 'kanji_reading_choice'
-  | 'sentence_dictation';
+  | 'sentence_dictation'
+  /** Read the definition in the studied language and choose the word. */
+  | 'definition_choice';
+
+/** How common the word is in everyday use. */
+export type WordFrequency = 'high' | 'mid' | 'low';
+
+/** An example sentence with the studied word in it. */
+export interface WordExample {
+  original: string;
+  /** Japanese: the whole sentence in kana, for furigana. */
+  reading?: string;
+  translation: string;
+  /** The studied word exactly as it appears in `original`. */
+  form: string;
+}
 
 export interface Word {
   id: string;
@@ -61,6 +76,16 @@ export interface Word {
   imageLicenseUrl?: string;
   imageAttribution?: string;
   imageAssociationWordId?: string;
+  /** French: IPA without slashes. */
+  ipa?: string;
+  frequency?: WordFrequency;
+  /** A short definition in the studied language. */
+  definition?: string;
+  /** Japanese: the definition in kana. */
+  definition_reading?: string;
+  definition_translation?: string;
+  /** Two or three examples; the first one is also `example_original`. */
+  examples?: WordExample[];
 }
 
 export interface WordProgress {

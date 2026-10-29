@@ -777,7 +777,7 @@ function App() {
 
     const selectedOptionWordId = currentExercise.options?.find((option) => option.label === answer)?.id;
     const selectedOriginalWord =
-      currentExercise.type === 'translation_to_original_choice' && selectedOptionWordId
+      (currentExercise.type === 'translation_to_original_choice' || currentExercise.type === 'definition_choice') && selectedOptionWordId
         ? wordsById.get(selectedOptionWordId) ?? null
         : null;
     const resultAudioWord = selectedOriginalWord ?? currentWord;

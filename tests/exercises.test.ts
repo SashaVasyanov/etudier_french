@@ -280,6 +280,29 @@ describe('phrase, article and reading tasks', () => {
     throw new Error('no sentence-order task in ten lessons');
   });
 
+  it('asks for the word by its definition when the word has one', () => {
+    const pool = Array.from({ length: 8 }, (_, i) => ({ ...word(`d${i}`), definition: `Définition numéro ${i}.`, definition_translation: `Определение ${i}.` }));
+    let task;
+    for (let attempt = 0; attempt < 10 && !task; attempt += 1) {
+      const session = createLessonSession({ mode: 'default', words: pool, storage: storage(), durationMinutes: 20 })!;
+      task = session.exercises.find((exercise) => exercise.type === 'definition_choice');
+    }
+    expect(task).toBeTruthy();
+    const target = pool.find((item) => item.id === task!.wordId)!;
+    expect(task!.prompt).toBe(target.definition);
+    expect(task!.correctAnswer).toBe(target.original);
+    expect(task!.options!.some((option) => option.label === target.original)).toBe(true);
+    expect(task!.options!.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('never asks by a definition that gives the word away', () => {
+    const pool = Array.from({ length: 8 }, (_, i) => ({ ...word(`g${i}`), definition: `Le mot mot-g${i}.` }));
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const session = createLessonSession({ mode: 'default', words: pool, storage: storage(), durationMinutes: 20 })!;
+      expect(session.exercises.some((exercise) => exercise.type === 'definition_choice')).toBe(false);
+    }
+  });
+
   it('asks le or la only for nouns with a known gender that do not take l’', () => {
     const maison = { ...word('m'), original: 'maison', translation: 'дом', part_of_speech: 'noun' };
     const arbre = { ...word('ar'), original: 'arbre', translation: 'дерево', part_of_speech: 'noun' };

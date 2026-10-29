@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Exercise, Word } from '../types';
 import { containsJapaneseKanji, getDisplayWord, getExerciseCopy, getJapaneseExampleReading } from '../lib/wordPresentation';
 import { AnswerWordDetails } from './AnswerWordDetails';
@@ -40,10 +40,14 @@ export function MultipleChoiceExercise({
   const isSentenceAudio = exercise.type === 'audio_sentence_choice';
   const isArticle = exercise.type === 'article_choice';
   const isReading = exercise.type === 'kanji_reading_choice';
+  const isDefinition = exercise.type === 'definition_choice';
+  // «Подсказка» shows the Russian translation of the definition.
+  const [hintShown, setHintShown] = useState(false);
   const copy = getExerciseCopy(exercise.type, word.language);
   const cardClassName = [
     'lesson-exercise-card',
     isTranslationExercise ? 'lesson-image-choice-card' : '',
+    isDefinition ? 'lesson-definition-card' : '',
     isOriginalExercise ? 'lesson-translation-choice-card' : '',
     isAudioExercise || isSentenceAudio ? 'lesson-audio-choice-card' : '',
     isSentenceAudio ? 'lesson-sentence-choice-card' : '',
@@ -127,6 +131,23 @@ export function MultipleChoiceExercise({
               subtitleClassName="lesson-prompt-copy"
             />
           ) : null}
+          {isDefinition ? (
+            <div className="definition-prompt">
+              <p className="definition-prompt-text" lang={word.language === 'japanese' ? 'ja' : 'fr'}>
+                <JapaneseSentence text={exercise.prompt} reading={word.definition === exercise.prompt ? word.definition_reading : null} />
+              </p>
+              {exercise.context ? (
+                hintShown || isSubmitted ? (
+                  <p className="definition-prompt-hint" lang="ru">{exercise.context}</p>
+                ) : (
+                  <button type="button" className="text-action-button definition-hint-button" onClick={() => setHintShown(true)}>
+                    Подсказка: перевод определения
+                  </button>
+                )
+              ) : null}
+              <p className="lesson-prompt-copy">{copy.hint}</p>
+            </div>
+          ) : null}
           {isArticle ? (
             <CenteredWordBlock
               title={exercise.prompt}
@@ -162,7 +183,7 @@ export function MultipleChoiceExercise({
         </header>
       }
       visual={
-        (isOriginalExercise || isTranslationExercise) && isSubmitted ? (
+        (isOriginalExercise || isTranslationExercise || isDefinition) && isSubmitted ? (
           <WordImage word={word} size="large" className="lesson-word-image lesson-choice-image" />
         ) : null
       }
@@ -171,7 +192,7 @@ export function MultipleChoiceExercise({
           <div
             className={[
               'choice-list',
-              isTranslationExercise || isArticle || isReading ? 'lesson-choice-grid' : 'lesson-choice-stack',
+              isTranslationExercise || isDefinition || isArticle || isReading ? 'lesson-choice-grid' : 'lesson-choice-stack',
             ]
               .filter(Boolean)
               .join(' ')}
@@ -198,7 +219,7 @@ export function MultipleChoiceExercise({
                   onClick={() => onSelect(option.label)}
                 >
                   {exercise.options!.length <= 9 ? <span className="choice-key" aria-hidden="true">{optionIndex + 1}</span> : null}
-                  <span lang={word.language === 'japanese' && (isTranslationExercise || isReading) ? 'ja' : isArticle ? 'fr' : undefined}>{option.label}</span>
+                  <span lang={word.language === 'japanese' && (isTranslationExercise || isDefinition || isReading) ? 'ja' : isArticle || isDefinition ? 'fr' : undefined}>{option.label}</span>
                 </LessonChoiceButton>
               );
             })}
@@ -208,7 +229,7 @@ export function MultipleChoiceExercise({
               <div>
                 <strong>
                   {selectedAnswer === exercise.correctAnswer ? 'Верно' : (
-                    <>Правильный ответ: <span lang={word.language === 'japanese' && isTranslationExercise ? 'ja' : undefined}>{exercise.correctAnswer}</span></>
+                    <>Правильный ответ: <span lang={word.language === 'japanese' && (isTranslationExercise || isDefinition) ? 'ja' : undefined}>{exercise.correctAnswer}</span></>
                   )}
                 </strong>
                 <AnswerWordDetails word={word} />

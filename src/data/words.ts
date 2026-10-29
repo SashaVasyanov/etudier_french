@@ -1,5 +1,5 @@
 import { getPackWords, STARTER_PACKS } from './wordPacks';
-import type { JlptLevel, LearningLanguage, Word, WordLevel, WordPack } from '../types';
+import type { JlptLevel, LearningLanguage, Word, WordExample, WordFrequency, WordLevel, WordPack } from '../types';
 import { getStudyLevelRank } from '../lib/levels';
 import { createFallbackWordImage } from '../lib/wordImages';
 import { deriveFrenchLatinTranscription } from '../lib/utils';
@@ -113,6 +113,71 @@ type WordImageManifest = Record<
     | 'imageAssociationWordId'
   >
 >;
+
+/** Definitions, examples, IPA and frequency, written per word id. */
+interface WordContextEntry {
+  ipa?: string;
+  pos?: string;
+  frequency?: string;
+  definition?: string;
+  definition_reading?: string;
+  definition_translation?: string;
+  examples?: unknown[];
+}
+
+type WordContextFile = Record<string, WordContextEntry>;
+
+const CONTEXT_URLS: Record<LearningLanguage, string> = {
+  french: '/data/word_context_fr.json',
+  japanese: '/data/word_context_ja.json',
+};
+const FREQUENCIES: ReadonlySet<string> = new Set<WordFrequency>(['high', 'mid', 'low']);
+
+function text(value: unknown): string | undefined {
+  return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+}
+
+function toExample(value: unknown): WordExample | null {
+  if (!value || typeof value !== 'object') return null;
+  const record = value as Record<string, unknown>;
+  const original = text(record.original);
+  const translation = text(record.translation);
+  const form = text(record.form);
+  if (!original || !translation || !form || !original.includes(form)) return null;
+  const reading = text(record.reading);
+  return reading ? { original, reading, translation, form } : { original, translation, form };
+}
+
+async function loadWordContext(language: LearningLanguage): Promise<WordContextFile> {
+  try {
+    const file = await fetchJson<unknown>(CONTEXT_URLS[language]);
+    return file && typeof file === 'object' && !Array.isArray(file) ? (file as WordContextFile) : {};
+  } catch {
+    // The words still work without context: one example, no definition.
+    return {};
+  }
+}
+
+/** Adds the written context; its first example becomes the word's main example. */
+export function withWordContext(word: Word, entry: WordContextEntry | undefined): Word {
+  if (!entry || typeof entry !== 'object') return word;
+  const examples = (Array.isArray(entry.examples) ? entry.examples : []).map(toExample).filter((example): example is WordExample => example !== null);
+  const first = examples[0];
+  const frequency = text(entry.frequency);
+  return {
+    ...word,
+    part_of_speech: text(entry.pos) ?? word.part_of_speech,
+    ipa: text(entry.ipa) ?? word.ipa,
+    frequency: frequency && FREQUENCIES.has(frequency) ? (frequency as WordFrequency) : word.frequency,
+    definition: text(entry.definition) ?? word.definition,
+    definition_reading: text(entry.definition_reading) ?? word.definition_reading,
+    definition_translation: text(entry.definition_translation) ?? word.definition_translation,
+    examples: examples.length > 0 ? examples : word.examples,
+    ...(first
+      ? { example_original: first.original, example_translation: first.translation, example_reading: first.reading ?? word.example_reading }
+      : {}),
+  };
+}
 
 function isGenericExample(text: string): boolean {
   return /On dit souvent/.test(text);
@@ -1067,7 +1132,7 @@ function normalizeWord(word: Word): Word {
           }
         : createFallbackWordImage(word);
   const improvedExamples =
-    word.language === 'french'
+    word.language === 'french' && !word.examples?.length
       ? improveWordExamples(word)
       : {
           example_original: word.example_original.trim(),
@@ -1075,7 +1140,7 @@ function normalizeWord(word: Word): Word {
         };
   const transcription =
     word.language === 'french'
-      ? deriveFrenchLatinTranscription(word.original, word.transcription ?? '')
+      ? word.ipa ? `[${word.ipa}]` : deriveFrenchLatinTranscription(word.original, word.transcription ?? '')
       : word.transcription?.trim() || word.original.trim();
 
   return {
@@ -1181,6 +1246,7 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
 
   const wordsPromise = (async () => {
     const wordImageManifestPromise = loadWordImageManifest();
+    const contextPromise = loadWordContext(language);
 
     if (language === 'japanese') {
       const [
@@ -1189,33 +1255,36 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
         { JAPANESE_JLPT_LEVELS },
         { JAPANESE_BASIC_WORDS },
         wordImageManifest,
+        context,
       ] = await Promise.all([
         import('./japaneseWords'),
         import('./japaneseWordCorrections'),
         import('./japaneseJlpt'),
         import('./japaneseBasics'),
         wordImageManifestPromise,
+        contextPromise,
       ]);
 
       return sortWordsByCurriculum(
         [
           ...JAPANESE_CORE_WORDS.filter((word) => !JAPANESE_EXCLUDED_WORDS.has(word.original)).map((word) =>
-            normalizeWord(cleanJapaneseEntry(applyJapaneseWordCorrection({ ...word, ...wordImageManifest[word.id] }))),
+            normalizeWord(withWordContext(cleanJapaneseEntry(applyJapaneseWordCorrection({ ...word, ...wordImageManifest[word.id] })), context[word.id])),
           ),
-          ...JAPANESE_BASIC_WORDS.map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
-          ...getPackWords('japanese').map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
+          ...JAPANESE_BASIC_WORDS.map((word) => normalizeWord(withWordContext({ ...word, ...wordImageManifest[word.id] }, context[word.id]))),
+          ...getPackWords('japanese').map((word) => normalizeWord(withWordContext({ ...word, ...wordImageManifest[word.id] }, context[word.id]))),
         ].map((word) => withJlptLevel(word, JAPANESE_JLPT_LEVELS)),
         language,
       );
     }
 
-    const [datasetResults, wordImageManifest] = await Promise.all([
+    const [datasetResults, wordImageManifest, context] = await Promise.all([
       Promise.allSettled(
         DATASET_URLS.map((url) =>
           fetchJson<Array<Omit<Word, 'packIds' | 'source' | 'language'>>>(url),
         ),
       ),
       wordImageManifestPromise,
+      contextPromise,
     ]);
     const parts = datasetResults
       .filter((result): result is PromiseFulfilledResult<Array<Omit<Word, 'packIds' | 'source' | 'language'>>> => result.status === 'fulfilled')
@@ -1230,10 +1299,10 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
         ...parts
           .flat()
           .map((word) =>
-            normalizeWord({ ...word, language: 'french', ...wordImageManifest[word.id], packIds: [], source: 'core' } as Word),
+            normalizeWord(withWordContext({ ...word, language: 'french', ...wordImageManifest[word.id], packIds: [], source: 'core' } as Word, context[word.id])),
           )
           .filter((word) => isSupportedCoreWord(word)),
-        ...getPackWords('french').map((word) => normalizeWord({ ...word, ...wordImageManifest[word.id] })),
+        ...getPackWords('french').map((word) => normalizeWord(withWordContext({ ...word, ...wordImageManifest[word.id] }, context[word.id]))),
       ],
       language,
     );

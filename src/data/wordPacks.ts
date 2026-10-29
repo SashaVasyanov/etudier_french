@@ -194,7 +194,7 @@ export const STARTER_PACKS: WordPack[] = [
     { id: 'lampe', original: 'lampe', translation: 'лампа', transcription: '[lɑ̃p]', exampleOriginal: 'La lampe éclaire la pièce.', exampleTranslation: 'Лампа освещает комнату.', partOfSpeech: 'noun', tags: ['дом'] },
     { id: 'porte', original: 'porte', translation: 'дверь', transcription: '[pɔʁt]', exampleOriginal: 'La porte est ouverte.', exampleTranslation: 'Дверь открыта.', partOfSpeech: 'noun', tags: ['дом'] },
     { id: 'fenêtre', original: 'fenêtre', translation: 'окно', transcription: '[fənɛtʁ]', exampleOriginal: 'La fenêtre donne sur la cour.', exampleTranslation: 'Окно выходит во двор.', partOfSpeech: 'noun', tags: ['дом'] },
-    { id: 'balai', original: 'balai', translation: 'веник', transcription: '[balɛ]', exampleOriginal: 'Je prends le balai.', exampleTranslation: 'Я беру веник.', partOfSpeech: 'noun', tags: ['быт'] },
+    { id: 'balai', original: 'balai', translation: 'метла', transcription: '[balɛ]', exampleOriginal: 'Je prends le balai.', exampleTranslation: 'Я беру метлу.', partOfSpeech: 'noun', tags: ['быт'] },
     { id: 'aspirateur', original: 'aspirateur', translation: 'пылесос', transcription: '[aspiʁatœʁ]', exampleOriginal: "L'aspirateur est dans le placard.", exampleTranslation: 'Пылесос в шкафу.', partOfSpeech: 'noun', tags: ['быт'] },
     { id: 'lessive', original: 'lessive', translation: 'стирка', transcription: '[lɛsiv]', exampleOriginal: 'Je fais la lessive samedi.', exampleTranslation: 'Я стираю в субботу.', partOfSpeech: 'noun', tags: ['быт'] },
     { id: 'vaisselle', original: 'vaisselle', translation: 'посуда', transcription: '[vɛsɛl]', exampleOriginal: 'La vaisselle est propre.', exampleTranslation: 'Посуда чистая.', partOfSpeech: 'noun', tags: ['быт'] },

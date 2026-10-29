@@ -18,6 +18,36 @@ type JapaneseWordCorrection = Partial<
 // restore rare, truncated or contextually incorrect glosses.
 const JAPANESE_WORD_CORRECTIONS: Readonly<Record<string, JapaneseWordCorrection>> = {
   '何': { translation: 'что?' },
+  // Surnames and rare senses the generator picked for everyday words.
+  '南': { translation: 'юг' },
+  '西': { translation: 'запад' },
+  '東': { translation: 'восток' },
+  '半': { translation: 'половина / полчаса' },
+  '門': { translation: 'ворота', transcription: '[もん · mon]' },
+  '帽子する': { original: '帽子', translation: 'шапка / шляпа', transcription: '[ぼうし · boushi]', part_of_speech: 'noun' },
+  'アパート': { translation: 'многоквартирный дом / квартира' },
+  '得意': { translation: 'сильная сторона / хорошо уметь', part_of_speech: 'adjective' },
+  '王子': { translation: 'принц' },
+  '常': { translation: 'всегда / постоянно', transcription: '[つね · tsune]' },
+  '地': { transcription: '[ち · chi]' },
+  '別れ': { translation: 'расставание / прощание' },
+  '現在する': { original: '現在', translation: 'сейчас / настоящее время', transcription: '[げんざい · genzai]', part_of_speech: 'noun' },
+  '影': { translation: 'тень' },
+  '人気': { translation: 'популярность' },
+  '小屋': { translation: 'хижина / сарай' },
+  '知識': { translation: 'знания' },
+  '最近': { translation: 'недавно / в последнее время', part_of_speech: 'adverb' },
+  '議員': { translation: 'депутат / член парламента' },
+  '信号': { translation: 'светофор / сигнал' },
+  '野郎': { translation: 'парень / мужик (грубо)' },
+  '限': { original: '限り', translation: 'только / предел', transcription: '[かぎり · kagiri]', part_of_speech: 'noun' },
+  '受け取': { original: '受け取り', transcription: '[うけとり · uketori]' },
+  '出会': { original: '出会い', transcription: '[であい · deai]' },
+  '無実': { translation: 'невиновность / необоснованный' },
+  '感覚する': { original: '感覚', translation: 'чувство / ощущение', transcription: '[かんかく · kankaku]', part_of_speech: 'noun' },
+  '利益する': { original: '利益', translation: 'прибыль / выгода', transcription: '[りえき · rieki]', part_of_speech: 'noun' },
+  '一言する': { original: '一言', translation: 'одно слово / пара слов', transcription: '[ひとこと · hitokoto]', part_of_speech: 'noun' },
+  '選挙する': { original: '選挙', translation: 'выборы', transcription: '[せんきょ · senkyo]', part_of_speech: 'noun' },
   'あ': { translation: 'ах! / ой!' },
   'あなた': { translation: 'вы / ты' },
   '言': { translation: 'слово / высказывание' },
@@ -301,7 +331,11 @@ const JAPANESE_WORD_CORRECTIONS: Readonly<Record<string, JapaneseWordCorrection>
  * usable meaning (あげ, 上げ), and entries whose kanji, reading and example
  * belong to different words (重, 科).
  */
-export const JAPANESE_EXCLUDED_WORDS: ReadonlySet<string> = new Set(['あぁ', 'あー', 'アア', 'ア', '有難う', 'あげ', '上げ', '重', '科']);
+export const JAPANESE_EXCLUDED_WORDS: ReadonlySet<string> = new Set(['あぁ', 'あー', 'アア', 'ア', '有難う', 'あげ', '上げ', '重', '科',
+  // Generator artifacts: a misread kanji and する-verbs in rare senses.
+  '経', '十分する', '将来する', '原因する', '科学する',
+  // Wrong readings for the kanji (玄人, 取り柄, 目印): left out until rewritten.
+  '黒人', '取得', '目標']);
 
 export function applyJapaneseWordCorrection(word: Word): Word {
   const correction = JAPANESE_WORD_CORRECTIONS[word.original];

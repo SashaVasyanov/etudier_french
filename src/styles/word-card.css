@@ -1,0 +1,349 @@
+/*
+ * A new word as a learner's dictionary card (after Skyeng, laid out for a
+ * desktop window): the picture beside a coloured banner with the word,
+ * then pronunciation, frequency, a definition and examples, then actions.
+ */
+.lesson-shell .lesson-focus-screen:has(.word-card-view) {
+  --lesson-width: 860px;
+}
+
+.word-card-view .lesson-card-header:empty {
+  display: none;
+}
+
+.word-card {
+  display: grid;
+  gap: 18px;
+  text-align: left;
+}
+
+.word-card-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  background: var(--accent);
+  box-shadow: 0 18px 40px -26px color-mix(in srgb, var(--accent) 80%, black);
+}
+
+.word-card-hero .word-card-image {
+  width: 100%;
+  height: 100%;
+  min-height: 230px;
+  max-height: 300px;
+  margin: 0;
+  border-radius: 0;
+  aspect-ratio: auto;
+  background: var(--fill);
+}
+
+.word-card-hero .word-card-image .word-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.word-card-banner {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  gap: 10px;
+  padding: 26px 28px;
+  color: #fff;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 255, 255, 0.2), transparent 60%),
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 88%, white), var(--accent));
+}
+
+.word-card-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.word-card-word {
+  margin: 0;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.6vw, 2.9rem);
+  font-weight: 750;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+  color: #fff;
+}
+
+.word-card-word:lang(ja) {
+  font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', var(--font-display);
+  letter-spacing: 0;
+}
+
+.word-card-sound {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease;
+}
+
+.word-card-sound:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.word-card-sound:active {
+  transform: scale(0.96);
+}
+
+.word-card-sound:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.word-card-translation {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.word-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+}
+
+.word-card-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 0;
+  color: var(--label-2);
+  font-size: 0.95rem;
+}
+
+.word-card-facts > span + span::before {
+  content: '·';
+  margin: 0 8px;
+  color: var(--label-3);
+}
+
+.word-card-ipa {
+  color: var(--label);
+  font-family: 'Charis SIL', 'Doulos SIL', 'Gentium Plus', 'Lucida Grande', var(--font-display);
+}
+
+.word-frequency {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--label);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.word-frequency-bars {
+  display: grid;
+  gap: 3px;
+  width: 16px;
+}
+
+.word-frequency-bars i {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--fill-strong);
+}
+
+.word-frequency-high .word-frequency-bars i.on {
+  background: var(--green);
+}
+
+.word-frequency-mid .word-frequency-bars i.on {
+  background: color-mix(in srgb, var(--green) 75%, var(--orange));
+}
+
+.word-frequency-low .word-frequency-bars i.on {
+  background: var(--orange);
+}
+
+.word-card-definition {
+  display: grid;
+  gap: 4px;
+}
+
+.word-card-definition-text {
+  margin: 0;
+  color: var(--label);
+  font-size: 1.12rem;
+  line-height: 1.5;
+}
+
+.word-card-definition-translation,
+.word-card-note {
+  margin: 0;
+  color: var(--label-2);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+/* Examples (shared with the dictionary panel). */
+.word-examples {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+
+.word-example {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+}
+
+.word-example .sentence-audio-button {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--accent);
+  border: 0;
+}
+
+.word-example .sentence-audio-button:hover {
+  background: var(--accent-hover);
+}
+
+.word-example-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.word-example-original {
+  margin: 0;
+  color: var(--label-2);
+  font-size: 1.08rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.word-example-original mark {
+  background: none;
+  color: var(--label);
+  font-weight: 700;
+}
+
+.word-example-original rt {
+  font-size: 0.55em;
+  color: var(--label-3);
+}
+
+.word-example-reading {
+  margin: 0;
+  color: var(--label-3);
+  font-size: 0.88rem;
+}
+
+.word-example-translation {
+  margin: 0;
+  color: var(--label-3);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.word-card .word-examples {
+  padding-top: 16px;
+  border-top: 1px solid var(--separator);
+}
+
+.word-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--separator);
+}
+
+.word-card-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+.word-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--label);
+  font: inherit;
+  font-size: 0.98rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.word-card-link:hover {
+  color: var(--accent);
+}
+
+.word-card-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.word-card-known svg {
+  color: var(--green);
+}
+
+.word-card-ignore svg {
+  color: var(--red);
+}
+
+.word-card-next.primary-button {
+  min-width: 200px;
+  min-height: 50px;
+  border-radius: 14px;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 760px) {
+  .word-card-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .word-card-hero .word-card-image {
+    min-height: 200px;
+    max-height: 240px;
+  }
+
+  .word-card-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .word-card-next.primary-button {
+    width: 100%;
+  }
+}

@@ -27,7 +27,9 @@ describe('French dictionary data', () => {
     expect(display('souris')).toBe('la souris');
     expect(display('lunettes')).toBe('les lunettes');
     const packTree = words.find((item) => item.source === 'pack' && item.original === 'arbre')!;
-    expect(packTree.example_original).toBe("L'arbre est vieux.");
+    // Written context replaces generated sentences; the pack word keeps a real one.
+    expect(packTree.example_original.includes('arbre')).toBe(true);
+    expect(packTree.examples?.length).toBeGreaterThanOrEqual(2);
     expect(words.some((item) => /(^|\s)(à|de) (le|les)\s/.test(item.example_original))).toBe(false);
   });
 });
