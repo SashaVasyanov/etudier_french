@@ -46,7 +46,6 @@ export function SpeechSettingsPanel({ language, speech, onChange }: SpeechSettin
   }, [language]);
 
   const selected = speech.voices[language] ?? '';
-  const hasGoodVoice = Boolean(voices?.some((voice) => voice.quality === 'premium' || voice.quality === 'enhanced'));
 
   return (
     <section className="settings-panel settings-speech-panel">
@@ -54,13 +53,13 @@ export function SpeechSettingsPanel({ language, speech, onChange }: SpeechSettin
         <span className="settings-icon"><AppIcon name="volume" size={21} /></span>
         <div>
           <h2>Озвучка</h2>
-          <p>Голос для слов и предложений на {language === 'japanese' ? 'японском' : 'французском'}.</p>
+          <p>Слова и примеры курса озвучены заранее нейросетевым голосом. Системный голос ниже нужен только для ваших собственных слов.</p>
         </div>
       </div>
 
       <label className="settings-row">
         <span>
-          Голос
+          Системный голос
           <small>{voices === null ? 'Загружаем список голосов…' : voices.length === 0 ? 'В системе нет голоса для этого языка.' : 'Лучшие голоса стоят первыми.'}</small>
         </span>
         <select
@@ -100,13 +99,6 @@ export function SpeechSettingsPanel({ language, speech, onChange }: SpeechSettin
         </button>
       </div>
 
-      {voices && !hasGoodVoice ? (
-        <p className="speech-hint">
-          Чтобы голос звучал естественно, скачайте бесплатный голос «Премиум» или «Улучшенный»: Системные настройки → Универсальный
-          доступ → Устное содержание → Системный голос → Управлять голосами… → {language === 'japanese' ? 'Японский' : 'Французский'}.
-          После загрузки перезапустите étudier.
-        </p>
-      ) : null}
     </section>
   );
 }

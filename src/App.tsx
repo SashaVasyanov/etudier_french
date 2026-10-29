@@ -13,7 +13,7 @@ import { SentenceOrderExercise } from './components/SentenceOrderExercise';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
 import { LetterAssemblyExercise } from './components/LetterAssemblyExercise';
 import { getLessonPoolWords, getStarterPacks, loadWords } from './data/words';
-import { playTextAudio, playWordAudio, setSpeechPreferences, stopAudio } from './lib/audio';
+import { playTextAudio, playWordAudio, preloadSpeech, setSpeechPreferences, stopAudio } from './lib/audio';
 import { createFlashcardSession, createLessonSession, getDailyBalance, LISTENING_TITLE, pickPracticeWords, QUICK_REVIEW_TITLE, scheduleExerciseRetry } from './lib/exercises';
 import { getPhraseOfTheDay } from './lib/reading';
 import { getNextReminderAt, getReminderText, scheduleReminder, setDockBadge } from './lib/desktop';
@@ -430,6 +430,11 @@ function App() {
   useEffect(() => {
     setSpeechPreferences(storage.speech);
   }, [storage.speech]);
+
+  // The list of recorded words and sentences loads once per language.
+  useEffect(() => {
+    preloadSpeech(storage.learningLanguage);
+  }, [storage.learningLanguage]);
 
   const restoringBackupRef = useRef(false);
 

@@ -2,7 +2,65 @@ import type { Word } from '../types';
 import { getSpokenWordText } from './wordPresentation';
 
 let activeUtterance: SpeechSynthesisUtterance | null = null;
+
+/*
+ * Recorded speech: every word and example sentence of the course is voiced
+ * ahead of time by a neural voice (Kokoro) and shipped as small audio files.
+ * The manifest maps a text to its file; anything not in it (a word the
+ * learner added, a sentence typed elsewhere) falls back to the system voice.
+ */
+type SpeechManifest = Record<string, string>;
+const speechManifests: Partial<Record<Word['language'], SpeechManifest>> = {};
+const speechManifestRequests: Partial<Record<Word['language'], Promise<SpeechManifest>>> = {};
+
+/** The key a text is stored under: same spelling rules as at generation. */
+export function speechKey(text: string): string {
+  return text.normalize('NFC').replace(/[’`]/g, "'").replace(/\s+/g, ' ').trim();
+}
+
+function loadSpeechManifest(language: Word['language']): Promise<SpeechManifest> {
+  const ready = speechManifests[language];
+  if (ready) return Promise.resolve(ready);
+  const pending = speechManifestRequests[language];
+  if (pending) return pending;
+  const code = language === 'japanese' ? 'ja' : 'fr';
+  const request = fetch(`/data/speech_${code}.json`, { cache: 'force-cache' })
+    .then((response) => (response.ok ? response.json() : {}))
+    .then((value: unknown) => {
+      const manifest = value && typeof value === 'object' && !Array.isArray(value) ? (value as SpeechManifest) : {};
+      speechManifests[language] = manifest;
+      return manifest;
+    })
+    .catch(() => {
+      delete speechManifestRequests[language];
+      return {} as SpeechManifest;
+    });
+  speechManifestRequests[language] = request;
+  return request;
+}
+
+/** Starts loading the recorded speech list early, so the first word plays at once. */
+export function preloadSpeech(language: Word['language']): void {
+  void loadSpeechManifest(language);
+}
+
+function speechFileUrl(language: Word['language'], file: string): string {
+  return `/speech/${language === 'japanese' ? 'ja' : 'fr'}/${file}`;
+}
+
+/** Files for a text: the whole text, or each of its sentences when they are all recorded. */
+async function findRecordedSpeech(text: string, language: Word['language']): Promise<string[] | null> {
+  const manifest = await loadSpeechManifest(language);
+  const whole = manifest[speechKey(text)];
+  if (whole) return [speechFileUrl(language, whole)];
+  const sentences = text.match(/[^.!?。！？]+[.!?。！？]*\s*/g)?.map((part) => speechKey(part)).filter(Boolean) ?? [];
+  if (sentences.length < 2) return null;
+  const files = sentences.map((sentence) => manifest[sentence]);
+  return files.every(Boolean) ? files.map((file) => speechFileUrl(language, file!)) : null;
+}
 let activeAudio: HTMLAudioElement | null = null;
+// Settles the promise of the file that is playing when it gets stopped.
+let settleActive: (() => void) | null = null;
 let lastPlayAt = 0;
 let cachedVoices: SpeechSynthesisVoice[] = [];
 let voicesReadyPromise: Promise<SpeechSynthesisVoice[]> | null = null;
@@ -168,28 +226,59 @@ function canReplay(): boolean {
   return true;
 }
 
-async function playFileAudio(src: string): Promise<void> {
-  const audio = new Audio(src);
-  activeAudio = audio;
-  audio.preload = 'auto';
-  const release = () => {
-    if (activeAudio === audio) {
-      activeAudio = null;
+/** Plays one file to the end; resolves early when another playback takes over. */
+function playFileAudio(src: string, token = playbackToken, rate = 1): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const audio = new Audio(src);
+    activeAudio = audio;
+    audio.preload = 'auto';
+    audio.playbackRate = rate;
+    (audio as HTMLAudioElement & { preservesPitch?: boolean }).preservesPitch = true;
+    const release = () => {
+      if (activeAudio === audio) {
+        activeAudio = null;
+        settleActive = null;
+      }
+      audio.onended = null;
+      audio.onerror = null;
+    };
+    settleActive = () => {
+      release();
+      resolve();
+    };
+    audio.onended = () => {
+      release();
+      resolve();
+    };
+    audio.onerror = () => {
+      release();
+      reject(new Error('Audio file failed'));
+    };
+    if (token !== playbackToken) {
+      release();
+      resolve();
+      return;
     }
+    audio.play().catch((error: unknown) => {
+      release();
+      reject(error instanceof Error ? error : new Error('Audio playback failed'));
+    });
+  });
+}
 
-    audio.onended = null;
-    audio.onerror = null;
-  };
+/** Recorded voice speed follows the «Скорость» setting (0.9 is the recording's own pace). */
+function recordedRate(): number {
+  return Math.min(1.3, Math.max(0.6, speechRate / 0.9));
+}
 
-  audio.onended = release;
-  audio.onerror = release;
-
-  try {
-    await audio.play();
-  } catch (error) {
-    release();
-    throw error;
+async function playRecorded(text: string, language: Word['language'], token: number): Promise<boolean> {
+  const files = await findRecordedSpeech(text, language);
+  if (!files || token !== playbackToken) return Boolean(files);
+  for (const file of files) {
+    if (token !== playbackToken) return true;
+    await playFileAudio(file, token, recordedRate());
   }
+  return true;
 }
 
 async function speakFallback(text: string, token: number, language: Word['language']): Promise<void> {
@@ -262,15 +351,22 @@ export async function playWordAudio(word: Word, options?: { force?: boolean }): 
 
   if (word.audio_original) {
     try {
-      await playFileAudio(word.audio_original);
+      await playFileAudio(word.audio_original, token);
       return;
     } catch {
       activeAudio = null;
     }
   }
 
+  const spoken = getSpokenWordText(word);
   try {
-    await speakFallback(getSpokenWordText(word), token, word.language);
+    if (await playRecorded(spoken, word.language, token)) return;
+  } catch {
+    activeAudio = null;
+  }
+
+  try {
+    await speakFallback(spoken, token, word.language);
   } catch {
     return;
   }
@@ -284,6 +380,11 @@ export async function playTextAudio(text: string, language: Word['language']): P
   playbackToken = token;
   lastPlayAt = Date.now();
   try {
+    if (await playRecorded(text, language, token)) return;
+  } catch {
+    activeAudio = null;
+  }
+  try {
     await speakFallback(text, token, language);
   } catch {
     // Speech is a convenience; a failed playback must not break the lesson.
@@ -293,13 +394,17 @@ export async function playTextAudio(text: string, language: Word['language']): P
 export function stopAudio(): void {
   playbackToken += 1;
 
-  if (activeAudio) {
-    activeAudio.onended = null;
-    activeAudio.onerror = null;
-    activeAudio.pause();
-    activeAudio.currentTime = 0;
-    activeAudio = null;
+  const audio = activeAudio;
+  const settle = settleActive;
+  settleActive = null;
+  activeAudio = null;
+  if (audio) {
+    audio.onended = null;
+    audio.onerror = null;
+    audio.pause();
+    audio.currentTime = 0;
   }
+  settle?.();
 
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();

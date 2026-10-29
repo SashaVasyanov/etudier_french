@@ -16,3 +16,12 @@ describe('voice quality', () => {
     expect(getVoiceQuality(voice('Thomas'))).toBe('standard');
   });
 });
+
+describe('recorded speech keys', () => {
+  it('matches texts regardless of apostrophes and spacing', async () => {
+    const { speechKey } = await import('../src/lib/audio');
+    expect(speechKey("  l’abeille ")).toBe("l'abeille");
+    expect(speechKey('Nous  allons\nà Paris.')).toBe('Nous allons à Paris.');
+    expect(speechKey('été')).toBe('été');
+  });
+});
