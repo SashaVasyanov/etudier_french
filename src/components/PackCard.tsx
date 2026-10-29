@@ -1,8 +1,9 @@
 import type { CSSProperties } from 'react';
 import type { PackStatus, WordPack } from '../types';
+import { countRu, RU_WORDS } from '../lib/utils';
 import { AppCard } from './AppCard';
+import { PackCover } from './PackCover';
 import { StatusBadge } from './StatusBadge';
-import { WordImage } from './WordImage';
 
 interface PackCardProps {
   pack: WordPack;
@@ -13,59 +14,38 @@ interface PackCardProps {
 }
 
 export function PackCard({ pack, status, completion, onAdd, onOpen }: PackCardProps) {
-  const previewWord = pack.words[0];
-
   return (
     <AppCard as="article" className="pack-card" style={{ '--pack-accent': pack.accent } as CSSProperties}>
-      <div className="pack-card-cover">
-        {previewWord ? <WordImage word={previewWord} size="large" className="pack-cover-image" /> : null}
-      </div>
+      <button type="button" className="pack-card-cover-button" onClick={onOpen} aria-label={`Открыть тему «${pack.title}»`}>
+        <PackCover pack={pack} />
+      </button>
 
       <div className="pack-card-body">
         <div className="pack-card-header">
-          <div className="pack-card-title-group">
-            <span className="eyebrow">Пак слов</span>
-            <h2 className="section-title">{pack.title}</h2>
-          </div>
-          <StatusBadge status={status} />
+          <h2 className="pack-card-title">{pack.title}</h2>
+          {status === 'not_added' ? null : <StatusBadge status={status} />}
         </div>
-
-        <p className="hero-text">{pack.description}</p>
-
-        <div className="pack-card-meta">
-          <div className="pack-kpi">
-            <strong>{pack.words.length}</strong>
-            <span>слов</span>
-          </div>
-          <div className="pack-kpi">
-            <strong>{completion}%</strong>
-            <span>освоено</span>
-          </div>
+        <p className="pack-card-description">{pack.description}</p>
+        <p className="pack-card-words">{pack.words.slice(0, 4).map((word) => word.translation).join(' · ')}</p>
+        <div className="pack-card-progress">
+          <span>{countRu(pack.words.length, RU_WORDS)}</span>
+          <span>{completion}% освоено</span>
         </div>
-
         <div className="progress-track" aria-hidden="true">
           <div className="progress-fill" style={{ width: `${completion}%` }} />
-        </div>
-
-        <div className="badge-row">
-          {pack.words.slice(0, 4).map((word) => (
-            <span key={word.id} className="tag-badge">
-              {word.translation}
-            </span>
-          ))}
         </div>
       </div>
 
       <div className="pack-card-actions">
-        <button type="button" className="ghost-button" onClick={onOpen}>
+        <button type="button" className="secondary-button" onClick={onOpen}>
           Открыть
         </button>
         {status === 'not_added' ? (
-          <button type="button" className="secondary-button" onClick={onAdd}>
+          <button type="button" className="primary-button" onClick={onAdd}>
             Добавить
           </button>
         ) : (
-          <span className="pack-card-added">Добавлен в уроки</span>
+          <span className="pack-card-added">В уроках</span>
         )}
       </div>
     </AppCard>

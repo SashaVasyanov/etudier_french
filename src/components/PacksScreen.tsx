@@ -5,7 +5,6 @@ import { IMPORT_LIMITS } from '../lib/importPacks';
 import type { AppStorage, LearningLanguage, WordPack } from '../types';
 import { AppCard } from './AppCard';
 import { PackCard } from './PackCard';
-import { StatCard } from './StatCard';
 
 type ImportPackResult =
   | { ok: true; importedWords: number }
@@ -55,22 +54,18 @@ export default function PacksScreen({ learningLanguage, packs, storage, onAddPac
 
   return (
     <section className="dashboard-shell">
-      <AppCard as="header" tone="hero">
-        <div className="section-heading">
-          <div>
-            <h1 className="hero-title compact-title">Темы</h1>
-            <p className="hero-text">Наборы слов по темам. Добавленные темы попадают в словарь и уроки, любую можно открыть и потренировать отдельно.</p>
-          </div>
-          <button type="button" className="secondary-button" aria-expanded={showImport} onClick={() => setShowImport((value) => !value)}>
-            {showImport ? 'Скрыть импорт' : 'Импорт из Anki или Quizlet'}
-          </button>
+      <header className="page-head">
+        <div>
+          <h1>Темы</h1>
+          <p>
+            Наборы слов по темам: {packs.length} {packs.length === 1 ? 'тема' : packs.length < 5 ? 'темы' : 'тем'}
+            {addedCount ? `, в уроках — ${addedCount}` : ''}. Добавленная тема идёт в словарь и уроки; любую можно открыть и потренировать отдельно.
+          </p>
         </div>
-
-        <section className="stats-grid compact-stats">
-          <StatCard label="Тем" value={packs.length} hint="Доступны сразу" />
-          <StatCard label="Добавлено в уроки" value={addedCount} hint="Слова из них идут в уроки и словарь" tone="accent" />
-        </section>
-      </AppCard>
+        <button type="button" className="secondary-button" aria-expanded={showImport} onClick={() => setShowImport((value) => !value)}>
+          {showImport ? 'Скрыть импорт' : 'Импорт из Anki или Quizlet'}
+        </button>
+      </header>
 
       {showImport ? (
         <AppCard as="section" className="pack-import-card">

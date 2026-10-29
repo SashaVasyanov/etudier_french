@@ -1,0 +1,902 @@
+/*
+ * Mac density pass. Loaded after app.css: smaller radii, tighter rhythm,
+ * a sidebar attached to the window edge, and System Settings–style grouped
+ * rows in the profile. Every rule is scoped under .desktop-app-layout so it
+ * wins over the older layers without !important.
+ */
+
+:root {
+  --mac-radius-card: 12px;
+  --mac-radius-tile: 8px;
+  --mac-radius-control: 7px;
+  --mac-gap: 12px;
+  --mac-pad: 18px;
+}
+
+/* ---------- Window and sidebar ---------- */
+.desktop-app-layout .desktop-app-content {
+  padding: 22px 28px 32px;
+}
+
+@media (min-width: 821px) {
+  .desktop-app-layout .app-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 100vh;
+    margin: 0;
+    padding: 18px 10px 12px;
+    border: 0;
+    border-right: 1px solid var(--separator);
+    border-radius: 0;
+    box-shadow: none;
+    gap: 18px;
+  }
+}
+
+@media (min-width: 1181px) {
+  .desktop-app-layout:not(.lesson-desktop-layout) {
+    grid-template-columns: 212px minmax(0, 1fr);
+  }
+}
+
+.desktop-app-layout .nav-button {
+  min-height: 32px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  font-size: 0.9rem;
+}
+
+.desktop-app-layout .sidebar-streak-card {
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+/* The narrow rail: everything fits its width, the week dots stay inside. */
+@media (min-width: 821px) and (max-width: 1180px) {
+  .desktop-app-layout .app-sidebar {
+    width: auto;
+    padding: 14px 8px 10px;
+    overflow: hidden;
+  }
+
+  .desktop-app-layout .sidebar-logo,
+  .desktop-app-layout .app-nav,
+  .desktop-app-layout .nav-button,
+  .desktop-app-layout .sidebar-streak-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .desktop-app-layout .nav-button {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    padding: 6px 0;
+  }
+
+  .desktop-app-layout .sidebar-streak-card {
+    padding: 8px 4px;
+    justify-items: center;
+  }
+
+  .desktop-app-layout .sidebar-week {
+    display: none;
+  }
+}
+
+/* ---------- Surfaces ---------- */
+.desktop-app-layout .home-bento-card,
+.desktop-app-layout .daily-journey-card,
+.desktop-app-layout .settings-panel,
+.desktop-app-layout .pack-card,
+.desktop-app-layout .pack-import-card,
+.desktop-app-layout .pack-detail-hero,
+.desktop-app-layout .hero-card,
+.desktop-app-layout .filter-card .app-card-shell,
+.desktop-app-layout .dictionary-hero,
+.desktop-app-layout .mini-text-reader,
+.desktop-app-layout .reading-item,
+.desktop-app-layout .mini-text-card,
+.desktop-app-layout .settings-user-card,
+.desktop-app-layout .settings-profile-overview article,
+.desktop-app-layout .radical-catalog-panel,
+.desktop-app-layout .radicals-hero,
+.desktop-app-layout .contextual-empty-state {
+  border-radius: var(--mac-radius-card);
+}
+
+.desktop-app-layout .mini-stat,
+.desktop-app-layout .mini-panel,
+.desktop-app-layout .flashcard-meta-item,
+.desktop-app-layout .pack-kpi,
+.desktop-app-layout .progress-bento-stats > *,
+.desktop-app-layout .formats-actions > *,
+.desktop-app-layout .settings-mini-grid > span,
+.desktop-app-layout .settings-summary-panel .settings-mini-grid > span {
+  border-radius: var(--mac-radius-tile);
+}
+
+/* Buttons: rounded rectangles, not capsules. */
+.desktop-app-layout .primary-button,
+.desktop-app-layout .secondary-button,
+.desktop-app-layout .ghost-button,
+.desktop-app-layout .danger-button,
+.desktop-app-layout .daily-start-button,
+.desktop-app-layout .practice-quick-button,
+.desktop-app-layout .practice-bento-actions button {
+  border-radius: var(--mac-radius-control);
+}
+
+/* ---------- Page rhythm ---------- */
+.desktop-app-layout .learning-home,
+.desktop-app-layout .dashboard-shell,
+.desktop-app-layout .settings-page {
+  gap: 14px;
+}
+
+.desktop-app-layout .learning-home-grid,
+.desktop-app-layout .packs-grid,
+.desktop-app-layout .settings-grid,
+.desktop-app-layout .dictionary-grid {
+  gap: var(--mac-gap);
+}
+
+.desktop-app-layout .learning-home-head h1,
+.desktop-app-layout .settings-head h1,
+.desktop-app-layout .page-head h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.desktop-app-layout .learning-home-head p,
+.desktop-app-layout .settings-head p,
+.desktop-app-layout .page-head p {
+  margin: 4px 0 0;
+  color: var(--label-2);
+  font-size: 0.95rem;
+}
+
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-head > div {
+  min-width: 0;
+  max-width: 720px;
+}
+
+/* ---------- Home ---------- */
+.desktop-app-layout .daily-journey-card {
+  padding: 22px 24px;
+  gap: 18px;
+}
+
+.desktop-app-layout .daily-journey-card h2 {
+  font-size: 1.6rem;
+  line-height: 1.15;
+}
+
+.desktop-app-layout .home-bento-card {
+  padding: var(--mac-pad);
+  gap: 12px;
+}
+
+.desktop-app-layout .bento-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.desktop-app-layout .bento-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+/* «Быстрая практика»: heading on top, actions right under it. */
+.desktop-app-layout .practice-bento-card {
+  align-content: start;
+  grid-template-rows: auto auto auto;
+}
+
+.desktop-app-layout .practice-bento-card > .bento-icon {
+  display: none;
+}
+
+.desktop-app-layout .practice-bento-actions {
+  margin-top: auto;
+}
+
+.desktop-app-layout .practice-bento-actions button,
+.desktop-app-layout .practice-quick-button {
+  min-height: 34px;
+  height: auto;
+  padding: 7px 12px;
+  font-size: 0.9rem;
+}
+
+.desktop-app-layout .progress-bento-stats > *,
+.desktop-app-layout .formats-actions > * {
+  padding: 10px 12px;
+}
+
+.desktop-app-layout .daily-start-button {
+  min-height: 36px;
+  padding: 8px 16px;
+}
+
+/* ---------- Packs ---------- */
+.desktop-app-layout .packs-grid {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.desktop-app-layout .pack-card {
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.pack-card-cover-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.pack-card-cover-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.pack-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--pack-accent, var(--accent)) 14%, var(--fill));
+}
+
+.pack-cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.pack-cover.drawn img {
+  object-fit: contain;
+  padding: 12% 0;
+}
+
+.pack-card-cover-button:hover .pack-cover img {
+  transform: scale(1.03);
+}
+
+.desktop-app-layout .pack-card-body {
+  padding: 14px 16px 4px;
+  display: grid;
+  gap: 6px;
+  flex: 1;
+  align-content: start;
+}
+
+.desktop-app-layout .pack-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pack-card-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.pack-card-description {
+  margin: 0;
+  color: var(--label-2);
+  font-size: 0.86rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pack-card-words {
+  margin: 0;
+  color: var(--label-3);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pack-card-progress {
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--label-2);
+  font-size: 0.8rem;
+}
+
+.desktop-app-layout .pack-card .progress-track {
+  height: 4px;
+}
+
+.desktop-app-layout .pack-card-actions {
+  padding: 10px 16px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.desktop-app-layout .pack-card-actions button {
+  min-height: 30px;
+  padding: 5px 14px;
+  font-size: 0.88rem;
+}
+
+.desktop-app-layout .pack-card-added {
+  color: var(--green);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.desktop-app-layout .pack-detail-hero {
+  overflow: hidden;
+}
+
+.pack-detail-cover {
+  margin: -22px -22px 0;
+  width: calc(100% + 44px);
+  aspect-ratio: 21 / 7;
+}
+
+/* ---------- Profile: System Settings ---------- */
+.desktop-app-layout .settings-page {
+  max-width: 760px;
+}
+
+.desktop-app-layout .settings-head {
+  align-items: center;
+}
+
+.desktop-app-layout .settings-user-card {
+  padding: 8px 14px 8px 8px;
+  box-shadow: none;
+}
+
+.desktop-app-layout .settings-profile-overview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--mac-gap);
+}
+
+.desktop-app-layout .settings-profile-overview article {
+  min-height: 0;
+  padding: 12px 14px;
+  gap: 10px;
+  box-shadow: none;
+}
+
+.desktop-app-layout .settings-profile-overview strong {
+  font-size: 1.3rem;
+}
+
+.desktop-app-layout .settings-overview-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+
+.desktop-app-layout .settings-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.desktop-app-layout .settings-grid > * {
+  grid-column: 1 / -1;
+  grid-row: auto;
+}
+
+.desktop-app-layout .settings-panel {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: none;
+}
+
+.desktop-app-layout .settings-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.desktop-app-layout .settings-section-title h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.desktop-app-layout .settings-section-title p {
+  margin: 1px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: var(--label-2);
+}
+
+.desktop-app-layout .settings-icon {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: #fff;
+}
+
+.desktop-app-layout .settings-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* One row: what it is on the left, the control on the right. */
+.desktop-app-layout .settings-row {
+  margin: 0 -16px;
+  padding: 9px 16px;
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  border: 0;
+  border-top: 1px solid var(--separator);
+  border-radius: 0;
+  background: transparent;
+}
+
+.desktop-app-layout .settings-row + .settings-row {
+  margin-top: -12px;
+}
+
+.desktop-app-layout .settings-row > span:first-child {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--label);
+}
+
+.desktop-app-layout .settings-row small {
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--label-2);
+}
+
+/* Pop-up button with the macOS double chevron. */
+.desktop-app-layout .settings-select {
+  -webkit-appearance: none;
+  appearance: none;
+  width: auto;
+  min-width: 120px;
+  max-width: 240px;
+  height: 26px;
+  min-height: 26px;
+  padding: 0 28px 0 10px;
+  border: 1px solid var(--separator);
+  border-radius: 6px;
+  background-color: var(--surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='14' viewBox='0 0 10 14'%3E%3Cpath d='M2 5l3-3 3 3M2 9l3 3 3-3' fill='none' stroke='%238e8e93' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  background-size: 9px 13px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  color: var(--label);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  justify-self: end;
+}
+
+.desktop-app-layout .settings-select:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  outline-offset: 0;
+}
+
+.desktop-app-layout .settings-select:disabled {
+  opacity: 0.45;
+}
+
+/* Switch instead of a checkbox with a word next to it. */
+.desktop-app-layout .settings-toggle {
+  min-height: 0;
+  width: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.desktop-app-layout .settings-toggle > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.desktop-app-layout .settings-toggle input {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 38px;
+  height: 22px;
+  margin: 0;
+  border: 0;
+  border-radius: 11px;
+  background: var(--fill-strong);
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+
+.desktop-app-layout .settings-toggle input::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 0 0 0.5px rgba(0, 0, 0, 0.06);
+  transition: transform 0.18s ease;
+}
+
+.desktop-app-layout .settings-toggle input:checked {
+  background: var(--green);
+}
+
+.desktop-app-layout .settings-toggle input:checked::before {
+  transform: translateX(16px);
+}
+
+.desktop-app-layout .settings-toggle input:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop-app-layout .settings-toggle input,
+  .desktop-app-layout .settings-toggle input::before {
+    transition: none;
+  }
+}
+
+/* Reminder: time and switch side by side, never on top of each other. */
+.desktop-app-layout .settings-row.settings-reminder-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.desktop-app-layout .settings-row > .settings-reminder {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: end;
+}
+
+.desktop-app-layout .settings-time {
+  width: auto;
+  height: 26px;
+  min-height: 26px;
+  padding: 0 8px;
+  border: 1px solid var(--separator);
+  border-radius: 6px;
+  background: var(--surface);
+  font-size: 0.86rem;
+}
+
+.desktop-app-layout .settings-field {
+  display: grid;
+  gap: 6px;
+}
+
+.desktop-app-layout .settings-field > span {
+  font-size: 0.82rem;
+  color: var(--label-2);
+}
+
+.desktop-app-layout .settings-input {
+  min-height: 30px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  font-size: 0.92rem;
+}
+
+.desktop-app-layout .settings-mini-grid {
+  gap: 8px;
+}
+
+.desktop-app-layout .settings-mini-grid > span {
+  padding: 10px 12px;
+  min-height: 0;
+}
+
+.desktop-app-layout .settings-note,
+.desktop-app-layout .speech-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--label-2);
+}
+
+.desktop-app-layout .speech-actions,
+.desktop-app-layout .backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.desktop-app-layout .settings-panel .secondary-button,
+.desktop-app-layout .settings-panel .primary-button,
+.desktop-app-layout .settings-panel .ghost-button,
+.desktop-app-layout .settings-panel .danger-button {
+  min-height: 28px;
+  padding: 4px 12px;
+  font-size: 0.86rem;
+}
+
+.desktop-app-layout .reports-item {
+  margin: 0 -16px;
+  padding: 9px 16px;
+  border-bottom: 0;
+  border-top: 1px solid var(--separator);
+}
+
+.desktop-app-layout .reports-list {
+  gap: 0;
+}
+
+@media (max-width: 900px) {
+  .desktop-app-layout .settings-profile-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Cards whose content runs to the edges. */
+.desktop-app-layout .pack-card > .app-card-shell {
+  padding: 0;
+  gap: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.desktop-app-layout .page-head > button {
+  flex: none;
+  white-space: nowrap;
+}
+
+/* Small figures: three in a row, number over a quiet label. */
+.desktop-app-layout .settings-summary-list,
+.desktop-app-layout .settings-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.desktop-app-layout .settings-mini-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.desktop-app-layout .settings-summary-list > span,
+.desktop-app-layout .settings-mini-grid > span {
+  min-height: 0;
+  padding: 8px 12px;
+  display: grid;
+  justify-items: start;
+  gap: 0;
+  border-radius: var(--mac-radius-tile);
+  background: var(--fill);
+  color: var(--label-2);
+  font-size: 0.78rem;
+  text-align: left;
+}
+
+.desktop-app-layout .settings-summary-list strong,
+.desktop-app-layout .settings-mini-grid strong {
+  color: var(--label);
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.desktop-app-layout .settings-profile-overview small {
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+/* Progress page: same corners as everything else. */
+.desktop-app-layout .statistics-screen,
+.desktop-app-layout {
+  --stats-radius: 16px;
+}
+
+/* Dictionary: one grouped list with hairlines, not a stack of cards. */
+.desktop-app-layout .dictionary-grid {
+  gap: 0;
+  border-radius: var(--mac-radius-card);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.desktop-app-layout .dictionary-grid > .word-card {
+  border-radius: 0;
+  box-shadow: none;
+  border: 0;
+  border-top: 1px solid var(--separator);
+}
+
+.desktop-app-layout .dictionary-grid > .word-card:first-child {
+  border-top: 0;
+}
+
+/* Toolbars: search field, pop-up buttons and a segmented control at Mac size. */
+.desktop-app-layout .dictionary-toolbar .text-input,
+.desktop-app-layout .filter-card .text-input {
+  min-height: 32px;
+  height: 32px;
+  padding: 4px 12px;
+  border-radius: var(--mac-radius-control);
+  font-size: 0.92rem;
+}
+
+.desktop-app-layout .level-select {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 32px;
+  height: 32px;
+  padding: 0 30px 0 12px;
+  border: 1px solid var(--separator);
+  border-radius: var(--mac-radius-control);
+  background-color: var(--surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='14' viewBox='0 0 10 14'%3E%3Cpath d='M2 5l3-3 3 3M2 9l3 3 3-3' fill='none' stroke='%238e8e93' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 9px 13px;
+  color: var(--label);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.desktop-app-layout .tab-row {
+  padding: 2px;
+  gap: 2px;
+  border-radius: 8px;
+}
+
+.desktop-app-layout .tab-row .tab-button {
+  min-height: 26px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.desktop-app-layout .dictionary-summary span,
+.desktop-app-layout .tag-badge {
+  border-radius: 5px;
+}
+
+.desktop-app-layout .tag-badge {
+  min-height: 0;
+  padding: 1px 7px;
+  font-size: 0.74rem;
+}
+
+.desktop-app-layout .dictionary-toolbar .primary-button,
+.desktop-app-layout .dictionary-toolbar .secondary-button,
+.desktop-app-layout .section-heading .primary-button,
+.desktop-app-layout .section-heading .secondary-button,
+.desktop-app-layout .pack-word-row-action button,
+.desktop-app-layout .result-actions button {
+  min-height: 30px;
+  padding: 5px 14px;
+  font-size: 0.88rem;
+}
+
+.desktop-app-layout .pack-word-row-action {
+  border: 0;
+  padding: 0;
+}
+
+.desktop-app-layout .pack-word-row {
+  gap: 4px 14px;
+}
+
+.desktop-app-layout .dictionary-grid > .word-card .app-card-shell {
+  padding: 10px 16px;
+}
+
+.desktop-app-layout .pack-word-row-media .word-image-frame {
+  border-radius: 8px;
+}
+
+/* Pack page: a banner, then compact figures. */
+.desktop-app-layout .pack-detail-cover {
+  aspect-ratio: auto;
+  height: clamp(140px, 22vw, 240px);
+}
+
+.desktop-app-layout .pack-detail-meta {
+  display: flex;
+  gap: 8px;
+}
+
+.desktop-app-layout .pack-detail-meta .mini-stat {
+  min-height: 0;
+  padding: 8px 14px;
+  gap: 0;
+}
+
+.desktop-app-layout .pack-detail-meta .mini-stat-value {
+  font-size: 1.2rem;
+}
+
+.desktop-app-layout .dictionary-hero .app-card-shell,
+.desktop-app-layout .pack-detail-hero .app-card-shell {
+  gap: 12px;
+  padding: 22px;
+}
+
+.desktop-app-layout .pack-detail-hero .hero-title,
+.desktop-app-layout .dictionary-hero .hero-title {
+  font-size: 1.6rem;
+}
+
+.desktop-app-layout .dictionary-grid .word-card-actions {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.desktop-app-layout .pack-detail-cover.drawn img {
+  padding: 28px 0;
+}
+
+/* Lessons: the same, slightly softer corners. */
+.desktop-app-layout .lesson-focus-screen .lesson-card,
+.desktop-app-layout .lesson-focus-screen .lesson-card > .app-card-shell,
+.desktop-app-layout .lesson-session-progress {
+  border-radius: 16px;
+}
+
+.desktop-app-layout .lesson-focus-screen .lesson-choice-grid .choice-button,
+.desktop-app-layout .lesson-focus-screen .lesson-choice-stack .choice-button {
+  border-radius: 12px;
+}
+
+.desktop-app-layout .answer-feedback {
+  border-radius: 12px;
+}

@@ -6,6 +6,7 @@ import { getWordProgress } from '../lib/storage';
 import type { AppStorage, LessonDurationMinutes, WordPack } from '../types';
 import { AppIcon } from './AppIcon';
 import { AppCard } from './AppCard';
+import { PackCover } from './PackCover';
 import { LessonDurationSelector } from './LessonDurationSelector';
 import { PackWordRow } from './PackWordRow';
 import { StatusBadge } from './StatusBadge';
@@ -88,6 +89,7 @@ export function PackDetailScreen({
       </button>
 
       <AppCard as="header" tone="hero" className="pack-detail-hero">
+        <PackCover pack={pack} className="pack-detail-cover" />
         <div className="pack-detail-head">
           <div className="hero-copy">
             <span className="eyebrow">Пак слов</span>

@@ -110,7 +110,35 @@ const SOURCE_PRIORITY: Record<Word['source'], number> = { core: 0, custom: 1, pa
  * progress under that word's id. Pack words get the same id, keeping their own
  * picture and example, so pack progress counts words learned anywhere.
  */
+function hasRealImage(word: Word): boolean {
+  return Boolean(word.imageUrl && !word.imageUrl.startsWith('data:'));
+}
+
+function pickImage(word: Word): Partial<Word> {
+  return {
+    imageUrl: word.imageUrl,
+    imagePath: word.imagePath,
+    imageAlt: word.imageAlt,
+    imageSource: word.imageSource,
+    imageSourceTitle: word.imageSourceTitle,
+    imageProvider: word.imageProvider,
+    imageAttribution: word.imageAttribution,
+    imageLicense: word.imageLicense,
+    imageLicenseUrl: word.imageLicenseUrl,
+  };
+}
+
+function pickWordMedia(word: Word): Partial<Word> {
+  return {
+    ...(hasRealImage(word) ? pickImage(word) : {}),
+    ...(word.definition ? { definition: word.definition, definition_reading: word.definition_reading, definition_translation: word.definition_translation } : {}),
+    ...(word.examples?.length ? { examples: word.examples } : {}),
+    ...(word.frequency ? { frequency: word.frequency } : {}),
+  };
+}
+
 export function canonicalizePackWords(packs: WordPack[], words: Word[]): WordPack[] {
+  const loadedById = new Map(words.map((word) => [word.id, word]));
   const canonicalIdByKey = new Map<string, Word>();
   words.forEach((word) => {
     const key = getMergeKey(word);
@@ -120,10 +148,18 @@ export function canonicalizePackWords(packs: WordPack[], words: Word[]): WordPac
   return packs.map((pack) => {
     let changed = false;
     const packWords = pack.words.map((word) => {
+      // The loaded copy of this very word carries the generated picture and
+      // dictionary context; the merged word lends its picture when the pack
+      // only has a drawn placeholder.
+      const loaded = loadedById.get(word.id);
+      const own = loaded ? { ...word, ...pickWordMedia(loaded) } : word;
       const canonical = canonicalIdByKey.get(getMergeKey(word));
-      if (!canonical || canonical.id === word.id) return word;
+      if (!canonical || canonical.id === word.id) {
+        if (own !== word) changed = true;
+        return own;
+      }
       changed = true;
-      return { ...word, id: canonical.id };
+      return { ...own, ...(hasRealImage(own) || !hasRealImage(canonical) ? {} : pickImage(canonical)), id: canonical.id };
     });
     return changed ? { ...pack, words: packWords } : pack;
   });

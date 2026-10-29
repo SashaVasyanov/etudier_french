@@ -449,4 +449,6 @@ export interface WordPack {
   words: Word[];
   coverImageUrl?: string;
   coverImageAlt?: string;
+  /** A photo cover made for the starter packs; falls back to coverImageUrl. */
+  coverPhotoUrl?: string;
 }

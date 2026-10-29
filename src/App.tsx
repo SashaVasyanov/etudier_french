@@ -76,6 +76,7 @@ import type {
   WordProgress,
 } from './types';
 import './styles/app.css';
+import './styles/refine.css';
 
 const DictionaryScreen = lazy(() => import('./components/DictionaryScreen'));
 const PackDetailScreen = lazy(() =>

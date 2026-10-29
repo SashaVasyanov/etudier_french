@@ -87,6 +87,7 @@ function createPack(
     accent,
     words: words.map(createWord),
     ...createPackCoverImage(category, title, coverType, accent),
+    coverPhotoUrl: `/generated-pack-covers/${id}.webp`,
   };
 }
 
