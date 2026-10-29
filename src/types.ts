@@ -323,6 +323,22 @@ export interface AppStorage {
   comfort?: ComfortPreferences;
   /** How this learner's lapses compare with the FSRS forecast, per language. */
   memoryCalibration?: Partial<Record<LearningLanguage, MemoryCalibration>>;
+  /** Words the learner marked as wrong («Сообщить об ошибке»), newest first. */
+  contentReports?: ContentReport[];
+}
+
+export type ContentIssue = 'translation' | 'example' | 'image' | 'sound' | 'other';
+
+/** A mistake the learner found in a word's data; kept locally to be fixed. */
+export interface ContentReport {
+  wordId: string;
+  language: LearningLanguage;
+  /** The word and its translation as shown when it was reported. */
+  original: string;
+  translation: string;
+  issue: ContentIssue;
+  note?: string;
+  reportedAt: string;
 }
 
 export interface MemoryCalibration {

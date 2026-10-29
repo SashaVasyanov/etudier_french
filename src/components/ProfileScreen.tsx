@@ -5,6 +5,7 @@ import { getCurrentStreakDays } from '../lib/storage';
 import { summarizeStudyHistory, summarizeWordStatuses } from '../lib/studyMetrics';
 import { formatDateTimeLabel, formatDurationLabel, formatLongDateLabel, countRu, pluralRu, RU_LESSONS, RU_MISTAKES, RU_MODULES, RU_WORDS } from '../lib/utils';
 import type {
+  ContentIssue,
   ComfortPreferences,
   AppStorage,
   LearningLanguage,
@@ -17,6 +18,7 @@ import type {
 } from '../types';
 import { AppIcon } from './AppIcon';
 import { BackupPanel } from './BackupPanel';
+import { ContentReportsPanel } from './ContentReportsPanel';
 import { ComfortPanel } from './ComfortPanel';
 import { SpeechSettingsPanel } from './SpeechSettingsPanel';
 
@@ -51,6 +53,7 @@ interface ProfileScreenProps {
   onComfortChange: (change: Partial<ComfortPreferences>) => void;
   onExportBackup: () => string;
   onImportBackup: (raw: string) => string | null;
+  onRemoveContentReport: (wordId: string, issue: ContentIssue | null) => void;
 }
 
 const DURATION_OPTIONS: LessonDurationMinutes[] = [10, 20, 30];
@@ -91,6 +94,7 @@ export default function ProfileScreen({
   onLessonSourcePackChange,
   onExportBackup,
   onImportBackup,
+  onRemoveContentReport,
   dayStartHour,
   onDayStartHourChange,
   desiredRetention,
@@ -357,6 +361,8 @@ export default function ProfileScreen({
         <ComfortPanel comfort={comfort} language={learningLanguage} onChange={onComfortChange} />
 
         <SpeechSettingsPanel language={learningLanguage} speech={storage.speech} onChange={onSpeechChange} />
+
+        <ContentReportsPanel reports={storage.contentReports ?? []} onRemove={onRemoveContentReport} />
 
         <BackupPanel onExport={onExportBackup} onImport={onImportBackup} />
 

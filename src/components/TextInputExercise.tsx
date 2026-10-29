@@ -7,6 +7,7 @@ import { AppIcon } from './AppIcon';
 import { WordImage } from './WordImage';
 import type { Exercise, Word } from '../types';
 import { AnswerWordDetails } from './AnswerWordDetails';
+import { AnswerContext } from './AnswerContext';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
 
@@ -235,6 +236,7 @@ export function TextInputExercise({
                       </span>
                     </div>
                   ) : null}
+                  {isDictation ? null : <AnswerContext word={word} />}
                 </div>
                 <button type="button" className="feedback-replay-button" onClick={onReplayAudio}>
                   Прослушать ещё раз

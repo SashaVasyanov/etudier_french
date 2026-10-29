@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Exercise, Word } from '../types';
 import { containsJapaneseKanji, getDisplayWord, getExerciseCopy, getJapaneseExampleReading } from '../lib/wordPresentation';
 import { AnswerWordDetails } from './AnswerWordDetails';
+import { AnswerContext } from './AnswerContext';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
 import { LessonChoiceButton } from './LessonChoiceButton';
@@ -260,12 +261,9 @@ export function MultipleChoiceExercise({
                     <span lang={word.language === 'japanese' ? 'ja' : 'fr'}><JapaneseSentence text={word.example_original} reading={getJapaneseExampleReading(word)} /></span>
                     <SentenceAudioButton text={word.example_original} language={word.language} />
                   </div>
-                ) : word.example_original && word.example_original !== word.original ? (
-                  <div className="feedback-example example-line">
-                    <span lang={word.language === 'japanese' ? 'ja' : 'fr'}><JapaneseSentence text={word.example_original} reading={getJapaneseExampleReading(word)} /></span>
-                    <SentenceAudioButton text={word.example_original} language={word.language} />
-                  </div>
-                ) : null}
+                ) : (
+                  <AnswerContext word={word} showDefinition={!isDefinition} />
+                )}
               </div>
               {onReplayAudio ? (
                 <button type="button" className="feedback-replay-button" onClick={onReplayAudio}>

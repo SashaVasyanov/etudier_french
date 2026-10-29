@@ -58,11 +58,15 @@ import {
   reconcileWithProgressFile,
   recordSpeedScore,
   updateProfileName,
+  reportContentIssue,
+  removeContentReport,
 } from './lib/storage';
+import { ReportContext } from './components/ReportIssue';
 import { parseImportedPack } from './lib/importPacks';
 import { checkDictation, getTodayDateKey, isAnswerMatch, isFrenchNearMiss, isJapaneseReadingMatch, setDayStartHour } from './lib/utils';
 import type {
   AppStorage,
+  ContentIssue,
   ExerciseOutcome,
   LearningLanguage,
   LessonMode,
@@ -292,6 +296,25 @@ function App() {
   const currentWord = currentStep ? wordsById.get(currentStep.wordId) ?? null : null;
   const dailyCompletion = getCompletedDailyLesson(storage, today);
   const comfort = getComfort(storage);
+  const reportedWordIds = useMemo(() => new Set((storage.contentReports ?? []).map((report) => report.wordId)), [storage.contentReports]);
+  const reportContextValue = useMemo(
+    () => ({
+      report: (word: Word, issue: ContentIssue, note: string) => {
+        setStorage((currentStorage) =>
+          reportContentIssue(currentStorage, {
+            wordId: word.id,
+            language: word.language,
+            original: word.original,
+            translation: word.translation,
+            issue,
+            note: note.trim() || undefined,
+          }),
+        );
+      },
+      isReported: (wordId: string) => reportedWordIds.has(wordId),
+    }),
+    [reportedWordIds],
+  );
   const autoplayEnabled = comfort.autoplay;
   // Read by the components that print Japanese readings, during this render.
   setReadingPreferences({ furigana: comfort.furigana, romaji: comfort.romaji });
@@ -1043,6 +1066,7 @@ function App() {
       : 'home';
 
   return (
+    <ReportContext.Provider value={reportContextValue}>
     <AppShell>
       <div className={screen === 'lesson' ? 'desktop-app-layout lesson-desktop-layout' : 'desktop-app-layout'}>
         <AppNavigation
@@ -1463,6 +1487,9 @@ function App() {
               lessonWordTarget={storage.lessonWordTarget}
               lessonSourcePackId={storage.lessonSourcePackId}
               onExportBackup={() => exportStorageSnapshot(storageRef.current)}
+              onRemoveContentReport={(wordId, issue) => {
+                setStorage((currentStorage) => removeContentReport(currentStorage, wordId, issue));
+              }}
               onImportBackup={(raw) => {
                 try {
                   const restored = importStorageSnapshot(raw);
@@ -1566,6 +1593,7 @@ function App() {
         </main>
       </div>
     </AppShell>
+    </ReportContext.Provider>
   );
 }
 

@@ -3,6 +3,7 @@ import type { Exercise, Word } from '../types';
 import { getExerciseCopy } from '../lib/wordPresentation';
 import { LessonCard } from './LessonCard';
 import { AnswerWordDetails } from './AnswerWordDetails';
+import { AnswerContext } from './AnswerContext';
 
 interface MemoryCheckExerciseProps {
   exercise: Exercise;
@@ -94,6 +95,7 @@ export function MemoryCheckExercise({
             <div className={selectedAnswer === 'Помню' ? 'answer-feedback success' : 'answer-feedback error'}>
               <strong>{selectedAnswer === 'Помню' ? 'Отмечено: помню' : 'Отмечено: не помню'}</strong>
               <AnswerWordDetails word={word} />
+              <AnswerContext word={word} />
             </div>
           ) : null}
         </div>

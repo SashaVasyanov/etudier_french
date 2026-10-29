@@ -6,6 +6,7 @@ import { WordImage } from './WordImage';
 import { WordExamplesList } from './WordExamplesList';
 import { WordFrequencyBadge } from './WordFrequencyBadge';
 import { JapaneseSentence } from './JapaneseSentence';
+import { ReportIssueButton } from './ReportIssue';
 import { FRENCH_GENDER_LABELS, getDisplayWord, getFrenchGender, getLessonWordNotes, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordLevelLabel } from '../lib/levels';
 import { formatTranscription } from '../lib/readingPrefs';
@@ -104,6 +105,7 @@ export function LessonWordPreview({
                   <AppIcon name="close" size={18} /> Не хочу учить
                 </button>
               ) : null}
+              <ReportIssueButton word={word} />
             </div>
             <button type="button" className="primary-button word-card-next" onClick={onNext}>
               Далее

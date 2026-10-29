@@ -6416,3 +6416,195 @@ ruby rt {
   width: min(100%, 640px);
   margin-inline: auto;
 }
+
+/* ── Сообщить об ошибке ─────────────────────────────────────────── */
+.report-issue {
+  position: relative;
+  display: inline-flex;
+}
+
+.report-issue-toggle {
+  color: var(--label-2);
+}
+
+.report-issue-mark {
+  width: 18px;
+  height: 18px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.report-issue-panel {
+  position: absolute;
+  z-index: 30;
+  left: 0;
+  bottom: calc(100% + 8px);
+  width: min(360px, calc(100vw - 48px));
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  border-radius: 18px;
+  background: var(--glass-strong, var(--surface));
+  border: 1px solid var(--glass-edge, var(--separator));
+  box-shadow: var(--shadow-float);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  backdrop-filter: blur(24px) saturate(1.6);
+  text-align: left;
+}
+
+.report-issue-panel strong {
+  font-size: 0.95rem;
+  color: var(--label);
+}
+
+.report-issue-panel small {
+  color: var(--label-3);
+  font-size: 0.75rem;
+}
+
+.report-issue-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.report-issue-options button {
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--separator);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--label);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.report-issue-options button.active {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--on-fill, #fff);
+}
+
+.report-issue-note {
+  width: 100%;
+  min-height: 56px;
+  resize: vertical;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--separator);
+  background: var(--fill, transparent);
+  color: var(--label);
+  font: inherit;
+  font-size: 0.88rem;
+}
+
+.report-issue-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.report-issue-actions button {
+  min-height: 34px;
+  padding: 0 14px;
+}
+
+.word-details-report {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.word-details-report .report-issue-panel {
+  bottom: auto;
+  top: calc(100% + 6px);
+}
+
+/* Profile list */
+.reports-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 2px;
+}
+
+.reports-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--separator);
+}
+
+.reports-item > div {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+}
+
+.reports-translation {
+  color: var(--label-2);
+}
+
+.reports-meta {
+  flex-basis: 100%;
+  color: var(--label-3);
+  font-size: 0.8rem;
+}
+
+.reports-note {
+  flex-basis: 100%;
+  margin: 2px 0 0;
+  color: var(--label-2);
+  font-size: 0.88rem;
+}
+
+/* ── Контекст после ответа ──────────────────────────────────────── */
+.answer-context {
+  margin-top: 8px;
+  padding-top: 10px;
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  font-weight: 400;
+}
+
+.answer-context-definition {
+  margin: 0;
+  display: grid;
+  gap: 2px;
+  color: var(--label);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.answer-context-definition-translation {
+  color: var(--label-2);
+  font-size: 0.85rem;
+}
+
+.answer-context .word-examples {
+  gap: 8px;
+}
+
+.answer-context .word-example {
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.answer-context .word-example-original {
+  font-size: 0.95rem;
+}
+
+.answer-context .word-example-translation {
+  font-size: 0.85rem;
+}

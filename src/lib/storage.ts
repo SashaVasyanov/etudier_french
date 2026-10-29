@@ -14,6 +14,8 @@ import type {
   RadicalStudyHistoryEntry,
   SpeechPreferences,
   ComfortPreferences,
+  ContentIssue,
+  ContentReport,
   TextSize,
   StorageLoadResult,
   StorageSaveResult,
@@ -495,6 +497,7 @@ function normalizeStorage(parsedValue: Record<string, unknown>): AppStorage {
     comfort: normalizeComfort(parsed.comfort),
     memoryCalibration: normalizeCalibration(parsed.memoryCalibration),
     speedRecords: normalizeSpeedRecords(parsed.speedRecords),
+    contentReports: normalizeContentReports(parsed.contentReports),
     desiredRetention: typeof parsed.desiredRetention === 'number' && Number.isFinite(parsed.desiredRetention)
       ? clamp(parsed.desiredRetention, MIN_RETENTION, MAX_RETENTION)
       : DEFAULT_RETENTION,
@@ -1759,6 +1762,41 @@ export function recordKanaSession(
 
 export function setDesiredRetention(currentStorage: AppStorage, retention: number): AppStorage {
   return { ...currentStorage, desiredRetention: clamp(retention, MIN_RETENTION, MAX_RETENTION) };
+}
+
+const CONTENT_ISSUES: ReadonlySet<string> = new Set(['translation', 'example', 'image', 'sound', 'other']);
+const MAX_CONTENT_REPORTS = 500;
+
+function normalizeContentReports(value: unknown): AppStorage['contentReports'] {
+  if (!Array.isArray(value)) return undefined;
+  const reports = value.filter((item): item is ContentReport => isRecord(item)
+    && typeof item.wordId === 'string' && (item.language === 'french' || item.language === 'japanese')
+    && typeof item.original === 'string' && typeof item.translation === 'string'
+    && typeof item.issue === 'string' && CONTENT_ISSUES.has(item.issue)
+    && typeof item.reportedAt === 'string' && Number.isFinite(Date.parse(item.reportedAt))
+    && (item.note === undefined || typeof item.note === 'string'))
+    .slice(0, MAX_CONTENT_REPORTS)
+    .map((item) => ({ ...item, note: item.note?.slice(0, 500) || undefined }));
+  return reports.length > 0 ? reports : undefined;
+}
+
+/** «Сообщить об ошибке»: one report per word and kind of mistake, newest first. */
+export function reportContentIssue(
+  currentStorage: AppStorage,
+  report: Omit<ContentReport, 'reportedAt'>,
+  now = new Date(),
+): AppStorage {
+  const note = report.note?.trim().slice(0, 500) || undefined;
+  const others = (currentStorage.contentReports ?? []).filter((item) => !(item.wordId === report.wordId && item.issue === report.issue));
+  return {
+    ...currentStorage,
+    contentReports: [{ ...report, note, reportedAt: now.toISOString() }, ...others].slice(0, MAX_CONTENT_REPORTS),
+  };
+}
+
+export function removeContentReport(currentStorage: AppStorage, wordId: string, issue: ContentIssue | null = null): AppStorage {
+  const left = (currentStorage.contentReports ?? []).filter((item) => !(item.wordId === wordId && (issue === null || item.issue === issue)));
+  return { ...currentStorage, contentReports: left.length > 0 ? left : undefined };
 }
 
 function normalizeSpeedRecords(value: unknown): AppStorage['speedRecords'] {

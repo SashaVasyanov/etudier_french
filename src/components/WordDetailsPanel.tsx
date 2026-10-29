@@ -3,6 +3,7 @@ import { getMemoryState, getRecallProbability } from '../lib/storage';
 import { countRu, RU_DAYS } from '../lib/utils';
 import { getPartOfSpeechLabel, getWordDescription, getWordExampleLabel } from '../lib/wordPresentation';
 import { JapaneseSentence } from './JapaneseSentence';
+import { ReportIssueButton } from './ReportIssue';
 import { WordExamplesList } from './WordExamplesList';
 import { WordFrequencyBadge } from './WordFrequencyBadge';
 
@@ -100,6 +101,7 @@ export function WordDetailsPanel({ word, progress }: WordDetailsPanelProps) {
           </div>
         </div>
       ) : null}
+      <ReportIssueButton word={word} className="word-details-report" />
     </div>
   );
 }

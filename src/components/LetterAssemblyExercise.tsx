@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Exercise, Word } from '../types';
 import { getDisplayWord, getExerciseCopy } from '../lib/wordPresentation';
+import { AnswerContext } from './AnswerContext';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { HintButton } from './HintButton';
 import { LessonCard } from './LessonCard';
@@ -149,6 +150,8 @@ export function LetterAssemblyExercise({
               <div>
                 <strong>{isCorrect ? (hintsUsed ? 'Верно, с подсказкой' : 'Верно') : 'Правильно так:'}</strong>
                 <span lang={lang}>{getDisplayWord(word)}</span>
+                <span className="answer-feedback-translation" lang="ru">{word.translation}</span>
+                <AnswerContext word={word} />
               </div>
             </div>
           ) : (

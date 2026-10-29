@@ -8,12 +8,16 @@ interface WordExamplesListProps {
   word: Word;
   /** Show at most this many examples. */
   limit?: number;
+  /** Start from this example when there are enough (e.g. 1 = the second). */
+  offset?: number;
   className?: string;
 }
 
 /** Examples with the studied word marked, a play button and the translation. */
-export function WordExamplesList({ word, limit, className }: WordExamplesListProps) {
-  const examples = getWordExamples(word).slice(0, limit);
+export function WordExamplesList({ word, limit, offset = 0, className }: WordExamplesListProps) {
+  const all = getWordExamples(word);
+  const start = offset < all.length ? offset : 0;
+  const examples = all.slice(start, limit === undefined ? undefined : start + limit);
   if (examples.length === 0) return null;
   const lang = word.language === 'japanese' ? 'ja' : 'fr';
 
