@@ -738,12 +738,6 @@
   line-height: 1.25;
 }
 
-/* Progress page: same corners as everything else. */
-.desktop-app-layout .statistics-screen,
-.desktop-app-layout {
-  --stats-radius: 16px;
-}
-
 /* Dictionary: one grouped list with hairlines, not a stack of cards. */
 .desktop-app-layout .dictionary-grid {
   gap: 0;

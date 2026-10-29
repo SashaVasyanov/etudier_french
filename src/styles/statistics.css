@@ -1,10 +1,10 @@
 /*
- * «Прогресс»: a quiet page in the manner of Apple's Liquid Glass. Translucent
- * cards float over a soft colour field, so the glass has something to refract;
- * a few large numbers, one week chart, the rest behind «Подробнее».
+ * «Прогресс»: a quiet page in the manner of Apple's Liquid Glass, at the same
+ * density as the rest of the app — 12 px corners, 12 px between cards.
+ * A few large numbers, one week chart, the rest behind «Подробнее».
  */
 .stats-page {
-  --stats-radius: 28px;
+  --stats-radius: 12px;
   --stats-glass: color-mix(in srgb, var(--surface) 58%, transparent);
   --stats-glass-edge: color-mix(in srgb, var(--label) 9%, transparent);
   --stats-sheen: rgba(255, 255, 255, 0.55);
@@ -16,7 +16,7 @@
   width: min(100%, 1040px);
   margin: 0 auto;
   display: grid;
-  gap: 18px;
+  gap: 12px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,7 +40,7 @@
     radial-gradient(34% 40% at 78% 12%, color-mix(in srgb, var(--chart-6) 30%, transparent), transparent 72%),
     radial-gradient(40% 44% at 62% 70%, color-mix(in srgb, var(--chart-5) 22%, transparent), transparent 74%);
   filter: blur(30px);
-  opacity: 0.9;
+  opacity: 0.45;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,13 +53,13 @@
 .stats-head {
   display: grid;
   gap: 4px;
-  padding: 6px 4px 2px;
+  padding: 0;
 }
 
 .stats-head h1 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 2.1rem;
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--label);
@@ -74,7 +74,7 @@
 .stats-glass {
   position: relative;
   min-width: 0;
-  padding: 24px 26px;
+  padding: 18px 20px;
   border-radius: var(--stats-radius);
   border: 1px solid var(--stats-glass-edge);
   background:
@@ -84,8 +84,7 @@
   backdrop-filter: blur(30px) saturate(170%);
   box-shadow:
     inset 0 1px 0 var(--stats-sheen),
-    inset 0 -1px 0 color-mix(in srgb, var(--label) 4%, transparent),
-    0 18px 40px -22px var(--shadow-color);
+    0 1px 2px color-mix(in srgb, var(--shadow-color) 40%, transparent);
 }
 
 /* Hero: the one number that matters, then three quiet ones. */
@@ -93,8 +92,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   align-items: center;
-  gap: 28px;
-  padding: 30px 32px;
+  gap: 20px;
+  padding: 20px 22px;
 }
 
 .stats-hero-main {
@@ -113,7 +112,7 @@
 
 .stats-number-xl {
   font-family: var(--font-rounded);
-  font-size: clamp(3.6rem, 7vw, 5.2rem);
+  font-size: clamp(2.8rem, 5vw, 3.8rem);
   font-weight: 700;
   line-height: 0.95;
   letter-spacing: -0.03em;
@@ -152,14 +151,14 @@
 .stats-hero-side > div {
   display: grid;
   gap: 6px;
-  padding: 4px 18px;
+  padding: 2px 16px;
   border-left: 1px solid var(--stats-glass-edge);
 }
 
 .stats-hero-side dd {
   margin: 0;
   font-family: var(--font-rounded);
-  font-size: 1.75rem;
+  font-size: 1.45rem;
   font-weight: 650;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
@@ -199,17 +198,17 @@
 .stats-segmented {
   flex: none;
   display: inline-flex;
-  padding: 3px;
-  border-radius: 999px;
+  padding: 2px;
+  border-radius: 8px;
   background: color-mix(in srgb, var(--label) 7%, transparent);
   box-shadow: inset 0 0 0 1px var(--stats-glass-edge);
 }
 
 .stats-segmented button {
-  min-height: 28px;
-  padding: 0 14px;
+  min-height: 24px;
+  padding: 0 12px;
   border: 0;
-  border-radius: 999px;
+  border-radius: 6px;
   background: transparent;
   color: var(--label-2);
   font: inherit;
@@ -238,14 +237,14 @@
 /* Week chart: thin capsules on tracks. */
 .stats-chart-card {
   display: grid;
-  gap: 20px;
+  gap: 12px;
 }
 
 .stats-bars {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   align-items: end;
-  height: 170px;
+  height: 140px;
 }
 
 .stats-bar {
@@ -265,9 +264,9 @@
 
 .stats-bar-track {
   position: relative;
-  width: 12px;
+  width: 16px;
   height: 100%;
-  border-radius: 999px;
+  border-radius: 4px;
   background: color-mix(in srgb, var(--label) 7%, transparent);
   overflow: hidden;
 }
@@ -312,10 +311,10 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 34px;
-  padding: 0 16px;
+  min-height: 28px;
+  padding: 0 12px;
   border: 1px solid var(--stats-glass-edge);
-  border-radius: 999px;
+  border-radius: 7px;
   background: var(--stats-glass);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   backdrop-filter: blur(20px) saturate(160%);
@@ -342,7 +341,7 @@
 .stats-details {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 12px;
   animation: stats-reveal 240ms ease both;
 }
 
@@ -354,7 +353,7 @@
 .stats-detail-card {
   display: grid;
   align-content: start;
-  gap: 18px;
+  gap: 14px;
 }
 
 .stats-detail-wide {
@@ -363,13 +362,13 @@
 
 .stats-share-bar {
   display: flex;
-  gap: 3px;
-  height: 12px;
+  gap: 2px;
+  height: 10px;
 }
 
 .stats-share-bar span {
   min-width: 6px;
-  border-radius: 999px;
+  border-radius: 3px;
 }
 
 .stats-legend {
@@ -389,7 +388,7 @@
 
 .stats-legend strong {
   font-family: var(--font-rounded);
-  font-size: 1.45rem;
+  font-size: 1.3rem;
   font-weight: 650;
   letter-spacing: -0.02em;
   color: var(--label);
@@ -433,7 +432,7 @@
   position: relative;
   width: 100%;
   max-width: 26px;
-  border-radius: 8px;
+  border-radius: 4px;
   background: color-mix(in srgb, var(--label) 6%, transparent);
   overflow: hidden;
 }

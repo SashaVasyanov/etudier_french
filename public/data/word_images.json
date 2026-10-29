@@ -7082,13 +7082,11 @@
     "imagePath": "/generated-word-images/a1-chaussette-845.webp",
     "imageUrl": "/generated-word-images/a1-chaussette-845.webp",
     "imageAlt": "носок: chaussette",
-    "imagePrompt": "Real associative image for \"chaussette\" (носок). Query: chaussette.",
-    "imageSource": "https://www.flickr.com/photos/138077105@N08/23225133729",
-    "imageSourceTitle": "Chaussettes vertes ministérielles",
-    "imageProvider": "flickr",
-    "imageLicense": "cc0-1.0",
-    "imageLicenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
-    "imageAttribution": "\"Chaussettes vertes ministérielles\" by COPPARIS2015 is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+    "imagePrompt": "A pair of wool socks and one lone sock lying on a wooden floor. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: chaussette",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-basket-846": {
     "imagePath": "/generated-word-images/a1-basket-846.webp",
@@ -7124,13 +7122,11 @@
     "imagePath": "/generated-word-images/a1-bonnet-849.webp",
     "imageUrl": "/generated-word-images/a1-bonnet-849.webp",
     "imageAlt": "шапка: bonnet",
-    "imagePrompt": "Real associative image for \"bonnet\" (шапка). Query: bonnet.",
-    "imageSource": "https://www.flickr.com/photos/24469639@N00/4949083517",
-    "imageSourceTitle": "Gorgeous autochrome of young girl in bonnet, with dog",
-    "imageProvider": "flickr",
-    "imageLicense": "pdm-1.0",
-    "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-    "imageAttribution": "\"Gorgeous autochrome of young girl in bonnet, with dog\" by whatsthatpicture is marked with Public Domain Mark 1.0. To view the terms, visit https://creativecommons.org/publicdomain/mark/1.0/."
+    "imagePrompt": "A warm knitted beanie hat lying on a wooden table with a winter window behind it. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bonnet",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-echarpe-850": {
     "imagePath": "/generated-word-images/a1-echarpe-850.webp",
@@ -7146,13 +7142,11 @@
     "imagePath": "/generated-word-images/a1-gant-851.webp",
     "imageUrl": "/generated-word-images/a1-gant-851.webp",
     "imageAlt": "перчатка: gant",
-    "imagePrompt": "Real associative image for \"gant\" (перчатка). Query: gant.",
-    "imageSource": "https://www.flickr.com/photos/14473732@N00/8573255542",
-    "imageSourceTitle": "treasures of Ghent (I) • tesoros de Gante (I)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"treasures of Ghent (I) • tesoros de Gante (I)\" by jesuscm is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A single woollen glove lying on a snowy park bench in France. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: gant",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-montre-852": {
     "imagePath": "/generated-word-images/a1-montre-852.webp",
@@ -7215,16 +7209,14 @@
     "imageAttribution": "\"LEYENDECKER, F. X. Collier's, Fiction Number, Oct. 1904\" by Halloween HJB is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
   },
   "a1-taille-857": {
-    "imagePath": "https://api.openverse.org/v1/images/88a66ce3-8904-453a-9d28-301c2dde44ad/thumb/",
-    "imageUrl": "https://api.openverse.org/v1/images/88a66ce3-8904-453a-9d28-301c2dde44ad/thumb/",
+    "imagePath": "/generated-word-images/a1-taille-857.webp",
+    "imageUrl": "/generated-word-images/a1-taille-857.webp",
     "imageAlt": "размер: taille",
-    "imagePrompt": "Real associative image for \"taille\" (размер). Query: taille.",
-    "imageSource": "https://commons.wikimedia.org/w/index.php?curid=5489009",
-    "imageSourceTitle": "IMG Taille guyot",
-    "imageProvider": "wikimedia",
-    "imageLicense": "by-sa-3.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "imageAttribution": "\"IMG Taille guyot\" by Mpmpmp is licensed under CC BY-SA 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/3.0/."
+    "imagePrompt": "A shopper holding a shirt against herself in front of a mirror in a French store to check the size, a measuring tape around her neck. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: taille",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-matiere-858": {
     "imagePath": "/generated-word-images/a1-matiere-858.webp",
@@ -34260,6 +34252,906 @@
     "imagePrompt": "A plate of whole grilled fish with lemon slices and herbs on a terrace table of a seaside restaurant in Marseille, France. Photorealistic, no text, no letters, no numbers, no logos.",
     "imageSource": "generated:openai-imagegen",
     "imageSourceTitle": "Generated association: poisson grillé",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-city-croisement": {
+    "imagePath": "/generated-word-images/pack-city-croisement.webp",
+    "imageUrl": "/generated-word-images/pack-city-croisement.webp",
+    "imageAlt": "перекрёсток: croisement",
+    "imagePrompt": "An aerial view of a street intersection in a French city with zebra crossings and Haussmann buildings, cars turning, daytime. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: croisement",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-city-terrasse": {
+    "imagePath": "/generated-word-images/pack-city-terrasse.webp",
+    "imageUrl": "/generated-word-images/pack-city-terrasse.webp",
+    "imageAlt": "терраса кафе: terrasse",
+    "imagePrompt": "People sitting at small round tables on a sunny café terrace on a Paris sidewalk, wicker chairs and coffee cups, seen from a distance. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: terrasse",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-clothes-baskets": {
+    "imagePath": "/generated-word-images/pack-clothes-baskets.webp",
+    "imageUrl": "/generated-word-images/pack-clothes-baskets.webp",
+    "imageAlt": "кроссовки: baskets",
+    "imagePrompt": "A pair of clean white sneakers on a Paris cobblestone street, natural light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: baskets",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-clothes-cabine": {
+    "imagePath": "/generated-word-images/pack-clothes-cabine.webp",
+    "imageUrl": "/generated-word-images/pack-clothes-cabine.webp",
+    "imageAlt": "примерочная: cabine d’essayage",
+    "imagePrompt": "An empty fitting room in a French clothing store with the curtain drawn open, a full-length mirror, a stool and clothes on a hook, warm lighting. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: cabine d’essayage",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-clothes-short": {
+    "imagePath": "/generated-word-images/pack-clothes-short.webp",
+    "imageUrl": "/generated-word-images/pack-clothes-short.webp",
+    "imageAlt": "шорты: short",
+    "imagePrompt": "A pair of beige casual shorts folded on a beach towel on a sunny Mediterranean beach in the south of France. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: short",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-clothes-t-shirt": {
+    "imagePath": "/generated-word-images/pack-clothes-t-shirt.webp",
+    "imageUrl": "/generated-word-images/pack-clothes-t-shirt.webp",
+    "imageAlt": "футболка: t-shirt",
+    "imagePrompt": "A plain blue cotton t-shirt with no print laid flat on a light wooden surface, soft daylight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: t-shirt",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-home-lessive": {
+    "imagePath": "/generated-word-images/pack-home-lessive.webp",
+    "imageUrl": "/generated-word-images/pack-home-lessive.webp",
+    "imageAlt": "стирка: lessive",
+    "imagePrompt": "Hands loading dirty clothes from a laundry basket into a front-loading washing machine in a French apartment, soft daylight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: lessive",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-home-vaisselle": {
+    "imagePath": "/generated-word-images/pack-home-vaisselle.webp",
+    "imageUrl": "/generated-word-images/pack-home-vaisselle.webp",
+    "imageAlt": "посуда: vaisselle",
+    "imagePrompt": "Clean white plates, bowls and glasses drying in a dish rack next to the sink in a French home kitchen, sunlight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: vaisselle",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-buta": {
+    "imagePath": "/generated-word-images/pack-ja-animals-buta.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-buta.webp",
+    "imageAlt": "свинья: 豚",
+    "imagePrompt": "A pink pig standing on clean straw in a farm pen in rural Japan. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 豚",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-hebi": {
+    "imagePath": "/generated-word-images/pack-ja-animals-hebi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-hebi.webp",
+    "imageAlt": "змея: 蛇",
+    "imagePrompt": "A small harmless green snake resting calmly in tall grass in Japan, close-up, natural light, gentle and not threatening. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 蛇",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-hitsuji": {
+    "imagePath": "/generated-word-images/pack-ja-animals-hitsuji.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-hitsuji.webp",
+    "imageAlt": "овца: 羊",
+    "imagePrompt": "Sheep grazing on a green hill in Hokkaido, Japan, blue sky. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 羊",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-inu": {
+    "imagePath": "/generated-word-images/pack-ja-animals-inu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-inu.webp",
+    "imageAlt": "собака: 犬",
+    "imagePrompt": "A Shiba Inu dog walking on a leash in a Japanese park, sunny day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 犬",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-kame": {
+    "imagePath": "/generated-word-images/pack-ja-animals-kame.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-kame.webp",
+    "imageAlt": "черепаха: 亀",
+    "imagePrompt": "A turtle slowly walking on the grass beside a pond in a Japanese garden. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 亀",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-kitsune": {
+    "imagePath": "/generated-word-images/pack-ja-animals-kitsune.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-kitsune.webp",
+    "imageAlt": "лиса: 狐",
+    "imagePrompt": "A red fox running across fresh snow in Hokkaido, Japan. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 狐",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-kuma": {
+    "imagePath": "/generated-word-images/pack-ja-animals-kuma.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-kuma.webp",
+    "imageAlt": "медведь: 熊",
+    "imagePrompt": "A brown bear standing calmly in a mountain forest in Japan, seen from a distance, peaceful. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 熊",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-mushi": {
+    "imagePath": "/generated-word-images/pack-ja-animals-mushi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-mushi.webp",
+    "imageAlt": "насекомое: 虫",
+    "imagePrompt": "A colorful beetle and a small butterfly on a green leaf in a Japanese summer garden, macro close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 虫",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-neko": {
+    "imagePath": "/generated-word-images/pack-ja-animals-neko.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-neko.webp",
+    "imageAlt": "кошка: 猫",
+    "imagePrompt": "A cat sleeping curled up on a sofa in a Japanese apartment, soft afternoon light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 猫",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-niwatori": {
+    "imagePath": "/generated-word-images/pack-ja-animals-niwatori.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-niwatori.webp",
+    "imageAlt": "курица: 鶏",
+    "imagePrompt": "A brown hen sitting next to freshly laid eggs in straw in a Japanese farmhouse coop, morning light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 鶏",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-petto": {
+    "imagePath": "/generated-word-images/pack-ja-animals-petto.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-petto.webp",
+    "imageAlt": "домашний питомец: ペット",
+    "imagePrompt": "A young Japanese woman hugging her happy pet dog on the sofa of a cozy living room, a cat sitting beside them. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ペット",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-sakana": {
+    "imagePath": "/generated-word-images/pack-ja-animals-sakana.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-sakana.webp",
+    "imageAlt": "рыба: 魚",
+    "imagePrompt": "Many fish swimming in a clear shallow river in rural Japan, seen through the transparent water. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 魚",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-saru": {
+    "imagePath": "/generated-word-images/pack-ja-animals-saru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-saru.webp",
+    "imageAlt": "обезьяна: 猿",
+    "imagePrompt": "A Japanese macaque monkey sitting calmly on a rock in a Japanese zoo. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 猿",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-tora": {
+    "imagePath": "/generated-word-images/pack-ja-animals-tora.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-tora.webp",
+    "imageAlt": "тигр: 虎",
+    "imagePrompt": "A tiger walking calmly through a lush green forest enclosure in a Japanese zoo. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 虎",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-tori": {
+    "imagePath": "/generated-word-images/pack-ja-animals-tori.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-tori.webp",
+    "imageAlt": "птица: 鳥",
+    "imagePrompt": "A small sparrow singing on a tree branch at dawn in Japan, soft morning light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 鳥",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-usagi": {
+    "imagePath": "/generated-word-images/pack-ja-animals-usagi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-usagi.webp",
+    "imageAlt": "кролик, заяц: うさぎ",
+    "imagePrompt": "A white rabbit with long upright ears sitting on grass in a Japanese garden, close-up, soft light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: うさぎ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-ushi": {
+    "imagePath": "/generated-word-images/pack-ja-animals-ushi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-ushi.webp",
+    "imageAlt": "корова: 牛",
+    "imagePrompt": "A black-and-white cow eating green grass on a farm in Hokkaido, Japan. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 牛",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-animals-zou": {
+    "imagePath": "/generated-word-images/pack-ja-animals-zou.webp",
+    "imageUrl": "/generated-word-images/pack-ja-animals-zou.webp",
+    "imageAlt": "слон: 象",
+    "imagePrompt": "An elephant with its long trunk raised in a Japanese zoo, sunny day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 象",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-asagohan": {
+    "imagePath": "/generated-word-images/pack-ja-food-asagohan.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-asagohan.webp",
+    "imageAlt": "завтрак: 朝ご飯",
+    "imagePrompt": "A traditional Japanese breakfast tray with rice, miso soup, grilled salmon, pickles and a rolled omelette, morning sunlight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 朝ご飯",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-bentou": {
+    "imagePath": "/generated-word-images/pack-ja-food-bentou.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-bentou.webp",
+    "imageAlt": "бэнто (обед с собой): 弁当",
+    "imagePrompt": "An open homemade bento box with rice, rolled omelette, vegetables and fried chicken, chopsticks beside it. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 弁当",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-gohan": {
+    "imagePath": "/generated-word-images/pack-ja-food-gohan.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-gohan.webp",
+    "imageAlt": "варёный рис; еда: ご飯",
+    "imagePrompt": "A bowl of freshly steamed white rice with chopsticks on a wooden Japanese table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ご飯",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-gyuunyuu": {
+    "imagePath": "/generated-word-images/pack-ja-food-gyuunyuu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-gyuunyuu.webp",
+    "imageAlt": "молоко: 牛乳",
+    "imagePrompt": "A glass of milk next to a plain glass milk bottle on a table in a Japanese kitchen, morning light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 牛乳",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-hashi": {
+    "imagePath": "/generated-word-images/pack-ja-food-hashi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-hashi.webp",
+    "imageAlt": "палочки для еды: 箸",
+    "imagePrompt": "A pair of lacquered chopsticks resting on a chopstick rest beside a rice bowl, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 箸",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-kudamono": {
+    "imagePath": "/generated-word-images/pack-ja-food-kudamono.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-kudamono.webp",
+    "imageAlt": "фрукты: 果物",
+    "imagePrompt": "A bowl of assorted fruit: apples, mandarins, grapes, peaches and a melon on a table in a Japanese home. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 果物",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-men": {
+    "imagePath": "/generated-word-images/pack-ja-food-men.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-men.webp",
+    "imageAlt": "лапша: 麺",
+    "imagePrompt": "Thick udon noodles being lifted with chopsticks from a steaming bowl in a Japanese noodle shop. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 麺",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-misoshiru": {
+    "imagePath": "/generated-word-images/pack-ja-food-misoshiru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-misoshiru.webp",
+    "imageAlt": "мисо-суп: 味噌汁",
+    "imagePrompt": "A lacquered bowl of miso soup with tofu cubes, seaweed and green onion. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 味噌汁",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-niku": {
+    "imagePath": "/generated-word-images/pack-ja-food-niku.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-niku.webp",
+    "imageAlt": "мясо: 肉",
+    "imagePrompt": "Raw marbled beef slices on a plate in a Japanese kitchen, ready for cooking. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 肉",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-ocha": {
+    "imagePath": "/generated-word-images/pack-ja-food-ocha.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-ocha.webp",
+    "imageAlt": "чай: お茶",
+    "imagePrompt": "A cup of green tea in a Japanese ceramic teacup beside a teapot on a wooden tray. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: お茶",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-oishii": {
+    "imagePath": "/generated-word-images/pack-ja-food-oishii.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-oishii.webp",
+    "imageAlt": "вкусный: おいしい",
+    "imagePrompt": "A young Japanese woman taking a bite of cake and smiling with delight in a café, eyes closed with pleasure. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: おいしい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-pan": {
+    "imagePath": "/generated-word-images/pack-ja-food-pan.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-pan.webp",
+    "imageAlt": "хлеб: パン",
+    "imagePrompt": "A plate of toasted bread slices with butter on a breakfast table in a Tokyo apartment, morning light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: パン",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-ringo": {
+    "imagePath": "/generated-word-images/pack-ja-food-ringo.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-ringo.webp",
+    "imageAlt": "яблоко: りんご",
+    "imagePrompt": "A shiny red apple on a wooden table, Japanese kitchen softly blurred in the background. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: りんご",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-satou": {
+    "imagePath": "/generated-word-images/pack-ja-food-satou.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-satou.webp",
+    "imageAlt": "сахар: 砂糖",
+    "imagePrompt": "A spoonful of white sugar being added to a cup of coffee, a sugar bowl beside it on a Japanese café table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 砂糖",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-shio": {
+    "imagePath": "/generated-word-images/pack-ja-food-shio.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-shio.webp",
+    "imageAlt": "соль: 塩",
+    "imagePrompt": "A small dish of white salt with a pinch being sprinkled into a pot of soup in a Japanese kitchen. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 塩",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-sushi": {
+    "imagePath": "/generated-word-images/pack-ja-food-sushi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-sushi.webp",
+    "imageAlt": "суси: 寿司",
+    "imagePrompt": "A wooden platter of assorted nigiri sushi on a table in a Japanese restaurant. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 寿司",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-tamago": {
+    "imagePath": "/generated-word-images/pack-ja-food-tamago.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-tamago.webp",
+    "imageAlt": "яйцо: 卵",
+    "imagePrompt": "Two fresh brown eggs in a small ceramic bowl on a Japanese kitchen counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 卵",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-toufu": {
+    "imagePath": "/generated-word-images/pack-ja-food-toufu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-toufu.webp",
+    "imageAlt": "тофу: 豆腐",
+    "imagePrompt": "A block of white silken tofu on a plate topped with grated ginger and green onions, Japanese style. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 豆腐",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-food-yasai": {
+    "imagePath": "/generated-word-images/pack-ja-food-yasai.webp",
+    "imageUrl": "/generated-word-images/pack-ja-food-yasai.webp",
+    "imageAlt": "овощи: 野菜",
+    "imagePrompt": "Baskets of fresh vegetables: daikon, carrots, cabbage, green onions and tomatoes at a Japanese market stall, no price tags. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 野菜",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-futon": {
+    "imagePath": "/generated-word-images/pack-ja-home-futon.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-futon.webp",
+    "imageAlt": "футон, постель: 布団",
+    "imagePrompt": "A futon mattress and quilt being aired over the balcony railing of a Japanese house in the sunshine. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 布団",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-genkan": {
+    "imagePath": "/generated-word-images/pack-ja-home-genkan.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-genkan.webp",
+    "imageAlt": "прихожая: 玄関",
+    "imagePrompt": "A Japanese home entrance with shoes neatly lined up on the lower floor and a step up to the wooden hallway, slippers waiting. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 玄関",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-kagi": {
+    "imagePath": "/generated-word-images/pack-ja-home-kagi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-kagi.webp",
+    "imageAlt": "ключ: 鍵",
+    "imagePrompt": "A set of house keys on a keyring lying on a wooden floor near a door, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 鍵",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-sentaku": {
+    "imagePath": "/generated-word-images/pack-ja-home-sentaku.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-sentaku.webp",
+    "imageAlt": "стирка: 洗濯",
+    "imagePrompt": "Freshly washed laundry hanging to dry on the balcony of a Japanese apartment under a blue sky. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 洗濯",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-toire": {
+    "imagePath": "/generated-word-images/pack-ja-home-toire.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-toire.webp",
+    "imageAlt": "туалет: トイレ",
+    "imagePrompt": "A clean, bright modern Japanese toilet room with a white toilet and a small hand-wash sink. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: トイレ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-tsukue": {
+    "imagePath": "/generated-word-images/pack-ja-home-tsukue.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-tsukue.webp",
+    "imageAlt": "письменный стол: 机",
+    "imagePrompt": "A wooden writing desk with a few books on top in a quiet Japanese room by a window. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 机",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-bara": {
+    "imagePath": "/generated-word-images/pack-ja-plants-bara.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-bara.webp",
+    "imageAlt": "роза: バラ",
+    "imagePrompt": "A single red rose being handed to a smiling mother in a Japanese home, close-up on the rose, warm light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: バラ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-eda": {
+    "imagePath": "/generated-word-images/pack-ja-plants-eda.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-eda.webp",
+    "imageAlt": "ветка: 枝",
+    "imagePrompt": "A small bird perched on a tree branch in a Japanese garden, close-up, soft blurred background. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 枝",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-ha": {
+    "imagePath": "/generated-word-images/pack-ja-plants-ha.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-ha.webp",
+    "imageAlt": "лист (растения): 葉",
+    "imagePrompt": "Close-up of red and orange maple leaves on a branch in autumn in Japan, sunlight shining through them. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 葉",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-hana": {
+    "imagePath": "/generated-word-images/pack-ja-plants-hana.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-hana.webp",
+    "imageAlt": "цветок: 花",
+    "imagePrompt": "Bright pink and yellow flowers blooming in a flower bed in a Japanese park, close-up, sunny day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 花",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-ine": {
+    "imagePath": "/generated-word-images/pack-ja-plants-ine.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-ine.webp",
+    "imageAlt": "рис (растение): 稲",
+    "imagePrompt": "Golden ripe rice plants heavy with grain in a paddy field in rural Japan in autumn, a farmer harvesting in the background. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 稲",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-koke": {
+    "imagePath": "/generated-word-images/pack-ja-plants-koke.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-koke.webp",
+    "imageAlt": "мох: 苔",
+    "imagePrompt": "Thick green moss growing on stones in a Japanese temple garden, close-up, soft light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 苔",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-kouyou": {
+    "imagePath": "/generated-word-images/pack-ja-plants-kouyou.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-kouyou.webp",
+    "imageAlt": "осенняя листва: 紅葉",
+    "imagePrompt": "Vivid red and orange autumn maple foliage around a wooden temple in Kyoto, Japan. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 紅葉",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-kusa": {
+    "imagePath": "/generated-word-images/pack-ja-plants-kusa.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-kusa.webp",
+    "imageAlt": "трава: 草",
+    "imagePrompt": "Lush green grass in a Japanese park seen at ground level, soft sunlight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 草",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-matsu": {
+    "imagePath": "/generated-word-images/pack-ja-plants-matsu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-matsu.webp",
+    "imageAlt": "сосна: 松",
+    "imagePrompt": "A row of Japanese black pine trees along a sandy seashore in Japan, calm sea, clear day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 松",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-mizuyari": {
+    "imagePath": "/generated-word-images/pack-ja-plants-mizuyari.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-mizuyari.webp",
+    "imageAlt": "полив: 水やり",
+    "imagePrompt": "Watering flowers with a metal watering can in a small Japanese garden in the morning, water droplets sparkling in the sunlight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 水やり",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-mori": {
+    "imagePath": "/generated-word-images/pack-ja-plants-mori.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-mori.webp",
+    "imageAlt": "лес: 森",
+    "imagePrompt": "A peaceful path through a dense green cedar forest in Japan, sunbeams through tall trees. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 森",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-ne": {
+    "imagePath": "/generated-word-images/pack-ja-plants-ne.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-ne.webp",
+    "imageAlt": "корень: 根",
+    "imagePrompt": "The thick exposed roots of a huge old tree spreading over the ground in a Japanese shrine forest. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 根",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-niwa": {
+    "imagePath": "/generated-word-images/pack-ja-plants-niwa.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-niwa.webp",
+    "imageAlt": "сад, двор: 庭",
+    "imagePrompt": "A grandmother tending vegetables in the small backyard garden of a traditional Japanese house, seen from behind, sunny morning. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 庭",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-sakura": {
+    "imagePath": "/generated-word-images/pack-ja-plants-sakura.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-sakura.webp",
+    "imageAlt": "сакура (японская вишня): 桜",
+    "imagePrompt": "Cherry blossom trees in full bloom along a river in Japan in April, pink petals, blue sky. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 桜",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-shibafu": {
+    "imagePath": "/generated-word-images/pack-ja-plants-shibafu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-shibafu.webp",
+    "imageAlt": "газон: 芝生",
+    "imagePrompt": "A neatly mown green lawn in a Japanese park bordered by a low rope barrier, sunny day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 芝生",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-shokubutsu": {
+    "imagePath": "/generated-word-images/pack-ja-plants-shokubutsu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-shokubutsu.webp",
+    "imageAlt": "растение: 植物",
+    "imagePrompt": "Green potted houseplants on a windowsill in a bright Japanese apartment room, soft daylight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 植物",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-take": {
+    "imagePath": "/generated-word-images/pack-ja-plants-take.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-take.webp",
+    "imageAlt": "бамбук: 竹",
+    "imagePrompt": "A tall dense bamboo grove in Arashiyama, Kyoto, green stalks rising to the sky. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 竹",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-eki": {
+    "imagePath": "/generated-word-images/pack-ja-travel-eki.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-eki.webp",
+    "imageAlt": "станция, вокзал: 駅",
+    "imagePrompt": "The entrance of a Japanese train station in a small city with travelers walking in, seen from the station plaza, daytime, no readable signs. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 駅",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-hikouki": {
+    "imagePath": "/generated-word-images/pack-ja-travel-hikouki.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-hikouki.webp",
+    "imageAlt": "самолёт: 飛行機",
+    "imagePrompt": "A passenger airplane taking off from an airport runway in Japan, blue sky. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 飛行機",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-hoteru": {
+    "imagePath": "/generated-word-images/pack-ja-travel-hoteru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-hoteru.webp",
+    "imageAlt": "гостиница: ホテル",
+    "imagePrompt": "A clean modern hotel room in Tokyo with a neatly made bed, a suitcase by the door and a city view window. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ホテル",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-iriguchi": {
+    "imagePath": "/generated-word-images/pack-ja-travel-iriguchi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-iriguchi.webp",
+    "imageAlt": "вход: 入口",
+    "imagePrompt": "The entrance of a Japanese building with automatic glass doors wide open and a person waiting beside it. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 入口",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-kankou": {
+    "imagePath": "/generated-word-images/pack-ja-travel-kankou.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-kankou.webp",
+    "imageAlt": "осмотр достопримечательностей: 観光",
+    "imagePrompt": "Tourists taking photos of a famous five-storied pagoda in Kyoto, sightseeing on a sunny afternoon, seen from a distance. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 観光",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-kippu": {
+    "imagePath": "/generated-word-images/pack-ja-travel-kippu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-kippu.webp",
+    "imageAlt": "билет: 切符",
+    "imagePrompt": "Two small blank paper train tickets held between fingers in front of an automatic ticket gate at a Japanese station. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 切符",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-michi": {
+    "imagePath": "/generated-word-images/pack-ja-travel-michi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-michi.webp",
+    "imageAlt": "дорога, путь: 道",
+    "imagePrompt": "A quiet narrow road winding through the rural Japanese countryside between rice fields, sunny day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 道",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-norikae": {
+    "imagePath": "/generated-word-images/pack-ja-travel-norikae.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-norikae.webp",
+    "imageAlt": "пересадка: 乗り換え",
+    "imagePrompt": "Passengers walking across a platform to transfer from one train to another train waiting on the opposite track at a Japanese station. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 乗り換え",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-omiyage": {
+    "imagePath": "/generated-word-images/pack-ja-travel-omiyage.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-omiyage.webp",
+    "imageAlt": "сувенир, гостинец: お土産",
+    "imagePrompt": "Neatly wrapped Japanese souvenir gift boxes of sweets being handed over in a paper shopping bag to a friend, plain packaging. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: お土産",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-pasupooto": {
+    "imagePath": "/generated-word-images/pack-ja-travel-pasupooto.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-pasupooto.webp",
+    "imageAlt": "паспорт: パスポート",
+    "imagePrompt": "A passport with a plain dark cover lying on top of a packed suitcase, ready for a trip. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: パスポート",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-ryokou": {
+    "imagePath": "/generated-word-images/pack-ja-travel-ryokou.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-ryokou.webp",
+    "imageAlt": "путешествие, поездка: 旅行",
+    "imagePrompt": "A traveler with a backpack and a rolling suitcase walking toward a temple gate in Kyoto, seen from behind, autumn day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 旅行",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-umi": {
+    "imagePath": "/generated-word-images/pack-ja-travel-umi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-umi.webp",
+    "imageAlt": "море: 海",
+    "imagePrompt": "A clear blue sea and white sandy beach in Okinawa, Japan, gentle waves, summer. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 海",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-yama": {
+    "imagePath": "/generated-word-images/pack-ja-travel-yama.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-yama.webp",
+    "imageAlt": "гора: 山",
+    "imagePrompt": "Mount Fuji clearly visible on a sunny day, seen across a lake with green trees in the foreground. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 山",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-yoyaku": {
+    "imagePath": "/generated-word-images/pack-ja-travel-yoyaku.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-yoyaku.webp",
+    "imageAlt": "бронирование: 予約",
+    "imagePrompt": "A table for two set and waiting in a Japanese restaurant with a small blank reservation card stand on it, empty chairs, warm evening light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 予約",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-plants-bouquet": {
+    "imagePath": "/generated-word-images/pack-plants-bouquet.webp",
+    "imageUrl": "/generated-word-images/pack-plants-bouquet.webp",
+    "imageAlt": "букет: bouquet",
+    "imagePrompt": "A colorful bouquet of fresh flowers wrapped in kraft paper being held out as a gift in a French apartment, soft window light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bouquet",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-plants-mousse": {
+    "imagePath": "/generated-word-images/pack-plants-mousse.webp",
+    "imageUrl": "/generated-word-images/pack-plants-mousse.webp",
+    "imageAlt": "мох: mousse",
+    "imagePrompt": "Close-up of a stone covered in thick green moss in a French forest, soft diffuse light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: mousse",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-plants-potager": {
+    "imagePath": "/generated-word-images/pack-plants-potager.webp",
+    "imageUrl": "/generated-word-images/pack-plants-potager.webp",
+    "imageAlt": "огород: potager",
+    "imagePrompt": "A small vegetable garden behind a stone cottage in rural France, rows of lettuces, tomatoes on stakes and carrots, an elderly man's hands tending the plants, morning sun. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: potager",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-plants-rosier": {
+    "imagePath": "/generated-word-images/pack-plants-rosier.webp",
+    "imageUrl": "/generated-word-images/pack-plants-rosier.webp",
+    "imageAlt": "куст роз: rosier",
+    "imagePrompt": "A blooming rose bush with pink roses in front of a window with blue shutters of a French country house, sunny day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: rosier",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-work-study-agenda": {
+    "imagePath": "/generated-word-images/pack-work-study-agenda.webp",
+    "imageUrl": "/generated-word-images/pack-work-study-agenda.webp",
+    "imageAlt": "ежедневник: agenda",
+    "imagePrompt": "An open paper planner full of colorful sticky tabs and highlighted blocks with illegible scribbles, a pen and a coffee cup beside it on a Paris café table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: agenda",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-work-study-courriel": {
+    "imagePath": "/generated-word-images/pack-work-study-courriel.webp",
+    "imageUrl": "/generated-word-images/pack-work-study-courriel.webp",
+    "imageAlt": "электронное письмо: courriel",
+    "imagePrompt": "A laptop on a desk showing a mail app with a large envelope icon and abstract grey lines instead of text, a student's hands on the keyboard, French apartment. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: courriel",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-work-study-patron": {
+    "imagePath": "/generated-word-images/pack-work-study-patron.webp",
+    "imageUrl": "/generated-word-images/pack-work-study-patron.webp",
+    "imageAlt": "начальник: patron",
+    "imagePrompt": "A confident middle-aged boss in a suit giving instructions to two employees in a modern Paris office, early morning light through large windows. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: patron",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-hondana": {
+    "imagePath": "/generated-word-images/pack-ja-home-hondana.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-hondana.webp",
+    "imageAlt": "книжная полка: 本棚",
+    "imagePrompt": "A wooden bookshelf neatly lined with books with plain unmarked spines in a Japanese room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 本棚",
     "imageProvider": "openai-imagegen",
     "imageAttribution": "Создано специально для étudier"
   }
