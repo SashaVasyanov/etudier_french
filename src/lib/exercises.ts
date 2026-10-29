@@ -227,83 +227,6 @@ function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'or
   ]);
 }
 
-function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-const KANJI_CHAR = /[\u3400-\u9fff\u3005]/;
-const KATAKANA_CHAR = /[\u30a0-\u30ff]/;
-const HIRAGANA_CHAR = /[\u3041-\u309f]/;
-// Hiragana that may follow a kanji word: particles, the copula and する.
-// Matched as whole prefixes, so okurigana (話す, 書き, 早く) is not mistaken
-// for a particle the way single letters (す, し, ほ) would be.
-const PARTICLE_PREFIXES = [
-  'まで', 'から', 'より', 'しか', 'ほど', 'けど', 'じゃ', 'こそ', 'さえ', 'すら', 'ばかり', 'など', 'くらい', 'ぐらい',
-  'です', 'でし', 'だ', 'できる', 'でき',
-  'が', 'を', 'に', 'は', 'の', 'で', 'と', 'も', 'へ', 'や', 'か', 'な', 'よ', 'ね',
-];
-// «勉強します» is a noun + する, but after a single kanji the same letters are
-// usually okurigana (話します, 出して), so する forms need a compound noun.
-const SURU_PREFIXES = ['する', 'すれ', 'しま', 'した', 'して', 'しな', 'しよ', 'させ', 'され'];
-
-/**
- * Japanese has no spaces, so a plain substring search would blank out 日 inside
- * 今日 or 少年 inside 青少年. Only cut occurrences whose edges do not run into
- * the same script (a kanji word must not touch other kanji, a katakana word
- * other katakana). Hiragana-only words cannot be delimited reliably and get a
- * different exercise instead.
- */
-function createJapaneseSentenceCloze(example: string, original: string): string | null {
-  if (!KANJI_CHAR.test(original) && !KATAKANA_CHAR.test(original)) {
-    return null;
-  }
-
-  const first = original[0];
-  const last = original[original.length - 1];
-  const clashes = (neighbour: string | undefined, edge: string) =>
-    neighbour !== undefined
-    && ((KANJI_CHAR.test(edge) && KANJI_CHAR.test(neighbour)) || (KATAKANA_CHAR.test(edge) && KATAKANA_CHAR.test(neighbour)));
-  // After a word ending in kanji, hiragana must start a particle or copula
-  // (日が, 日です, 簡単に); otherwise it is okurigana of another word (数える).
-  const allowedPrefixes = original.length >= 2 ? [...PARTICLE_PREFIXES, ...SURU_PREFIXES] : PARTICLE_PREFIXES;
-  const startsOtherWord = (rest: string) =>
-    KANJI_CHAR.test(last) && HIRAGANA_CHAR.test(rest[0] ?? '') && !allowedPrefixes.some((prefix) => rest.startsWith(prefix));
-
-  let result = '';
-  let cursor = 0;
-  let replaced = false;
-  let index = example.indexOf(original);
-
-  while (index !== -1) {
-    const before = index > 0 ? example[index - 1] : undefined;
-    const after = example[index + original.length];
-    if (!clashes(before, first) && !clashes(after, last) && !startsOtherWord(example.slice(index + original.length))) {
-      result += `${example.slice(cursor, index)}＿＿`;
-      cursor = index + original.length;
-      replaced = true;
-    }
-    index = example.indexOf(original, index + original.length);
-  }
-
-  return replaced ? result + example.slice(cursor) : null;
-}
-
-export function createSentenceCloze(word: Word): string | null {
-  const example = word.example_original.trim();
-  const original = word.original.trim();
-
-  if (!example || !original) {
-    return null;
-  }
-
-  if (word.language === 'japanese') {
-    return createJapaneseSentenceCloze(example, original);
-  }
-
-  const pattern = new RegExp(`(^|[^\\p{L}])${escapeRegExp(original)}(?=$|[^\\p{L}])`, 'giu');
-  return pattern.test(example) ? example.replace(pattern, '$1＿＿') : null;
-}
-
 /** Words of the example sentence for «Соберите фразу»; null when the sentence
  *  has no spaces (Japanese) or is too short or too long to be a puzzle. */
 export function getSentenceTokens(word: Word): string[] | null {
@@ -354,8 +277,10 @@ function canCreateExercise(word: Word, type: ExerciseType): boolean {
     return false;
   }
 
+  // «Заполните пропуск» was dropped: the blank was guessed from the shape of
+  // the sentence rather than recalled. The type stays only in old history.
   if (type === 'sentence_cloze_input') {
-    return Boolean(createSentenceCloze(word));
+    return false;
   }
 
   return true;
@@ -369,7 +294,7 @@ function getAvailableExerciseTypes(word: Word, exerciseTypes: ExerciseType[]): E
 
     // No usable sentence (or no gender, no kanji): ask for the word by choice
     // instead, so lessons do not turn into a row of typing tasks.
-    return type === 'sentence_cloze_input' || type === 'sentence_order' || type === 'audio_sentence_choice' || type === 'sentence_dictation'
+    return type === 'sentence_order' || type === 'audio_sentence_choice' || type === 'sentence_dictation'
       || type === 'article_choice' || type === 'kanji_reading_choice'
       ? 'translation_to_original_choice'
       : null;
@@ -465,22 +390,8 @@ function createExercise(word: Word, optionPool: Word[], type: ExerciseType, inde
         correctAnswer: reading,
       };
     }
-    case 'sentence_cloze_input': {
-      const cloze = createSentenceCloze(word);
-
-      if (!cloze) {
-        return createExercise(word, optionPool, 'translation_to_original_input', index);
-      }
-
-      return {
-        id: `${word.id}-${type}-${index}`,
-        type,
-        wordId: word.id,
-        prompt: cloze,
-        context: word.example_translation,
-        correctAnswer: word.original,
-      };
-    }
+    case 'sentence_cloze_input':
+      return createExercise(word, optionPool, 'translation_to_original_input', index);
     case 'sentence_order': {
       const tokens = getSentenceTokens(word);
       if (!tokens) return createExercise(word, optionPool, 'translation_to_original_choice', index);
@@ -990,7 +901,7 @@ function createMistakesSession(
     'Сложные слова',
     'Точечное повторение слов, где были ошибки.',
     mistakeWords,
-    ['translation_to_original_input', 'sentence_cloze_input', 'translation_to_original_choice', 'audio_to_translation_choice'],
+    ['translation_to_original_input', 'audio_to_original_input', 'translation_to_original_choice', 'audio_to_translation_choice'],
     uniqueWords(words),
     undefined,
   );
@@ -1126,7 +1037,7 @@ function createDailySession(
     'Смешанное закрепление',
     'Слова возвращаются в новом порядке, чтобы проверить узнавание без заучивания по шаблону.',
     reinforcementWords,
-    ['sentence_cloze_input', 'sentence_order', 'audio_sentence_choice', 'sentence_dictation', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
+    ['sentence_order', 'audio_sentence_choice', 'sentence_dictation', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
     uniqueWords(words),
     storage,
     1,
@@ -1137,7 +1048,7 @@ function createDailySession(
       'Финальная мини-проверка',
       'Короткий итоговый блок: ключевые слова дня и редкая проверка давно выученного.',
       recapWords,
-      ['translation_to_original_input', 'sentence_cloze_input', 'sentence_order', 'original_to_translation_choice'],
+      ['translation_to_original_input', 'sentence_order', 'original_to_translation_choice'],
       uniqueWords(words),
       storage,
       1,
@@ -1347,7 +1258,7 @@ function createExtraSession(
       'Смешанное закрепление',
       'Финальный блок на закрепление активных, новых и давно выученных слов.',
       mixedWords,
-      ['sentence_cloze_input', 'sentence_order', 'audio_to_original_input', 'article_choice', 'translation_to_original_choice', 'original_to_translation_choice'],
+      ['sentence_order', 'audio_to_original_input', 'article_choice', 'translation_to_original_choice', 'original_to_translation_choice'],
       uniqueWords(words),
       storage,
     ),
@@ -1575,10 +1486,11 @@ export function scheduleExerciseRetry(
     return session;
   }
 
-  const candidateTypes: ExerciseType[] = [
-    ...(failedExercise.type !== 'sentence_cloze_input' ? (['sentence_cloze_input'] as ExerciseType[]) : []),
-    'translation_to_original_input',
-  ];
+  // The return asks for the word itself; after a failed typing task it is
+  // asked by ear, so the retry is not the same task twice.
+  const candidateTypes: ExerciseType[] = failedExercise.type === 'translation_to_original_input'
+    ? ['audio_to_original_input', 'translation_to_original_input']
+    : ['translation_to_original_input'];
   const retryType = candidateTypes.find((type) => canCreateExercise(word, type)) ?? 'translation_to_original_input';
   const retryIndex = session.exercises.length;
   const baseRetryExercise = createExercise(word, [word], retryType, retryIndex);

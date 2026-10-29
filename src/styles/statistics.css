@@ -1,0 +1,512 @@
+/*
+ * «Прогресс»: a quiet page in the manner of Apple's Liquid Glass. Translucent
+ * cards float over a soft colour field, so the glass has something to refract;
+ * a few large numbers, one week chart, the rest behind «Подробнее».
+ */
+.stats-page {
+  --stats-radius: 28px;
+  --stats-glass: color-mix(in srgb, var(--surface) 58%, transparent);
+  --stats-glass-edge: color-mix(in srgb, var(--label) 9%, transparent);
+  --stats-sheen: rgba(255, 255, 255, 0.55);
+  --stats-number: var(--label);
+  --stats-thumb: var(--surface);
+
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 1040px);
+  margin: 0 auto;
+  display: grid;
+  gap: 18px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .stats-page {
+    --stats-glass: rgba(40, 40, 44, 0.5);
+    --stats-glass-edge: rgba(255, 255, 255, 0.1);
+    --stats-sheen: rgba(255, 255, 255, 0.14);
+    --stats-thumb: rgba(255, 255, 255, 0.16);
+  }
+}
+
+/* The colour field behind the glass: three blurred washes, still. */
+.stats-ambient {
+  position: absolute;
+  inset: -40px -60px auto;
+  height: 620px;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 46% at 18% 22%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 70%),
+    radial-gradient(34% 40% at 78% 12%, color-mix(in srgb, var(--chart-6) 30%, transparent), transparent 72%),
+    radial-gradient(40% 44% at 62% 70%, color-mix(in srgb, var(--chart-5) 22%, transparent), transparent 74%);
+  filter: blur(30px);
+  opacity: 0.9;
+}
+
+@media (prefers-color-scheme: dark) {
+  .stats-ambient {
+    opacity: 1;
+    filter: blur(24px) saturate(130%);
+  }
+}
+
+.stats-head {
+  display: grid;
+  gap: 4px;
+  padding: 6px 4px 2px;
+}
+
+.stats-head h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--label);
+}
+
+.stats-head p {
+  margin: 0;
+  color: var(--label-2);
+  font-size: 0.95rem;
+}
+
+.stats-glass {
+  position: relative;
+  min-width: 0;
+  padding: 24px 26px;
+  border-radius: var(--stats-radius);
+  border: 1px solid var(--stats-glass-edge);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--stats-sheen) 45%, transparent), transparent 42%),
+    var(--stats-glass);
+  -webkit-backdrop-filter: blur(30px) saturate(170%);
+  backdrop-filter: blur(30px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 var(--stats-sheen),
+    inset 0 -1px 0 color-mix(in srgb, var(--label) 4%, transparent),
+    0 18px 40px -22px var(--shadow-color);
+}
+
+/* Hero: the one number that matters, then three quiet ones. */
+.stats-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 28px;
+  padding: 30px 32px;
+}
+
+.stats-hero-main {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.stats-caption,
+.stats-hero-side dt {
+  color: var(--label-2);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.stats-number-xl {
+  font-family: var(--font-rounded);
+  font-size: clamp(3.6rem, 7vw, 5.2rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--stats-number);
+}
+
+.stats-hero-sub {
+  color: var(--label-2);
+  font-size: 0.95rem;
+}
+
+.stats-progress {
+  display: block;
+  width: min(100%, 320px);
+  height: 6px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--label) 10%, transparent);
+  overflow: hidden;
+}
+
+.stats-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 70%, var(--chart-6)), var(--accent));
+}
+
+.stats-hero-side {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.stats-hero-side > div {
+  display: grid;
+  gap: 6px;
+  padding: 4px 18px;
+  border-left: 1px solid var(--stats-glass-edge);
+}
+
+.stats-hero-side dd {
+  margin: 0;
+  font-family: var(--font-rounded);
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--label);
+  white-space: nowrap;
+}
+
+.stats-hero-side dd small {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--label-2);
+  letter-spacing: 0;
+}
+
+.stats-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.stats-card-head h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 650;
+  color: var(--label);
+}
+
+.stats-card-head p {
+  margin: 4px 0 0;
+  color: var(--label-2);
+  font-size: 0.9rem;
+}
+
+/* A capsule toggle, like a macOS segmented control on glass. */
+.stats-segmented {
+  flex: none;
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--label) 7%, transparent);
+  box-shadow: inset 0 0 0 1px var(--stats-glass-edge);
+}
+
+.stats-segmented button {
+  min-height: 28px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--label-2);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.stats-segmented button:hover {
+  color: var(--label);
+}
+
+.stats-segmented button.active {
+  background: var(--stats-thumb);
+  color: var(--label);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 1px 0 var(--stats-sheen);
+}
+
+.stats-segmented button:focus-visible,
+.stats-more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Week chart: thin capsules on tracks. */
+.stats-chart-card {
+  display: grid;
+  gap: 20px;
+}
+
+.stats-bars {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  height: 170px;
+}
+
+.stats-bar {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 18px minmax(0, 1fr) 22px;
+  justify-items: center;
+  gap: 6px;
+}
+
+.stats-bar-value {
+  color: var(--label-2);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-bar-track {
+  position: relative;
+  width: 12px;
+  height: 100%;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--label) 7%, transparent);
+  overflow: hidden;
+}
+
+.stats-bar-fill {
+  position: absolute;
+  inset: auto 0 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.stats-bar.current .stats-bar-fill {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 75%, var(--chart-6)), var(--accent));
+}
+
+.stats-bar-label {
+  align-self: center;
+  color: var(--label-3);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.stats-bar.current .stats-bar-label,
+.stats-bar.current .stats-bar-value {
+  color: var(--accent);
+  font-weight: 650;
+}
+
+.stats-empty {
+  margin: 0;
+  color: var(--label-3);
+  font-size: 0.9rem;
+}
+
+.stats-chart-empty {
+  text-align: center;
+  margin-top: -6px;
+}
+
+.stats-more {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0 16px;
+  border: 1px solid var(--stats-glass-edge);
+  border-radius: 999px;
+  background: var(--stats-glass);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  color: var(--label);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stats-chevron {
+  width: 7px;
+  height: 7px;
+  border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 200ms ease;
+}
+
+.stats-chevron.open {
+  transform: translateY(2px) rotate(-135deg);
+}
+
+.stats-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  animation: stats-reveal 240ms ease both;
+}
+
+@keyframes stats-reveal {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.stats-detail-card {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+}
+
+.stats-detail-wide {
+  grid-column: 1 / -1;
+}
+
+.stats-share-bar {
+  display: flex;
+  gap: 3px;
+  height: 12px;
+}
+
+.stats-share-bar span {
+  min-width: 6px;
+  border-radius: 999px;
+}
+
+.stats-legend {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  gap: 14px 18px;
+}
+
+.stats-legend li {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.stats-legend strong {
+  font-family: var(--font-rounded);
+  font-size: 1.45rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--label);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--label-2);
+  font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stats-legend i {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.stats-months {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 8px;
+  height: 92px;
+}
+
+.stats-month {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 18px;
+  justify-items: center;
+  gap: 6px;
+}
+
+.stats-month-track {
+  position: relative;
+  width: 100%;
+  max-width: 26px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--label) 6%, transparent);
+  overflow: hidden;
+}
+
+.stats-month-track span {
+  position: absolute;
+  inset: auto 0 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.stats-month small {
+  color: var(--label-3);
+  font-size: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .stats-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-hero-side > div:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .stats-details {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Glass gives way to solid cards when transparency or motion is unwanted,
+   or when the system asks for more contrast. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .stats-page {
+    --stats-glass: var(--surface);
+    --stats-sheen: transparent;
+  }
+
+  .stats-ambient {
+    display: none;
+  }
+
+  .stats-glass,
+  .stats-more {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .stats-page {
+    --stats-glass-edge: var(--label-3);
+  }
+}
+
+:root[data-motion='reduced'] .stats-page {
+  --stats-glass: var(--surface);
+  --stats-sheen: transparent;
+}
+
+:root[data-motion='reduced'] .stats-ambient {
+  display: none;
+}
+
+:root[data-motion='reduced'] .stats-glass,
+:root[data-motion='reduced'] .stats-more {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .stats-page {
+    --stats-glass: var(--surface);
+  }
+}

@@ -1,14 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { getLearningLanguageAdverb, getLearningLanguageTitle } from '../lib/languages';
 import { diffAnswer, editDistance, normalizeDictation, stripFrenchArticleForDisplay } from '../lib/utils';
-import { getExerciseCopy, getJapaneseExampleReading } from '../lib/wordPresentation';
+import { getExerciseCopy } from '../lib/wordPresentation';
 import type { Exercise, Word } from '../types';
 import { AnswerWordDetails } from './AnswerWordDetails';
 import { CenteredWordBlock } from './CenteredWordBlock';
-import { JapaneseExampleReading } from './JapaneseExampleReading';
 import { LessonCard } from './LessonCard';
-import { SentenceAudioButton } from './SentenceAudioButton';
-import { JapaneseSentence } from './JapaneseSentence';
 
 interface TextInputExerciseProps {
   exercise: Exercise;
@@ -42,13 +39,16 @@ export function TextInputExercise({
 }: TextInputExerciseProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
-  const copy = getExerciseCopy(exercise.type, word.language);
+  // A «Заполните пропуск» task left in a lesson saved before it was dropped is
+  // asked as «Напишите слово» by its translation.
+  const isLegacyCloze = exercise.type === 'sentence_cloze_input';
+  const copy = getExerciseCopy(isLegacyCloze ? 'translation_to_original_input' : exercise.type, word.language);
+  const prompt = isLegacyCloze ? word.translation : exercise.prompt;
   const languageAdverb = getLearningLanguageAdverb(word.language);
   const languageTitle = getLearningLanguageTitle(word.language);
   const isDictation = exercise.type === 'sentence_dictation';
   const isAudioExercise = exercise.type === 'audio_to_original_input' || isDictation;
   const isReadingExercise = exercise.type === 'kanji_to_hiragana_input';
-  const isClozeExercise = exercise.type === 'sentence_cloze_input';
   const answerFormatHint = isDictation
     ? 'Заглавные буквы и знаки препинания не проверяются'
     : isReadingExercise
@@ -112,7 +112,6 @@ export function TextInputExercise({
       className={[
         'lesson-exercise-card',
         'lesson-input-card',
-        isClozeExercise ? 'lesson-cloze-card' : '',
         isReadingExercise ? 'lesson-reading-card' : '',
       ].filter(Boolean).join(' ')}
       header={
@@ -126,14 +125,9 @@ export function TextInputExercise({
               </button>
               <p className="lesson-prompt-copy">{copy.hint}</p>
             </div>
-          ) : isClozeExercise ? (
-            <div className="cloze-prompt-panel">
-              <p className="cloze-prompt" lang={word.language === 'japanese' ? 'ja' : 'fr'}>{exercise.prompt}</p>
-              {exercise.context ? <p className="cloze-context" lang="ru">{exercise.context}</p> : null}
-            </div>
           ) : (
             <CenteredWordBlock
-              title={exercise.prompt}
+              title={prompt}
               subtitle={copy.hint}
               titleClassName={isReadingExercise ? 'lesson-prompt-title lesson-kanji-reading-prompt' : 'lesson-prompt-title lesson-translation'}
               subtitleClassName="lesson-prompt-copy"
@@ -219,16 +213,6 @@ export function TextInputExercise({
                   Прослушать ещё раз
                 </button>
               </div>
-              {isClozeExercise ? (
-                <div className="cloze-answer-context">
-                  <div className="example-line">
-                    <p className="example-original" lang={word.language === 'japanese' ? 'ja' : 'fr'}><JapaneseSentence text={word.example_original} reading={getJapaneseExampleReading(word)} /></p>
-                    <SentenceAudioButton text={word.example_original} language={word.language} />
-                  </div>
-                  {word.language === 'japanese' ? <JapaneseExampleReading word={word} /> : null}
-                  <p className="example-translation" lang="ru">{word.example_translation}</p>
-                </div>
-              ) : null}
             </>
           ) : null}
         </div>

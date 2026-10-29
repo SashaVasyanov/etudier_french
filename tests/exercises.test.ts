@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createFlashcardSession, createLessonSession, getDailyBalance, createSentenceCloze, scheduleExerciseRetry } from '../src/lib/exercises';
+import { createFlashcardSession, createLessonSession, getDailyBalance, scheduleExerciseRetry } from '../src/lib/exercises';
 import { applyOutcomes, setLessonDurationPreference } from '../src/lib/storage';
 import type { LessonDurationMinutes, LessonSession, Word } from '../src/types';
 import { now, outcome, progress, storage, word } from './fixtures';
@@ -156,19 +156,6 @@ describe('lesson generation and recovery', () => {
     expect(session.exercises.filter((exercise) => exercise.wordId === 'car' && wordChoice.has(exercise.type)).every((exercise) => !exercise.options)).toBe(true);
   });
 
-  it('hides repeated target words in French and Japanese cloze exercises', async () => {
-    const { createSentenceCloze } = await import('../src/lib/exercises');
-    const words: Word[] = [
-      { ...word('cat'), original: 'chat', example_original: 'Le chat regarde le chat.' },
-      { ...word('cat-ja'), language: 'japanese', original: '猫', transcription: '[ねこ · neko]', example_original: '猫と猫がいます。' },
-    ];
-    for (const item of words) {
-      const prompt = createSentenceCloze(item);
-      expect(prompt).toBeTruthy();
-      expect(prompt!).not.toContain(item.original);
-    }
-  });
-
   it('mixes task types and no longer asks to type the hiragana reading', () => {
     const words: Word[] = Array.from({ length: 8 }, (_, index) => ({
       ...word(`ja-${index}`), language: 'japanese', original: `漢字${index}`, transcription: `[かんじ · kanji${index}]`, example_original: `これは漢字${index}です。`,
@@ -176,23 +163,10 @@ describe('lesson generation and recovery', () => {
     const session = createLessonSession({ mode: 'default', words, storage: storage(), durationMinutes: 10 })!;
     const types = session.exercises.map((exercise) => exercise.type);
     expect(types).not.toContain('kanji_to_hiragana_input');
+    expect(types).not.toContain('sentence_cloze_input');
     expect(new Set(types).size).toBeGreaterThanOrEqual(5);
     const typing = types.filter((type) => type.endsWith('_input')).length;
     expect(typing / types.length).toBeLessThan(0.5);
-  });
-});
-
-describe('Japanese sentence cloze', () => {
-  const jaWord = (id: string, original: string, example: string): Word => ({
-    ...word(id), language: 'japanese', original, transcription: '[x · x]', example_original: example,
-  });
-  const clozeFor = (item: Word) => createSentenceCloze(item);
-
-  it('never cuts a word out of a longer compound or a different word', () => {
-    expect(clozeFor(jaWord('hi', '日', '今日は暖かい日です。'))).toBe('今日は暖かい＿＿です。');
-    expect(clozeFor(jaWord('shonen', '少年', '青少年と少年が来た。'))).toBe('青少年と＿＿が来た。');
-    expect(clozeFor(jaWord('mokuteki', '目的', '盲目的に従う。'))).toBeNull();
-    expect(clozeFor(jaWord('kazu', '数', '１０まで数えなさい。'))).toBeNull();
   });
 });
 
@@ -291,11 +265,12 @@ describe('phrase, article and reading tasks', () => {
   });
 
   it('builds a sentence-order task whose words never come already in order', () => {
-    const sentence = { ...word('s'), example_original: 'Le chat dort sur le lit.', example_translation: 'Кот спит на кровати.' };
-    const pool = [sentence, ...Array.from({ length: 6 }, (_, i) => word(`p${i}`))];
+    // Every word carries the sentence: which word gets the task depends on the
+    // rotation of task types, not on the word.
+    const pool = Array.from({ length: 7 }, (_, i) => ({ ...word(`s${i}`), example_original: 'Le chat dort sur le lit.', example_translation: 'Кот спит на кровати.' }));
     for (let attempt = 0; attempt < 10; attempt += 1) {
       const session = createLessonSession({ mode: 'default', words: pool, storage: storage(), durationMinutes: 20 })!;
-      const task = session.exercises.find((exercise) => exercise.type === 'sentence_order' && exercise.wordId === 's');
+      const task = session.exercises.find((exercise) => exercise.type === 'sentence_order');
       if (!task) continue;
       expect(task.correctAnswer).toBe('Le chat dort sur le lit.');
       expect(task.options!.map((option) => option.label).join(' ')).not.toBe(task.correctAnswer);
