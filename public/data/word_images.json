@@ -31210,5 +31210,2915 @@
     "imageLicense": "CC0",
     "imageLicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
     "imageAttribution": "Pixabay"
+  },
+  "a1-an-b055": {
+    "imagePath": "/generated-word-images/a1-an-b055.webp",
+    "imageUrl": "/generated-word-images/a1-an-b055.webp",
+    "imageAlt": "год: an",
+    "imagePrompt": "Fireworks bursting over a French city at New Year's Eve as people celebrate the start of a new year. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: an",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-aout-b045": {
+    "imagePath": "/generated-word-images/a1-aout-b045.webp",
+    "imageUrl": "/generated-word-images/a1-aout-b045.webp",
+    "imageAlt": "август: août",
+    "imagePrompt": "A crowded Mediterranean beach in the south of France in August with umbrellas and swimmers. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: août",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-apres-midi-b061": {
+    "imagePath": "/generated-word-images/a1-apres-midi-b061.webp",
+    "imageUrl": "/generated-word-images/a1-apres-midi-b061.webp",
+    "imageAlt": "вторая половина дня: après-midi",
+    "imagePrompt": "Afternoon coffee and cake on a sunny French terrace with long afternoon shadows. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: après-midi",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-avril-b041": {
+    "imagePath": "/generated-word-images/a1-avril-b041.webp",
+    "imageUrl": "/generated-word-images/a1-avril-b041.webp",
+    "imageAlt": "апрель: avril",
+    "imagePrompt": "Fruit trees in full white blossom in a French countryside orchard in spring. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: avril",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-bienvenue-b100": {
+    "imagePath": "/generated-word-images/a1-bienvenue-b100.webp",
+    "imageUrl": "/generated-word-images/a1-bienvenue-b100.webp",
+    "imageAlt": "добро пожаловать: bienvenue",
+    "imagePrompt": "A smiling host opening the front door of a French country house, welcoming guests with open arms. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bienvenue",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-bonsoir-b101": {
+    "imagePath": "/generated-word-images/a1-bonsoir-b101.webp",
+    "imageUrl": "/generated-word-images/a1-bonsoir-b101.webp",
+    "imageAlt": "добрый вечер: bonsoir",
+    "imagePrompt": "Two neighbors greeting each other on a Paris street at dusk under glowing street lamps. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bonsoir",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-cadeau-b074": {
+    "imagePath": "/generated-word-images/a1-cadeau-b074.webp",
+    "imageUrl": "/generated-word-images/a1-cadeau-b074.webp",
+    "imageAlt": "подарок: cadeau",
+    "imagePrompt": "A gift box wrapped in red paper with a large gold ribbon on a table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: cadeau",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-chanson-b073": {
+    "imagePath": "/generated-word-images/a1-chanson-b073.webp",
+    "imageUrl": "/generated-word-images/a1-chanson-b073.webp",
+    "imageAlt": "песня: chanson",
+    "imagePrompt": "A street musician singing and playing guitar in a Paris square. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: chanson",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-cinq-b005": {
+    "imagePath": "/generated-word-images/a1-cinq-b005.webp",
+    "imageUrl": "/generated-word-images/a1-cinq-b005.webp",
+    "imageAlt": "пять: cinq",
+    "imagePrompt": "Exactly five yellow lemons in a neat row on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: cinq",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-combien-b110": {
+    "imagePath": "/generated-word-images/a1-combien-b110.webp",
+    "imageUrl": "/generated-word-images/a1-combien-b110.webp",
+    "imageAlt": "сколько: combien",
+    "imagePrompt": "A customer at a French market holding a melon and looking questioningly at the vendor. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: combien",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-cote-b093": {
+    "imagePath": "/generated-word-images/a1-cote-b093.webp",
+    "imageUrl": "/generated-word-images/a1-cote-b093.webp",
+    "imageAlt": "сторона, бок: côté",
+    "imagePrompt": "Two cats sitting side by side on a sunny windowsill in a French house. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: côté",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-decembre-b049": {
+    "imagePath": "/generated-word-images/a1-decembre-b049.webp",
+    "imageUrl": "/generated-word-images/a1-decembre-b049.webp",
+    "imageAlt": "декабрь: décembre",
+    "imagePrompt": "A Christmas market in a French town at night, glowing with fairy lights and decorated stalls. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: décembre",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-desole-b099": {
+    "imagePath": "/generated-word-images/a1-desole-b099.webp",
+    "imageUrl": "/generated-word-images/a1-desole-b099.webp",
+    "imageAlt": "извините, мне жаль: désolé",
+    "imagePrompt": "A young man with an apologetic face and his hand on his chest after accidentally spilling a woman's coffee at a French café. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: désolé",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-deux-b002": {
+    "imagePath": "/generated-word-images/a1-deux-b002.webp",
+    "imageUrl": "/generated-word-images/a1-deux-b002.webp",
+    "imageAlt": "два: deux",
+    "imagePrompt": "Exactly two croissants on a plate on a French café table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: deux",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-dimanche-b037": {
+    "imagePath": "/generated-word-images/a1-dimanche-b037.webp",
+    "imageUrl": "/generated-word-images/a1-dimanche-b037.webp",
+    "imageAlt": "воскресенье: dimanche",
+    "imagePrompt": "A French family sharing a long Sunday lunch at a table in the garden. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: dimanche",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-dix-b010": {
+    "imagePath": "/generated-word-images/a1-dix-b010.webp",
+    "imageUrl": "/generated-word-images/a1-dix-b010.webp",
+    "imageAlt": "десять: dix",
+    "imagePrompt": "Exactly ten chestnuts arranged in two neat rows of five on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: dix",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-docteur-b070": {
+    "imagePath": "/generated-word-images/a1-docteur-b070.webp",
+    "imageUrl": "/generated-word-images/a1-docteur-b070.webp",
+    "imageAlt": "врач, доктор: docteur",
+    "imagePrompt": "A doctor with a stethoscope talking kindly with a patient in a bright French clinic. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: docteur",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-douze-b012": {
+    "imagePath": "/generated-word-images/a1-douze-b012.webp",
+    "imageUrl": "/generated-word-images/a1-douze-b012.webp",
+    "imageAlt": "двенадцать: douze",
+    "imagePrompt": "A carton holding exactly twelve white eggs on a kitchen table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: douze",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-droite-b092": {
+    "imagePath": "/generated-word-images/a1-droite-b092.webp",
+    "imageUrl": "/generated-word-images/a1-droite-b092.webp",
+    "imageAlt": "правая сторона; справа: droite",
+    "imagePrompt": "A cyclist on a Paris street extending the right arm to signal a right turn. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: droite",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-fatigue-b098": {
+    "imagePath": "/generated-word-images/a1-fatigue-b098.webp",
+    "imageUrl": "/generated-word-images/a1-fatigue-b098.webp",
+    "imageAlt": "уставший: fatigué",
+    "imagePrompt": "A tired young man yawning and rubbing his eyes at his desk late in the evening. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: fatigué",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-fevrier-b039": {
+    "imagePath": "/generated-word-images/a1-fevrier-b039.webp",
+    "imageUrl": "/generated-word-images/a1-fevrier-b039.webp",
+    "imageAlt": "февраль: février",
+    "imagePrompt": "Skiers on snowy slopes in the French Alps on a bright February day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: février",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-gauche-b091": {
+    "imagePath": "/generated-word-images/a1-gauche-b091.webp",
+    "imageUrl": "/generated-word-images/a1-gauche-b091.webp",
+    "imageAlt": "левый; слева: gauche",
+    "imagePrompt": "A person seen from behind pointing with the left arm and turning left at a fork on a French village street. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: gauche",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-genial-b105": {
+    "imagePath": "/generated-word-images/a1-genial-b105.webp",
+    "imageUrl": "/generated-word-images/a1-genial-b105.webp",
+    "imageAlt": "классный, гениальный: génial",
+    "imagePrompt": "A young woman's face lighting up with delight, raising her hands in excitement at a brilliant idea, in a bright café. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: génial",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-gris-b095": {
+    "imagePath": "/generated-word-images/a1-gris-b095.webp",
+    "imageUrl": "/generated-word-images/a1-gris-b095.webp",
+    "imageAlt": "серый: gris",
+    "imagePrompt": "A grey cat on a grey stone wall under a grey cloudy sky above Paris rooftops. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: gris",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-huit-b008": {
+    "imagePath": "/generated-word-images/a1-huit-b008.webp",
+    "imageUrl": "/generated-word-images/a1-huit-b008.webp",
+    "imageAlt": "восемь: huit",
+    "imagePrompt": "Exactly eight red strawberries in two neat rows of four on a white plate. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: huit",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-janvier-b038": {
+    "imagePath": "/generated-word-images/a1-janvier-b038.webp",
+    "imageUrl": "/generated-word-images/a1-janvier-b038.webp",
+    "imageAlt": "январь: janvier",
+    "imagePrompt": "A galette des rois with a golden paper crown on a table, snowy window behind, French January tradition. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: janvier",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-jeudi-b034": {
+    "imagePath": "/generated-word-images/a1-jeudi-b034.webp",
+    "imageUrl": "/generated-word-images/a1-jeudi-b034.webp",
+    "imageAlt": "четверг: jeudi",
+    "imagePrompt": "A busy office worker at her desk in a Paris office on a weekday afternoon, papers and a laptop around her. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: jeudi",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-journee-b056": {
+    "imagePath": "/generated-word-images/a1-journee-b056.webp",
+    "imageUrl": "/generated-word-images/a1-journee-b056.webp",
+    "imageAlt": "день (как отрезок времени): journée",
+    "imagePrompt": "A bright, sunny full day in a French park, people strolling under a clear blue sky. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: journée",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-juillet-b044": {
+    "imagePath": "/generated-word-images/a1-juillet-b044.webp",
+    "imageUrl": "/generated-word-images/a1-juillet-b044.webp",
+    "imageAlt": "июль: juillet",
+    "imagePrompt": "Endless rows of purple lavender in bloom in Provence under a hot July sun. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: juillet",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-juin-b043": {
+    "imagePath": "/generated-word-images/a1-juin-b043.webp",
+    "imageUrl": "/generated-word-images/a1-juin-b043.webp",
+    "imageAlt": "июнь: juin",
+    "imagePrompt": "A field of red poppies and green wheat in the French countryside in early summer. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: juin",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-lundi-b031": {
+    "imagePath": "/generated-word-images/a1-lundi-b031.webp",
+    "imageUrl": "/generated-word-images/a1-lundi-b031.webp",
+    "imageAlt": "понедельник: lundi",
+    "imagePrompt": "Parisian commuters with coffee cups hurrying down the steps into a metro station on a Monday morning. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: lundi",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-mai-b042": {
+    "imagePath": "/generated-word-images/a1-mai-b042.webp",
+    "imageUrl": "/generated-word-images/a1-mai-b042.webp",
+    "imageAlt": "май: mai",
+    "imagePrompt": "Small bouquets of lily of the valley for sale at a French street stall on the first of May. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: mai",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-mardi-b032": {
+    "imagePath": "/generated-word-images/a1-mardi-b032.webp",
+    "imageUrl": "/generated-word-images/a1-mardi-b032.webp",
+    "imageAlt": "вторник: mardi",
+    "imagePrompt": "French children with backpacks walking through the gate of a primary school on a weekday morning. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: mardi",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-mars-b040": {
+    "imagePath": "/generated-word-images/a1-mars-b040.webp",
+    "imageUrl": "/generated-word-images/a1-mars-b040.webp",
+    "imageAlt": "март: mars",
+    "imagePrompt": "The first yellow daffodils blooming in a French garden on a cool, damp March morning. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: mars",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-mercredi-b033": {
+    "imagePath": "/generated-word-images/a1-mercredi-b033.webp",
+    "imageUrl": "/generated-word-images/a1-mercredi-b033.webp",
+    "imageAlt": "среда: mercredi",
+    "imagePrompt": "French children playing freely in a city park on a Wednesday afternoon with no school. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: mercredi",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-midi-b057": {
+    "imagePath": "/generated-word-images/a1-midi-b057.webp",
+    "imageUrl": "/generated-word-images/a1-midi-b057.webp",
+    "imageAlt": "полдень: midi",
+    "imagePrompt": "A French village square at noon with the sun high overhead and short shadows, people heading to lunch. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: midi",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-minuit-b058": {
+    "imagePath": "/generated-word-images/a1-minuit-b058.webp",
+    "imageUrl": "/generated-word-images/a1-minuit-b058.webp",
+    "imageAlt": "полночь: minuit",
+    "imagePrompt": "A church clock tower under a dark night sky with the moon, both hands pointing straight up at midnight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: minuit",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-neiger-b107": {
+    "imagePath": "/generated-word-images/a1-neiger-b107.webp",
+    "imageUrl": "/generated-word-images/a1-neiger-b107.webp",
+    "imageAlt": "идти (о снеге): neiger",
+    "imagePrompt": "Snow falling gently over a small French village with stone houses. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: neiger",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-neuf-b009": {
+    "imagePath": "/generated-word-images/a1-neuf-b009.webp",
+    "imageUrl": "/generated-word-images/a1-neuf-b009.webp",
+    "imageAlt": "девять: neuf",
+    "imagePrompt": "Exactly nine walnuts arranged in a neat three-by-three grid on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: neuf",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-nord-b087": {
+    "imagePath": "/generated-word-images/a1-nord-b087.webp",
+    "imageUrl": "/generated-word-images/a1-nord-b087.webp",
+    "imageAlt": "север: nord",
+    "imagePrompt": "A compass on a map with its needle pointing up, a cold misty northern French coastline in the background. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: nord",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-novembre-b048": {
+    "imagePath": "/generated-word-images/a1-novembre-b048.webp",
+    "imageUrl": "/generated-word-images/a1-novembre-b048.webp",
+    "imageAlt": "ноябрь: novembre",
+    "imagePrompt": "A foggy, grey November street in a French town with wet fallen leaves and bare trees. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: novembre",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-octobre-b047": {
+    "imagePath": "/generated-word-images/a1-octobre-b047.webp",
+    "imageUrl": "/generated-word-images/a1-octobre-b047.webp",
+    "imageAlt": "октябрь: octobre",
+    "imagePrompt": "A park in France covered in orange and red autumn leaves in October. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: octobre",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-papa-b068": {
+    "imagePath": "/generated-word-images/a1-papa-b068.webp",
+    "imageUrl": "/generated-word-images/a1-papa-b068.webp",
+    "imageAlt": "папа: papa",
+    "imagePrompt": "A French dad laughing as he lifts his toddler into the air in a park. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: papa",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-parapluie-b108": {
+    "imagePath": "/generated-word-images/a1-parapluie-b108.webp",
+    "imageUrl": "/generated-word-images/a1-parapluie-b108.webp",
+    "imageAlt": "зонт: parapluie",
+    "imagePrompt": "An open black umbrella on a wet cobblestone street in the rain. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: parapluie",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-pays-b072": {
+    "imagePath": "/generated-word-images/a1-pays-b072.webp",
+    "imageUrl": "/generated-word-images/a1-pays-b072.webp",
+    "imageAlt": "страна: pays",
+    "imagePrompt": "A hand pointing at a country on a plain physical globe without any labels. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: pays",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-pleuvoir-b106": {
+    "imagePath": "/generated-word-images/a1-pleuvoir-b106.webp",
+    "imageUrl": "/generated-word-images/a1-pleuvoir-b106.webp",
+    "imageAlt": "идти (о дожде): pleuvoir",
+    "imagePrompt": "Rain pouring down on a Paris street, people hurrying past with umbrellas. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: pleuvoir",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-premier-b030": {
+    "imagePath": "/generated-word-images/a1-premier-b030.webp",
+    "imageUrl": "/generated-word-images/a1-premier-b030.webp",
+    "imageAlt": "первый: premier",
+    "imagePrompt": "A runner breaking the finish tape first in a race, arms raised in victory, other runners behind. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: premier",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-quatre-b004": {
+    "imagePath": "/generated-word-images/a1-quatre-b004.webp",
+    "imageUrl": "/generated-word-images/a1-quatre-b004.webp",
+    "imageAlt": "четыре: quatre",
+    "imagePrompt": "Exactly four pastel macarons in a neat row on a white plate. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: quatre",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-s-appeler-b113": {
+    "imagePath": "/generated-word-images/a1-s-appeler-b113.webp",
+    "imageUrl": "/generated-word-images/a1-s-appeler-b113.webp",
+    "imageAlt": "называться, зваться: s'appeler",
+    "imagePrompt": "Two people meeting at a party, one with her hand on her chest introducing herself while the other listens with a smile. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: s'appeler",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-saison-b054": {
+    "imagePath": "/generated-word-images/a1-saison-b054.webp",
+    "imageUrl": "/generated-word-images/a1-saison-b054.webp",
+    "imageAlt": "время года, сезон: saison",
+    "imagePrompt": "A four-panel collage of the same tree in the French countryside in spring, summer, autumn and winter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: saison",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-samedi-b036": {
+    "imagePath": "/generated-word-images/a1-samedi-b036.webp",
+    "imageUrl": "/generated-word-images/a1-samedi-b036.webp",
+    "imageAlt": "суббота: samedi",
+    "imagePrompt": "A lively weekend open-air market in a French town square with stalls of fruit, cheese and flowers. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: samedi",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-seconde-b059": {
+    "imagePath": "/generated-word-images/a1-seconde-b059.webp",
+    "imageUrl": "/generated-word-images/a1-seconde-b059.webp",
+    "imageAlt": "секунда: seconde",
+    "imagePrompt": "A hand holding an analog stopwatch at a running track, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: seconde",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-sept-b007": {
+    "imagePath": "/generated-word-images/a1-sept-b007.webp",
+    "imageUrl": "/generated-word-images/a1-sept-b007.webp",
+    "imageAlt": "семь: sept",
+    "imagePrompt": "Exactly seven small white espresso cups in a neat row on a café counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: sept",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-septembre-b046": {
+    "imagePath": "/generated-word-images/a1-septembre-b046.webp",
+    "imageUrl": "/generated-word-images/a1-septembre-b046.webp",
+    "imageAlt": "сентябрь: septembre",
+    "imagePrompt": "French children with new backpacks walking to school with their parents on the first day of the school year. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: septembre",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-six-b006": {
+    "imagePath": "/generated-word-images/a1-six-b006.webp",
+    "imageUrl": "/generated-word-images/a1-six-b006.webp",
+    "imageAlt": "шесть: six",
+    "imagePrompt": "Exactly six brown eggs in a half-dozen carton on a kitchen table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: six",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-sud-b088": {
+    "imagePath": "/generated-word-images/a1-sud-b088.webp",
+    "imageUrl": "/generated-word-images/a1-sud-b088.webp",
+    "imageAlt": "юг: sud",
+    "imagePrompt": "A sunny village in the south of France with terracotta roofs, olive trees and a blue Mediterranean sea. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: sud",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-super-b104": {
+    "imagePath": "/generated-word-images/a1-super-b104.webp",
+    "imageUrl": "/generated-word-images/a1-super-b104.webp",
+    "imageAlt": "отлично, супер: super",
+    "imagePrompt": "A young French man giving an enthusiastic thumbs-up with a big smile on a sunny street. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: super",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-tennis-b082": {
+    "imagePath": "/generated-word-images/a1-tennis-b082.webp",
+    "imageUrl": "/generated-word-images/a1-tennis-b082.webp",
+    "imageAlt": "теннис: tennis",
+    "imagePrompt": "A player hitting a tennis ball on a red clay tennis court in France. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: tennis",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-trente-b021": {
+    "imagePath": "/generated-word-images/a1-trente-b021.webp",
+    "imageUrl": "/generated-word-images/a1-trente-b021.webp",
+    "imageAlt": "тридцать: trente",
+    "imagePrompt": "A full egg tray holding thirty brown eggs in five rows of six. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: trente",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-trois-b003": {
+    "imagePath": "/generated-word-images/a1-trois-b003.webp",
+    "imageUrl": "/generated-word-images/a1-trois-b003.webp",
+    "imageAlt": "три: trois",
+    "imagePrompt": "Exactly three red apples in a row on a wooden table in a French kitchen. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: trois",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-vendredi-b035": {
+    "imagePath": "/generated-word-images/a1-vendredi-b035.webp",
+    "imageUrl": "/generated-word-images/a1-vendredi-b035.webp",
+    "imageAlt": "пятница: vendredi",
+    "imagePrompt": "Friends relaxing with drinks on a café terrace in France on a Friday evening, warm sunset light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: vendredi",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-vite-b062": {
+    "imagePath": "/generated-word-images/a1-vite-b062.webp",
+    "imageUrl": "/generated-word-images/a1-vite-b062.webp",
+    "imageAlt": "быстро: vite",
+    "imagePrompt": "A high-speed train racing through the French countryside with motion blur. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: vite",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-voici-b103": {
+    "imagePath": "/generated-word-images/a1-voici-b103.webp",
+    "imageUrl": "/generated-word-images/a1-voici-b103.webp",
+    "imageAlt": "вот (здесь): voici",
+    "imagePrompt": "A smiling French baker handing a fresh baguette to a customer across the counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: voici",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-voila-b102": {
+    "imagePath": "/generated-word-images/a1-voila-b102.webp",
+    "imageUrl": "/generated-word-images/a1-voila-b102.webp",
+    "imageAlt": "вот (там): voilà",
+    "imagePrompt": "A French waiter presenting a dish to diners with a proud flourish of his hand. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: voilà",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-week-end-b060": {
+    "imagePath": "/generated-word-images/a1-week-end-b060.webp",
+    "imageUrl": "/generated-word-images/a1-week-end-b060.webp",
+    "imageAlt": "выходные: week-end",
+    "imagePrompt": "A French couple cycling along a quiet country road with a picnic basket on a sunny weekend. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: week-end",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a1-zero-b001": {
+    "imagePath": "/generated-word-images/a1-zero-b001.webp",
+    "imageUrl": "/generated-word-images/a1-zero-b001.webp",
+    "imageAlt": "ноль: zéro",
+    "imagePrompt": "An empty white plate on a café table in France. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: zéro",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a2-est-b089": {
+    "imagePath": "/generated-word-images/a2-est-b089.webp",
+    "imageUrl": "/generated-word-images/a2-est-b089.webp",
+    "imageAlt": "восток: est",
+    "imagePrompt": "The sun rising in the east over the mountains of eastern France at dawn. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: est",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a2-mademoiselle-b066": {
+    "imagePath": "/generated-word-images/a2-mademoiselle-b066.webp",
+    "imageUrl": "/generated-word-images/a2-mademoiselle-b066.webp",
+    "imageAlt": "барышня, девушка: mademoiselle",
+    "imagePrompt": "A young French woman smiling at a café table on a Paris street. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: mademoiselle",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "a2-ouest-b090": {
+    "imagePath": "/generated-word-images/a2-ouest-b090.webp",
+    "imageUrl": "/generated-word-images/a2-ouest-b090.webp",
+    "imageAlt": "запад: ouest",
+    "imagePrompt": "The sun setting in the west over the Atlantic ocean on the rocky coast of Brittany. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ouest",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-001": {
+    "imagePath": "/generated-word-images/ja-n5-001.webp",
+    "imageUrl": "/generated-word-images/ja-n5-001.webp",
+    "imageAlt": "встречаться, видеться: 会う",
+    "imagePrompt": "Two Japanese friends spotting each other and waving happily as they meet outside a train station exit in Tokyo, soft daylight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 会う",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-006": {
+    "imagePath": "/generated-word-images/ja-n5-006.webp",
+    "imageUrl": "/generated-word-images/ja-n5-006.webp",
+    "imageAlt": "светлый, яркий, жизнерадостный: 明るい",
+    "imagePrompt": "A cheerful young Japanese woman laughing in a bright, sunlit room with large windows and white curtains. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 明るい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-009": {
+    "imagePath": "/generated-word-images/ja-n5-009.webp",
+    "imageUrl": "/generated-word-images/ja-n5-009.webp",
+    "imageAlt": "открывать: 開ける",
+    "imagePrompt": "A Japanese woman sliding open a wooden window in her home, letting bright morning light pour in. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 開ける",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-010": {
+    "imagePath": "/generated-word-images/ja-n5-010.webp",
+    "imageUrl": "/generated-word-images/ja-n5-010.webp",
+    "imageAlt": "поднимать, давать (кому-либо): 上げる",
+    "imagePrompt": "A Japanese man lifting a cardboard box high above his head onto a tall shelf in a bright storeroom. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 上げる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-011": {
+    "imagePath": "/generated-word-images/ja-n5-011.webp",
+    "imageUrl": "/generated-word-images/ja-n5-011.webp",
+    "imageAlt": "завтрак: 朝御飯",
+    "imagePrompt": "A traditional Japanese breakfast tray with a bowl of rice, miso soup, grilled salmon and pickles on a wooden table in soft morning light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 朝御飯",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-013": {
+    "imagePath": "/generated-word-images/ja-n5-013.webp",
+    "imageUrl": "/generated-word-images/ja-n5-013.webp",
+    "imageAlt": "играть, развлекаться, проводить время: 遊ぶ",
+    "imagePrompt": "Japanese children playing happily on a slide and swings in a neighborhood park on a sunny afternoon. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 遊ぶ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-015": {
+    "imagePath": "/generated-word-images/ja-n5-015.webp",
+    "imageUrl": "/generated-word-images/ja-n5-015.webp",
+    "imageAlt": "голова: 頭",
+    "imagePrompt": "Close-up portrait of a Japanese man resting one hand on top of his head, his head clearly the focus, plain background. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 頭",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-016": {
+    "imagePath": "/generated-word-images/ja-n5-016.webp",
+    "imageUrl": "/generated-word-images/ja-n5-016.webp",
+    "imageAlt": "там, вон там (вежл.): あちら",
+    "imagePrompt": "A polite Japanese hotel staff member in uniform gesturing with an open palm toward a far-away hallway, guiding a guest over there. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: あちら",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-017": {
+    "imagePath": "/generated-word-images/ja-n5-017.webp",
+    "imageUrl": "/generated-word-images/ja-n5-017.webp",
+    "imageAlt": "жаркий (о погоде): 暑い",
+    "imagePrompt": "A Japanese man on a scorching summer street wiping sweat from his forehead with a towel while fanning himself with a paper fan, heat haze in the air. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 暑い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-019": {
+    "imagePath": "/generated-word-images/ja-n5-019.webp",
+    "imageUrl": "/generated-word-images/ja-n5-019.webp",
+    "imageAlt": "толстый, плотный, сердечный: 厚い",
+    "imagePrompt": "A very thick, fluffy slice of Japanese toast on a white plate in a cozy café, side view showing its thickness. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 厚い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-023": {
+    "imagePath": "/generated-word-images/ja-n5-023.webp",
+    "imageUrl": "/generated-word-images/ja-n5-023.webp",
+    "imageAlt": "опасный: 危ない",
+    "imagePrompt": "A deep open hole in a Japanese street surrounded by warning cones and barriers, a pedestrian stepping back cautiously. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 危ない",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-025": {
+    "imagePath": "/generated-word-images/ja-n5-025.webp",
+    "imageUrl": "/generated-word-images/ja-n5-025.webp",
+    "imageAlt": "не очень (с отрицанием), остаток: 余り",
+    "imagePrompt": "A large platter with only a few leftover pieces of sushi remaining after a party, on a Japanese dining table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 余り",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-028": {
+    "imagePath": "/generated-word-images/ja-n5-028.webp",
+    "imageUrl": "/generated-word-images/ja-n5-028.webp",
+    "imageAlt": "мыть, стирать: 洗う",
+    "imagePrompt": "A Japanese woman washing dishes with soap bubbles at a kitchen sink, water running from the tap. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 洗う",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-030": {
+    "imagePath": "/generated-word-images/ja-n5-030.webp",
+    "imageUrl": "/generated-word-images/ja-n5-030.webp",
+    "imageAlt": "хороший: いい",
+    "imagePrompt": "A smiling Japanese man giving a thumbs-up after tasting a delicious bowl of ramen at a small restaurant counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: いい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-031": {
+    "imagePath": "/generated-word-images/ja-n5-031.webp",
+    "imageUrl": "/generated-word-images/ja-n5-031.webp",
+    "imageAlt": "нет: いいえ",
+    "imagePrompt": "A Japanese woman politely waving her open hand side to side in front of her face, the Japanese gesture for no, while smiling at a shop clerk. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: いいえ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-032": {
+    "imagePath": "/generated-word-images/ja-n5-032.webp",
+    "imageUrl": "/generated-word-images/ja-n5-032.webp",
+    "imageAlt": "говорить, сказать: 言う",
+    "imagePrompt": "A Japanese woman speaking to her friend at a café table, mouth open mid-sentence and gesturing with her hand while the friend listens. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 言う",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-033": {
+    "imagePath": "/generated-word-images/ja-n5-033.webp",
+    "imageUrl": "/generated-word-images/ja-n5-033.webp",
+    "imageAlt": "как, не желаете ли (вежл.): いかが",
+    "imagePrompt": "A Japanese waitress in a kimono politely offering a cup of green tea on a tray to a seated guest in a traditional tea room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: いかが",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-034": {
+    "imagePath": "/generated-word-images/ja-n5-034.webp",
+    "imageUrl": "/generated-word-images/ja-n5-034.webp",
+    "imageAlt": "сколько (штук), сколько лет: いくつ",
+    "imagePrompt": "A Japanese grandmother kneeling beside a small child who proudly holds up four fingers next to a birthday cake with candles. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: いくつ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-035": {
+    "imagePath": "/generated-word-images/ja-n5-035.webp",
+    "imageUrl": "/generated-word-images/ja-n5-035.webp",
+    "imageAlt": "сколько (стоит): いくら",
+    "imagePrompt": "A Japanese shopper at an open-air vegetable stall pointing at a basket of tomatoes and looking questioningly at the vendor, wallet in hand. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: いくら",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-038": {
+    "imagePath": "/generated-word-images/ja-n5-038.webp",
+    "imageUrl": "/generated-word-images/ja-n5-038.webp",
+    "imageAlt": "болезненный, больно: 痛い",
+    "imagePrompt": "A Japanese man holding his cheek with a pained grimace from a toothache, sitting on a sofa at home. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 痛い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-039": {
+    "imagePath": "/generated-word-images/ja-n5-039.webp",
+    "imageUrl": "/generated-word-images/ja-n5-039.webp",
+    "imageAlt": "один день, весь день: 一日",
+    "imagePrompt": "A Japanese woman opening the curtains to bright sunrise light in her apartment, the start of a new day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 一日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-040": {
+    "imagePath": "/generated-word-images/ja-n5-040.webp",
+    "imageUrl": "/generated-word-images/ja-n5-040.webp",
+    "imageAlt": "когда: いつ",
+    "imagePrompt": "A Japanese woman standing in her kitchen looking up at a wall clock and a blank wall calendar, finger on her chin, wondering when. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: いつ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-041": {
+    "imagePath": "/generated-word-images/ja-n5-041.webp",
+    "imageUrl": "/generated-word-images/ja-n5-041.webp",
+    "imageAlt": "пятое число, пять дней: 五日",
+    "imagePrompt": "Five identical bento lunch boxes lined up neatly in a row on a Japanese kitchen counter, prepared for the days ahead. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 五日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-042": {
+    "imagePath": "/generated-word-images/ja-n5-042.webp",
+    "imageUrl": "/generated-word-images/ja-n5-042.webp",
+    "imageAlt": "пять (штук): 五つ",
+    "imagePrompt": "Exactly five round orange mandarins arranged in a neat row on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 五つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-043": {
+    "imagePath": "/generated-word-images/ja-n5-043.webp",
+    "imageUrl": "/generated-word-images/ja-n5-043.webp",
+    "imageAlt": "всегда, обычно: いつも",
+    "imagePrompt": "A Japanese office worker standing at the same bus stop in the morning as on every other day, the familiar street behind him. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: いつも",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-044": {
+    "imagePath": "/generated-word-images/ja-n5-044.webp",
+    "imageUrl": "/generated-word-images/ja-n5-044.webp",
+    "imageAlt": "сейчас, теперь: 今",
+    "imagePrompt": "A Japanese woman stepping forward onto a pedestrian crossing at the very moment the walk light turns green, busy city street. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 今",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-045": {
+    "imagePath": "/generated-word-images/ja-n5-045.webp",
+    "imageUrl": "/generated-word-images/ja-n5-045.webp",
+    "imageAlt": "(моя) младшая сестра: 妹",
+    "imagePrompt": "A Japanese teenage girl holding hands with her little sister as they walk home together along a quiet street. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 妹",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-046": {
+    "imagePath": "/generated-word-images/ja-n5-046.webp",
+    "imageUrl": "/generated-word-images/ja-n5-046.webp",
+    "imageAlt": "неприятный, противный: 嫌",
+    "imagePrompt": "An annoyed Japanese commuter squeezed uncomfortably in a packed rush-hour train, frowning with displeasure. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 嫌",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-047": {
+    "imagePath": "/generated-word-images/ja-n5-047.webp",
+    "imageUrl": "/generated-word-images/ja-n5-047.webp",
+    "imageAlt": "быть, находиться (о живых): 居る",
+    "imagePrompt": "A cat sitting calmly inside a cardboard box in the middle of a Japanese tatami living room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 居る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-048": {
+    "imagePath": "/generated-word-images/ja-n5-048.webp",
+    "imageUrl": "/generated-word-images/ja-n5-048.webp",
+    "imageAlt": "быть нужным, требоваться: 要る",
+    "imagePrompt": "A Japanese man caught in sudden rain, holding his briefcase over his head and looking around, clearly needing an umbrella. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 要る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-049": {
+    "imagePath": "/generated-word-images/ja-n5-049.webp",
+    "imageUrl": "/generated-word-images/ja-n5-049.webp",
+    "imageAlt": "класть внутрь, вкладывать: 入れる",
+    "imagePrompt": "A hand dropping a sugar cube into a cup of coffee, close-up on a café table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 入れる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-052": {
+    "imagePath": "/generated-word-images/ja-n5-052.webp",
+    "imageUrl": "/generated-word-images/ja-n5-052.webp",
+    "imageAlt": "дом, мой дом: うち",
+    "imagePrompt": "A traditional Japanese family house with a warmly lit entrance and a small garden at dusk. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: うち",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-059": {
+    "imagePath": "/generated-word-images/ja-n5-059.webp",
+    "imageUrl": "/generated-word-images/ja-n5-059.webp",
+    "imageAlt": "да: ええ",
+    "imagePrompt": "Two Japanese women chatting at a café table, one nodding in agreement with a gentle smile. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ええ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-063": {
+    "imagePath": "/generated-word-images/ja-n5-063.webp",
+    "imageUrl": "/generated-word-images/ja-n5-063.webp",
+    "imageAlt": "мама, мать: お母さん",
+    "imagePrompt": "A Japanese mother hugging her young child warmly in a sunny living room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: お母さん",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-065": {
+    "imagePath": "/generated-word-images/ja-n5-065.webp",
+    "imageUrl": "/generated-word-images/ja-n5-065.webp",
+    "imageAlt": "класть, ставить: 置く",
+    "imagePrompt": "A hand carefully placing a small flower vase on a wooden table in a Japanese home. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 置く",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-066": {
+    "imagePath": "/generated-word-images/ja-n5-066.webp",
+    "imageUrl": "/generated-word-images/ja-n5-066.webp",
+    "imageAlt": "жена (чужая, вежл.): 奥さん",
+    "imagePrompt": "A middle-aged Japanese wife standing beside her husband at the front door of their home, smiling and welcoming a guest. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 奥さん",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-071": {
+    "imagePath": "/generated-word-images/ja-n5-071.webp",
+    "imageUrl": "/generated-word-images/ja-n5-071.webp",
+    "imageAlt": "нажимать, толкать: 押す",
+    "imagePrompt": "A Japanese worker pushing a heavy hand cart loaded with boxes along a narrow street. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 押す",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-074": {
+    "imagePath": "/generated-word-images/ja-n5-074.webp",
+    "imageUrl": "/generated-word-images/ja-n5-074.webp",
+    "imageAlt": "папа, отец: お父さん",
+    "imagePrompt": "A Japanese father carrying his laughing child on his shoulders in a park. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: お父さん",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-075": {
+    "imagePath": "/generated-word-images/ja-n5-075.webp",
+    "imageUrl": "/generated-word-images/ja-n5-075.webp",
+    "imageAlt": "(мой) младший брат: 弟",
+    "imagePrompt": "A Japanese boy playing a board game on the floor with his younger brother, both laughing. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 弟",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-076": {
+    "imagePath": "/generated-word-images/ja-n5-076.webp",
+    "imageUrl": "/generated-word-images/ja-n5-076.webp",
+    "imageAlt": "мужчина: 男",
+    "imagePrompt": "Portrait of a Japanese man in his thirties standing in a city park, casual clothes, natural light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 男",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-079": {
+    "imagePath": "/generated-word-images/ja-n5-079.webp",
+    "imageUrl": "/generated-word-images/ja-n5-079.webp",
+    "imageAlt": "живот: お腹",
+    "imagePrompt": "A Japanese man patting his full stomach with both hands after a big meal at a dining table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: お腹",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-081": {
+    "imagePath": "/generated-word-images/ja-n5-081.webp",
+    "imageUrl": "/generated-word-images/ja-n5-081.webp",
+    "imageAlt": "старшая сестра (вежл.): お姉さん",
+    "imagePrompt": "A Japanese teenage girl helping her younger brother with his homework at the kitchen table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: お姉さん",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-083": {
+    "imagePath": "/generated-word-images/ja-n5-083.webp",
+    "imageUrl": "/generated-word-images/ja-n5-083.webp",
+    "imageAlt": "бабушка, пожилая женщина: おばあさん",
+    "imagePrompt": "An elderly Japanese grandmother in a simple kimono sipping green tea on a wooden veranda. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: おばあさん",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-085": {
+    "imagePath": "/generated-word-images/ja-n5-085.webp",
+    "imageUrl": "/generated-word-images/ja-n5-085.webp",
+    "imageAlt": "запоминать, выучивать: 覚える",
+    "imagePrompt": "A Japanese student with eyes closed, reciting from memory while holding a stack of flashcards face-down at her desk. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 覚える",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-091": {
+    "imagePath": "/generated-word-images/ja-n5-091.webp",
+    "imageUrl": "/generated-word-images/ja-n5-091.webp",
+    "imageAlt": "заканчиваться, кончаться: 終わる",
+    "imagePrompt": "Japanese office workers stretching happily and packing their bags at the end of the workday, sunset light through office windows. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 終わる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-092": {
+    "imagePath": "/generated-word-images/ja-n5-092.webp",
+    "imageUrl": "/generated-word-images/ja-n5-092.webp",
+    "imageAlt": "заграница, зарубежная страна: 外国",
+    "imagePrompt": "A Japanese traveler with a suitcase looking up in wonder at an old European town square with cobblestones and colorful houses. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 外国",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-093": {
+    "imagePath": "/generated-word-images/ja-n5-093.webp",
+    "imageUrl": "/generated-word-images/ja-n5-093.webp",
+    "imageAlt": "иностранец: 外国人",
+    "imagePrompt": "A European tourist with a backpack asking a Japanese local for directions on a Tokyo street. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 外国人",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-096": {
+    "imagePath": "/generated-word-images/ja-n5-096.webp",
+    "imageUrl": "/generated-word-images/ja-n5-096.webp",
+    "imageAlt": "возвращаться, идти домой: 帰る",
+    "imagePrompt": "A Japanese office worker with a briefcase walking home along a quiet residential street at dusk, houses with lit windows. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 帰る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-099": {
+    "imagePath": "/generated-word-images/ja-n5-099.webp",
+    "imageUrl": "/generated-word-images/ja-n5-099.webp",
+    "imageAlt": "вешать, надевать (очки): 掛ける",
+    "imagePrompt": "An elderly Japanese man putting on his reading glasses with both hands, sitting by a window. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 掛ける",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-102": {
+    "imagePath": "/generated-word-images/ja-n5-102.webp",
+    "imageUrl": "/generated-word-images/ja-n5-102.webp",
+    "imageAlt": "давать взаймы, одалживать: 貸す",
+    "imagePrompt": "A Japanese student handing her umbrella to a friend at a school entrance on a rainy day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 貸す",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-108": {
+    "imagePath": "/generated-word-images/ja-n5-108.webp",
+    "imageUrl": "/generated-word-images/ja-n5-108.webp",
+    "imageAlt": "сумка, портфель: かばん",
+    "imagePrompt": "A brown leather shoulder bag resting on a wooden bench in a Japanese train station. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: かばん",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-110": {
+    "imagePath": "/generated-word-images/ja-n5-110.webp",
+    "imageUrl": "/generated-word-images/ja-n5-110.webp",
+    "imageAlt": "надевать (на голову): かぶる",
+    "imagePrompt": "A Japanese girl putting a straw sun hat on her head on a sunny summer day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: かぶる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-111": {
+    "imagePath": "/generated-word-images/ja-n5-111.webp",
+    "imageUrl": "/generated-word-images/ja-n5-111.webp",
+    "imageAlt": "бумага: 紙",
+    "imagePrompt": "A neat stack of plain white paper sheets on a wooden desk, soft side light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 紙",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-113": {
+    "imagePath": "/generated-word-images/ja-n5-113.webp",
+    "imageUrl": "/generated-word-images/ja-n5-113.webp",
+    "imageAlt": "вторник: 火曜日",
+    "imagePrompt": "A charcoal fire glowing red in a traditional Japanese irori hearth with an iron kettle hanging above it. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 火曜日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-115": {
+    "imagePath": "/generated-word-images/ja-n5-115.webp",
+    "imageUrl": "/generated-word-images/ja-n5-115.webp",
+    "imageAlt": "брать взаймы, одалживать (у кого-то): 借りる",
+    "imagePrompt": "A Japanese student borrowing a book at a library counter, the librarian handing it over. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 借りる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-124": {
+    "imagePath": "/generated-word-images/ja-n5-124.webp",
+    "imageUrl": "/generated-word-images/ja-n5-124.webp",
+    "imageAlt": "исчезать, гаснуть: 消える",
+    "imagePrompt": "A candle flame that has just gone out, a thin wisp of smoke rising in a dim Japanese room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 消える",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-125": {
+    "imagePath": "/generated-word-images/ja-n5-125.webp",
+    "imageUrl": "/generated-word-images/ja-n5-125.webp",
+    "imageAlt": "север: 北",
+    "imagePrompt": "A compass on a snowy wooden table in Hokkaido, its needle pointing up, snowy northern forest in the background. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 北",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-130": {
+    "imagePath": "/generated-word-images/ja-n5-130.webp",
+    "imageUrl": "/generated-word-images/ja-n5-130.webp",
+    "imageAlt": "девять: 九",
+    "imagePrompt": "Exactly nine white eggs arranged in a neat three-by-three grid on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 九",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-132": {
+    "imagePath": "/generated-word-images/ja-n5-132.webp",
+    "imageUrl": "/generated-word-images/ja-n5-132.webp",
+    "imageAlt": "класс, аудитория: 教室",
+    "imagePrompt": "An empty Japanese school classroom with rows of wooden desks, a blank green chalkboard and sunlight through the windows. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 教室",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-134": {
+    "imagePath": "/generated-word-images/ja-n5-134.webp",
+    "imageUrl": "/generated-word-images/ja-n5-134.webp",
+    "imageAlt": "нелюбимый, неприятный: 嫌い",
+    "imagePrompt": "A Japanese man covering his nose and turning away in disgust from a bowl of sticky natto. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 嫌い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-138": {
+    "imagePath": "/generated-word-images/ja-n5-138.webp",
+    "imageUrl": "/generated-word-images/ja-n5-138.webp",
+    "imageAlt": "килограмм, километр: キロ",
+    "imagePrompt": "A bag of rice sitting on a kitchen scale in a Japanese kitchen. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: キロ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-139": {
+    "imagePath": "/generated-word-images/ja-n5-139.webp",
+    "imageUrl": "/generated-word-images/ja-n5-139.webp",
+    "imageAlt": "пятница: 金曜日",
+    "imagePrompt": "Japanese coworkers relaxing and laughing together with drinks and snacks at a cozy izakaya on Friday evening, warm golden light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 金曜日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-140": {
+    "imagePath": "/generated-word-images/ja-n5-140.webp",
+    "imageUrl": "/generated-word-images/ja-n5-140.webp",
+    "imageAlt": "лекарство: 薬",
+    "imagePrompt": "A few white pills and a glass of water on a bedside table, soft morning light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 薬",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-141": {
+    "imagePath": "/generated-word-images/ja-n5-141.webp",
+    "imageUrl": "/generated-word-images/ja-n5-141.webp",
+    "imageAlt": "пожалуйста (сделайте, дайте): 下さい",
+    "imagePrompt": "A Japanese customer at a bakery pointing at a pastry in the display case, asking the clerk to give it to her. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 下さい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-143": {
+    "imagePath": "/generated-word-images/ja-n5-143.webp",
+    "imageUrl": "/generated-word-images/ja-n5-143.webp",
+    "imageAlt": "обувь, туфли: 靴",
+    "imagePrompt": "A pair of polished brown leather shoes on a wooden floor, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 靴",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-144": {
+    "imagePath": "/generated-word-images/ja-n5-144.webp",
+    "imageUrl": "/generated-word-images/ja-n5-144.webp",
+    "imageAlt": "носки: 靴下",
+    "imagePrompt": "A pair of colorful striped socks laid flat on a wooden floor. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 靴下",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-149": {
+    "imagePath": "/generated-word-images/ja-n5-149.webp",
+    "imageUrl": "/generated-word-images/ja-n5-149.webp",
+    "imageAlt": "грамм: グラム",
+    "imagePrompt": "A tiny pinch of tea leaves on a small kitchen scale, close-up in a Japanese kitchen. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: グラム",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-150": {
+    "imagePath": "/generated-word-images/ja-n5-150.webp",
+    "imageUrl": "/generated-word-images/ja-n5-150.webp",
+    "imageAlt": "чёрный цвет: 黒",
+    "imagePrompt": "A sleek black cat sitting on black velvet against a black background, glossy fur highlights. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 黒",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-152": {
+    "imagePath": "/generated-word-images/ja-n5-152.webp",
+    "imageUrl": "/generated-word-images/ja-n5-152.webp",
+    "imageAlt": "стирать, выключать, гасить: 消す",
+    "imagePrompt": "A hand switching off a lamp in a Japanese bedroom at night, the room going dark. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 消す",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-153": {
+    "imagePath": "/generated-word-images/ja-n5-153.webp",
+    "imageUrl": "/generated-word-images/ja-n5-153.webp",
+    "imageAlt": "понедельник: 月曜日",
+    "imagePrompt": "Crowds of Japanese commuters in suits walking briskly through a busy train station on a Monday morning. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 月曜日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-154": {
+    "imagePath": "/generated-word-images/ja-n5-154.webp",
+    "imageUrl": "/generated-word-images/ja-n5-154.webp",
+    "imageAlt": "пять: 五",
+    "imagePrompt": "Exactly five yellow lemons arranged in a neat row on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 五",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-160": {
+    "imagePath": "/generated-word-images/ja-n5-160.webp",
+    "imageUrl": "/generated-word-images/ja-n5-160.webp",
+    "imageAlt": "здесь, это место: ここ",
+    "imagePrompt": "A Japanese man pointing down at the spot right where he is standing on a plaza, as if saying meet here. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ここ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-161": {
+    "imagePath": "/generated-word-images/ja-n5-161.webp",
+    "imageUrl": "/generated-word-images/ja-n5-161.webp",
+    "imageAlt": "девятое число, девять дней: 九日",
+    "imagePrompt": "Nine identical bento lunch boxes stacked neatly in three rows on a Japanese kitchen counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 九日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-162": {
+    "imagePath": "/generated-word-images/ja-n5-162.webp",
+    "imageUrl": "/generated-word-images/ja-n5-162.webp",
+    "imageAlt": "девять (штук): 九つ",
+    "imagePrompt": "Exactly nine small round rice crackers arranged in a three-by-three grid on a wooden tray. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 九つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-164": {
+    "imagePath": "/generated-word-images/ja-n5-164.webp",
+    "imageUrl": "/generated-word-images/ja-n5-164.webp",
+    "imageAlt": "сюда, этот (вежл.): こちら",
+    "imagePrompt": "A Japanese restaurant hostess bowing slightly and gesturing toward a nearby table, politely inviting a guest this way. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: こちら",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-165": {
+    "imagePath": "/generated-word-images/ja-n5-165.webp",
+    "imageUrl": "/generated-word-images/ja-n5-165.webp",
+    "imageAlt": "сюда, эта сторона: こっち",
+    "imagePrompt": "A young Japanese man in a park waving his hand toward himself, calling a friend to come over this way. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: こっち",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-168": {
+    "imagePath": "/generated-word-images/ja-n5-168.webp",
+    "imageUrl": "/generated-word-images/ja-n5-168.webp",
+    "imageAlt": "варёный рис, еда: 御飯",
+    "imagePrompt": "A bowl of freshly cooked steaming white rice with chopsticks resting on top, Japanese dining table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 御飯",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-170": {
+    "imagePath": "/generated-word-images/ja-n5-170.webp",
+    "imageUrl": "/generated-word-images/ja-n5-170.webp",
+    "imageAlt": "быть в затруднении, не знать, что делать: 困る",
+    "imagePrompt": "A puzzled Japanese woman standing in a train station, holding a ticket and looking around helplessly, not knowing what to do. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 困る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-171": {
+    "imagePath": "/generated-word-images/ja-n5-171.webp",
+    "imageUrl": "/generated-word-images/ja-n5-171.webp",
+    "imageAlt": "это: これ",
+    "imagePrompt": "A hand pointing at a teacup right in front of the camera on a Japanese café table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: これ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-175": {
+    "imagePath": "/generated-word-images/ja-n5-175.webp",
+    "imageUrl": "/generated-word-images/ja-n5-175.webp",
+    "imageAlt": "сегодня вечером: 今晩",
+    "imagePrompt": "A Japanese family preparing dinner together in the evening, city lights visible through the kitchen window. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 今晩",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-177": {
+    "imagePath": "/generated-word-images/ja-n5-177.webp",
+    "imageUrl": "/generated-word-images/ja-n5-177.webp",
+    "imageAlt": "сочинение: 作文",
+    "imagePrompt": "A Japanese student concentrating as she writes an essay by hand at her desk, the page out of focus. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 作文",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-178": {
+    "imagePath": "/generated-word-images/ja-n5-178.webp",
+    "imageUrl": "/generated-word-images/ja-n5-178.webp",
+    "imageAlt": "раскрывать (зонт), поднимать (руку): 差す",
+    "imagePrompt": "A Japanese woman opening an umbrella as she steps out into the rain on a city street. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 差す",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-182": {
+    "imagePath": "/generated-word-images/ja-n5-182.webp",
+    "imageUrl": "/generated-word-images/ja-n5-182.webp",
+    "imageAlt": "три: 三",
+    "imagePrompt": "Exactly three red apples in a row on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 三",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-185": {
+    "imagePath": "/generated-word-images/ja-n5-185.webp",
+    "imageUrl": "/generated-word-images/ja-n5-185.webp",
+    "imageAlt": "словарь: 辞書",
+    "imagePrompt": "A thick dictionary lying open on a wooden desk beside a pencil, soft lamp light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 辞書",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-187": {
+    "imagePath": "/generated-word-images/ja-n5-187.webp",
+    "imageUrl": "/generated-word-images/ja-n5-187.webp",
+    "imageAlt": "семь: 七",
+    "imagePrompt": "Exactly seven small white teacups arranged in a neat row on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 七",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-192": {
+    "imagePath": "/generated-word-images/ja-n5-192.webp",
+    "imageUrl": "/generated-word-images/ja-n5-192.webp",
+    "imageAlt": "закрывать: 閉める",
+    "imagePrompt": "A Japanese man pulling a sliding shoji door closed in a traditional room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 閉める",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-197": {
+    "imagePath": "/generated-word-images/ja-n5-197.webp",
+    "imageUrl": "/generated-word-images/ja-n5-197.webp",
+    "imageAlt": "десять: 十",
+    "imagePrompt": "Exactly ten chestnuts arranged in two neat rows of five on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 十",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-199": {
+    "imagePath": "/generated-word-images/ja-n5-199.webp",
+    "imageUrl": "/generated-word-images/ja-n5-199.webp",
+    "imageAlt": "прочный, крепкий, здоровый: 丈夫",
+    "imagePrompt": "A sturdy, healthy elderly Japanese farmer carrying heavy baskets of vegetables across a field, strong and robust. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 丈夫",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-202": {
+    "imagePath": "/generated-word-images/ja-n5-202.webp",
+    "imageUrl": "/generated-word-images/ja-n5-202.webp",
+    "imageAlt": "знать, узнавать: 知る",
+    "imagePrompt": "A Japanese student nodding with understanding as a teacher explains something to her at a desk. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 知る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-203": {
+    "imagePath": "/generated-word-images/ja-n5-203.webp",
+    "imageUrl": "/generated-word-images/ja-n5-203.webp",
+    "imageAlt": "белый: 白い",
+    "imagePrompt": "A white rabbit sitting on fresh white snow. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 白い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-204": {
+    "imagePath": "/generated-word-images/ja-n5-204.webp",
+    "imageUrl": "/generated-word-images/ja-n5-204.webp",
+    "imageAlt": "среда: 水曜日",
+    "imagePrompt": "Clear water flowing from a bamboo spout into a stone basin in a Japanese garden. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 水曜日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-205": {
+    "imagePath": "/generated-word-images/ja-n5-205.webp",
+    "imageUrl": "/generated-word-images/ja-n5-205.webp",
+    "imageAlt": "вдыхать, курить, всасывать: 吸う",
+    "imagePrompt": "A Japanese woman taking a deep breath of fresh air with eyes closed in a green cedar forest. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 吸う",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-207": {
+    "imagePath": "/generated-word-images/ja-n5-207.webp",
+    "imageUrl": "/generated-word-images/ja-n5-207.webp",
+    "imageAlt": "любимый, нравиться: 好き",
+    "imagePrompt": "A Japanese woman smiling blissfully as she eats her favorite strawberry shortcake in a café. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 好き",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-208": {
+    "imagePath": "/generated-word-images/ja-n5-208.webp",
+    "imageUrl": "/generated-word-images/ja-n5-208.webp",
+    "imageAlt": "малочисленный, мало: 少ない",
+    "imagePrompt": "A large rice bowl with only a few grains of rice left in it, chopsticks laid beside it. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 少ない",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-209": {
+    "imagePath": "/generated-word-images/ja-n5-209.webp",
+    "imageUrl": "/generated-word-images/ja-n5-209.webp",
+    "imageAlt": "сразу, немедленно: すぐに",
+    "imagePrompt": "A dog instantly jumping up with excitement the moment its owner picks up the leash at the door of a Japanese home. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: すぐに",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-214": {
+    "imagePath": "/generated-word-images/ja-n5-214.webp",
+    "imageUrl": "/generated-word-images/ja-n5-214.webp",
+    "imageAlt": "брюки: ズボン",
+    "imagePrompt": "A pair of folded grey trousers lying on a bed. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ズボン",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-215": {
+    "imagePath": "/generated-word-images/ja-n5-215.webp",
+    "imageUrl": "/generated-word-images/ja-n5-215.webp",
+    "imageAlt": "жить, проживать: 住む",
+    "imagePrompt": "A Japanese couple relaxing on the sofa in the living room of their cozy apartment. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 住む",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-216": {
+    "imagePath": "/generated-word-images/ja-n5-216.webp",
+    "imageUrl": "/generated-word-images/ja-n5-216.webp",
+    "imageAlt": "делать, заниматься; носить (галстук, часы): する",
+    "imagePrompt": "A Japanese man tying his necktie in front of a mirror in the morning. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: する",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-218": {
+    "imagePath": "/generated-word-images/ja-n5-218.webp",
+    "imageUrl": "/generated-word-images/ja-n5-218.webp",
+    "imageAlt": "рост: 背",
+    "imagePrompt": "A Japanese child standing straight against a wooden door frame while a parent marks the child's height with a pencil. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 背",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-223": {
+    "imagePath": "/generated-word-images/ja-n5-223.webp",
+    "imageUrl": "/generated-word-images/ja-n5-223.webp",
+    "imageAlt": "ноль: ゼロ",
+    "imagePrompt": "An empty glass bowl on a white table, nothing inside. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ゼロ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-233": {
+    "imagePath": "/generated-word-images/ja-n5-233.webp",
+    "imageUrl": "/generated-word-images/ja-n5-233.webp",
+    "imageAlt": "это, то: それ",
+    "imagePrompt": "A Japanese woman pointing at a teacup held in her friend's hand across a café table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: それ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-236": {
+    "imagePath": "/generated-word-images/ja-n5-236.webp",
+    "imageUrl": "/generated-word-images/ja-n5-236.webp",
+    "imageAlt": "посольство: 大使館",
+    "imagePrompt": "A traveler holding a passport waiting at the gated entrance of a formal stone embassy building with a security guard, quiet Tokyo street, no flags visible. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 大使館",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-237": {
+    "imagePath": "/generated-word-images/ja-n5-237.webp",
+    "imageUrl": "/generated-word-images/ja-n5-237.webp",
+    "imageAlt": "много: 沢山",
+    "imagePrompt": "A huge pile of oranges heaped high at a Japanese market stall. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 沢山",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-239": {
+    "imagePath": "/generated-word-images/ja-n5-239.webp",
+    "imageUrl": "/generated-word-images/ja-n5-239.webp",
+    "imageAlt": "вынимать, доставать; сдавать, отправлять: 出す",
+    "imagePrompt": "A hand taking a wallet out of a bag at a shop counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 出す",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-240": {
+    "imagePath": "/generated-word-images/ja-n5-240.webp",
+    "imageUrl": "/generated-word-images/ja-n5-240.webp",
+    "imageAlt": "вставать, стоять: 立つ",
+    "imagePrompt": "Japanese students standing up from their desks in a classroom as the teacher enters. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 立つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-242": {
+    "imagePath": "/generated-word-images/ja-n5-242.webp",
+    "imageUrl": "/generated-word-images/ja-n5-242.webp",
+    "imageAlt": "весёлый, приятный, интересный: 楽しい",
+    "imagePrompt": "Japanese friends in yukata laughing together at a summer festival with paper lanterns. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 楽しい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-243": {
+    "imagePath": "/generated-word-images/ja-n5-243.webp",
+    "imageUrl": "/generated-word-images/ja-n5-243.webp",
+    "imageAlt": "просить, заказывать: 頼む",
+    "imagePrompt": "A Japanese customer ordering food from a waiter at a small restaurant, the waiter taking the order. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 頼む",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-244": {
+    "imagePath": "/generated-word-images/ja-n5-244.webp",
+    "imageUrl": "/generated-word-images/ja-n5-244.webp",
+    "imageAlt": "кто: 誰",
+    "imagePrompt": "A curious Japanese woman peeking through a slightly open door, wondering who is there. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 誰",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-245": {
+    "imagePath": "/generated-word-images/ja-n5-245.webp",
+    "imageUrl": "/generated-word-images/ja-n5-245.webp",
+    "imageAlt": "кто-то, кто-нибудь: 誰か",
+    "imagePrompt": "The blurry silhouette of someone standing behind a frosted glass front door of a Japanese house. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 誰か",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-247": {
+    "imagePath": "/generated-word-images/ja-n5-247.webp",
+    "imageUrl": "/generated-word-images/ja-n5-247.webp",
+    "imageAlt": "постепенно: 段々",
+    "imagePrompt": "A row of potted plants on a windowsill showing gradual growth, from a tiny seedling to a fully grown plant. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 段々",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-248": {
+    "imagePath": "/generated-word-images/ja-n5-248.webp",
+    "imageUrl": "/generated-word-images/ja-n5-248.webp",
+    "imageAlt": "близкий: 近い",
+    "imagePrompt": "A Japanese woman stepping out of her apartment building with a small train station just a few steps away. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 近い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-249": {
+    "imagePath": "/generated-word-images/ja-n5-249.webp",
+    "imageUrl": "/generated-word-images/ja-n5-249.webp",
+    "imageAlt": "отличаться, быть другим; быть неправильным: 違う",
+    "imagePrompt": "One red apple among many green apples arranged in a neat grid on a table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 違う",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-251": {
+    "imagePath": "/generated-word-images/ja-n5-251.webp",
+    "imageUrl": "/generated-word-images/ja-n5-251.webp",
+    "imageAlt": "(мой) отец: 父",
+    "imagePrompt": "A Japanese father teaching his son to ride a bicycle on a quiet park path. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 父",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-254": {
+    "imagePath": "/generated-word-images/ja-n5-254.webp",
+    "imageUrl": "/generated-word-images/ja-n5-254.webp",
+    "imageAlt": "как раз, ровно: 丁度",
+    "imagePrompt": "A wooden puzzle piece fitting exactly into its place in a puzzle, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 丁度",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-255": {
+    "imagePath": "/generated-word-images/ja-n5-255.webp",
+    "imageUrl": "/generated-word-images/ja-n5-255.webp",
+    "imageAlt": "немного, чуть-чуть: ちょっと",
+    "imagePrompt": "A Japanese person's hand showing a little with the thumb and index finger almost touching, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ちょっと",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-256": {
+    "imagePath": "/generated-word-images/ja-n5-256.webp",
+    "imageUrl": "/generated-word-images/ja-n5-256.webp",
+    "imageAlt": "использовать, пользоваться: 使う",
+    "imagePrompt": "A Japanese carpenter using a wooden hand plane on a beam in his workshop. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 使う",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-257": {
+    "imagePath": "/generated-word-images/ja-n5-257.webp",
+    "imageUrl": "/generated-word-images/ja-n5-257.webp",
+    "imageAlt": "уставать: 疲れる",
+    "imagePrompt": "An exhausted Japanese office worker in a suit dozing off on a commuter train seat late in the evening. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 疲れる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-259": {
+    "imagePath": "/generated-word-images/ja-n5-259.webp",
+    "imageUrl": "/generated-word-images/ja-n5-259.webp",
+    "imageAlt": "включать (свет и т. п.); прикреплять: つける",
+    "imagePrompt": "A hand switching on a lamp in a dark Japanese room, warm light glowing. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: つける",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-260": {
+    "imagePath": "/generated-word-images/ja-n5-260.webp",
+    "imageUrl": "/generated-word-images/ja-n5-260.webp",
+    "imageAlt": "работать, служить (в компании): 勤める",
+    "imagePrompt": "A Japanese salaryman in a suit working at his desk in a company office. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 勤める",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-261": {
+    "imagePath": "/generated-word-images/ja-n5-261.webp",
+    "imageUrl": "/generated-word-images/ja-n5-261.webp",
+    "imageAlt": "скучный, неинтересный; пустяковый: つまらない",
+    "imagePrompt": "A bored Japanese student resting his chin on his hand and yawning during a long lecture. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: つまらない",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-263": {
+    "imagePath": "/generated-word-images/ja-n5-263.webp",
+    "imageUrl": "/generated-word-images/ja-n5-263.webp",
+    "imageAlt": "сильный: 強い",
+    "imagePrompt": "A powerful sumo wrestler in a ring, crouched and ready, muscles tense. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 強い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-266": {
+    "imagePath": "/generated-word-images/ja-n5-266.webp",
+    "imageUrl": "/generated-word-images/ja-n5-266.webp",
+    "imageAlt": "выходить (из дома), уходить: 出かける",
+    "imagePrompt": "A Japanese woman stepping out of her front door with a handbag, heading out for the day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 出かける",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-267": {
+    "imagePath": "/generated-word-images/ja-n5-267.webp",
+    "imageUrl": "/generated-word-images/ja-n5-267.webp",
+    "imageAlt": "мочь, уметь: できる",
+    "imagePrompt": "A proud Japanese child riding a bicycle on her own for the first time, a parent clapping behind. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: できる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-270": {
+    "imagePath": "/generated-word-images/ja-n5-270.webp",
+    "imageUrl": "/generated-word-images/ja-n5-270.webp",
+    "imageAlt": "универмаг: デパート",
+    "imagePrompt": "The bright interior atrium of a large Japanese department store with escalators and elegant displays, unbranded. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: デパート",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-272": {
+    "imagePath": "/generated-word-images/ja-n5-272.webp",
+    "imageUrl": "/generated-word-images/ja-n5-272.webp",
+    "imageAlt": "выходить, уходить, появляться: 出る",
+    "imagePrompt": "Crowds of people streaming out of a Tokyo train station exit onto the street. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 出る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-276": {
+    "imagePath": "/generated-word-images/ja-n5-276.webp",
+    "imageUrl": "/generated-word-images/ja-n5-276.webp",
+    "imageAlt": "как, каким образом: どう",
+    "imagePrompt": "A Japanese woman watching expectantly as her friend tastes the dish she just cooked. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: どう",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-277": {
+    "imagePath": "/generated-word-images/ja-n5-277.webp",
+    "imageUrl": "/generated-word-images/ja-n5-277.webp",
+    "imageAlt": "почему, отчего: どうして",
+    "imagePrompt": "A small Japanese child looking up curiously at the rainy sky through a window, wondering why. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: どうして",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-278": {
+    "imagePath": "/generated-word-images/ja-n5-278.webp",
+    "imageUrl": "/generated-word-images/ja-n5-278.webp",
+    "imageAlt": "пожалуйста, прошу: どうぞ",
+    "imagePrompt": "A Japanese man holding a door open and gesturing politely for an elderly woman to go in first. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: どうぞ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-279": {
+    "imagePath": "/generated-word-images/ja-n5-279.webp",
+    "imageUrl": "/generated-word-images/ja-n5-279.webp",
+    "imageAlt": "спасибо, очень, как-то: どうも",
+    "imagePrompt": "A Japanese man bowing slightly with a grateful smile to a shopkeeper as he receives his purchase. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: どうも",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-280": {
+    "imagePath": "/generated-word-images/ja-n5-280.webp",
+    "imageUrl": "/generated-word-images/ja-n5-280.webp",
+    "imageAlt": "далёкий, далеко: 遠い",
+    "imagePrompt": "A tiny figure walking along a long straight road toward very distant mountains in Hokkaido. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 遠い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-281": {
+    "imagePath": "/generated-word-images/ja-n5-281.webp",
+    "imageUrl": "/generated-word-images/ja-n5-281.webp",
+    "imageAlt": "десятое число, десять дней: 十日",
+    "imagePrompt": "Ten identical bento lunch boxes lined up in two neat rows of five on a Japanese kitchen counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 十日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-282": {
+    "imagePath": "/generated-word-images/ja-n5-282.webp",
+    "imageUrl": "/generated-word-images/ja-n5-282.webp",
+    "imageAlt": "где, куда: どこ",
+    "imagePrompt": "A tourist looking at a paper map at a crossroads in a Japanese town, confused about where to go. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: どこ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-284": {
+    "imagePath": "/generated-word-images/ja-n5-284.webp",
+    "imageUrl": "/generated-word-images/ja-n5-284.webp",
+    "imageAlt": "который (из двух), где, куда (вежл.): どちら",
+    "imagePrompt": "A hiker standing at a fork in a mountain path in Japan, looking back and forth between the two ways. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: どちら",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-285": {
+    "imagePath": "/generated-word-images/ja-n5-285.webp",
+    "imageUrl": "/generated-word-images/ja-n5-285.webp",
+    "imageAlt": "который (из двух), куда: どっち",
+    "imagePrompt": "A Japanese girl holding two different ice cream cones, one in each hand, deciding which one to eat. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: どっち",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-286": {
+    "imagePath": "/generated-word-images/ja-n5-286.webp",
+    "imageUrl": "/generated-word-images/ja-n5-286.webp",
+    "imageAlt": "очень: とても",
+    "imagePrompt": "An enormous bowl of ramen, far bigger than normal, in front of a surprised Japanese man at a restaurant counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: とても",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-287": {
+    "imagePath": "/generated-word-images/ja-n5-287.webp",
+    "imageUrl": "/generated-word-images/ja-n5-287.webp",
+    "imageAlt": "кто (вежл.): どなた",
+    "imagePrompt": "A polite Japanese receptionist greeting an unfamiliar visitor at an office front desk with a questioning look. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: どなた",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-288": {
+    "imagePath": "/generated-word-images/ja-n5-288.webp",
+    "imageUrl": "/generated-word-images/ja-n5-288.webp",
+    "imageAlt": "соседний, рядом: 隣",
+    "imagePrompt": "A Japanese woman handing a gift bag over a low fence to her smiling next-door neighbor. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 隣",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-291": {
+    "imagePath": "/generated-word-images/ja-n5-291.webp",
+    "imageUrl": "/generated-word-images/ja-n5-291.webp",
+    "imageAlt": "останавливаться: 止まる",
+    "imagePrompt": "A Japanese commuter train coming to a halt at a station platform, passengers waiting. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 止まる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-292": {
+    "imagePath": "/generated-word-images/ja-n5-292.webp",
+    "imageUrl": "/generated-word-images/ja-n5-292.webp",
+    "imageAlt": "суббота: 土曜日",
+    "imagePrompt": "A Japanese family planting vegetables in the rich brown soil of their garden plot on a weekend morning. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 土曜日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-294": {
+    "imagePath": "/generated-word-images/ja-n5-294.webp",
+    "imageUrl": "/generated-word-images/ja-n5-294.webp",
+    "imageAlt": "брать, получать: 取る",
+    "imagePrompt": "A hand taking a book from a wooden bookshelf, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 取る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-296": {
+    "imagePath": "/generated-word-images/ja-n5-296.webp",
+    "imageUrl": "/generated-word-images/ja-n5-296.webp",
+    "imageAlt": "который, какой (из нескольких): どれ",
+    "imagePrompt": "A Japanese woman bending over a pastry display case full of different cakes, trying to choose one. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: どれ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-298": {
+    "imagePath": "/generated-word-images/ja-n5-298.webp",
+    "imageUrl": "/generated-word-images/ja-n5-298.webp",
+    "imageAlt": "нет, не иметься: ない",
+    "imagePrompt": "A Japanese man staring in disappointment into a completely empty refrigerator. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ない",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-300": {
+    "imagePath": "/generated-word-images/ja-n5-300.webp",
+    "imageUrl": "/generated-word-images/ja-n5-300.webp",
+    "imageAlt": "длинный, долгий: 長い",
+    "imagePrompt": "A Japanese woman with very long straight black hair reaching her waist, seen from behind. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 長い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-302": {
+    "imagePath": "/generated-word-images/ja-n5-302.webp",
+    "imageUrl": "/generated-word-images/ja-n5-302.webp",
+    "imageAlt": "терять: 無くす",
+    "imagePrompt": "A Japanese man frantically searching through his bag and pockets on a street, having lost his wallet. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 無くす",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-303": {
+    "imagePath": "/generated-word-images/ja-n5-303.webp",
+    "imageUrl": "/generated-word-images/ja-n5-303.webp",
+    "imageAlt": "почему: なぜ",
+    "imagePrompt": "A puzzled Japanese man scratching his head while looking at the flat tire of his bicycle. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: なぜ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-305": {
+    "imagePath": "/generated-word-images/ja-n5-305.webp",
+    "imageUrl": "/generated-word-images/ja-n5-305.webp",
+    "imageAlt": "летние каникулы: 夏休み",
+    "imagePrompt": "Japanese children with bug nets catching cicadas in a green park on a hot summer vacation day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 夏休み",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-306": {
+    "imagePath": "/generated-word-images/ja-n5-306.webp",
+    "imageUrl": "/generated-word-images/ja-n5-306.webp",
+    "imageAlt": "семь (штук): 七つ",
+    "imagePrompt": "Exactly seven onigiri rice balls arranged in a neat row on a bamboo tray. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 七つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-307": {
+    "imagePath": "/generated-word-images/ja-n5-307.webp",
+    "imageUrl": "/generated-word-images/ja-n5-307.webp",
+    "imageAlt": "седьмое число, семь дней: 七日",
+    "imagePrompt": "Seven identical bento lunch boxes lined up in a neat row on a Japanese kitchen counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 七日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-309": {
+    "imagePath": "/generated-word-images/ja-n5-309.webp",
+    "imageUrl": "/generated-word-images/ja-n5-309.webp",
+    "imageAlt": "выстраиваться в ряд, стоять в очереди: 並ぶ",
+    "imagePrompt": "A long line of people waiting in a neat queue outside a small Japanese ramen shop. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 並ぶ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-311": {
+    "imagePath": "/generated-word-images/ja-n5-311.webp",
+    "imageUrl": "/generated-word-images/ja-n5-311.webp",
+    "imageAlt": "становиться: なる",
+    "imagePrompt": "A green caterpillar on a leaf next to a freshly emerged butterfly, close-up in soft natural light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: なる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-313": {
+    "imagePath": "/generated-word-images/ja-n5-313.webp",
+    "imageUrl": "/generated-word-images/ja-n5-313.webp",
+    "imageAlt": "воскресенье: 日曜日",
+    "imagePrompt": "A Japanese family enjoying a picnic on a blanket in a sunny park on Sunday, bright sun in a clear sky. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 日曜日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-315": {
+    "imagePath": "/generated-word-images/ja-n5-315.webp",
+    "imageUrl": "/generated-word-images/ja-n5-315.webp",
+    "imageAlt": "снимать (одежду, обувь): 脱ぐ",
+    "imagePrompt": "A Japanese man taking off his shoes at the genkan entrance of a home. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 脱ぐ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-316": {
+    "imagePath": "/generated-word-images/ja-n5-316.webp",
+    "imageUrl": "/generated-word-images/ja-n5-316.webp",
+    "imageAlt": "тепловатый, недостаточно горячий: 温い",
+    "imagePrompt": "A Japanese woman touching a cup of tea that has gone lukewarm, with a slightly disappointed face. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 温い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-318": {
+    "imagePath": "/generated-word-images/ja-n5-318.webp",
+    "imageUrl": "/generated-word-images/ja-n5-318.webp",
+    "imageAlt": "тетрадь: ノート",
+    "imagePrompt": "An open blank notebook with a pencil lying on it on a wooden desk. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ノート",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-320": {
+    "imagePath": "/generated-word-images/ja-n5-320.webp",
+    "imageUrl": "/generated-word-images/ja-n5-320.webp",
+    "imageAlt": "садиться (в транспорт), ехать: 乗る",
+    "imagePrompt": "Japanese passengers boarding a city bus at a bus stop. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 乗る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-323": {
+    "imagePath": "/generated-word-images/ja-n5-323.webp",
+    "imageUrl": "/generated-word-images/ja-n5-323.webp",
+    "imageAlt": "да: はい",
+    "imagePrompt": "A Japanese student eagerly raising her hand in a classroom. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: はい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-328": {
+    "imagePath": "/generated-word-images/ja-n5-328.webp",
+    "imageUrl": "/generated-word-images/ja-n5-328.webp",
+    "imageAlt": "начинаться: 始まる",
+    "imagePrompt": "Japanese students bursting off the starting line of a running race on school sports day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 始まる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-332": {
+    "imagePath": "/generated-word-images/ja-n5-332.webp",
+    "imageUrl": "/generated-word-images/ja-n5-332.webp",
+    "imageAlt": "двадцать лет (возраст): 二十歳",
+    "imagePrompt": "A young Japanese woman in a colorful furisode kimono smiling on the day of her coming-of-age ceremony, with friends nearby. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 二十歳",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-333": {
+    "imagePath": "/generated-word-images/ja-n5-333.webp",
+    "imageUrl": "/generated-word-images/ja-n5-333.webp",
+    "imageAlt": "работать: 働く",
+    "imagePrompt": "A Japanese chef working hard over a hot stove in a busy restaurant kitchen. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 働く",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-334": {
+    "imagePath": "/generated-word-images/ja-n5-334.webp",
+    "imageUrl": "/generated-word-images/ja-n5-334.webp",
+    "imageAlt": "восемь: 八",
+    "imagePrompt": "Exactly eight red strawberries in two neat rows of four on a white plate. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 八",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-336": {
+    "imagePath": "/generated-word-images/ja-n5-336.webp",
+    "imageUrl": "/generated-word-images/ja-n5-336.webp",
+    "imageAlt": "нос: 鼻",
+    "imagePrompt": "Close-up of a Japanese woman's nose as she smells a pink flower. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 鼻",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-346": {
+    "imagePath": "/generated-word-images/ja-n5-346.webp",
+    "imageUrl": "/generated-word-images/ja-n5-346.webp",
+    "imageAlt": "тянуть, вычитать: 引く",
+    "imagePrompt": "Japanese students pulling hard on a thick rope in a tug-of-war on school sports day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 引く",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-349": {
+    "imagePath": "/generated-word-images/ja-n5-349.webp",
+    "imageUrl": "/generated-word-images/ja-n5-349.webp",
+    "imageAlt": "лево, левая сторона: 左",
+    "imagePrompt": "A pedestrian seen from behind turning left at a street corner in a Japanese town. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 左",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-350": {
+    "imagePath": "/generated-word-images/ja-n5-350.webp",
+    "imageUrl": "/generated-word-images/ja-n5-350.webp",
+    "imageAlt": "один (предмет), одна штука: 一つ",
+    "imagePrompt": "A single red apple on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 一つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-351": {
+    "imagePath": "/generated-word-images/ja-n5-351.webp",
+    "imageUrl": "/generated-word-images/ja-n5-351.webp",
+    "imageAlt": "свободное время, досуг: 暇",
+    "imagePrompt": "A Japanese man lying lazily on a tatami floor with nothing to do, relaxing on a quiet afternoon. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 暇",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-354": {
+    "imagePath": "/generated-word-images/ja-n5-354.webp",
+    "imageUrl": "/generated-word-images/ja-n5-354.webp",
+    "imageAlt": "полдень, день: 昼",
+    "imagePrompt": "Japanese office workers eating bento on park benches at midday, the sun high overhead. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 昼",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-357": {
+    "imagePath": "/generated-word-images/ja-n5-357.webp",
+    "imageUrl": "/generated-word-images/ja-n5-357.webp",
+    "imageAlt": "конверт: 封筒",
+    "imagePrompt": "A plain white sealed envelope lying on a wooden desk. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 封筒",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-360": {
+    "imagePath": "/generated-word-images/ja-n5-360.webp",
+    "imageUrl": "/generated-word-images/ja-n5-360.webp",
+    "imageAlt": "дуть: 吹く",
+    "imagePrompt": "Colorful carp streamers fluttering strongly in the wind against a blue sky in Japan. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 吹く",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-362": {
+    "imagePath": "/generated-word-images/ja-n5-362.webp",
+    "imageUrl": "/generated-word-images/ja-n5-362.webp",
+    "imageAlt": "два, две штуки: 二つ",
+    "imagePrompt": "Exactly two onigiri rice balls side by side on a small plate. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 二つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-364": {
+    "imagePath": "/generated-word-images/ja-n5-364.webp",
+    "imageUrl": "/generated-word-images/ja-n5-364.webp",
+    "imageAlt": "второе число, два дня: 二日",
+    "imagePrompt": "Two identical bento lunch boxes side by side on a Japanese kitchen counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 二日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-365": {
+    "imagePath": "/generated-word-images/ja-n5-365.webp",
+    "imageUrl": "/generated-word-images/ja-n5-365.webp",
+    "imageAlt": "толстый: 太い",
+    "imagePrompt": "Thick udon noodles being lifted from a bowl with chopsticks, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 太い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-366": {
+    "imagePath": "/generated-word-images/ja-n5-366.webp",
+    "imageUrl": "/generated-word-images/ja-n5-366.webp",
+    "imageAlt": "зима: 冬",
+    "imagePrompt": "A snowy Japanese mountain village with thatched-roof houses covered in deep snow. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 冬",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-367": {
+    "imagePath": "/generated-word-images/ja-n5-367.webp",
+    "imageUrl": "/generated-word-images/ja-n5-367.webp",
+    "imageAlt": "идти (о дожде, снеге), выпадать: 降る",
+    "imagePrompt": "Heavy rain falling on a Tokyo street, raindrops splashing on the pavement. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 降る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-369": {
+    "imagePath": "/generated-word-images/ja-n5-369.webp",
+    "imageUrl": "/generated-word-images/ja-n5-369.webp",
+    "imageAlt": "страница: ページ",
+    "imagePrompt": "A hand turning the page of an open book, the pages softly out of focus. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ページ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-370": {
+    "imagePath": "/generated-word-images/ja-n5-370.webp",
+    "imageUrl": "/generated-word-images/ja-n5-370.webp",
+    "imageAlt": "неумелый, плохо получается: 下手",
+    "imagePrompt": "A clumsy beginner wobbling on ice skates at a Japanese ice rink, arms flailing awkwardly. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 下手",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-373": {
+    "imagePath": "/generated-word-images/ja-n5-373.webp",
+    "imageUrl": "/generated-word-images/ja-n5-373.webp",
+    "imageAlt": "удобный: 便利",
+    "imagePrompt": "A bright, neatly stocked convenience store open late at night on a Japanese street, unbranded. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 便利",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-376": {
+    "imagePath": "/generated-word-images/ja-n5-376.webp",
+    "imageUrl": "/generated-word-images/ja-n5-376.webp",
+    "imageAlt": "хотеть (иметь), желанный: 欲しい",
+    "imagePrompt": "A Japanese child pressing her face against a toy shop window, longingly looking at a teddy bear. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 欲しい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-378": {
+    "imagePath": "/generated-word-images/ja-n5-378.webp",
+    "imageUrl": "/generated-word-images/ja-n5-378.webp",
+    "imageAlt": "тонкий, узкий: 細い",
+    "imagePrompt": "Very thin white somen noodles being lifted with chopsticks from a bowl of ice water, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 細い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-379": {
+    "imagePath": "/generated-word-images/ja-n5-379.webp",
+    "imageUrl": "/generated-word-images/ja-n5-379.webp",
+    "imageAlt": "кнопка, пуговица: ボタン",
+    "imagePrompt": "A close-up of round buttons on a woolen coat. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ボタン",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-381": {
+    "imagePath": "/generated-word-images/ja-n5-381.webp",
+    "imageUrl": "/generated-word-images/ja-n5-381.webp",
+    "imageAlt": "каждое утро: 毎朝",
+    "imagePrompt": "A Japanese man jogging along a riverside path at sunrise, part of his morning routine. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 毎朝",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-382": {
+    "imagePath": "/generated-word-images/ja-n5-382.webp",
+    "imageUrl": "/generated-word-images/ja-n5-382.webp",
+    "imageAlt": "каждый месяц, ежемесячно: 毎月",
+    "imagePrompt": "A full moon rising over the rooftops of a quiet Japanese town at night. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 毎月",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-383": {
+    "imagePath": "/generated-word-images/ja-n5-383.webp",
+    "imageUrl": "/generated-word-images/ja-n5-383.webp",
+    "imageAlt": "каждую неделю, еженедельно: 毎週",
+    "imagePrompt": "A Japanese family doing their weekly grocery shopping in a supermarket aisle. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 毎週",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-384": {
+    "imagePath": "/generated-word-images/ja-n5-384.webp",
+    "imageUrl": "/generated-word-images/ja-n5-384.webp",
+    "imageAlt": "каждый год, ежегодно: 毎年",
+    "imagePrompt": "A Japanese family enjoying their yearly hanami picnic under blooming cherry trees. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 毎年",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-385": {
+    "imagePath": "/generated-word-images/ja-n5-385.webp",
+    "imageUrl": "/generated-word-images/ja-n5-385.webp",
+    "imageAlt": "каждый вечер: 毎晩",
+    "imagePrompt": "A Japanese woman reading a book in bed under a warm lamp at night. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 毎晩",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-387": {
+    "imagePath": "/generated-word-images/ja-n5-387.webp",
+    "imageUrl": "/generated-word-images/ja-n5-387.webp",
+    "imageAlt": "невкусный: まずい",
+    "imagePrompt": "A Japanese man grimacing in disgust after tasting a spoonful of food at a dining table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: まずい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-389": {
+    "imagePath": "/generated-word-images/ja-n5-389.webp",
+    "imageUrl": "/generated-word-images/ja-n5-389.webp",
+    "imageAlt": "ещё, всё ещё: まだ",
+    "imagePrompt": "A Japanese man still waiting alone at a bus stop, looking down an empty road. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: まだ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-394": {
+    "imagePath": "/generated-word-images/ja-n5-394.webp",
+    "imageUrl": "/generated-word-images/ja-n5-394.webp",
+    "imageAlt": "право, правая сторона: 右",
+    "imagePrompt": "A Japanese cyclist turning right at a quiet intersection. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 右",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-395": {
+    "imagePath": "/generated-word-images/ja-n5-395.webp",
+    "imageUrl": "/generated-word-images/ja-n5-395.webp",
+    "imageAlt": "короткий: 短い",
+    "imagePrompt": "A tiny pencil stub worn down to almost nothing lying on a desk. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 短い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-396": {
+    "imagePath": "/generated-word-images/ja-n5-396.webp",
+    "imageUrl": "/generated-word-images/ja-n5-396.webp",
+    "imageAlt": "показывать: 見せる",
+    "imagePrompt": "A Japanese girl proudly showing her drawing to her mother in a bright living room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 見せる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-397": {
+    "imagePath": "/generated-word-images/ja-n5-397.webp",
+    "imageUrl": "/generated-word-images/ja-n5-397.webp",
+    "imageAlt": "третье число, три дня: 三日",
+    "imagePrompt": "Three identical bento lunch boxes in a row on a Japanese kitchen counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 三日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-398": {
+    "imagePath": "/generated-word-images/ja-n5-398.webp",
+    "imageUrl": "/generated-word-images/ja-n5-398.webp",
+    "imageAlt": "три, три штуки: 三つ",
+    "imagePrompt": "Exactly three onigiri rice balls in a row on a bamboo tray. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 三つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-400": {
+    "imagePath": "/generated-word-images/ja-n5-400.webp",
+    "imageUrl": "/generated-word-images/ja-n5-400.webp",
+    "imageAlt": "все (вы), дамы и господа: 皆さん",
+    "imagePrompt": "A speaker on a small stage addressing a large audience in a Japanese hall. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 皆さん",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-401": {
+    "imagePath": "/generated-word-images/ja-n5-401.webp",
+    "imageUrl": "/generated-word-images/ja-n5-401.webp",
+    "imageAlt": "ухо: 耳",
+    "imagePrompt": "Close-up of a Japanese woman cupping her hand behind her ear to listen. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 耳",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-402": {
+    "imagePath": "/generated-word-images/ja-n5-402.webp",
+    "imageUrl": "/generated-word-images/ja-n5-402.webp",
+    "imageAlt": "все: みんな",
+    "imagePrompt": "A large group of smiling Japanese friends posing together in a park. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: みんな",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-403": {
+    "imagePath": "/generated-word-images/ja-n5-403.webp",
+    "imageUrl": "/generated-word-images/ja-n5-403.webp",
+    "imageAlt": "шестое число, шесть дней: 六日",
+    "imagePrompt": "Six identical bento lunch boxes in two neat rows of three on a Japanese kitchen counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 六日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-404": {
+    "imagePath": "/generated-word-images/ja-n5-404.webp",
+    "imageUrl": "/generated-word-images/ja-n5-404.webp",
+    "imageAlt": "трудный, сложный: 難しい",
+    "imagePrompt": "A Japanese student frowning and holding his head over a very complicated puzzle at his desk. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 難しい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-405": {
+    "imagePath": "/generated-word-images/ja-n5-405.webp",
+    "imageUrl": "/generated-word-images/ja-n5-405.webp",
+    "imageAlt": "шесть, шесть штук: 六つ",
+    "imagePrompt": "Exactly six round mochi in two neat rows of three on a wooden tray. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 六つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-406": {
+    "imagePath": "/generated-word-images/ja-n5-406.webp",
+    "imageUrl": "/generated-word-images/ja-n5-406.webp",
+    "imageAlt": "метр: メートル",
+    "imagePrompt": "A person measuring the length of a wooden floor with a yellow tape measure. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: メートル",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-408": {
+    "imagePath": "/generated-word-images/ja-n5-408.webp",
+    "imageUrl": "/generated-word-images/ja-n5-408.webp",
+    "imageAlt": "уже, ещё: もう",
+    "imagePrompt": "A Japanese man running onto a station platform just as the train has already departed. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: もう",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-409": {
+    "imagePath": "/generated-word-images/ja-n5-409.webp",
+    "imageUrl": "/generated-word-images/ja-n5-409.webp",
+    "imageAlt": "четверг: 木曜日",
+    "imagePrompt": "A huge old tree with a thick trunk standing in the grounds of a Japanese shrine. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 木曜日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-410": {
+    "imagePath": "/generated-word-images/ja-n5-410.webp",
+    "imageUrl": "/generated-word-images/ja-n5-410.webp",
+    "imageAlt": "алло: もしもし",
+    "imagePrompt": "A Japanese woman answering a phone call, holding the phone to her ear and saying hello. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: もしもし",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-412": {
+    "imagePath": "/generated-word-images/ja-n5-412.webp",
+    "imageUrl": "/generated-word-images/ja-n5-412.webp",
+    "imageAlt": "больше, ещё: もっと",
+    "imagePrompt": "A Japanese child holding out an empty rice bowl, asking for more. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: もっと",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-413": {
+    "imagePath": "/generated-word-images/ja-n5-413.webp",
+    "imageUrl": "/generated-word-images/ja-n5-413.webp",
+    "imageAlt": "вещь, предмет: 物",
+    "imagePrompt": "A collection of various everyday objects, a cup, keys, a book and glasses, arranged on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 物",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-415": {
+    "imagePath": "/generated-word-images/ja-n5-415.webp",
+    "imageUrl": "/generated-word-images/ja-n5-415.webp",
+    "imageAlt": "лёгкий, простой: 易しい",
+    "imagePrompt": "A happy Japanese child easily completing a simple wooden puzzle with large pieces. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 易しい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-416": {
+    "imagePath": "/generated-word-images/ja-n5-416.webp",
+    "imageUrl": "/generated-word-images/ja-n5-416.webp",
+    "imageAlt": "отдыхать, брать выходной, пропускать: 休む",
+    "imagePrompt": "A Japanese construction worker taking a break, sitting on a bench in the shade with a bottle of tea. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 休む",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-417": {
+    "imagePath": "/generated-word-images/ja-n5-417.webp",
+    "imageUrl": "/generated-word-images/ja-n5-417.webp",
+    "imageAlt": "восемь, восемь штук: 八つ",
+    "imagePrompt": "Exactly eight small mandarins arranged in two neat rows of four on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 八つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-418": {
+    "imagePath": "/generated-word-images/ja-n5-418.webp",
+    "imageUrl": "/generated-word-images/ja-n5-418.webp",
+    "imageAlt": "делать, давать (младшим, животным): やる",
+    "imagePrompt": "A Japanese girl giving food to her dog from a bowl in the backyard. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: やる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-424": {
+    "imagePath": "/generated-word-images/ja-n5-424.webp",
+    "imageUrl": "/generated-word-images/ja-n5-424.webp",
+    "imageAlt": "медленно, не спеша: ゆっくりと",
+    "imagePrompt": "A snail moving slowly across a wet leaf in a Japanese garden, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ゆっくりと",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-425": {
+    "imagePath": "/generated-word-images/ja-n5-425.webp",
+    "imageUrl": "/generated-word-images/ja-n5-425.webp",
+    "imageAlt": "восьмое число, восемь дней: 八日",
+    "imagePrompt": "Eight identical bento lunch boxes in two neat rows of four on a Japanese kitchen counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 八日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-426": {
+    "imagePath": "/generated-word-images/ja-n5-426.webp",
+    "imageUrl": "/generated-word-images/ja-n5-426.webp",
+    "imageAlt": "одежда (европейская): 洋服",
+    "imagePrompt": "A rack of Western-style shirts, jackets and dresses hanging in a bright Japanese clothing shop. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 洋服",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-428": {
+    "imagePath": "/generated-word-images/ja-n5-428.webp",
+    "imageUrl": "/generated-word-images/ja-n5-428.webp",
+    "imageAlt": "четвёртое число, четыре дня: 四日",
+    "imagePrompt": "Four identical bento lunch boxes in a row on a Japanese kitchen counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 四日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-429": {
+    "imagePath": "/generated-word-images/ja-n5-429.webp",
+    "imageUrl": "/generated-word-images/ja-n5-429.webp",
+    "imageAlt": "четыре, четыре штуки: 四つ",
+    "imagePrompt": "Exactly four onigiri rice balls in a row on a bamboo tray. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 四つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-430": {
+    "imagePath": "/generated-word-images/ja-n5-430.webp",
+    "imageUrl": "/generated-word-images/ja-n5-430.webp",
+    "imageAlt": "звать, приглашать: 呼ぶ",
+    "imagePrompt": "A Japanese mother on a porch cupping her hands around her mouth, calling her children in from the garden. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 呼ぶ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-432": {
+    "imagePath": "/generated-word-images/ja-n5-432.webp",
+    "imageUrl": "/generated-word-images/ja-n5-432.webp",
+    "imageAlt": "слабый: 弱い",
+    "imagePrompt": "A thin Japanese man straining and failing to lift a heavy dumbbell in a gym. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 弱い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-434": {
+    "imagePath": "/generated-word-images/ja-n5-434.webp",
+    "imageUrl": "/generated-word-images/ja-n5-434.webp",
+    "imageAlt": "следующий год: 来年",
+    "imagePrompt": "The first sunrise of the new year over the sea in Japan, with a kadomatsu bamboo decoration in the foreground. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 来年",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-437": {
+    "imagePath": "/generated-word-images/ja-n5-437.webp",
+    "imageUrl": "/generated-word-images/ja-n5-437.webp",
+    "imageAlt": "иностранный студент: 留学生",
+    "imagePrompt": "A young European student with a backpack walking across a Japanese university campus with classmates. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 留学生",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-438": {
+    "imagePath": "/generated-word-images/ja-n5-438.webp",
+    "imageUrl": "/generated-word-images/ja-n5-438.webp",
+    "imageAlt": "ноль: 零",
+    "imagePrompt": "An empty white plate on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 零",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-441": {
+    "imagePath": "/generated-word-images/ja-n5-441.webp",
+    "imageUrl": "/generated-word-images/ja-n5-441.webp",
+    "imageAlt": "шесть: 六",
+    "imagePrompt": "Exactly six brown eggs in a neat row on a wooden table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 六",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-444": {
+    "imagePath": "/generated-word-images/ja-n5-444.webp",
+    "imageUrl": "/generated-word-images/ja-n5-444.webp",
+    "imageAlt": "понимать: 分かる",
+    "imagePrompt": "A Japanese student's face lighting up with sudden understanding as she looks up from a textbook. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 分かる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-445": {
+    "imagePath": "/generated-word-images/ja-n5-445.webp",
+    "imageUrl": "/generated-word-images/ja-n5-445.webp",
+    "imageAlt": "забывать: 忘れる",
+    "imagePrompt": "A Japanese man at his front door patting his pockets, realizing he forgot his keys. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 忘れる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-446": {
+    "imagePath": "/generated-word-images/ja-n5-446.webp",
+    "imageUrl": "/generated-word-images/ja-n5-446.webp",
+    "imageAlt": "я: 私",
+    "imagePrompt": "A Japanese woman pointing at her own nose with her finger, the Japanese gesture for me. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 私",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "ja-n5-449": {
+    "imagePath": "/generated-word-images/ja-n5-449.webp",
+    "imageUrl": "/generated-word-images/ja-n5-449.webp",
+    "imageAlt": "плохой: 悪い",
+    "imagePrompt": "A guilty-looking puppy sitting next to a chewed-up slipper on the floor. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 悪い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   }
 }
