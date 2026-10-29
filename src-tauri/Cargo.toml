@@ -1,6 +1,6 @@
 [package]
 name = "etudier"
-version = "0.13.3"
+version = "0.13.4"
 description = "Desktop shell for the étudier app"
 authors = ["Codex"]
 license = ""

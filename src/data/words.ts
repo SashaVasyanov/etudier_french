@@ -1,4 +1,5 @@
 import { getPackWords, STARTER_PACKS } from './wordPacks';
+import { applyJapaneseReviewFix, isExcludedByReview } from './japaneseReviewFixes';
 import type { JlptLevel, LearningLanguage, Word, WordExample, WordFrequency, WordLevel, WordPack } from '../types';
 import { getStudyLevelRank } from '../lib/levels';
 import { createFallbackWordImage } from '../lib/wordImages';
@@ -1267,10 +1268,12 @@ export async function loadWords(language: LearningLanguage): Promise<Word[]> {
 
       return sortWordsByCurriculum(
         [
-          ...JAPANESE_CORE_WORDS.filter((word) => !JAPANESE_EXCLUDED_WORDS.has(word.original)).map((word) =>
-            normalizeWord(withWordContext(cleanJapaneseEntry(applyJapaneseWordCorrection({ ...word, ...wordImageManifest[word.id] })), context[word.id])),
+          ...JAPANESE_CORE_WORDS.filter((word) => !JAPANESE_EXCLUDED_WORDS.has(word.original) && !isExcludedByReview(word)).map((word) =>
+            normalizeWord(withWordContext(applyJapaneseReviewFix(cleanJapaneseEntry(applyJapaneseWordCorrection({ ...word, ...wordImageManifest[word.id] }))), context[word.id])),
           ),
-          ...JAPANESE_BASIC_WORDS.map((word) => normalizeWord(withWordContext({ ...word, ...wordImageManifest[word.id] }, context[word.id]))),
+          ...JAPANESE_BASIC_WORDS.filter((word) => !isExcludedByReview(word)).map((word) =>
+            normalizeWord(withWordContext(applyJapaneseReviewFix({ ...word, ...wordImageManifest[word.id] }), context[word.id])),
+          ),
           ...getPackWords('japanese').map((word) => normalizeWord(withWordContext({ ...word, ...wordImageManifest[word.id] }, context[word.id]))),
         ].map((word) => withJlptLevel(word, JAPANESE_JLPT_LEVELS)),
         language,

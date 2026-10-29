@@ -186,6 +186,18 @@ function meaningWords(translation: string): Set<string> {
   return new Set(translation.toLocaleLowerCase('ru').split(/[^а-яё]+/).filter((part) => part.length >= 2));
 }
 
+/** The separate senses of a gloss («машина / автомобиль» → машина, автомобиль). */
+function glossParts(translation: string): Set<string> {
+  return new Set(
+    translation
+      .toLocaleLowerCase('ru')
+      .replace(/\([^)]*\)/g, ' ')
+      .split(/\s*[/,;…]\s*/)
+      .map((part) => part.replace(/[.!?]+$/, '').trim())
+      .filter((part) => part.length >= 2),
+  );
+}
+
 function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'original', distinctMeaning = false): ExerciseOption[] {
   const correctLabel = mode === 'translation' ? word.translation : word.original;
   const comparable = comparableText;
@@ -196,6 +208,12 @@ function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'or
     if (candidate.id === word.id) return false;
     const keys = comparableWord(candidate);
     if (keys.original === own.original || keys.translation === own.translation) return false;
+    // Two options that share a sense (車 «машина / автомобиль», 自動車 «автомобиль»)
+    // would both be right.
+    const senses = glossParts(word.translation);
+    if ([...glossParts(candidate.translation)].some((part) => senses.has(part))) return false;
+    // A definition that uses another option's word gives that option away.
+    if (distinctMeaning && word.definition && candidate.original.length > 0 && word.definition.includes(candidate.original)) return false;
     // A definition fits every word of the same meaning: keep only other meanings.
     if (distinctMeaning) {
       const target = meaningWords(word.translation);
@@ -335,7 +353,7 @@ export function getLetterAssemblyAnswer(word: Word): string | null {
   return /^[a-zàâäçéèêëîïôöûùüÿœæ]{3,12}$/i.test(original) && new Set(original).size >= 2 ? original.toLocaleLowerCase('fr') : null;
 }
 
-function createExercise(word: Word, optionPool: Word[], type: ExerciseType, index: number): Exercise {
+export function createExercise(word: Word, optionPool: Word[], type: ExerciseType, index: number): Exercise {
   switch (type) {
     case 'audio_to_translation_choice':
       {

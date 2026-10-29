@@ -717,7 +717,7 @@ dependencies = [
 
 [[package]]
 name = "etudier"
-version = "0.13.3"
+version = "0.13.4"
 dependencies = [
  "objc2-foundation",
  "tauri",
