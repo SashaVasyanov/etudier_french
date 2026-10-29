@@ -347,3 +347,89 @@
     width: 100%;
   }
 }
+
+/* ---- Reading on the banner, larger examples, one screen tall ---- */
+.word-card-kana {
+  margin: -4px 0 0;
+  font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.word-card {
+  gap: 14px;
+}
+
+.word-card-hero {
+  border-radius: 16px;
+}
+
+/* The picture shrinks with the window so the whole card stays on screen. */
+.word-card-hero .word-card-image {
+  min-height: 0;
+  height: clamp(150px, 30vh, 280px);
+  max-height: none;
+}
+
+.word-card-banner {
+  gap: 8px;
+  padding: 20px 24px;
+}
+
+.word-card-definition-text {
+  font-size: 1.15rem;
+}
+
+.word-card .word-examples {
+  gap: 12px;
+  padding-top: 14px;
+}
+
+.word-example {
+  grid-template-columns: 34px minmax(0, 1fr);
+}
+
+.word-example-original {
+  color: var(--label);
+  font-size: 1.3rem;
+  line-height: 1.55;
+}
+
+.word-example-original rt {
+  font-size: 0.5em;
+  color: var(--label-2);
+}
+
+.word-example-translation {
+  color: var(--label-2);
+  font-size: 1rem;
+}
+
+.word-card-actions {
+  padding-top: 12px;
+}
+
+.word-card-next.primary-button {
+  min-height: 44px;
+  border-radius: 10px;
+}
+
+@media (max-height: 760px) {
+  .word-card-hero .word-card-image {
+    height: clamp(130px, 24vh, 200px);
+  }
+
+  .word-card-banner {
+    padding: 14px 20px;
+  }
+
+  .word-card-word {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+  }
+
+  .word-card {
+    gap: 10px;
+  }
+}

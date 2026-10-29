@@ -7,7 +7,7 @@ import { WordExamplesList } from './WordExamplesList';
 import { WordFrequencyBadge } from './WordFrequencyBadge';
 import { JapaneseSentence } from './JapaneseSentence';
 import { ReportIssueButton } from './ReportIssue';
-import { FRENCH_GENDER_LABELS, getDisplayWord, getFrenchGender, getLessonWordNotes, getPartOfSpeechLabel } from '../lib/wordPresentation';
+import { FRENCH_GENDER_LABELS, getDisplayWord, getFrenchGender, getJapaneseHiraganaReading, getLessonWordNotes, getPartOfSpeechLabel } from '../lib/wordPresentation';
 import { getWordLevelLabel } from '../lib/levels';
 import { formatTranscription } from '../lib/readingPrefs';
 import '../styles/word-card.css';
@@ -37,6 +37,9 @@ export function LessonWordPreview({
   const gender = getFrenchGender(word);
   const transcription = formatTranscription(word.transcription, word.language);
   const lang = word.language === 'japanese' ? 'ja' : 'fr';
+  // Kanji get their hiragana reading right under them on the banner.
+  const kana = word.language === 'japanese' ? getJapaneseHiraganaReading(word) : null;
+  const showKana = Boolean(kana && kana !== word.original);
 
   // Enter (or Space) moves on, like the main button.
   useEffect(() => {
@@ -66,6 +69,7 @@ export function LessonWordPreview({
                   <AppIcon name="volume" size={22} />
                 </button>
               </div>
+              {showKana ? <p className="word-card-kana" lang="ja">{kana}</p> : null}
               <p className="word-card-translation">{word.translation}</p>
             </div>
           </div>
