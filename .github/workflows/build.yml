@@ -3,6 +3,7 @@ name: Build
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -46,6 +47,8 @@ jobs:
   windows-package:
     name: Windows installer and exe
     runs-on: windows-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -110,3 +113,18 @@ jobs:
           name: etudier-french-windows-installers
           path: artifacts/windows-installers/*
           if-no-files-found: error
+
+      # A version tag (v1.2.3) publishes the installers as a GitHub release.
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: étudier ${{ github.ref_name }}
+          body: |
+            Сборка для Windows.
+            - Установщик: файл `.msi` или `-setup.exe`.
+            - Без установки: `Etudier-French-Windows-portable.zip`.
+          files: |
+            artifacts/windows-installers/*
+            artifacts/Etudier-French-Windows-portable.zip
+          fail_on_unmatched_files: true
