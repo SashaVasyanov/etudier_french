@@ -11,6 +11,7 @@ import { LessonWordPreview } from './components/LessonWordPreview';
 import { MemoryCheckExercise } from './components/MemoryCheckExercise';
 import { SentenceOrderExercise } from './components/SentenceOrderExercise';
 import { MultipleChoiceExercise } from './components/MultipleChoiceExercise';
+import { LetterAssemblyExercise } from './components/LetterAssemblyExercise';
 import { getLessonPoolWords, getStarterPacks, loadWords } from './data/words';
 import { playTextAudio, playWordAudio, setSpeechPreferences, stopAudio } from './lib/audio';
 import { createFlashcardSession, createLessonSession, getDailyBalance, LISTENING_TITLE, pickPracticeWords, QUICK_REVIEW_TITLE, scheduleExerciseRetry } from './lib/exercises';
@@ -190,6 +191,8 @@ function App() {
   const [stepIndex, setStepIndex] = useState(initialDraft?.stepIndex ?? 0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(initialDraft?.selectedAnswer ?? null);
   const [typedAnswer, setTypedAnswer] = useState(initialDraft?.typedAnswer ?? '');
+  // Hints taken on the current task (the key button).
+  const [hintsUsed, setHintsUsed] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(initialDraft?.isSubmitted ?? false);
   const [outcomes, setOutcomes] = useState<ExerciseOutcome[]>(initialDraft?.outcomes ?? []);
   const [knownWordIds, setKnownWordIds] = useState<string[]>(initialDraft?.knownWordIds ?? []);
@@ -498,6 +501,19 @@ function App() {
     setSelectedAnswer(null);
     setTypedAnswer('');
     setIsSubmitted(false);
+    setHintsUsed(0);
+  }
+
+  /** «Пропустить»: on to the next step without an answer; the word is not marked. */
+  function skipExercise() {
+    if (!session || currentStep?.kind !== 'exercise' || isSubmitted) return;
+    stopAudio();
+    if (stepIndex >= session.steps.length - 1) {
+      finishLesson(session);
+      return;
+    }
+    setStepIndex((current) => current + 1);
+    resetExerciseState();
   }
 
   function reportStorageMutationError(error: unknown) {
@@ -761,6 +777,7 @@ function App() {
       isCorrect,
       responseMs: Math.max(0, Date.now() - stepShownAtRef.current),
       ...(nearMiss ? { nearMiss: true } : {}),
+      ...(hintsUsed > 0 ? { hinted: true } : {}),
     };
 
     setOutcomes((current) => [...current, outcome]);
@@ -1128,6 +1145,11 @@ function App() {
                   <span className="lesson-session-count" title="Выполнено заданий за урок">
                     {lessonProgress?.completedSteps} из {session.steps.length}
                   </span>
+                  {currentStep.kind === 'exercise' && !isSubmitted ? (
+                    <button type="button" className="lesson-skip-button" title="Пропустить задание, слово не отмечается" onClick={skipExercise}>
+                      Пропустить
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     className={showShortcuts ? 'lesson-keys-button active' : 'lesson-keys-button'}
@@ -1203,6 +1225,20 @@ function App() {
                     onIgnoreWord={handleIgnoreWord}
                     onNext={goToNextStep}
                   />
+                ) : currentExercise?.type === 'letter_assembly' ? (
+                  <LetterAssemblyExercise
+                    key={currentStep.id}
+                    exercise={currentExercise}
+                    word={currentWord}
+                    isSubmitted={isSubmitted}
+                    selectedAnswer={selectedAnswer}
+                    hintsUsed={hintsUsed}
+                    onHint={() => setHintsUsed((count) => count + 1)}
+                    onSubmit={(answer) => handleSubmit(answer)}
+                    onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
+                    onIgnoreWord={handleIgnoreWord}
+                    onNext={goToNextStep}
+                  />
                 ) : currentExercise?.options ? (
                   <MultipleChoiceExercise
                     key={currentStep.id}
@@ -1220,6 +1256,8 @@ function App() {
                     }}
                     onMarkKnown={currentStep.allowMarkKnown ? handleMarkKnown : undefined}
                     onIgnoreWord={handleIgnoreWord}
+                    hintsUsed={hintsUsed}
+                    onHint={() => setHintsUsed((count) => count + 1)}
                     onNext={goToNextStep}
                   />
                 ) : currentExercise ? (
@@ -1232,6 +1270,8 @@ function App() {
                     isCorrect={latestOutcome?.isCorrect}
                     nearMiss={latestOutcome?.nearMiss}
                     onChange={setTypedAnswer}
+                    hintsUsed={hintsUsed}
+                    onHint={() => setHintsUsed((count) => count + 1)}
                     onSubmit={() => handleSubmit(typedAnswer)}
                     onReplayAudio={() => {
                       if (currentExercise.type === 'sentence_dictation') void playTextAudio(currentWord.example_original, currentWord.language);

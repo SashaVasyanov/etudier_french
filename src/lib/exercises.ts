@@ -181,7 +181,12 @@ function comparableWord(word: Word): { original: string; translation: string } {
   return keys;
 }
 
-function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'original'): ExerciseOption[] {
+/** Russian words of a translation, for telling apart close meanings. */
+function meaningWords(translation: string): Set<string> {
+  return new Set(translation.toLocaleLowerCase('ru').split(/[^а-яё]+/).filter((part) => part.length >= 2));
+}
+
+function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'original', distinctMeaning = false): ExerciseOption[] {
   const correctLabel = mode === 'translation' ? word.translation : word.original;
   const comparable = comparableText;
   const own = comparableWord(word);
@@ -190,7 +195,13 @@ function buildChoiceOptions(word: Word, words: Word[], mode: 'translation' | 'or
   const pool = words.filter((candidate) => {
     if (candidate.id === word.id) return false;
     const keys = comparableWord(candidate);
-    return keys.original !== own.original && keys.translation !== own.translation;
+    if (keys.original === own.original || keys.translation === own.translation) return false;
+    // A definition fits every word of the same meaning: keep only other meanings.
+    if (distinctMeaning) {
+      const target = meaningWords(word.translation);
+      if ([...meaningWords(candidate.translation)].some((part) => target.has(part))) return false;
+    }
+    return true;
   });
   const distractors: ExerciseOption[] = [];
   const seen = new Set<string>([comparable(correctLabel)]);
@@ -277,8 +288,13 @@ function canCreateExercise(word: Word, type: ExerciseType): boolean {
     return false;
   }
 
+  if (type === 'letter_assembly') {
+    return getLetterAssemblyAnswer(word) !== null;
+  }
+
   if (type === 'definition_choice') {
-    return Boolean(word.definition) && !word.definition!.includes(word.original);
+    // Interjections (ああ, あっ, oh) cannot be told apart by a definition.
+    return Boolean(word.definition) && word.part_of_speech !== 'interjection' && !word.definition!.includes(word.original);
   }
 
   // «Заполните пропуск» was dropped: the blank was guessed from the shape of
@@ -298,13 +314,25 @@ function getAvailableExerciseTypes(word: Word, exerciseTypes: ExerciseType[]): E
 
     // No usable sentence (or no gender, no kanji): ask for the word by choice
     // instead, so lessons do not turn into a row of typing tasks.
-    return type === 'definition_choice' || type === 'sentence_order' || type === 'audio_sentence_choice' || type === 'sentence_dictation'
+    return type === 'definition_choice' || type === 'letter_assembly' || type === 'sentence_order' || type === 'audio_sentence_choice' || type === 'sentence_dictation'
       || type === 'article_choice' || type === 'kanji_reading_choice'
       ? 'translation_to_original_choice'
       : null;
   });
 
   return Array.from(new Set(availableTypes.filter((type): type is ExerciseType => type !== null)));
+}
+
+/** What «Соберите слово» spells: a single French word, or the kana of a Japanese one. */
+export function getLetterAssemblyAnswer(word: Word): string | null {
+  if (word.language === 'japanese') {
+    const reading = getJapaneseHiraganaReading(word);
+    // Katakana words would be spelled in hiragana: not a useful puzzle.
+    if (/[\u30a1-\u30fa]/.test(word.original)) return null;
+    return reading && /^[\u3041-\u3096ー]{3,8}$/.test(reading) && new Set(reading).size >= 2 ? reading : null;
+  }
+  const original = word.original.trim();
+  return /^[a-zàâäçéèêëîïôöûùüÿœæ]{3,12}$/i.test(original) && new Set(original).size >= 2 ? original.toLocaleLowerCase('fr') : null;
 }
 
 function createExercise(word: Word, optionPool: Word[], type: ExerciseType, index: number): Exercise {
@@ -346,8 +374,25 @@ function createExercise(word: Word, optionPool: Word[], type: ExerciseType, inde
         options,
       };
       }
+    case 'letter_assembly': {
+      const answer = getLetterAssemblyAnswer(word);
+      if (!answer) return createExercise(word, optionPool, 'translation_to_original_input', index);
+      const letters = [...answer].map((label, position) => ({ id: `${word.id}-l${position}`, label }));
+      let shuffled = shuffleArray(letters);
+      for (let attempt = 0; attempt < 5 && shuffled.map((item) => item.label).join('') === answer; attempt += 1) {
+        shuffled = shuffleArray(letters);
+      }
+      return {
+        id: `${word.id}-${type}-${index}`,
+        type,
+        wordId: word.id,
+        prompt: word.translation,
+        correctAnswer: answer,
+        options: shuffled,
+      };
+    }
     case 'definition_choice': {
-      const options = buildChoiceOptions(word, optionPool, 'original');
+      const options = buildChoiceOptions(word, optionPool, 'original', true);
       if (!word.definition || options.length < 2) return createExercise(word, optionPool, 'translation_to_original_choice', index);
       return {
         id: `${word.id}-${type}-${index}`,
@@ -667,6 +712,7 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       kanji_reading_choice: 0,
       sentence_dictation: 3,
       definition_choice: 2,
+      letter_assembly: 1,
     },
     growing: {
       original_to_translation_choice: 1,
@@ -683,6 +729,7 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       kanji_reading_choice: 1,
       sentence_dictation: 1,
       definition_choice: 0,
+      letter_assembly: 1,
     },
     stable: {
       original_to_translation_choice: 2,
@@ -699,6 +746,7 @@ function reorderExerciseTypesForWord(word: Word, storage: AppStorage, exerciseTy
       kanji_reading_choice: 1,
       sentence_dictation: 0,
       definition_choice: 0,
+      letter_assembly: 2,
     },
   };
 
@@ -1035,7 +1083,7 @@ function createDailySession(
     introductionWords,
     // On review days module 1 already asked for the meaning; ask the other way.
     newWords.length > 0
-      ? ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_translation_choice', 'article_choice', 'kanji_reading_choice']
+      ? ['original_to_translation_choice', 'translation_to_original_choice', 'audio_to_translation_choice', 'letter_assembly', 'article_choice', 'kanji_reading_choice']
       : ['translation_to_original_choice', 'audio_to_translation_choice', 'translation_to_original_input'],
     uniqueWords(words),
     storage,
@@ -1057,7 +1105,7 @@ function createDailySession(
     'Смешанное закрепление',
     'Слова возвращаются в новом порядке, чтобы проверить узнавание без заучивания по шаблону.',
     reinforcementWords,
-    ['sentence_order', 'definition_choice', 'audio_sentence_choice', 'sentence_dictation', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
+    ['sentence_order', 'definition_choice', 'letter_assembly', 'audio_sentence_choice', 'sentence_dictation', 'translation_to_original_choice', 'audio_to_original_input', 'original_to_translation_choice'],
     uniqueWords(words),
     storage,
     1,

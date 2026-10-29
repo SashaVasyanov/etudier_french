@@ -391,6 +391,12 @@ export function getExerciseCopy(
         title: 'Что вы слышите?',
         hint: 'Прослушайте слово и выберите точный перевод.',
       };
+    case 'letter_assembly':
+      return {
+        eyebrow: 'Из букв',
+        title: 'Соберите слово',
+        hint: language === 'japanese' ? 'Нажимайте знаки каны по порядку.' : 'Нажимайте буквы по порядку или печатайте их.',
+      };
     case 'definition_choice':
       return {
         eyebrow: 'Определение',

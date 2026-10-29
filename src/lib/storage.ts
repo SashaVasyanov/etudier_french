@@ -864,6 +864,8 @@ export function gradeReview(outcomes: ExerciseOutcome[]): Grade {
   const wrongAnswers = outcomes.length - correctAnswers;
   if (!first.isCorrect) return 1;
   if (correctAnswers / outcomes.length < SUCCESSFUL_SESSION_RATIO) return 1;
+  // A first answer found with a hint was remembered only in part.
+  if (first.hinted) return 2;
   const slow = typeof first.responseMs === 'number' && first.responseMs > slowAnswerMs(first.type);
   if (wrongAnswers >= 2 || first.nearMiss || slow) return 2;
   const recall = outcomes.find((outcome) => RECALL_EXERCISES.has(outcome.type));

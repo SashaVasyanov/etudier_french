@@ -1994,13 +1994,11 @@
     "imagePath": "/generated-word-images/a1-a-droite-384.webp",
     "imageUrl": "/generated-word-images/a1-a-droite-384.webp",
     "imageAlt": "справа: à droite",
-    "imagePrompt": "Real associative image for \"à droite\" (справа). Query: à droite expression.",
-    "imageSource": "https://www.flickr.com/photos/79505738@N03/49192542117",
-    "imageSourceTitle": "IMG_5175A Egon Schiele 1890-1918 Wien Femme semi nue, jambe droite relevée Female Semi Nude, right leg raised 1916 Wien Leopold Museum",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"IMG_5175A Egon Schiele 1890-1918 Wien Femme semi nue, jambe droite relevée Female Semi Nude, right leg raised 1916 Wien Leopold Museum\" by jean louis mazieres is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A street signpost style scene in Paris: a cyclist turning right at a crossroads, a clear right-pointing gesture by a pedestrian, sunny day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: à droite",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-a-gauche-385": {
     "imagePath": "/generated-word-images/a1-a-gauche-385.webp",
@@ -5722,13 +5720,11 @@
     "imagePath": "/generated-word-images/a1-nature-728.webp",
     "imageUrl": "/generated-word-images/a1-nature-728.webp",
     "imageAlt": "природа: nature",
-    "imagePrompt": "Real associative image for \"nature\" (природа). Query: nature nature.",
-    "imageSource": "https://www.flickr.com/photos/12693966@N07/8600161755",
-    "imageSourceTitle": "Go Naked #naturism #Nature #naturist",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Go Naked #naturism #Nature #naturist\" by fabfotophotography is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A calm green forest with a stream, ferns and sunlight through tall trees in the French countryside. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: nature",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-terre-729": {
     "imagePath": "/generated-word-images/a1-terre-729.webp",
@@ -7558,13 +7554,11 @@
     "imagePath": "/generated-word-images/a1-lettre-885.webp",
     "imageUrl": "/generated-word-images/a1-lettre-885.webp",
     "imageAlt": "буква: lettre",
-    "imagePrompt": "Real associative image for \"lettre\" (буква). Query: lettre work office.",
-    "imageSource": "https://www.flickr.com/photos/70323761@N00/1386140401",
-    "imageSourceTitle": "Paris - Musée Rodin: Balzac, Naked C with folded arms",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Paris - Musée Rodin: Balzac, Naked C with folded arms\" by wallyg is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "Large colorful wooden alphabet blocks with the capital letters A, B and C on a child's desk, a hand picking up the block with A, soft daylight. Photorealistic, no other text, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: lettre",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-regle-886": {
     "imagePath": "/generated-word-images/a1-regle-886.webp",
@@ -16474,13 +16468,11 @@
     "imagePath": "/generated-word-images/b1-reel-1511.webp",
     "imageUrl": "/generated-word-images/b1-reel-1511.webp",
     "imageAlt": "реальный: réel",
-    "imagePrompt": "Real associative image for \"réel\" (реальный). Query: réel.",
-    "imageSource": "https://www.flickr.com/photos/79505738@N03/49371944062",
-    "imageSourceTitle": "IMG_2152 Tal Coat 1905-1985 Femme nue allongée Naked woman lying 1935-1938 Musée d'Art Moderne de la Ville de Paris (Palais de Tokyo) Quand l'art commence à devenir une systématique de l'enlaidissement du réel, la femme est une des premières cibles des",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"IMG_2152 Tal Coat 1905-1985 Femme nue allongée Naked woman lying 1935-1938 Musée d'Art Moderne de la Ville de Paris (Palais de Tokyo) Quand l'art commence à devenir une systématique de l'enlaidissement du réel, la femme est une des premières cibles des\" by jean louis mazieres is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A real red apple on a wooden table next to a simple pencil drawing of an apple on paper, showing real versus drawn. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: réel",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "b1-relatif-1512": {
     "imagePath": "/generated-word-images/b1-relatif-1512.webp",
@@ -19394,17 +19386,14 @@
     "imageAssociationWordId": "a2-voyage-161"
   },
   "ja-0429": {
-    "imagePath": "/generated-word-images/a1-nature-728.webp",
-    "imageUrl": "/generated-word-images/a1-nature-728.webp",
-    "imageAlt": "1. природа: 自然",
-    "imagePrompt": "Shared real associative image for \"自然\" (1. природа) via \"nature\".",
-    "imageSource": "https://www.flickr.com/photos/12693966@N07/8600161755",
-    "imageSourceTitle": "Go Naked #naturism #Nature #naturist",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Go Naked #naturism #Nature #naturist\" by fabfotophotography is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/.",
-    "imageAssociationWordId": "a1-nature-728"
+    "imagePath": "/generated-word-images/ja-0429.webp",
+    "imageUrl": "/generated-word-images/ja-0429.webp",
+    "imageAlt": "природа: 自然",
+    "imagePrompt": "A peaceful Japanese mountain landscape with a clear river, green forest and morning mist. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 自然",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0431": {
     "imagePath": "/generated-word-images/a1-jardin-19.webp",
@@ -28430,18 +28419,14 @@
     "imageAssociationScore": 98
   },
   "ja-0970": {
-    "imagePath": "/generated-word-images/b1-reel-1511.webp",
-    "imageUrl": "/generated-word-images/b1-reel-1511.webp",
-    "imageAlt": "справедливость, беспристрастие: 公平",
-    "imagePrompt": "Unique real associative image for \"公平\" (справедливость, беспристрастие) via \"réel\".",
-    "imageSource": "https://www.flickr.com/photos/79505738@N03/49371944062",
-    "imageSourceTitle": "IMG_2152 Tal Coat 1905-1985 Femme nue allongée Naked woman lying 1935-1938 Musée d'Art Moderne de la Ville de Paris (Palais de Tokyo) Quand l'art commence à devenir une systématique de l'enlaidissement du réel, la femme est une des premières cibles des",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"IMG_2152 Tal Coat 1905-1985 Femme nue allongée Naked woman lying 1935-1938 Musée d'Art Moderne de la Ville de Paris (Palais de Tokyo) Quand l'art commence à devenir une systématique de l'enlaidissement du réel, la femme est une des premières cibles des\" by jean louis mazieres is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/.",
-    "imageAssociationWordId": "b1-reel-1511",
-    "imageAssociationScore": 98
+    "imagePath": "/generated-word-images/ja-0970.webp",
+    "imageUrl": "/generated-word-images/ja-0970.webp",
+    "imageAlt": "справедливость: 公平",
+    "imagePrompt": "Two children sharing a cake cut into exactly equal halves on a kitchen table in Japan, a parent's hands holding the knife. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 公平",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0971": {
     "imagePath": "/generated-word-images/a2-mentir-1162.webp",

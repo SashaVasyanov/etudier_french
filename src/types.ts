@@ -31,7 +31,9 @@ export type ExerciseType =
   | 'kanji_reading_choice'
   | 'sentence_dictation'
   /** Read the definition in the studied language and choose the word. */
-  | 'definition_choice';
+  | 'definition_choice'
+  /** Put the letters (Japanese: kana) of the word in order. */
+  | 'letter_assembly';
 
 /** How common the word is in everyday use. */
 export type WordFrequency = 'high' | 'mid' | 'low';
@@ -158,6 +160,8 @@ export interface ExerciseOutcome {
   responseMs?: number;
   /** Accepted with a one-letter typo («почти верно»). */
   nearMiss?: boolean;
+  /** Answered after taking a hint (the key button). */
+  hinted?: boolean;
 }
 
 export interface LessonSession {

@@ -17,6 +17,7 @@ export type AppIconName =
   | 'home'
   | 'kana'
   | 'kanji'
+  | 'key'
   | 'layers'
   | 'leaf'
   | 'play'
@@ -49,6 +50,7 @@ const ICON_PATHS: Record<AppIconName, ReactNode> = {
   home: <><path d="m3 11 9-8 9 8" /><path d="M5 10v10h14V10M9 20v-6h6v6" /></>,
   kana: <><path d="M5 5.5h14c-.6 4.2-3.2 7.3-7 8.6" /><path d="M11.5 9.5c0 5.2-2 8.8-6 10.5" /></>,
   kanji: <text x="12" y="17" fill="currentColor" stroke="none" textAnchor="middle" fontSize="15" fontWeight="800">部</text>,
+  key: <><circle cx="8" cy="15" r="4" /><path d="m10.8 12.2 9.2-9.2M16 7l3 3M13.5 9.5l2 2" /></>,
   layers: <><path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="m3 12 9 5 9-5M3 16l9 5 9-5" /></>,
   leaf: <><path d="M20.5 3.5C12 3.7 6.2 7.1 5.2 13.1c-.7 4.1 2.4 7.2 6.2 6.4 5.7-1.2 8.6-7.3 9.1-16Z" /><path d="M4 21c2.7-5.5 6.6-9.2 12-12" /></>,
   play: <><circle cx="12" cy="12" r="9" /><path d="m10 8 6 4-6 4V8Z" /></>,

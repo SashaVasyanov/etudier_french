@@ -295,6 +295,27 @@ describe('phrase, article and reading tasks', () => {
     expect(task!.options!.length).toBeGreaterThanOrEqual(2);
   });
 
+  it('spells single French words and Japanese kana, never katakana words', async () => {
+    const { getLetterAssemblyAnswer } = await import('../src/lib/exercises');
+    expect(getLetterAssemblyAnswer({ ...word('m'), original: 'Maison' })).toBe('maison');
+    expect(getLetterAssemblyAnswer({ ...word('b'), original: 'à bientôt' })).toBeNull();
+    expect(getLetterAssemblyAnswer({ ...word('n'), language: 'japanese', original: '猫', transcription: '[ねこ · neko]' })).toBeNull();
+    expect(getLetterAssemblyAnswer({ ...word('t'), language: 'japanese', original: '食べる', transcription: '[たべる · taberu]' })).toBe('たべる');
+    expect(getLetterAssemblyAnswer({ ...word('a'), language: 'japanese', original: 'ああ', transcription: '[ああ · aa]' })).toBeNull();
+    expect(getLetterAssemblyAnswer({ ...word('k'), language: 'japanese', original: 'テレビ', transcription: '[てれび · terebi]' })).toBeNull();
+  });
+
+  it('builds a letter puzzle with exactly the letters of the word', () => {
+    const pool = Array.from({ length: 8 }, (_, i) => ({ ...word(`l${i}`), original: ['maison', 'chat', 'livre', 'table', 'pomme', 'école', 'jardin', 'soleil'][i] }));
+    let task;
+    for (let attempt = 0; attempt < 10 && !task; attempt += 1) {
+      task = createLessonSession({ mode: 'default', words: pool, storage: storage(), durationMinutes: 20 })!
+        .exercises.find((exercise) => exercise.type === 'letter_assembly');
+    }
+    expect(task).toBeTruthy();
+    expect(task!.options!.map((option) => option.label).sort().join('')).toBe([...task!.correctAnswer].sort().join(''));
+  });
+
   it('never asks by a definition that gives the word away', () => {
     const pool = Array.from({ length: 8 }, (_, i) => ({ ...word(`g${i}`), definition: `Le mot mot-g${i}.` }));
     for (let attempt = 0; attempt < 5; attempt += 1) {

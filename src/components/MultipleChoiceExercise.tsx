@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Exercise, Word } from '../types';
 import { containsJapaneseKanji, getDisplayWord, getExerciseCopy, getJapaneseExampleReading } from '../lib/wordPresentation';
 import { AnswerWordDetails } from './AnswerWordDetails';
 import { CenteredWordBlock } from './CenteredWordBlock';
 import { LessonCard } from './LessonCard';
 import { LessonChoiceButton } from './LessonChoiceButton';
+import { HintButton } from './HintButton';
+import { AppIcon } from './AppIcon';
 import { WordImage } from './WordImage';
 import { SentenceAudioButton } from './SentenceAudioButton';
 import { JapaneseSentence } from './JapaneseSentence';
@@ -20,6 +22,9 @@ interface MultipleChoiceExerciseProps {
   onReplayAudio?: () => void;
   onMarkKnown?: () => void;
   onIgnoreWord?: () => void;
+  /** How many hints were taken on this task; the first removes wrong options. */
+  hintsUsed?: number;
+  onHint?: () => void;
 }
 
 export function MultipleChoiceExercise({
@@ -32,6 +37,8 @@ export function MultipleChoiceExercise({
   onReplayAudio,
   onMarkKnown,
   onIgnoreWord,
+  hintsUsed = 0,
+  onHint,
 }: MultipleChoiceExerciseProps) {
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
   const isAudioExercise = exercise.type === 'audio_to_translation_choice';
@@ -44,6 +51,14 @@ export function MultipleChoiceExercise({
   // «Подсказка» shows the Russian translation of the definition.
   const [hintShown, setHintShown] = useState(false);
   const copy = getExerciseCopy(exercise.type, word.language);
+  const options = exercise.options;
+  // The hint takes away half of the wrong answers (two of four).
+  const canHint = Boolean(onHint) && !isArticle && (options?.length ?? 0) >= 3;
+  const hiddenLabels = useMemo(() => {
+    if (!hintsUsed || !options || options.length < 3) return new Set<string>();
+    const wrong = options.filter((option) => option.label !== exercise.correctAnswer).map((option) => option.label);
+    return new Set(wrong.slice(-(options.length >= 4 ? 2 : 1)));
+  }, [exercise.correctAnswer, hintsUsed, options]);
   const cardClassName = [
     'lesson-exercise-card',
     isTranslationExercise ? 'lesson-image-choice-card' : '',
@@ -67,7 +82,7 @@ export function MultipleChoiceExercise({
       if (event.defaultPrevented || event.repeat || event.metaKey || event.ctrlKey || event.altKey) return;
       if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
       const index = Number(event.key) - 1;
-      if (Number.isInteger(index) && index >= 0 && index < options.length) {
+      if (Number.isInteger(index) && index >= 0 && index < options.length && !hiddenLabels.has(options[index].label)) {
         event.preventDefault();
         onSelect(options[index].label);
       }
@@ -75,7 +90,7 @@ export function MultipleChoiceExercise({
 
     window.addEventListener('keydown', handleDigit);
     return () => window.removeEventListener('keydown', handleDigit);
-  }, [exercise.options, isSubmitted, onSelect]);
+  }, [exercise.options, hiddenLabels, isSubmitted, onSelect]);
 
   useEffect(() => {
     if (!isSubmitted) {
@@ -166,16 +181,16 @@ export function MultipleChoiceExercise({
           ) : null}
           {isSentenceAudio ? (
             <div className="audio-panel lesson-audio-panel">
-              <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
-                Повторить фразу
+              <button className="audio-round-button" type="button" onClick={onReplayAudio} title="Повторить фразу (R)" aria-label="Повторить фразу">
+                <AppIcon name="volume" size={44} />
               </button>
               <p className="lesson-prompt-copy">{copy.hint}</p>
             </div>
           ) : null}
           {isAudioExercise ? (
             <div className="audio-panel lesson-audio-panel">
-              <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
-                Повторить аудио
+              <button className="audio-round-button" type="button" onClick={onReplayAudio} title="Повторить аудио (R)" aria-label="Повторить аудио">
+                <AppIcon name="volume" size={44} />
               </button>
               <p className="lesson-prompt-copy">{copy.hint}</p>
             </div>
@@ -189,6 +204,12 @@ export function MultipleChoiceExercise({
       }
       body={
         <>
+          {canHint && !isSubmitted ? (
+            <div className="lesson-hint-row">
+              <span>{hintsUsed ? 'Осталось два варианта' : 'Не уверены? Возьмите подсказку'}</span>
+              <HintButton label="Подсказка: убрать два неверных варианта" disabled={hintsUsed > 0} onClick={() => onHint?.()} />
+            </div>
+          ) : null}
           <div
             className={[
               'choice-list',
@@ -200,7 +221,8 @@ export function MultipleChoiceExercise({
             {exercise.options?.map((option, optionIndex) => {
               const isCorrect = option.label === exercise.correctAnswer;
               const isSelected = option.label === selectedAnswer;
-              const state = isSubmitted
+              const isHidden = hiddenLabels.has(option.label);
+              const state = isHidden && !isSubmitted ? 'muted' : isSubmitted
                 ? isCorrect
                   ? 'correct'
                   : isSelected
@@ -214,8 +236,8 @@ export function MultipleChoiceExercise({
                 <LessonChoiceButton
                   key={option.id + option.label}
                   state={state}
-                  disabled={isSubmitted}
-                  className={word.language === 'japanese' && containsJapaneseKanji(option.label) ? 'japanese-kanji-choice' : ''}
+                  disabled={isSubmitted || isHidden}
+                  className={[word.language === 'japanese' && containsJapaneseKanji(option.label) ? 'japanese-kanji-choice' : '', isHidden ? 'hint-removed' : ''].filter(Boolean).join(' ')}
                   onClick={() => onSelect(option.label)}
                 >
                   {exercise.options!.length <= 9 ? <span className="choice-key" aria-hidden="true">{optionIndex + 1}</span> : null}
@@ -228,7 +250,7 @@ export function MultipleChoiceExercise({
             <div className={selectedAnswer === exercise.correctAnswer ? 'answer-feedback success' : 'answer-feedback error'}>
               <div>
                 <strong>
-                  {selectedAnswer === exercise.correctAnswer ? 'Верно' : (
+                  {selectedAnswer === exercise.correctAnswer ? (hintsUsed ? 'Верно, с подсказкой' : 'Верно') : (
                     <>Правильный ответ: <span lang={word.language === 'japanese' && (isTranslationExercise || isDefinition) ? 'ja' : undefined}>{exercise.correctAnswer}</span></>
                   )}
                 </strong>

@@ -251,6 +251,8 @@ describe('grading and long intervals', () => {
     const timed = <T extends ReturnType<typeof correct>>(o: T, responseMs: number, nearMiss = false) => ({ ...o, responseMs, nearMiss });
     expect(gradeReview([timed(correct('a', 0), 3000), timed(correct('a', 1), 2500)])).toBe(4);
     expect(gradeReview([correct('a', 0), correct('a', 1)])).toBe(3);
+    // A first answer found with a hint counts as «с трудом».
+    expect(gradeReview([{ ...timed(correct('a', 0), 3000), hinted: true }, timed(correct('a', 1), 2500)])).toBe(2);
     expect(gradeReview([timed(choice('a', true, 0), 1500), timed(choice('a', true, 1), 1500)])).toBe(3);
     expect(gradeReview([correct('a', 0), correct('a', 1), correct('a', 2), wrong('a', 3)])).toBe(3);
     expect(gradeReview([...[0, 1, 2, 3, 4, 5].map((n) => correct('a', n)), wrong('a', 6), wrong('a', 7)])).toBe(2);

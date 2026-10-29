@@ -44,6 +44,14 @@ const JAPANESE_WORD_CORRECTIONS: Readonly<Record<string, JapaneseWordCorrection>
   '受け取': { original: '受け取り', transcription: '[うけとり · uketori]' },
   '出会': { original: '出会い', transcription: '[であい · deai]' },
   '無実': { translation: 'невиновность / необоснованный' },
+  '目標': { translation: 'цель', transcription: '[もくひょう · mokuhyou]', part_of_speech: 'noun' },
+  '取得': { translation: 'получение (прав, документа)', transcription: '[しゅとく · shutoku]', part_of_speech: 'noun' },
+  '地獄': { translation: 'ад' },
+  '映像': { translation: 'изображение / видео' },
+  '代': { translation: 'плата (за что-то)', transcription: '[だい · dai]', part_of_speech: 'noun' },
+  '自ら': { translation: 'сам / собственноручно', transcription: '[みずから · mizukara]', part_of_speech: 'adverb' },
+  '持ち': { translation: 'за счёт (кого-то)' },
+  '畜生': { translation: 'скотина; бранное «чёрт!»' },
   '感覚する': { original: '感覚', translation: 'чувство / ощущение', transcription: '[かんかく · kankaku]', part_of_speech: 'noun' },
   '利益する': { original: '利益', translation: 'прибыль / выгода', transcription: '[りえき · rieki]', part_of_speech: 'noun' },
   '一言する': { original: '一言', translation: 'одно слово / пара слов', transcription: '[ひとこと · hitokoto]', part_of_speech: 'noun' },
@@ -334,8 +342,8 @@ const JAPANESE_WORD_CORRECTIONS: Readonly<Record<string, JapaneseWordCorrection>
 export const JAPANESE_EXCLUDED_WORDS: ReadonlySet<string> = new Set(['あぁ', 'あー', 'アア', 'ア', '有難う', 'あげ', '上げ', '重', '科',
   // Generator artifacts: a misread kanji and する-verbs in rare senses.
   '経', '十分する', '将来する', '原因する', '科学する',
-  // Wrong readings for the kanji (玄人, 取り柄, 目印): left out until rewritten.
-  '黒人', '取得', '目標']);
+  // A wrong reading (玄人) and senses too narrow to teach (thesis, antithesis, resigning at shogi).
+  '黒人', '正', '反', '投げ']);
 
 export function applyJapaneseWordCorrection(word: Word): Word {
   const correction = JAPANESE_WORD_CORRECTIONS[word.original];

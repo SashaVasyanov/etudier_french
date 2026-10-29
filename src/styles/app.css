@@ -6136,3 +6136,283 @@ ruby rt {
   color: var(--label-2);
   font-size: 0.98rem;
 }
+
+/* The key: one more clue toward the answer. */
+.hint-key-button {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--accent);
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease, opacity 150ms ease;
+}
+
+.hint-key-button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.hint-key-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.hint-key-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.hint-key-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.lesson-hint-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--label-3);
+  font-size: 0.92rem;
+}
+
+.choice-button.hint-removed {
+  opacity: 0.25;
+  text-decoration: line-through;
+}
+
+.input-with-hint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-with-hint .text-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.lesson-skip-button {
+  border: 0;
+  background: none;
+  padding: 6px 4px;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.lesson-skip-button:hover {
+  color: var(--accent-hover);
+}
+
+.lesson-skip-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* «Соберите слово». */
+.letters {
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+}
+
+.letters-slots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  min-height: 56px;
+}
+
+.letters-slot {
+  width: 40px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-bottom: 3px solid var(--fill-strong);
+  color: var(--label);
+  font-size: 1.6rem;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.letters-slot.space {
+  width: 16px;
+  border-bottom-color: transparent;
+}
+
+.letters-slot.filled {
+  border-bottom-color: var(--accent);
+}
+
+.letters-slot.wrong {
+  color: var(--red);
+  border-bottom-color: var(--red);
+}
+
+.letters-slots.correct .letters-slot {
+  color: var(--green);
+  border-bottom-color: var(--green);
+}
+
+.letters-slots.incorrect .letters-slot {
+  color: var(--label);
+  border-bottom-color: var(--red);
+}
+
+.letters-slots .hint-key-button {
+  margin-left: 10px;
+}
+
+.letters-bank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.letter-tile {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 14px;
+  background: var(--fill);
+  color: var(--label);
+  font: inherit;
+  font-size: 1.45rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms ease, transform 120ms ease;
+}
+
+.letter-tile:hover:not(:disabled) {
+  background: var(--fill-strong);
+}
+
+.letter-tile:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.letter-tile:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.letter-tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.letter-tile-count {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ── Tasks laid out for a desktop window (after the Skyeng phone screens) ── */
+
+/* The lesson bar: close, title, count, «Пропустить», keys. */
+.lesson-session-row {
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: auto;
+}
+
+/* Listening tasks: one big round speaker, as on the phone. */
+.audio-round-button {
+  width: 104px;
+  height: 104px;
+  display: grid;
+  place-items: center;
+  margin: 4px auto 2px;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent) 80%, white), var(--accent));
+  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--accent) 80%, black);
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.audio-round-button:hover {
+  transform: scale(1.03);
+}
+
+.audio-round-button:active {
+  transform: scale(0.97);
+}
+
+.audio-round-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  outline-offset: 4px;
+}
+
+.lesson-focus-screen .lesson-audio-panel {
+  justify-items: center;
+  text-align: center;
+}
+
+/* Answers in two columns: keys 1–4 map to a 2 × 2 grid. */
+@media (min-width: 720px) {
+  .lesson-focus-screen .lesson-choice-stack {
+    max-width: 640px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 16px;
+  }
+}
+
+.lesson-focus-screen .lesson-choice-grid .choice-button,
+.lesson-focus-screen .lesson-choice-stack .choice-button {
+  min-height: 64px;
+  border-radius: 16px;
+  font-size: 1.05rem;
+}
+
+/* Picture first, then the word to write or spell. */
+.lesson-input-card .lesson-card-visual,
+.lesson-letters-card .lesson-card-visual {
+  order: -1;
+}
+
+.lesson-input-card .lesson-choice-image.word-image-large,
+.lesson-letters-card .lesson-choice-image.word-image-large {
+  width: min(100%, 460px);
+  max-height: 240px;
+  margin-inline: auto;
+}
+
+/* The answer format is a quiet note, not a chip. */
+.lesson-focus-screen .input-meta span {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--label-3);
+  font-size: 0.86rem;
+}
+
+.lesson-focus-screen .lesson-hint-row {
+  width: min(100%, 640px);
+  margin-inline: auto;
+}

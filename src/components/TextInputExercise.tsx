@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { getLearningLanguageAdverb, getLearningLanguageTitle } from '../lib/languages';
 import { diffAnswer, editDistance, normalizeDictation, stripFrenchArticleForDisplay } from '../lib/utils';
-import { getExerciseCopy } from '../lib/wordPresentation';
+import { getExerciseCopy, getJapaneseHiraganaReading } from '../lib/wordPresentation';
+import { HintButton } from './HintButton';
+import { AppIcon } from './AppIcon';
+import { WordImage } from './WordImage';
 import type { Exercise, Word } from '../types';
 import { AnswerWordDetails } from './AnswerWordDetails';
 import { CenteredWordBlock } from './CenteredWordBlock';
@@ -21,6 +24,9 @@ interface TextInputExerciseProps {
   onNext: () => void;
   onMarkKnown?: () => void;
   onIgnoreWord?: () => void;
+  /** Hints taken: each one fills in one more letter of the answer. */
+  hintsUsed?: number;
+  onHint?: () => void;
 }
 
 export function TextInputExercise({
@@ -36,6 +42,8 @@ export function TextInputExercise({
   onNext,
   onMarkKnown,
   onIgnoreWord,
+  hintsUsed = 0,
+  onHint,
 }: TextInputExerciseProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -49,6 +57,19 @@ export function TextInputExercise({
   const isDictation = exercise.type === 'sentence_dictation';
   const isAudioExercise = exercise.type === 'audio_to_original_input' || isDictation;
   const isReadingExercise = exercise.type === 'kanji_to_hiragana_input';
+  const isTranslationPrompt = exercise.type === 'translation_to_original_input' || exercise.type === 'sentence_cloze_input';
+  // Japanese answers are hinted in kana, so the hint does not need an IME.
+  const hintTarget = word.language === 'japanese' && !isReadingExercise
+    ? getJapaneseHiraganaReading(word) ?? exercise.correctAnswer
+    : exercise.correctAnswer;
+  const canHint = Boolean(onHint) && !isDictation && hintTarget.length > 1;
+  const hintsLeft = canHint && hintsUsed < hintTarget.length - 1;
+  function takeHint() {
+    const shown = Math.min(hintsUsed + 1, hintTarget.length - 1);
+    onChange(hintTarget.slice(0, shown));
+    onHint?.();
+    inputRef.current?.focus();
+  }
   const answerFormatHint = isDictation
     ? 'Заглавные буквы и знаки препинания не проверяются'
     : isReadingExercise
@@ -120,8 +141,8 @@ export function TextInputExercise({
           <h2 className="exercise-title">{copy.title}</h2>
           {isAudioExercise ? (
             <div className="audio-panel lesson-audio-panel">
-              <button className="audio-button audio-button-prominent" type="button" onClick={onReplayAudio}>
-                Повторить аудио
+              <button className="audio-round-button" type="button" onClick={onReplayAudio} title="Повторить аудио (R)" aria-label="Повторить аудио">
+                <AppIcon name="volume" size={44} />
               </button>
               <p className="lesson-prompt-copy">{copy.hint}</p>
             </div>
@@ -135,11 +156,13 @@ export function TextInputExercise({
           )}
         </header>
       }
+      visual={isTranslationPrompt && !isSubmitted ? <WordImage word={word} size="large" className="lesson-word-image lesson-choice-image" /> : null}
       body={
         <div className="exercise-input-panel">
           <label className="input-label" htmlFor={`word-answer-${exercise.id}`}>
             Ваш ответ
           </label>
+          <div className="input-with-hint">
           <input
             id={`word-answer-${exercise.id}`}
             ref={inputRef}
@@ -170,6 +193,10 @@ export function TextInputExercise({
               }
             }}
           />
+          {canHint && !isSubmitted ? (
+            <HintButton label="Подсказка: следующая буква" disabled={!hintsLeft} onClick={takeHint} />
+          ) : null}
+          </div>
 
           <div className="input-meta">
             <span>{answerFormatHint}</span>
@@ -179,7 +206,7 @@ export function TextInputExercise({
             <>
               <div className={nearMiss ? 'answer-feedback near' : isCorrect ? 'answer-feedback success' : 'answer-feedback error'}>
                 <div>
-                  <strong>{nearMiss ? 'Почти верно — опечатка' : isCorrect ? 'Верно' : 'Правильный ответ:'}</strong>
+                  <strong>{nearMiss ? 'Почти верно — опечатка' : isCorrect ? (hintsUsed ? 'Верно, с подсказкой' : 'Верно') : 'Правильный ответ:'}</strong>
                   {isDictation ? (
                     <span className="answer-dictation">
                       <span lang="fr">{exercise.correctAnswer}</span>
