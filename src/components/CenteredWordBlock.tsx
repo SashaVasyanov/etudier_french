@@ -3,6 +3,8 @@ interface CenteredWordBlockProps {
   subtitle?: string;
   meta?: string;
   titleClassName?: string;
+  /** Language of the title, so Japanese words get the larger CJK style. */
+  titleLang?: string;
   subtitleClassName?: string;
   className?: string;
 }
@@ -12,13 +14,14 @@ export function CenteredWordBlock({
   subtitle,
   meta,
   titleClassName = '',
+  titleLang,
   subtitleClassName = '',
   className = '',
 }: CenteredWordBlockProps) {
   return (
     <div className={['centered-word-block', className].filter(Boolean).join(' ')}>
       <div className="centered-word-block-inner">
-        <h2 className={['centered-word-title', titleClassName].filter(Boolean).join(' ')}>{title}</h2>
+        <h2 className={['centered-word-title', titleClassName].filter(Boolean).join(' ')} lang={titleLang}>{title}</h2>
         {subtitle ? <p className={['centered-word-subtitle', subtitleClassName].filter(Boolean).join(' ')}>{subtitle}</p> : null}
         {meta ? <p className="centered-word-meta">{meta}</p> : null}
       </div>

@@ -963,3 +963,95 @@
   padding-top: 0;
   min-height: 0;
 }
+
+/* ── Japanese text sizes in tasks ───────────────────────────────── */
+/* The kanji being asked about is the main thing on the screen. */
+.desktop-app-layout .lesson-focus-screen .lesson-prompt-title[lang='ja'] {
+  font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  font-size: clamp(3.2rem, 6vw, 4.4rem);
+  line-height: 1.1;
+}
+
+.desktop-app-layout .lesson-focus-screen .lesson-prompt-title[lang='ja'] + .centered-word-subtitle {
+  font-size: 1.15rem;
+}
+
+/* After the answer: the word, its kana reading, and furigana big enough to read. */
+.desktop-app-layout .answer-word-details {
+  gap: 4px 14px;
+}
+
+.desktop-app-layout .answer-feedback-word {
+  font-size: 2.1rem;
+  line-height: 1.15;
+}
+
+.desktop-app-layout .answer-feedback-reading {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.desktop-app-layout .answer-feedback-translation {
+  font-size: 1rem;
+}
+
+.desktop-app-layout .answer-context-definition [lang='ja'],
+.desktop-app-layout .answer-context-definition[lang='ja'] {
+  font-size: 1.2rem;
+}
+
+.desktop-app-layout .answer-context .word-example-original {
+  font-size: 1.2rem;
+}
+
+.desktop-app-layout .answer-context rt,
+.desktop-app-layout .answer-context .word-example-original rt {
+  font-size: 0.62em;
+}
+
+.desktop-app-layout .answer-context .word-example-translation,
+.desktop-app-layout .answer-context-definition-translation {
+  font-size: 0.92rem;
+}
+
+/* Once answered, the hint and the transcription under the word repeat what the
+   answer panel shows, and the options can be slimmer: one screen for the answer. */
+.desktop-app-layout .lesson-card:has(.answer-feedback) .lesson-prompt-copy,
+.desktop-app-layout .lesson-card:has(.answer-feedback) .centered-word-subtitle {
+  display: none;
+}
+
+.desktop-app-layout .lesson-focus-screen .lesson-card:has(.answer-feedback) .lesson-choice-grid .choice-button,
+.desktop-app-layout .lesson-focus-screen .lesson-card:has(.answer-feedback) .lesson-choice-stack .choice-button {
+  min-height: 50px;
+  padding-block: 8px;
+}
+
+/* The revealed picture sits beside the answer text, above «Прослушать ещё раз». */
+.desktop-app-layout .answer-feedback {
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.desktop-app-layout .answer-feedback > div:first-child {
+  flex: 1 1 auto;
+}
+
+.desktop-app-layout .answer-feedback-aside {
+  flex: 0 0 auto;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 10px;
+}
+
+.desktop-app-layout .answer-feedback-image.word-image-frame {
+  width: clamp(150px, 24vw, 230px);
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+}
+
+.desktop-app-layout .answer-feedback-aside .feedback-replay-button {
+  margin-left: 0;
+}

@@ -126,6 +126,8 @@ export function MultipleChoiceExercise({
     };
   }, [isSubmitted, onNext]);
 
+  const showAnswerImage = isOriginalExercise || isTranslationExercise || isDefinition;
+
   return (
     <LessonCard
       className={cardClassName}
@@ -137,6 +139,7 @@ export function MultipleChoiceExercise({
               title={getDisplayWord(word)}
               subtitle={formatTranscription(word.transcription, word.language) || copy.hint}
               titleClassName="lesson-prompt-title lesson-word-title"
+              titleLang={word.language === 'japanese' ? 'ja' : undefined}
             />
           ) : null}
           {isTranslationExercise ? (
@@ -169,6 +172,7 @@ export function MultipleChoiceExercise({
               title={exercise.prompt}
               subtitle={`${exercise.context ?? ''} · ${copy.hint}`}
               titleClassName="lesson-prompt-title lesson-word-title"
+              titleLang={word.language === 'japanese' ? 'ja' : undefined}
               subtitleClassName="lesson-prompt-copy"
             />
           ) : null}
@@ -177,6 +181,7 @@ export function MultipleChoiceExercise({
               title={exercise.prompt}
               subtitle={`${exercise.context ?? ''} · ${copy.hint}`}
               titleClassName="lesson-prompt-title lesson-word-title"
+              titleLang={word.language === 'japanese' ? 'ja' : undefined}
               subtitleClassName="lesson-prompt-copy"
             />
           ) : null}
@@ -197,11 +202,6 @@ export function MultipleChoiceExercise({
             </div>
           ) : null}
         </header>
-      }
-      visual={
-        (isOriginalExercise || isTranslationExercise || isDefinition) && isSubmitted ? (
-          <WordImage word={word} size="large" className="lesson-word-image lesson-choice-image" />
-        ) : null
       }
       body={
         <>
@@ -265,10 +265,16 @@ export function MultipleChoiceExercise({
                   <AnswerContext word={word} showDefinition={!isDefinition} />
                 )}
               </div>
-              {onReplayAudio ? (
-                <button type="button" className="feedback-replay-button" onClick={onReplayAudio}>
-                  Прослушать ещё раз
-                </button>
+              {showAnswerImage || onReplayAudio ? (
+                <div className="answer-feedback-aside">
+                  {/* The picture is the reward for answering: beside the answer, so all of it fits on one screen. */}
+                  {showAnswerImage ? <WordImage word={word} size="large" className="answer-feedback-image" /> : null}
+                  {onReplayAudio ? (
+                    <button type="button" className="feedback-replay-button" onClick={onReplayAudio}>
+                      Прослушать ещё раз
+                    </button>
+                  ) : null}
+                </div>
               ) : null}
             </div>
           ) : null}
