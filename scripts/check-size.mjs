@@ -11,8 +11,8 @@ import { join, extname, relative } from 'node:path';
 const MB = 1024 * 1024;
 const KB = 1024;
 const BUDGET = {
-  appBundle: 50 * MB,
-  images: 45 * MB, // grown with the 0.8–0.9 vocabulary: ~2100 pictures
+  appBundle: 200 * MB, // 0.14: ~110 MB of recorded neural speech for every word and sentence
+  images: 70 * MB, // 0.14.3: generated pictures replace the random Flickr photos (~2200 pictures)
   javascript: 1.6 * MB,
   largestChunk: 420 * KB,
   css: 220 * KB,

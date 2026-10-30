@@ -913,13 +913,11 @@
     "imagePath": "/generated-word-images/a1-oiseau-173.webp",
     "imageUrl": "/generated-word-images/a1-oiseau-173.webp",
     "imageAlt": "птица: oiseau",
-    "imagePrompt": "Real associative image for \"oiseau\" (птица). Query: oiseau nature.",
-    "imageSource": "https://www.flickr.com/photos/24998164@N06/9559750617",
-    "imageSourceTitle": "yseultdel: Un nouveau bébé tourterelle est né à la maison #oeuf #tourterelle #oiseau #nature #naissance #bébé",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"yseultdel: Un nouveau bébé tourterelle est né à la maison #oeuf #tourterelle #oiseau #nature #naissance #bébé\" by eric.delcroix is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A small robin bird perched on a branch in a garden. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: oiseau",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-fleur-174": {
     "imagePath": "/generated-word-images/a1-fleur-174.webp",
@@ -1274,13 +1272,11 @@
     "imagePath": "/generated-word-images/a1-devoir-251.webp",
     "imageUrl": "/generated-word-images/a1-devoir-251.webp",
     "imageAlt": "домашнее задание: devoir",
-    "imagePrompt": "Real associative image for \"devoir\" (домашнее задание). Query: person looking.",
-    "imageSource": "https://www.flickr.com/photos/68532869@N08/17468693762",
-    "imageSourceTitle": "Person looking at smartphone in the dark",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Person looking at smartphone in the dark\" by Japanexperterna.se is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A child doing homework in a notebook at a kitchen table in the evening. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: devoir",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-prendre-253": {
     "imagePath": "/generated-word-images/a1-prendre-253.webp",
@@ -2612,13 +2608,11 @@
     "imagePath": "/generated-word-images/a1-touriste-463.webp",
     "imageUrl": "/generated-word-images/a1-touriste-463.webp",
     "imageAlt": "турист: touriste",
-    "imagePrompt": "Real associative image for \"touriste\" (турист). Query: touriste.",
-    "imageSource": "https://www.flickr.com/photos/23473115@N08/13761147044",
-    "imageSourceTitle": "hot tourist",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"hot tourist\" by srikandi19 is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A tourist with a backpack and a camera taking a photo of the Eiffel Tower. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: touriste",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-voyageur-464": {
     "imagePath": "/generated-word-images/a1-voyageur-464.webp",
@@ -2944,13 +2938,11 @@
     "imagePath": "/generated-word-images/a1-salon-491.webp",
     "imageUrl": "/generated-word-images/a1-salon-491.webp",
     "imageAlt": "гостиная: salon",
-    "imagePrompt": "Real associative image for \"salon\" (гостиная). Query: salon home.",
-    "imageSource": "https://www.flickr.com/photos/88907899@N06/22099492659",
-    "imageSourceTitle": "#MuseomixNord n'a peur de rien, même pas du travail le #dimanche ! #coworking #museomix #orga #team #kaban #reunion #pole #competence #event #evenement #salon #home #diy #instamoment #asso #numerique #museum",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"#MuseomixNord n'a peur de rien, même pas du travail le #dimanche ! #coworking #museomix #orga #team #kaban #reunion #pole #competence #event #evenement #salon #home #diy #instamoment #asso #numerique #museum\" by museomix is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A cozy living room with a sofa, a coffee table and a rug in a Paris apartment. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: salon",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-toilettes-492": {
     "imagePath": "/generated-word-images/a1-toilettes-492.webp",
@@ -3012,13 +3004,11 @@
     "imagePath": "/generated-word-images/a1-serviette-497.webp",
     "imageUrl": "/generated-word-images/a1-serviette-497.webp",
     "imageAlt": "полотенце: serviette",
-    "imagePrompt": "Real associative image for \"serviette\" (полотенце). Query: serviette home.",
-    "imageSource": "https://www.flickr.com/photos/14087513@N00/290903378",
-    "imageSourceTitle": "Peignoir & Serviette",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"Peignoir & Serviette\" by Kiff ta race is back is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
+    "imagePrompt": "Folded white bath towels on a shelf in a bathroom. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: serviette",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-savon-498": {
     "imagePath": "/generated-word-images/a1-savon-498.webp",
@@ -3060,13 +3050,11 @@
     "imagePath": "/generated-word-images/a1-canape-501.webp",
     "imageUrl": "/generated-word-images/a1-canape-501.webp",
     "imageAlt": "диван: canapé",
-    "imagePrompt": "Real associative image for \"canapé\" (диван). Query: canapé home.",
-    "imageSource": "https://www.flickr.com/photos/58820009@N05/7176097410",
-    "imageSourceTitle": "The Star",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"The Star\" by Eva Rinaldi Celebrity Photographer is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A comfortable grey sofa with cushions in a bright living room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: canapé",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-fauteuil-502": {
     "imagePath": "/generated-word-images/a1-fauteuil-502.webp",
@@ -3084,13 +3072,11 @@
     "imagePath": "/generated-word-images/a1-armoire-503.webp",
     "imageUrl": "/generated-word-images/a1-armoire-503.webp",
     "imageAlt": "шкаф: armoire",
-    "imagePrompt": "Real associative image for \"armoire\" (шкаф). Query: armoire home.",
-    "imageSource": "https://www.flickr.com/photos/23717595@N05/5445105117",
-    "imageSourceTitle": "French Antique Rococo Armoire in Pink",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"French Antique Rococo Armoire in Pink\" by frenchfinds.co.uk is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A tall wooden wardrobe with open doors showing hanging clothes in a bedroom. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: armoire",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-placard-504": {
     "imagePath": "/generated-word-images/a1-placard-504.webp",
@@ -3108,13 +3094,11 @@
     "imagePath": "/generated-word-images/a1-etagere-505.webp",
     "imageUrl": "/generated-word-images/a1-etagere-505.webp",
     "imageAlt": "полка: étagère",
-    "imagePrompt": "Real associative image for \"étagère\" (полка). Query: étagère home.",
-    "imageSource": "https://www.flickr.com/photos/39685874@N00/14678336902",
-    "imageSourceTitle": "interiors",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"interiors\" by omnia_mutantur is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A wall shelf with books and small plants in a living room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: étagère",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-tiroir-506": {
     "imagePath": "/generated-word-images/a1-tiroir-506.webp",
@@ -3516,25 +3500,21 @@
     "imagePath": "/generated-word-images/a1-balai-540.webp",
     "imageUrl": "/generated-word-images/a1-balai-540.webp",
     "imageAlt": "метла: balai",
-    "imagePrompt": "Real associative image for \"balai\" (метла). Query: balai home.",
-    "imageSource": "https://www.flickr.com/photos/85264217@N04/16203942938",
-    "imageSourceTitle": "Devora Neumark, Faire bon ménage, 22 novembre 2014, Bâle",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Devora Neumark, Faire bon ménage, 22 novembre 2014, Bâle\" by Retis is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A broom sweeping a tiled kitchen floor. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: balai",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-aspirateur-541": {
     "imagePath": "/generated-word-images/a1-aspirateur-541.webp",
     "imageUrl": "/generated-word-images/a1-aspirateur-541.webp",
     "imageAlt": "пылесос: aspirateur",
-    "imagePrompt": "Real associative image for \"aspirateur\" (пылесос). Query: aspirateur home.",
-    "imageSource": "https://www.flickr.com/photos/28853433@N02/34384173275",
-    "imageSourceTitle": "Two children playing in the living room of a farm home, Ontario / Deux enfants qui jouent dans le salon d’une maison de ferme (Ontario)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Two children playing in the living room of a farm home, Ontario / Deux enfants qui jouent dans le salon d’une maison de ferme (Ontario)\" by BiblioArchives / LibraryArchives is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A vacuum cleaner on a carpet in a living room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: aspirateur",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-machine-542": {
     "imagePath": "/generated-word-images/a1-machine-542.webp",
@@ -3712,13 +3692,11 @@
     "imagePath": "/generated-word-images/a1-jus-557.webp",
     "imageUrl": "/generated-word-images/a1-jus-557.webp",
     "imageAlt": "сок: jus",
-    "imagePrompt": "Real associative image for \"jus\" (сок). Query: jus food.",
-    "imageSource": "https://www.flickr.com/photos/10559879@N00/3106001349",
-    "imageSourceTitle": "Duck leg confit with kipfler potato salad and jus gras - Jones The Grocer, Chadstone AUD15",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Duck leg confit with kipfler potato salad and jus gras - Jones The Grocer, Chadstone AUD15\" by avlxyz is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A glass of fresh orange juice next to halved oranges on a breakfast table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: jus",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-limonade-558": {
     "imagePath": "/generated-word-images/a1-limonade-558.webp",
@@ -4156,25 +4134,21 @@
     "imagePath": "/generated-word-images/a1-raisin-596.webp",
     "imageUrl": "/generated-word-images/a1-raisin-596.webp",
     "imageAlt": "виноград: raisin",
-    "imagePrompt": "Real associative image for \"raisin\" (виноград). Query: raisin food.",
-    "imageSource": "https://www.flickr.com/photos/24998164@N06/20930433571",
-    "imageSourceTitle": "cuisinedemememoniq: Scones aux raisins et à la crème #scone #cream #raisin #food #homemade #faitmaison N'hésitez pas à nous demander la recette, nous la publierons dans notre blog http://ift.tt/1q7mxub #yummy #cooking #eating #french #foodpic #foodgasm #i",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"cuisinedemememoniq: Scones aux raisins et à la crème #scone #cream #raisin #food #homemade #faitmaison N'hésitez pas à nous demander la recette, nous la publierons dans notre blog http://ift.tt/1q7mxub #yummy #cooking #eating #french #foodpic #foodgasm #i\" by eric.delcroix is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A bunch of purple grapes on the vine in a vineyard in Bordeaux. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: raisin",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-poire-597": {
     "imagePath": "/generated-word-images/a1-poire-597.webp",
     "imageUrl": "/generated-word-images/a1-poire-597.webp",
     "imageAlt": "груша: poire",
-    "imagePrompt": "Real associative image for \"poire\" (груша). Query: poire food.",
-    "imageSource": "https://www.flickr.com/photos/24257141@N05/2538540022",
-    "imageSourceTitle": "Miniature Food Fruit Plate",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Miniature Food Fruit Plate\" by PetitPlat - Stephanie Kilgast is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A ripe green pear on a wooden kitchen table. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: poire",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-kiwi-598": {
     "imagePath": "/generated-word-images/a1-kiwi-598.webp",
@@ -4248,13 +4222,11 @@
     "imagePath": "/generated-word-images/a1-carotte-604.webp",
     "imageUrl": "/generated-word-images/a1-carotte-604.webp",
     "imageAlt": "морковь: carotte",
-    "imagePrompt": "Real associative image for \"carotte\" (морковь). Query: carotte food.",
-    "imageSource": "https://www.flickr.com/photos/36131061@N00/35819369",
-    "imageSourceTitle": "Carrots - Carota - Wortels - Geze - 胡萝卜- zanahoria - carotte - ニンジン",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Carrots - Carota - Wortels - Geze - 胡萝卜- zanahoria - carotte - ニンジン\" by color line is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A bunch of fresh orange carrots with green tops at a French market stall. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: carotte",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-oignon-605": {
     "imagePath": "/generated-word-images/a1-oignon-605.webp",
@@ -4328,13 +4300,11 @@
     "imagePath": "/generated-word-images/a1-champignon-611.webp",
     "imageUrl": "/generated-word-images/a1-champignon-611.webp",
     "imageAlt": "гриб: champignon",
-    "imagePrompt": "Real associative image for \"champignon\" (гриб). Query: champignon food.",
-    "imageSource": "https://www.flickr.com/photos/24998164@N06/26477347083",
-    "imageSourceTitle": "cuisinedemememoniq: Pizza “restes du frigo” #pizza #olive #tomate #champignons #food #homemade #faitmaison N'hésitez pas à nous demander la recette, nous la publierons dans notre blog http://ift.tt/1JtxP6n #amazing #eat #foodporn #instagood #photooftheday",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"cuisinedemememoniq: Pizza “restes du frigo” #pizza #olive #tomate #champignons #food #homemade #faitmaison N'hésitez pas à nous demander la recette, nous la publierons dans notre blog http://ift.tt/1JtxP6n #amazing #eat #foodporn #instagood #photooftheday\" by eric.delcroix is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A brown wild mushroom growing on moss in an autumn forest. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: champignon",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-chou-612": {
     "imagePath": "/generated-word-images/a1-chou-612.webp",
@@ -4448,13 +4418,11 @@
     "imagePath": "/generated-word-images/a1-dessert-621.webp",
     "imageUrl": "/generated-word-images/a1-dessert-621.webp",
     "imageAlt": "десерт: dessert",
-    "imagePrompt": "Real associative image for \"dessert\" (десерт). Query: dessert food.",
-    "imageSource": "https://www.flickr.com/photos/76983781@N07/35098782454",
-    "imageSourceTitle": "Sweet Food Chocolate Dessert Food Indulgence Indoors Food And Drink Table Celebration Temptation No People High Angle View Unhealthy Eating Tray Ready-to-eat Candy Freshness Dark Chocolate Close-up Day Baker - Occupation Baking Bread Cake♥ White Backgrou",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Sweet Food Chocolate Dessert Food Indulgence Indoors Food And Drink Table Celebration Temptation No People High Angle View Unhealthy Eating Tray Ready-to-eat Candy Freshness Dark Chocolate Close-up Day Baker - Occupation Baking Bread Cake♥ White Backgrou\" by minhquanfoto is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A slice of strawberry tart served as dessert on a plate in a French restaurant. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: dessert",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-recette-622": {
     "imagePath": "/generated-word-images/a1-recette-622.webp",
@@ -4664,37 +4632,31 @@
     "imagePath": "/generated-word-images/a1-parc-639.webp",
     "imageUrl": "/generated-word-images/a1-parc-639.webp",
     "imageAlt": "парк: parc",
-    "imagePrompt": "Real associative image for \"parc\" (парк). Query: parc.",
-    "imageSource": "https://www.flickr.com/photos/46783079@N00/52285905229",
-    "imageSourceTitle": "Barcelona - Parc Güell",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"Barcelona - Parc Güell\" by Alf Igel is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
+    "imagePrompt": "A green city park in Paris with trees, paths and people on benches. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: parc",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-pont-640": {
     "imagePath": "/generated-word-images/a1-pont-640.webp",
     "imageUrl": "/generated-word-images/a1-pont-640.webp",
     "imageAlt": "мост: pont",
-    "imagePrompt": "Real associative image for \"pont\" (мост). Query: pont.",
-    "imageSource": "https://www.flickr.com/photos/115195291@N02/24563598964",
-    "imageSourceTitle": "[Pont Saint-Pierre, travaux de construction]. 1/7/1930.",
-    "imageProvider": "flickr",
-    "imageLicense": "pdm-1.0",
-    "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-    "imageAttribution": "\"[Pont Saint-Pierre, travaux de construction]. 1/7/1930.\" by AMToulouse is marked with Public Domain Mark 1.0. To view the terms, visit https://creativecommons.org/publicdomain/mark/1.0/."
+    "imagePrompt": "An old stone bridge over the Seine river in Paris. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: pont",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-trottoir-641": {
     "imagePath": "/generated-word-images/a1-trottoir-641.webp",
     "imageUrl": "/generated-word-images/a1-trottoir-641.webp",
     "imageAlt": "тротуар: trottoir",
-    "imagePrompt": "Real associative image for \"trottoir\" (тротуар). Query: trottoir.",
-    "imageSource": "https://www.flickr.com/photos/38891071@N00/1810501534",
-    "imageSourceTitle": "Op het trottoir / On the sidewalk",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Op het trottoir / On the sidewalk\" by FaceMePLS is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "People walking along a wide sidewalk next to a street in Paris. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: trottoir",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-carrefour-642": {
     "imagePath": "/generated-word-images/a1-carrefour-642.webp",
@@ -4772,13 +4734,11 @@
     "imagePath": "/generated-word-images/a1-mairie-648.webp",
     "imageUrl": "/generated-word-images/a1-mairie-648.webp",
     "imageAlt": "мэрия: mairie",
-    "imagePrompt": "Real associative image for \"mairie\" (мэрия). Query: mairie.",
-    "imageSource": "https://www.flickr.com/photos/74776159@N00/10478253726",
-    "imageSourceTitle": "Place de la Mairie",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Place de la Mairie\" by decar66 is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "The facade of a French town hall with a French flag on a sunny square. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: mairie",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-poste-649": {
     "imagePath": "/generated-word-images/a1-poste-649.webp",
@@ -4796,37 +4756,31 @@
     "imagePath": "/generated-word-images/a1-banque-650.webp",
     "imageUrl": "/generated-word-images/a1-banque-650.webp",
     "imageAlt": "банк: banque",
-    "imagePrompt": "Real associative image for \"banque\" (банк). Query: banque.",
-    "imageSource": "https://www.flickr.com/photos/28853433@N02/52376896405",
-    "imageSourceTitle": "Inspecting paper currency, Canadian Bank Note Company, Ottawa, Ontario / Inspection des billets à la Compagnie canadienne des billets de banque, Ottawa (Ontario)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Inspecting paper currency, Canadian Bank Note Company, Ottawa, Ontario / Inspection des billets à la Compagnie canadienne des billets de banque, Ottawa (Ontario)\" by BiblioArchives / LibraryArchives is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "The interior of a bank branch with a customer talking to a clerk at the counter. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: banque",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-pharmacie-651": {
     "imagePath": "/generated-word-images/a1-pharmacie-651.webp",
     "imageUrl": "/generated-word-images/a1-pharmacie-651.webp",
     "imageAlt": "аптека: pharmacie",
-    "imagePrompt": "Real associative image for \"pharmacie\" (аптека). Query: pharmacie.",
-    "imageSource": "https://www.flickr.com/photos/17514301@N00/503557565",
-    "imageSourceTitle": "Pharmacies",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Pharmacies\" by david_megginson is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A pharmacist handing a box of medicine to a customer in a French pharmacy with a green cross. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: pharmacie",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-hopital-652": {
     "imagePath": "/generated-word-images/a1-hopital-652.webp",
     "imageUrl": "/generated-word-images/a1-hopital-652.webp",
     "imageAlt": "больница: hôpital",
-    "imagePrompt": "Real associative image for \"hôpital\" (больница). Query: hôpital.",
-    "imageSource": "https://www.flickr.com/photos/39478367@N02/3662799002",
-    "imageSourceTitle": "Hôpital Notre-Dame",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"Hôpital Notre-Dame\" by Archives de la Ville de Montréal is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A hospital corridor with a doctor and a nurse walking past patient rooms. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: hôpital",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-clinique-653": {
     "imagePath": "/generated-word-images/a1-clinique-653.webp",
@@ -4856,13 +4810,11 @@
     "imagePath": "/generated-word-images/a1-bibliotheque-655.webp",
     "imageUrl": "/generated-word-images/a1-bibliotheque-655.webp",
     "imageAlt": "библиотека: bibliothèque",
-    "imagePrompt": "Real associative image for \"bibliothèque\" (библиотека). Query: bibliothèque.",
-    "imageSource": "https://www.flickr.com/photos/82733052@N00/2119289411",
-    "imageSourceTitle": "Bibliothèque",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"Bibliothèque\" by Ex-InTransit is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
+    "imagePrompt": "People reading at long wooden tables in a library with tall bookshelves. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bibliothèque",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-librairie-656": {
     "imagePath": "/generated-word-images/a1-librairie-656.webp",
@@ -4880,13 +4832,11 @@
     "imagePath": "/generated-word-images/a1-boulangerie-657.webp",
     "imageUrl": "/generated-word-images/a1-boulangerie-657.webp",
     "imageAlt": "булочная: boulangerie",
-    "imagePrompt": "Real associative image for \"boulangerie\" (булочная). Query: boulangerie.",
-    "imageSource": "https://www.flickr.com/photos/70323761@N00/1430807616",
-    "imageSourceTitle": "Paris - Latin Quarter - Eric Kayser Boulangerie - croissant",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Paris - Latin Quarter - Eric Kayser Boulangerie - croissant\" by wallyg is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "Baguettes and croissants on the counter of a French bakery, a baker behind it. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: boulangerie",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-boucherie-658": {
     "imagePath": "/generated-word-images/a1-boucherie-658.webp",
@@ -4916,13 +4866,11 @@
     "imagePath": "/generated-word-images/a1-supermarche-660.webp",
     "imageUrl": "/generated-word-images/a1-supermarche-660.webp",
     "imageAlt": "супермаркет: supermarché",
-    "imagePrompt": "Real associative image for \"supermarché\" (супермаркет). Query: supermarché.",
-    "imageSource": "https://www.flickr.com/photos/36135547@N00/5218734385",
-    "imageSourceTitle": "mirage dans le supermarché",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"mirage dans le supermarché\" by VYNO is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A shopper pushing a cart along an aisle of a supermarket. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: supermarché",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-centre-commercial-661": {
     "imagePath": "/generated-word-images/a1-centre-commercial-661.webp",
@@ -4940,13 +4888,11 @@
     "imagePath": "/generated-word-images/a1-cinema-662.webp",
     "imageUrl": "/generated-word-images/a1-cinema-662.webp",
     "imageAlt": "кинотеатр: cinéma",
-    "imagePrompt": "Real associative image for \"cinéma\" (кинотеатр). Query: cinéma.",
-    "imageSource": "https://www.flickr.com/photos/30533017@N00/51387483385",
-    "imageSourceTitle": "famille cinéma 1",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"famille cinéma 1\" by pilllpat (agence eureka) is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "People watching a film in a dark cinema hall, the screen glowing. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: cinéma",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-theatre-663": {
     "imagePath": "/generated-word-images/a1-theatre-663.webp",
@@ -4964,13 +4910,11 @@
     "imagePath": "/generated-word-images/a1-musee-664.webp",
     "imageUrl": "/generated-word-images/a1-musee-664.webp",
     "imageAlt": "музей: musée",
-    "imagePrompt": "Real associative image for \"musée\" (музей). Query: musée.",
-    "imageSource": "https://www.flickr.com/photos/79505738@N03/33945457638",
-    "imageSourceTitle": "IMG_4620B Bartolomé Esteban Murillo 1617-1682 Sevilla La Vierge et l'Enfant avec Sainte Rose de Viterbe 1670 The Virgin and Child with Saint Rose of Viterbo 1670 Madrid Musée Thyssen Bornemisza",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"IMG_4620B Bartolomé Esteban Murillo 1617-1682 Sevilla La Vierge et l'Enfant avec Sainte Rose de Viterbe 1670 The Virgin and Child with Saint Rose of Viterbo 1670 Madrid Musée Thyssen Bornemisza\" by jean louis mazieres is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "Visitors looking at paintings in a large hall of a Paris art museum. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: musée",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-exposition-665": {
     "imagePath": "/generated-word-images/a1-exposition-665.webp",
@@ -5072,13 +5016,11 @@
     "imagePath": "/generated-word-images/a1-commissariat-673.webp",
     "imageUrl": "/generated-word-images/a1-commissariat-673.webp",
     "imageAlt": "полицейский участок: commissariat",
-    "imagePrompt": "Real associative image for \"commissariat\" (полицейский участок). Query: commissariat.",
-    "imageSource": "https://www.flickr.com/photos/38712296@N07/4052982899",
-    "imageSourceTitle": "Enseigne de commissariat de police",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Enseigne de commissariat de police\" by zigazou76 is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "Two French police officers standing at the entrance of a police station. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: commissariat",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-ambassade-674": {
     "imagePath": "/generated-word-images/a1-ambassade-674.webp",
@@ -5228,25 +5170,21 @@
     "imagePath": "/generated-word-images/a1-depart-686.webp",
     "imageUrl": "/generated-word-images/a1-depart-686.webp",
     "imageAlt": "отправление: départ",
-    "imagePrompt": "Real associative image for \"départ\" (отправление). Query: départ travel.",
-    "imageSource": "https://www.flickr.com/photos/72746018@N00/8229592988",
-    "imageSourceTitle": "Paul Gauguin (musée de l'Orangerie, Paris)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Paul Gauguin (musée de l'Orangerie, Paris)\" by dalbera is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A high-speed train pulling away from a platform at a French railway station. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: départ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-arrivee-687": {
     "imagePath": "/generated-word-images/a1-arrivee-687.webp",
     "imageUrl": "/generated-word-images/a1-arrivee-687.webp",
     "imageAlt": "прибытие: arrivée",
-    "imagePrompt": "Real associative image for \"arrivée\" (прибытие). Query: arrivée travel.",
-    "imageSource": "https://www.flickr.com/photos/50785054@N03/51585359124",
-    "imageSourceTitle": "The Arrival of the James Webb Space Telescope in French Guiana",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"The Arrival of the James Webb Space Telescope in French Guiana\" by James Webb Space Telescope is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "Travellers with suitcases walking out of the arrivals gate at an airport, greeted by family. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: arrivée",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-retard-688": {
     "imagePath": "/generated-word-images/a1-retard-688.webp",
@@ -5276,13 +5214,11 @@
     "imagePath": "/generated-word-images/a1-arret-690.webp",
     "imageUrl": "/generated-word-images/a1-arret-690.webp",
     "imageAlt": "остановка: arrêt",
-    "imagePrompt": "Real associative image for \"arrêt\" (остановка). Query: arrêt travel.",
-    "imageSource": "https://www.flickr.com/photos/24559254@N00/523185165",
-    "imageSourceTitle": "Fermata dell'autobus.... alla Livornese",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Fermata dell'autobus.... alla Livornese\" by Conanil is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "People waiting at a city bus stop as a bus arrives. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: arrêt",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-quai-691": {
     "imagePath": "/generated-word-images/a1-quai-691.webp",
@@ -5358,13 +5294,11 @@
     "imagePath": "/generated-word-images/a1-valise-697.webp",
     "imageUrl": "/generated-word-images/a1-valise-697.webp",
     "imageAlt": "чемодан: valise",
-    "imagePrompt": "Real associative image for \"valise\" (чемодан). Query: valise travel.",
-    "imageSource": "https://www.flickr.com/photos/20195637@N00/6871142089",
-    "imageSourceTitle": "Voyage",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Voyage\" by Kat... is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A packed travel suitcase standing by the door of a hotel room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: valise",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-sac-a-dos-698": {
     "imagePath": "/generated-word-images/a1-sac-a-dos-698.webp",
@@ -5382,13 +5316,11 @@
     "imagePath": "/generated-word-images/a1-passeport-699.webp",
     "imageUrl": "/generated-word-images/a1-passeport-699.webp",
     "imageAlt": "паспорт: passeport",
-    "imagePrompt": "Real associative image for \"passeport\" (паспорт). Query: passeport travel.",
-    "imageSource": "https://www.flickr.com/photos/96425387@N00/3102463704",
-    "imageSourceTitle": "Selected Passport Pages",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"Selected Passport Pages\" by Mikael Colville-Andersen is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
+    "imagePrompt": "A closed passport held in a hand at an airport check-in desk, cover without any visible writing. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: passeport",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-visa-700": {
     "imagePath": "/generated-word-images/a1-visa-700.webp",
@@ -5430,13 +5362,11 @@
     "imagePath": "/generated-word-images/a1-itineraire-703.webp",
     "imageUrl": "/generated-word-images/a1-itineraire-703.webp",
     "imageAlt": "маршрут: itinéraire",
-    "imagePrompt": "Real associative image for \"itinéraire\" (маршрут). Query: itinéraire travel.",
-    "imageSource": "https://www.flickr.com/photos/26082117@N07/14924274547",
-    "imageSourceTitle": "Chassy (Cher).",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Chassy (Cher).\" by sybarite48 is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A paper road map spread on a car dashboard with a route traced by a finger, map without readable labels. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: itinéraire",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-plan-704": {
     "imagePath": "/generated-word-images/a1-plan-704.webp",
@@ -5454,13 +5384,11 @@
     "imagePath": "/generated-word-images/a1-reservation-705.webp",
     "imageUrl": "/generated-word-images/a1-reservation-705.webp",
     "imageAlt": "бронь: réservation",
-    "imagePrompt": "Real associative image for \"réservation\" (бронь). Query: réservation travel.",
-    "imageSource": "https://www.flickr.com/photos/19762676@N00/7907783102",
-    "imageSourceTitle": "Gallery of Palaeontology and Comparative Anatomy",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Gallery of Palaeontology and Comparative Anatomy\" by austinevan is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A hotel receptionist handing a room key card to a guest at the front desk. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: réservation",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-location-706": {
     "imagePath": "/generated-word-images/a1-location-706.webp",
@@ -5490,13 +5418,11 @@
     "imagePath": "/generated-word-images/a1-guide-708.webp",
     "imageUrl": "/generated-word-images/a1-guide-708.webp",
     "imageAlt": "гид: guide",
-    "imagePrompt": "Real associative image for \"guide\" (гид). Query: guide travel.",
-    "imageSource": "https://www.flickr.com/photos/99581103@N06/35855196166",
-    "imageSourceTitle": "barcelona city guide travel assaf henigsberg The Magic Fountain Font Màgica de Montjuïc אסף הניגסברג ברצלונה",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"barcelona city guide travel assaf henigsberg The Magic Fountain Font Màgica de Montjuïc אסף הניגסברג ברצלונה\" by Raphael Perez Israeli Artist is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A tour guide leading a small group of tourists through an old French town square, pointing at a building. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: guide",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-excursion-709": {
     "imagePath": "https://api.openverse.org/v1/images/6cf5f88b-f435-4797-9f69-2a6fa7f48410/thumb/",
@@ -5631,16 +5557,14 @@
     "imageAttribution": "\"Ship Portrait - 'Chemical Pioneer' (Bow)\" by OneEighteen is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
   },
   "a1-avion-721": {
-    "imagePath": "https://api.openverse.org/v1/images/cca306db-4150-4af3-925d-022cff3aac44/thumb/",
-    "imageUrl": "https://api.openverse.org/v1/images/cca306db-4150-4af3-925d-022cff3aac44/thumb/",
+    "imagePath": "/generated-word-images/a1-avion-721.webp",
+    "imageUrl": "/generated-word-images/a1-avion-721.webp",
     "imageAlt": "самолёт: avion",
-    "imagePrompt": "Real associative image for \"avion\" (самолёт). Query: avion travel.",
-    "imageSource": "https://commons.wikimedia.org/w/index.php?curid=35243821",
-    "imageSourceTitle": "Avion Travel 111 (870989713)",
-    "imageProvider": "wikimedia",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Avion Travel 111 (870989713)\" by Shadowgate from Novara, ITALY is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A passenger airplane taking off from a runway in France, blue sky. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: avion",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-helicoptere-722": {
     "imagePath": "/generated-word-images/a1-helicoptere-722.webp",
@@ -5669,14 +5593,12 @@
   "a1-ticket-724": {
     "imagePath": "/generated-word-images/a1-ticket-724.webp",
     "imageUrl": "/generated-word-images/a1-ticket-724.webp",
-    "imageAlt": "билет: ticket",
-    "imagePrompt": "Real associative image for \"ticket\" (билет). Query: ticket travel.",
-    "imageSource": "https://www.flickr.com/photos/45842803@N00/2702019803",
-    "imageSourceTitle": "'Ok I packed the tickets, travel shampoo, and GPF 15 (Geek Protection Factor). Do you think that is strong enough or should we pickup some GPF 45?'",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"'Ok I packed the tickets, travel shampoo, and GPF 15 (Geek Protection Factor). Do you think that is strong enough or should we pickup some GPF 45?'\" by colorblindPICASO is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
+    "imageAlt": "талон / билет: ticket",
+    "imagePrompt": "A hand holding a small paper metro ticket in front of a metro turnstile. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ticket",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-controle-725": {
     "imagePath": "/generated-word-images/a1-controle-725.webp",
@@ -5788,13 +5710,11 @@
     "imagePath": "/generated-word-images/a1-foret-734.webp",
     "imageUrl": "/generated-word-images/a1-foret-734.webp",
     "imageAlt": "лес: forêt",
-    "imagePrompt": "Real associative image for \"forêt\" (лес). Query: forêt nature.",
-    "imageSource": "https://www.flickr.com/photos/59782418@N02/5965334732",
-    "imageSourceTitle": "Série Forêt (Nature est Bitume)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Série Forêt (Nature est Bitume)\" by Bastien Confourier is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A sunlit path through a dense green forest of tall trees in France. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: forêt",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-bois-735": {
     "imagePath": "/generated-word-images/a1-bois-735.webp",
@@ -5932,109 +5852,91 @@
     "imagePath": "/generated-word-images/a1-plante-746.webp",
     "imageUrl": "/generated-word-images/a1-plante-746.webp",
     "imageAlt": "растение: plante",
-    "imagePrompt": "Real associative image for \"plante\" (растение). Query: plante nature.",
-    "imageSource": "https://www.flickr.com/photos/24998164@N06/35359515943",
-    "imageSourceTitle": "cladelcroix: Comme des petites couronnes 👑 Contz-Les-Bains, Lorraine, France . . . . . #plante #nature #green #plant #plants #fleur #flowers #fleurs #photography #flower #garden #plantes #vert #naturelovers #naturephotography #photo #summer #beauti",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"cladelcroix: Comme des petites couronnes 👑 Contz-Les-Bains, Lorraine, France . . . . . #plante #nature #green #plant #plants #fleur #flowers #fleurs #photography #flower #garden #plantes #vert #naturelovers #naturephotography #photo #summer #beauti\" by eric.delcroix is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A green potted plant on a sunny windowsill in a Paris apartment. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: plante",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-feuille-747": {
     "imagePath": "/generated-word-images/a1-feuille-747.webp",
     "imageUrl": "/generated-word-images/a1-feuille-747.webp",
     "imageAlt": "лист: feuille",
-    "imagePrompt": "Real associative image for \"feuille\" (лист). Query: feuille nature.",
-    "imageSource": "https://www.flickr.com/photos/24998164@N06/35022877171",
-    "imageSourceTitle": "La tempête a soufflée #feuille #feuilles #nature #leaves #vert #green #arbre #photography #paysage #tree #arbres #photo #couleurs #promenade #leaf #feuille #photooftheday #ville #urban #ville #city #street #picoftheday #igerslille #lille #lillemaville #ha",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"La tempête a soufflée #feuille #feuilles #nature #leaves #vert #green #arbre #photography #paysage #tree #arbres #photo #couleurs #promenade #leaf #feuille #photooftheday #ville #urban #ville #city #street #picoftheday #igerslille #lille #lillemaville #ha\" by eric.delcroix is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A single green leaf with visible veins lying on a wooden garden table in soft daylight. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: feuille",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-racine-748": {
     "imagePath": "/generated-word-images/a1-racine-748.webp",
     "imageUrl": "/generated-word-images/a1-racine-748.webp",
     "imageAlt": "корень: racine",
-    "imagePrompt": "Real associative image for \"racine\" (корень). Query: racine nature.",
-    "imageSource": "https://www.flickr.com/photos/84575872@N07/50568239498",
-    "imageSourceTitle": "conquering roots (in Explore)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nd/2.0/",
-    "imageAttribution": "\"conquering roots (in Explore)\" by WeVe1 is licensed under CC BY-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nd/2.0/."
+    "imagePrompt": "A young plant pulled out of the soil showing its long roots, held over a garden bed. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: racine",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-branche-749": {
     "imagePath": "/generated-word-images/a1-branche-749.webp",
     "imageUrl": "/generated-word-images/a1-branche-749.webp",
     "imageAlt": "ветка: branche",
-    "imagePrompt": "Real associative image for \"branche\" (ветка). Query: branche nature.",
-    "imageSource": "https://www.flickr.com/photos/33037982@N04/32530744756",
-    "imageSourceTitle": "Birds on branches ... nature's sculpture",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Birds on branches ... nature's sculpture\" by wallygrom is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A single tree branch with green leaves against a blue sky. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: branche",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-tronc-750": {
     "imagePath": "/generated-word-images/a1-tronc-750.webp",
     "imageUrl": "/generated-word-images/a1-tronc-750.webp",
     "imageAlt": "ствол: tronc",
-    "imagePrompt": "Real associative image for \"tronc\" (ствол). Query: tronc nature.",
-    "imageSource": "https://www.flickr.com/photos/47757737@N00/1752517791",
-    "imageSourceTitle": "olivier / olive tree",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"olivier / olive tree\" by OliBac is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "The thick trunk of an old oak tree with rough bark in a park, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: tronc",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-graine-751": {
     "imagePath": "/generated-word-images/a1-graine-751.webp",
     "imageUrl": "/generated-word-images/a1-graine-751.webp",
     "imageAlt": "семя: graine",
-    "imagePrompt": "Real associative image for \"graine\" (семя). Query: graine nature.",
-    "imageSource": "https://www.flickr.com/photos/22178197@N00/9689440088",
-    "imageSourceTitle": "Grain",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Grain\" by Kamil Porembiński is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A handful of sunflower seeds in an open palm above garden soil. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: graine",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-herbe-752": {
     "imagePath": "/generated-word-images/a1-herbe-752.webp",
     "imageUrl": "/generated-word-images/a1-herbe-752.webp",
     "imageAlt": "трава: herbe",
-    "imagePrompt": "Real associative image for \"herbe\" (трава). Query: herbe nature.",
-    "imageSource": "https://www.flickr.com/photos/55855021@N08/6818374784",
-    "imageSourceTitle": "Macro - Herbes - Nature",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Macro - Herbes - Nature\" by benjamin.pardon is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "Close-up of fresh green grass in a meadow with morning dew. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: herbe",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-rose-753": {
     "imagePath": "/generated-word-images/a1-rose-753.webp",
     "imageUrl": "/generated-word-images/a1-rose-753.webp",
     "imageAlt": "роза: rose",
-    "imagePrompt": "Real associative image for \"rose\" (роза). Query: rose nature.",
-    "imageSource": "https://www.flickr.com/photos/72575281@N00/14811961212",
-    "imageSourceTitle": "The Alma Rose. (Nature be cray)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"The Alma Rose. (Nature be cray)\" by Theory is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A single red rose in bloom in a French garden, soft background. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: rose",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-tulipe-754": {
     "imagePath": "/generated-word-images/a1-tulipe-754.webp",
     "imageUrl": "/generated-word-images/a1-tulipe-754.webp",
     "imageAlt": "тюльпан: tulipe",
-    "imagePrompt": "Real associative image for \"tulipe\" (тюльпан). Query: tulipe nature.",
-    "imageSource": "https://www.flickr.com/photos/50631360@N00/17328721526",
-    "imageSourceTitle": "Yuji contemplating his tulip nature.",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Yuji contemplating his tulip nature.\" by terryballard is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A bunch of bright red and yellow tulips in a flower bed in spring. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: tulipe",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-pissenlit-755": {
     "imagePath": "/generated-word-images/a1-pissenlit-755.webp",
@@ -6064,25 +5966,21 @@
     "imagePath": "/generated-word-images/a1-pin-757.webp",
     "imageUrl": "/generated-word-images/a1-pin-757.webp",
     "imageAlt": "сосна: pin",
-    "imagePrompt": "Real associative image for \"pin\" (сосна). Query: pin nature.",
-    "imageSource": "https://www.flickr.com/photos/52029354@N04/49919774133",
-    "imageSourceTitle": "Brindilles dans une forêt de pins #nature #twig #pine #sky #beautiful #pretty #tree #twilight #clouds #beauty #light #green#weather #red #mothernature",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Brindilles dans une forêt de pins #nature #twig #pine #sky #beautiful #pretty #tree #twilight #clouds #beauty #light #green#weather #red #mothernature\" by angelsansailes is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A tall pine tree with long needles on a hill by the Mediterranean sea. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: pin",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-chene-758": {
     "imagePath": "/generated-word-images/a1-chene-758.webp",
     "imageUrl": "/generated-word-images/a1-chene-758.webp",
     "imageAlt": "дуб: chêne",
-    "imagePrompt": "Real associative image for \"chêne\" (дуб). Query: chêne nature.",
-    "imageSource": "https://www.flickr.com/photos/44124348109@N01/357005518",
-    "imageSourceTitle": "Picnic on the Hill",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Picnic on the Hill\" by jurvetson is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A huge solitary oak tree with a wide crown in a green field. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: chêne",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-bouleau-759": {
     "imagePath": "/generated-word-images/a1-bouleau-759.webp",
@@ -6097,40 +5995,34 @@
     "imageAttribution": "\"The bark of white birch\" by Alexandre Dulaunoy is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
   },
   "a1-cheval-760": {
-    "imagePath": "https://api.openverse.org/v1/images/bd9c3b16-b821-4ada-8663-0ef1539b3607/thumb/",
-    "imageUrl": "https://api.openverse.org/v1/images/bd9c3b16-b821-4ada-8663-0ef1539b3607/thumb/",
+    "imagePath": "/generated-word-images/a1-cheval-760.webp",
+    "imageUrl": "/generated-word-images/a1-cheval-760.webp",
     "imageAlt": "лошадь: cheval",
-    "imagePrompt": "Real associative image for \"cheval\" (лошадь). Query: cheval nature.",
-    "imageSource": "https://commons.wikimedia.org/w/index.php?curid=130826746",
-    "imageSourceTitle": "Princess a cheval nature et animaux",
-    "imageProvider": "wikimedia",
-    "imageLicense": "by-sa-4.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "imageAttribution": "\"Princess a cheval nature et animaux\" by Princesssenegal is licensed under CC BY-SA 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/4.0/."
+    "imagePrompt": "A brown horse galloping across a green field in Normandy, France. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: cheval",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-vache-761": {
     "imagePath": "/generated-word-images/a1-vache-761.webp",
     "imageUrl": "/generated-word-images/a1-vache-761.webp",
     "imageAlt": "корова: vache",
-    "imagePrompt": "Real associative image for \"vache\" (корова). Query: vache nature.",
-    "imageSource": "https://www.flickr.com/photos/52499764@N00/7202950736",
-    "imageSourceTitle": "Nepal (09) - 26Sep10, Bardia (Nepal)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Nepal (09) - 26Sep10, Bardia (Nepal)\" by °]° is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A black and white cow grazing in a green pasture in Normandy. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: vache",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-mouton-762": {
     "imagePath": "/generated-word-images/a1-mouton-762.webp",
     "imageUrl": "/generated-word-images/a1-mouton-762.webp",
     "imageAlt": "овца: mouton",
-    "imagePrompt": "Real associative image for \"mouton\" (овца). Query: mouton nature.",
-    "imageSource": "https://www.flickr.com/photos/47487330@N05/51837296246",
-    "imageSourceTitle": "P1080275",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"P1080275\" by Cassiopée2010 is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A fluffy white sheep standing in a green meadow in the French countryside. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: mouton",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-chevre-763": {
     "imagePath": "/generated-word-images/a1-chevre-763.webp",
@@ -6148,25 +6040,21 @@
     "imagePath": "/generated-word-images/a1-cochon-764.webp",
     "imageUrl": "/generated-word-images/a1-cochon-764.webp",
     "imageAlt": "свинья: cochon",
-    "imagePrompt": "Real associative image for \"cochon\" (свинья). Query: cochon nature.",
-    "imageSource": "https://www.flickr.com/photos/72746018@N00/4402615264",
-    "imageSourceTitle": "le marché (Hoi An)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"le marché (Hoi An)\" by dalbera is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A pink pig standing in straw on a farm. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: cochon",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-lapin-765": {
     "imagePath": "/generated-word-images/a1-lapin-765.webp",
     "imageUrl": "/generated-word-images/a1-lapin-765.webp",
     "imageAlt": "кролик: lapin",
-    "imagePrompt": "Real associative image for \"lapin\" (кролик). Query: lapin nature.",
-    "imageSource": "https://www.flickr.com/photos/47604778@N00/2432270225",
-    "imageSourceTitle": "Snowshoe Hare / Lièvre d'Amérique",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Snowshoe Hare / Lièvre d'Amérique\" by Eric Bégin is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A brown rabbit sitting in the grass with ears up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: lapin",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-souris-766": {
     "imagePath": "/generated-word-images/a1-souris-766.webp",
@@ -6208,25 +6096,21 @@
     "imagePath": "/generated-word-images/a1-canard-769.webp",
     "imageUrl": "/generated-word-images/a1-canard-769.webp",
     "imageAlt": "утка: canard",
-    "imagePrompt": "Real associative image for \"canard\" (утка). Query: canard nature.",
-    "imageSource": "https://www.flickr.com/photos/47604778@N00/2569416200",
-    "imageSourceTitle": "Canada goslings",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Canada goslings\" by Eric Bégin is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A duck swimming on a calm pond in a park. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: canard",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-poule-770": {
     "imagePath": "/generated-word-images/a1-poule-770.webp",
     "imageUrl": "/generated-word-images/a1-poule-770.webp",
     "imageAlt": "курица: poule",
-    "imagePrompt": "Real associative image for \"poule\" (курица). Query: poule nature.",
-    "imageSource": "https://www.flickr.com/photos/47757737@N00/2743815756",
-    "imageSourceTitle": "Country Club",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Country Club\" by OliBac is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A brown hen standing in a farmyard. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: poule",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-coq-771": {
     "imagePath": "/generated-word-images/a1-coq-771.webp",
@@ -6244,13 +6128,11 @@
     "imagePath": "/generated-word-images/a1-grenouille-772.webp",
     "imageUrl": "/generated-word-images/a1-grenouille-772.webp",
     "imageAlt": "лягушка: grenouille",
-    "imagePrompt": "Real associative image for \"grenouille\" (лягушка). Query: grenouille nature.",
-    "imageSource": "https://www.flickr.com/photos/182347105@N03/48168394957",
-    "imageSourceTitle": "Grenouille Nature isère",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Grenouille Nature isère\" by Nature isère is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A green frog sitting on a lily pad in a pond. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: grenouille",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-serpent-773": {
     "imagePath": "/generated-word-images/a1-serpent-773.webp",
@@ -6392,25 +6274,21 @@
     "imagePath": "/generated-word-images/a1-ours-785.webp",
     "imageUrl": "/generated-word-images/a1-ours-785.webp",
     "imageAlt": "медведь: ours",
-    "imagePrompt": "Real associative image for \"ours\" (медведь). Query: ours nature.",
-    "imageSource": "https://www.flickr.com/photos/54462620@N08/7788886708",
-    "imageSourceTitle": "our nature is not a trap",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"our nature is not a trap\" by natalia peris is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A large brown bear walking through a forest clearing. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ours",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-lion-786": {
-    "imagePath": "https://api.openverse.org/v1/images/841a7f79-b73b-453c-b5df-748a55f18c2f/thumb/",
-    "imageUrl": "https://api.openverse.org/v1/images/841a7f79-b73b-453c-b5df-748a55f18c2f/thumb/",
+    "imagePath": "/generated-word-images/a1-lion-786.webp",
+    "imageUrl": "/generated-word-images/a1-lion-786.webp",
     "imageAlt": "лев: lion",
-    "imagePrompt": "Real associative image for \"lion\" (лев). Query: lion nature.",
-    "imageSource": "https://commons.wikimedia.org/w/index.php?curid=9845800",
-    "imageSourceTitle": "File:Mirafra africana -Rhino and Lion Nature Reserve, Gauteng, South Africa-8.jpg",
-    "imageProvider": "wikimedia",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "imageAttribution": "\"File:Mirafra africana -Rhino and Lion Nature Reserve, Gauteng, South Africa-8.jpg\" by Fiver Löcker is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0."
+    "imagePrompt": "A majestic male lion with a big mane resting in a zoo park in France. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: lion",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-tigre-787": {
     "imagePath": "/generated-word-images/a1-tigre-787.webp",
@@ -6424,13 +6302,11 @@
     "imagePath": "/generated-word-images/a1-singe-788.webp",
     "imageUrl": "/generated-word-images/a1-singe-788.webp",
     "imageAlt": "обезьяна: singe",
-    "imagePrompt": "Real associative image for \"singe\" (обезьяна). Query: singe nature.",
-    "imageSource": "https://www.flickr.com/photos/47735293@N06/8394684048",
-    "imageSourceTitle": "Pongo",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Pongo\" by Fotografik33 - www.fotografik33.com is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A monkey sitting on a tree branch in a zoo, looking at the camera. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: singe",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-elephant-789": {
     "imagePath": "/generated-word-images/a1-elephant-789.webp",
@@ -7454,13 +7330,11 @@
     "imagePath": "/generated-word-images/a1-examen-878.webp",
     "imageUrl": "/generated-word-images/a1-examen-878.webp",
     "imageAlt": "экзамен: examen",
-    "imagePrompt": "Real associative image for \"examen\" (экзамен). Query: office work.",
-    "imageSource": "https://www.flickr.com/photos/27888428@N00/5720849489",
-    "imageSourceTitle": "186 - Office Work",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"186 - Office Work\" by Trevor Butcher - Artist is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "Students writing an exam at rows of desks in a quiet classroom. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: examen",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-test-879": {
     "imagePath": "/generated-word-images/a1-test-879.webp",
@@ -7624,25 +7498,21 @@
     "imagePath": "/generated-word-images/a1-projet-893.webp",
     "imageUrl": "/generated-word-images/a1-projet-893.webp",
     "imageAlt": "проект: projet",
-    "imagePrompt": "Real associative image for \"projet\" (проект). Query: projet.",
-    "imageSource": "https://www.flickr.com/photos/99343263@N00/518991361",
-    "imageSourceTitle": "Design mural - wall design : projet 002",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nd/2.0/",
-    "imageAttribution": "\"Design mural - wall design : projet 002\" by nouknouk is licensed under CC BY-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nd/2.0/."
+    "imagePrompt": "A small team leaning over a table covered with plans and sketches, working on a project. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: projet",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-reunion-894": {
     "imagePath": "/generated-word-images/a1-reunion-894.webp",
     "imageUrl": "/generated-word-images/a1-reunion-894.webp",
     "imageAlt": "встреча: réunion",
-    "imagePrompt": "Real associative image for \"réunion\" (встреча). Query: réunion work office.",
-    "imageSource": "https://www.flickr.com/photos/94331216@N03/44511308991",
-    "imageSourceTitle": "12-Buzz About Dengue game, Marché de Nuit, Saint-Denis, Réunion, 4 August 2018",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"12-Buzz About Dengue game, Marché de Nuit, Saint-Denis, Réunion, 4 August 2018\" by Climate Centre is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
+    "imagePrompt": "Colleagues sitting around a table in an office meeting, one person presenting. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: réunion",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-entretien-895": {
     "imagePath": "/generated-word-images/a1-entretien-895.webp",
@@ -7696,37 +7566,31 @@
     "imagePath": "/generated-word-images/a1-tache-899.webp",
     "imageUrl": "/generated-word-images/a1-tache-899.webp",
     "imageAlt": "задача: tâche",
-    "imagePrompt": "Real associative image for \"tâche\" (задача). Query: office work.",
-    "imageSource": "https://www.flickr.com/photos/27888428@N00/5720849489",
-    "imageSourceTitle": "186 - Office Work",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"186 - Office Work\" by Trevor Butcher - Artist is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A person ticking off items on a to-do list on a desk with a laptop, list lines without readable words. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: tâche",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-dossier-900": {
     "imagePath": "/generated-word-images/a1-dossier-900.webp",
     "imageUrl": "/generated-word-images/a1-dossier-900.webp",
-    "imageAlt": "папка: dossier",
-    "imagePrompt": "Real associative image for \"dossier\" (папка). Query: dossier.",
-    "imageSource": "https://www.flickr.com/photos/72746018@N00/1815600152",
-    "imageSourceTitle": "Dossier du trône (tombe de Toutânkhamon / musée du Caire)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Dossier du trône (tombe de Toutânkhamon / musée du Caire)\" by dalbera is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imageAlt": "досье / папка: dossier",
+    "imagePrompt": "A stack of cardboard file folders with papers on an office desk. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: dossier",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-document-901": {
     "imagePath": "/generated-word-images/a1-document-901.webp",
     "imageUrl": "/generated-word-images/a1-document-901.webp",
     "imageAlt": "документ: document",
-    "imagePrompt": "Real associative image for \"document\" (документ). Query: document work office.",
-    "imageSource": "https://www.flickr.com/photos/12967790@N00/6982260418",
-    "imageSourceTitle": "Whats in my coat and bag",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Whats in my coat and bag\" by Jemimus is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A person signing a printed document with a pen on a desk, text not readable. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: document",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-fichier-902": {
     "imagePath": "/generated-word-images/a1-fichier-902.webp",
@@ -7860,13 +7724,11 @@
     "imagePath": "/generated-word-images/a1-pause-914.webp",
     "imageUrl": "/generated-word-images/a1-pause-914.webp",
     "imageAlt": "перерыв: pause",
-    "imagePrompt": "Real associative image for \"pause\" (перерыв). Query: pause work office.",
-    "imageSource": "https://www.flickr.com/photos/48596106@N00/93679057",
-    "imageSourceTitle": "Stopping to think",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nd/2.0/",
-    "imageAttribution": "\"Stopping to think\" by MitchellShapiroPhotography is licensed under CC BY-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nd/2.0/."
+    "imagePrompt": "Two colleagues taking a coffee break by the window of an office kitchen. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: pause",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-formation-915": {
     "imagePath": "/generated-word-images/a1-formation-915.webp",
@@ -8036,13 +7898,11 @@
     "imagePath": "/generated-word-images/a1-imprimante-929.webp",
     "imageUrl": "/generated-word-images/a1-imprimante-929.webp",
     "imageAlt": "принтер: imprimante",
-    "imagePrompt": "Real associative image for \"imprimante\" (принтер). Query: imprimante.",
-    "imageSource": "https://www.flickr.com/photos/108047436@N05/15409044868",
-    "imageSourceTitle": "Imprimante 3D | FabLab",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Imprimante 3D | FabLab\" by missbutterflies is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "An office printer printing a sheet of paper. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: imprimante",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-camera-930": {
     "imagePath": "/generated-word-images/a1-camera-930.webp",
@@ -16781,12 +16641,14 @@
     "imageAssociationWordId": "a1-merci-3"
   },
   "ja-0027": {
-    "imagePath": "/generated-word-images/a1-maison-9.webp",
-    "imageUrl": "/generated-word-images/a1-maison-9.webp",
+    "imagePath": "/generated-word-images/ja-0027.webp",
+    "imageUrl": "/generated-word-images/ja-0027.webp",
     "imageAlt": "дом: 家",
-    "imagePrompt": "Shared real associative image for \"家\" (дом) via \"maison\".",
-    "imageSource": "https://fr.wikipedia.org/wiki/Maison",
-    "imageAssociationWordId": "a1-maison-9"
+    "imagePrompt": "A traditional Japanese house with a tiled roof in a quiet residential area near a train station. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 家",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0028": {
     "imagePath": "/generated-word-images/a1-jour-72.webp",
@@ -17039,12 +16901,14 @@
     "imageAssociationWordId": "a1-rue-22"
   },
   "ja-0057": {
-    "imagePath": "/generated-word-images/a1-venir-234.webp",
-    "imageUrl": "/generated-word-images/a1-venir-234.webp",
-    "imageAlt": "приходить / приезжать: 来る",
-    "imagePrompt": "Shared real associative image for \"来る\" (приходить / приезжать) via \"venir\".",
-    "imageSource": "https://www.pexels.com/photo/assorted-argentine-currency-on-wooden-table-35861286/",
-    "imageAssociationWordId": "a1-venir-234"
+    "imagePath": "/generated-word-images/ja-0057.webp",
+    "imageUrl": "/generated-word-images/ja-0057.webp",
+    "imageAlt": "приходить, прибывать / приезжать / приходить в гости: 来る",
+    "imagePrompt": "A friend arriving at the front door of a Japanese house and being welcomed in. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 来る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0058": {
     "imagePath": "/generated-word-images/ja-0058.webp",
@@ -17059,12 +16923,14 @@
     "imageAttribution": "\"SOUND FOREST by WILLPOWER STUDIOS (WILLIAM ISMAEL)\" by WILLPOWER STUDIOS is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
   },
   "ja-0060": {
-    "imagePath": "/generated-word-images/a1-aujourd-hui-81.webp",
-    "imageUrl": "/generated-word-images/a1-aujourd-hui-81.webp",
-    "imageAlt": "сегодня: 今日",
-    "imagePrompt": "Shared real associative image for \"今日\" (сегодня) via \"aujourd'hui\".",
-    "imageSource": "https://www.pexels.com/photo/ancient-buildings-on-paris-street-5466801/",
-    "imageAssociationWordId": "a1-aujourd-hui-81"
+    "imagePath": "/generated-word-images/ja-0060.webp",
+    "imageUrl": "/generated-word-images/ja-0060.webp",
+    "imageAlt": "сегодня / этот (нынешний) день: 今日",
+    "imagePrompt": "A very hot sunny summer day on a Japanese street, a person wiping sweat under the bright sun. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 今日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0061": {
     "imagePath": "/generated-word-images/ja-0061.webp",
@@ -17322,12 +17188,14 @@
     "imageAttribution": "\"SOUND BARS BY WILLPOWER STUDIOS (WILLIAM ISMAEL)\" by WILLPOWER STUDIOS is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
   },
   "ja-0098": {
-    "imagePath": "/generated-word-images/a1-ami-52.webp",
-    "imageUrl": "/generated-word-images/a1-ami-52.webp",
-    "imageAlt": "друг / приятель: 友達",
-    "imagePrompt": "Shared real associative image for \"友達\" (друг / приятель) via \"ami\".",
-    "imageSource": "https://www.pexels.com/photo/woman-in-green-sweater-sitting-on-the-floor-7760007/",
-    "imageAssociationWordId": "a1-ami-52"
+    "imagePath": "/generated-word-images/ja-0098.webp",
+    "imageUrl": "/generated-word-images/ja-0098.webp",
+    "imageAlt": "приятель, товарищ: 友達",
+    "imagePrompt": "A group of young Japanese friends laughing together in a park. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 友達",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0099": {
     "imagePath": "/generated-word-images/a2-promettre-1165.webp",
@@ -17418,12 +17286,14 @@
     "imageAttribution": "\"SOUND FOREST by WILLPOWER STUDIOS (WILLIAM ISMAEL)\" by WILLPOWER STUDIOS is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
   },
   "ja-0112": {
-    "imagePath": "/generated-word-images/a1-demain-82.webp",
-    "imageUrl": "/generated-word-images/a1-demain-82.webp",
-    "imageAlt": "завтра: 明日",
-    "imagePrompt": "Shared real associative image for \"明日\" (завтра) via \"demain\".",
-    "imageSource": "https://www.pexels.com/photo/two-men-taking-photo-in-front-of-white-wall-1377459/",
-    "imageAssociationWordId": "a1-demain-82"
+    "imagePath": "/generated-word-images/ja-0112.webp",
+    "imageUrl": "/generated-word-images/ja-0112.webp",
+    "imageAlt": "завтрашний день / завтра: 明日",
+    "imagePrompt": "The sun rising over a Japanese town, a new day beginning tomorrow morning. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 明日",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0113": {
     "imagePath": "/generated-word-images/a2-verifier-1147.webp",
@@ -17483,12 +17353,14 @@
     "imageAttribution": "\"Friends: Cheerish This Moment.\" by iMorpheus is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
   },
   "ja-0121": {
-    "imagePath": "/generated-word-images/a1-professeur-64.webp",
-    "imageUrl": "/generated-word-images/a1-professeur-64.webp",
+    "imagePath": "/generated-word-images/ja-0121.webp",
+    "imageUrl": "/generated-word-images/ja-0121.webp",
     "imageAlt": "учитель, преподаватель: 先生",
-    "imagePrompt": "Shared real associative image for \"先生\" (учитель, преподаватель) via \"professeur\".",
-    "imageSource": "https://www.pexels.com/photo/photo-of-woman-standing-in-front-of-blackboard-5212320/",
-    "imageAssociationWordId": "a1-professeur-64"
+    "imagePrompt": "A Japanese teacher standing in front of a classroom explaining to students, the blackboard blank. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 先生",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0122": {
     "imagePath": "/generated-word-images/ja-0122.webp",
@@ -17516,12 +17388,14 @@
     "imageAssociationWordId": "a1-rendez-vous-827"
   },
   "ja-0126": {
-    "imagePath": "/generated-word-images/a1-porte-12.webp",
-    "imageUrl": "/generated-word-images/a1-porte-12.webp",
+    "imagePath": "/generated-word-images/ja-0126.webp",
+    "imageUrl": "/generated-word-images/ja-0126.webp",
     "imageAlt": "дверь (en: door): ドア",
-    "imagePrompt": "Shared real associative image for \"ドア\" (дверь (en: door)) via \"porte\".",
-    "imageSource": "https://fr.wikipedia.org/wiki/Porte",
-    "imageAssociationWordId": "a1-porte-12"
+    "imagePrompt": "A hand closing a door in a Japanese apartment. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ドア",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0128": {
     "imagePath": "/generated-word-images/a2-remercier-1167.webp",
@@ -17610,12 +17484,14 @@
     "imageAssociationWordId": "a2-important-191"
   },
   "ja-0144": {
-    "imagePath": "/generated-word-images/a1-eau-86.webp",
-    "imageUrl": "/generated-word-images/a1-eau-86.webp",
+    "imagePath": "/generated-word-images/ja-0144.webp",
+    "imageUrl": "/generated-word-images/ja-0144.webp",
     "imageAlt": "вода / холодная вода: 水",
-    "imagePrompt": "Shared real associative image for \"水\" (вода / холодная вода) via \"eau\".",
-    "imageSource": "https://fr.wikipedia.org/wiki/Eau",
-    "imageAssociationWordId": "a1-eau-86"
+    "imagePrompt": "A glass of cold water on a table in a Japanese restaurant. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 水",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0146": {
     "imagePath": "/generated-word-images/a1-semaine-73.webp",
@@ -17767,12 +17643,14 @@
     "imageAssociationScore": 158
   },
   "ja-0170": {
-    "imagePath": "/generated-word-images/a1-ecole-37.webp",
-    "imageUrl": "/generated-word-images/a1-ecole-37.webp",
+    "imagePath": "/generated-word-images/ja-0170.webp",
+    "imageUrl": "/generated-word-images/ja-0170.webp",
     "imageAlt": "школа, училище / учебное заведение: 学校",
-    "imagePrompt": "Shared real associative image for \"学校\" (школа, училище / учебное заведение) via \"école\".",
-    "imageSource": "https://fr.wikipedia.org/wiki/%C3%89cole",
-    "imageAssociationWordId": "a1-ecole-37"
+    "imagePrompt": "A Japanese school building with a schoolyard, cherry trees in bloom. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 学校",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0171": {
     "imagePath": "/generated-word-images/ja-0171.webp",
@@ -18532,17 +18410,14 @@
     "imageAssociationWordId": "a2-soigner-1172"
   },
   "ja-0287": {
-    "imagePath": "/generated-word-images/a1-plan-704.webp",
-    "imageUrl": "/generated-word-images/a1-plan-704.webp",
-    "imageAlt": "план / расписание: 予定",
-    "imagePrompt": "Shared real associative image for \"予定\" (план / расписание) via \"plan\".",
-    "imageSource": "https://www.flickr.com/photos/78087459@N00/13940942280",
-    "imageSourceTitle": "ANAL PLAN...",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"ANAL PLAN...\" by ЯAFIK ♋ BERLIN is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/.",
-    "imageAssociationWordId": "a1-plan-704"
+    "imagePath": "/generated-word-images/ja-0287.webp",
+    "imageUrl": "/generated-word-images/ja-0287.webp",
+    "imageAlt": "план, расписание: 予定",
+    "imagePrompt": "An open paper planner on a desk with a pen and several days marked with colored stickers, no readable writing, in a Japanese apartment. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 予定",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0288": {
     "imagePath": "/generated-word-images/a2-permettre-1134.webp",
@@ -18673,12 +18548,14 @@
     "imageAssociationWordId": "b1-systeme-1448"
   },
   "ja-0314": {
-    "imagePath": "/generated-word-images/a1-animal-170.webp",
-    "imageUrl": "/generated-word-images/a1-animal-170.webp",
+    "imagePath": "/generated-word-images/ja-0314.webp",
+    "imageUrl": "/generated-word-images/ja-0314.webp",
     "imageAlt": "животное, зверь: 動物",
-    "imagePrompt": "Shared real associative image for \"動物\" (животное, зверь) via \"animal\".",
-    "imageSource": "https://fr.wikipedia.org/wiki/Animal",
-    "imageAssociationWordId": "a1-animal-170"
+    "imagePrompt": "A Japanese child happily looking at giraffes and other animals at a zoo in Japan. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 動物",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0315": {
     "imagePath": "/generated-word-images/a1-aimable-1219.webp",
@@ -18814,12 +18691,14 @@
     "imageAssociationScore": 180
   },
   "ja-0335": {
-    "imagePath": "/generated-word-images/a1-arbre-175.webp",
-    "imageUrl": "/generated-word-images/a1-arbre-175.webp",
+    "imagePath": "/generated-word-images/ja-0335.webp",
+    "imageUrl": "/generated-word-images/ja-0335.webp",
     "imageAlt": "дерево: 木",
-    "imagePrompt": "Shared real associative image for \"木\" (дерево) via \"arbre\".",
-    "imageSource": "https://fr.wikipedia.org/wiki/Arbre",
-    "imageAssociationWordId": "a1-arbre-175"
+    "imagePrompt": "A large tree with a wide green crown in the garden of a Japanese house. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 木",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0336": {
     "imagePath": "/generated-word-images/a1-poivron-610.webp",
@@ -19420,17 +19299,14 @@
     "imageAssociationScore": 188
   },
   "ja-0437": {
-    "imagePath": "/generated-word-images/a1-graine-751.webp",
-    "imageUrl": "/generated-word-images/a1-graine-751.webp",
+    "imagePath": "/generated-word-images/ja-0437.webp",
+    "imageUrl": "/generated-word-images/ja-0437.webp",
     "imageAlt": "семя, семена / косточка (плода): 種",
-    "imagePrompt": "Shared real associative image for \"種\" (семя, семена / косточка (плода)) via \"graine\".",
-    "imageSource": "https://www.flickr.com/photos/22178197@N00/9689440088",
-    "imageSourceTitle": "Grain",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Grain\" by Kamil Porembiński is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/.",
-    "imageAssociationWordId": "a1-graine-751"
+    "imagePrompt": "Hands sowing flower seeds into soil in a Japanese garden in spring, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 種",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0441": {
     "imagePath": "/generated-word-images/a1-conseil-1020.webp",
@@ -19459,29 +19335,24 @@
     "imageAssociationWordId": "a2-offrir-1132"
   },
   "ja-0443": {
-    "imagePath": "/generated-word-images/a1-bagage-696.webp",
-    "imageUrl": "/generated-word-images/a1-bagage-696.webp",
+    "imagePath": "/generated-word-images/ja-0443.webp",
+    "imageUrl": "/generated-word-images/ja-0443.webp",
     "imageAlt": "груз / багаж, вещи / товар: 荷物",
-    "imagePrompt": "Shared real associative image for \"荷物\" (груз / багаж, вещи / товар) via \"bagage\".",
-    "imageSource": "https://www.flickr.com/photos/38891071@N00/1517562228",
-    "imageSourceTitle": "Rotterdam 'Kop van Zuid'",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Rotterdam 'Kop van Zuid'\" by FaceMePLS is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/.",
-    "imageAssociationWordId": "a1-bagage-696"
+    "imagePrompt": "Luggage and bags placed neatly on the floor of a Japanese hotel lobby. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 荷物",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0444": {
     "imagePath": "/generated-word-images/ja-0444.webp",
     "imageUrl": "/generated-word-images/ja-0444.webp",
-    "imageAlt": "[душевное] спокойствие: 安心",
-    "imagePrompt": "Real associative image for \"安心\" ([душевное] спокойствие). Query: visual concept.",
-    "imageSource": "https://www.flickr.com/photos/26344495@N05/52612366526",
-    "imageSourceTitle": "Visual concept of white-collar crime leading to an arrest",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Visual concept of white-collar crime leading to an arrest\" by Ivan Radic is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imageAlt": "спокойствие, облегчение: 安心",
+    "imagePrompt": "A young Japanese woman sighing with relief and smiling after reading a message on her phone, sitting on a bench. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 安心",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0445": {
     "imagePath": "/generated-word-images/a1-voir-240.webp",
@@ -20455,18 +20326,14 @@
     "imageAssociationWordId": "a2-paiement-1410"
   },
   "ja-0609": {
-    "imagePath": "/generated-word-images/a1-carte-bancaire-868.webp",
-    "imageUrl": "/generated-word-images/a1-carte-bancaire-868.webp",
+    "imagePath": "/generated-word-images/ja-0609.webp",
+    "imageUrl": "/generated-word-images/ja-0609.webp",
     "imageAlt": "карта / план (города) / атлас: 地図",
-    "imagePrompt": "Unique real associative image for \"地図\" (карта / план (города) / атлас) via \"carte bancaire\".",
-    "imageSource": "https://www.flickr.com/photos/26938299@N06/7969132844",
-    "imageSourceTitle": "Les DNA titrent sur les failles NFC des cartes bancaires",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Les DNA titrent sur les failles NFC des cartes bancaires\" by mathias_poujol_rost is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/.",
-    "imageAssociationWordId": "a1-carte-bancaire-868",
-    "imageAssociationScore": 383
+    "imagePrompt": "A person walking down a Kyoto street while looking at an unfolded paper map, the map seen from behind. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 地図",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0613": {
     "imagePath": "/generated-word-images/a1-forme-1007.webp",
@@ -20604,12 +20471,14 @@
     "imageAssociationScore": 98
   },
   "ja-0630": {
-    "imagePath": "/generated-word-images/a2-aeroport-25.webp",
-    "imageUrl": "/generated-word-images/a2-aeroport-25.webp",
+    "imagePath": "/generated-word-images/ja-0630.webp",
+    "imageUrl": "/generated-word-images/ja-0630.webp",
     "imageAlt": "аэропорт: 空港",
-    "imagePrompt": "Shared real associative image for \"空港\" (аэропорт) via \"aéroport\".",
-    "imageSource": "https://fr.wikipedia.org/wiki/A%C3%A9roport",
-    "imageAssociationWordId": "a2-aeroport-25"
+    "imagePrompt": "A Japanese airport terminal with planes visible through large windows and travelers with suitcases, no readable signs. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 空港",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0631": {
     "imagePath": "/generated-word-images/a1-bague-855.webp",
@@ -21163,12 +21032,14 @@
     "imageAssociationScore": 285
   },
   "ja-0745": {
-    "imagePath": "/generated-word-images/a1-chaise-15.webp",
-    "imageUrl": "/generated-word-images/a1-chaise-15.webp",
+    "imagePath": "/generated-word-images/ja-0745.webp",
+    "imageUrl": "/generated-word-images/ja-0745.webp",
     "imageAlt": "стул: 椅子",
-    "imagePrompt": "Shared real associative image for \"椅子\" (стул) via \"chaise\".",
-    "imageSource": "https://fr.wikipedia.org/wiki/Chaise",
-    "imageAssociationWordId": "a1-chaise-15"
+    "imagePrompt": "A wooden chair in a Japanese room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 椅子",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0746": {
     "imagePath": "/generated-word-images/a1-papier-43.webp",
@@ -21324,17 +21195,14 @@
     "imageAssociationWordId": "a2-vacances-162"
   },
   "ja-0774": {
-    "imagePath": "/generated-word-images/a1-sortie-486.webp",
-    "imageUrl": "/generated-word-images/a1-sortie-486.webp",
+    "imagePath": "/generated-word-images/ja-0774.webp",
+    "imageUrl": "/generated-word-images/ja-0774.webp",
     "imageAlt": "выход: 出口",
-    "imagePrompt": "Shared real associative image for \"出口\" (выход) via \"sortie\".",
-    "imageSource": "https://www.flickr.com/photos/50965924@N00/484644365",
-    "imageSourceTitle": "Alcatraz - Exercise Yard Exit Door 'Sailing Away'",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Alcatraz - Exercise Yard Exit Door 'Sailing Away'\" by David Paul Ohmer is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/.",
-    "imageAssociationWordId": "a1-sortie-486"
+    "imagePrompt": "The exit of a Japanese station with people walking out into daylight, no readable signs. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 出口",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0775": {
     "imagePath": "/generated-word-images/a2-connaitre-245.webp",
@@ -23846,13 +23714,14 @@
     "imageAssociationScore": 98
   },
   "ja-0930": {
-    "imagePath": "/generated-word-images/a1-vouloir-249.webp",
-    "imageUrl": "/generated-word-images/a1-vouloir-249.webp",
+    "imagePath": "/generated-word-images/ja-0930.webp",
+    "imageUrl": "/generated-word-images/ja-0930.webp",
     "imageAlt": "прелесть, интерес (чего-л.): 趣味",
-    "imagePrompt": "Unique real associative image for \"趣味\" (прелесть, интерес (чего-л.)) via \"vouloir\".",
-    "imageSource": "https://www.pexels.com/photo/close-up-of-woman-wearing-red-lipstick-3585029/",
-    "imageAssociationWordId": "a1-vouloir-249",
-    "imageAssociationScore": 180
+    "imagePrompt": "A Japanese person enjoying a hobby, photographing flowers with a camera in a park. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 趣味",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0994": {
     "imagePath": "/generated-word-images/a1-tranche-629.webp",
@@ -24695,18 +24564,14 @@
     "imageAssociationScore": 98
   },
   "ja-0327": {
-    "imagePath": "/generated-word-images/a1-copain-433.webp",
-    "imageUrl": "/generated-word-images/a1-copain-433.webp",
+    "imagePath": "/generated-word-images/ja-0327.webp",
+    "imageUrl": "/generated-word-images/ja-0327.webp",
     "imageAlt": "лошадь, конь: 馬",
-    "imagePrompt": "Unique real associative image for \"馬\" (лошадь, конь) via \"copain\".",
-    "imageSource": "https://www.flickr.com/photos/60894088@N00/634720908",
-    "imageSourceTitle": "Les Copains à la Piscine",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Les Copains à la Piscine\" by kahala is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/.",
-    "imageAssociationWordId": "a1-copain-433",
-    "imageAssociationScore": 98
+    "imagePrompt": "A brown horse standing in a green pasture in Hokkaido, Japan. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 馬",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0332": {
     "imagePath": "/generated-word-images/a1-aider-290.webp",
@@ -25948,14 +25813,14 @@
     "imageAssociationScore": 98
   },
   "ja-0569": {
-    "imagePath": "/generated-word-images/a1-poitrine-581.webp",
-    "imageUrl": "/generated-word-images/a1-poitrine-581.webp",
+    "imagePath": "/generated-word-images/ja-0569.webp",
+    "imageUrl": "/generated-word-images/ja-0569.webp",
     "imageAlt": "электричество: 電気",
-    "imagePrompt": "Unique real associative image for \"電気\" (электричество) via \"poitrine\".",
-    "imageSource": "https://commons.wikimedia.org/wiki/File:Salmonella_typhi_typhoid_fever_PHIL_2215_lores.jpg",
-    "imageSourceTitle": "File:Salmonella typhi typhoid fever PHIL 2215 lores.jpg",
-    "imageAssociationWordId": "a1-poitrine-581",
-    "imageAssociationScore": 98
+    "imagePrompt": "A hand switching off the light switch in a Japanese room, the ceiling light turning off. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 電気",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0574": {
     "imagePath": "/generated-word-images/a1-courgette-608.webp",
@@ -35152,6 +35017,586 @@
     "imagePrompt": "A wooden bookshelf neatly lined with books with plain unmarked spines in a Japanese room. Photorealistic, no text, no letters, no numbers, no logos.",
     "imageSource": "generated:openai-imagegen",
     "imageSourceTitle": "Generated association: 本棚",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-animals-âne": {
+    "imagePath": "/generated-word-images/pack-animals-ane.webp",
+    "imageUrl": "/generated-word-images/pack-animals-ane.webp",
+    "imageAlt": "осёл: âne",
+    "imagePrompt": "A grey donkey carrying a cloth sack on its back on a country path in Provence, France, sunny day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: âne",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-animals-écureuil": {
+    "imagePath": "/generated-word-images/pack-animals-ecureuil.webp",
+    "imageUrl": "/generated-word-images/pack-animals-ecureuil.webp",
+    "imageAlt": "белка: écureuil",
+    "imagePrompt": "A red squirrel holding a nut in its paws on a tree branch in a French park, autumn light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: écureuil",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-city-feu": {
+    "imagePath": "/generated-word-images/pack-city-feu.webp",
+    "imageUrl": "/generated-word-images/pack-city-feu.webp",
+    "imageAlt": "светофор: feu",
+    "imagePrompt": "A traffic light turning green at a street crossing in a French city. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: feu",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-city-place": {
+    "imagePath": "/generated-word-images/pack-city-place.webp",
+    "imageUrl": "/generated-word-images/pack-city-place.webp",
+    "imageAlt": "площадь: place",
+    "imagePrompt": "A busy town square full of people in a French city, café terraces around it. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: place",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-city-poste": {
+    "imagePath": "/generated-word-images/pack-city-poste.webp",
+    "imageUrl": "/generated-word-images/pack-city-poste.webp",
+    "imageAlt": "почта: poste",
+    "imagePrompt": "A French post office counter with a postal worker handing over a parcel, yellow decor, no readable signs. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: poste",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-clothes-sac-à-main": {
+    "imagePath": "/generated-word-images/pack-clothes-sac-a-main.webp",
+    "imageUrl": "/generated-word-images/pack-clothes-sac-a-main.webp",
+    "imageAlt": "сумка: sac à main",
+    "imagePrompt": "A leather handbag resting on a sofa in a Parisian apartment, soft window light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: sac à main",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-beddo": {
+    "imagePath": "/generated-word-images/pack-ja-home-beddo.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-beddo.webp",
+    "imageAlt": "кровать: ベッド",
+    "imagePrompt": "A neatly made bed with white sheets in a Japanese bedroom at night, bedside lamp glowing. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ベッド",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-daidokoro": {
+    "imagePath": "/generated-word-images/pack-ja-home-daidokoro.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-daidokoro.webp",
+    "imageAlt": "кухня: 台所",
+    "imagePrompt": "A cozy Japanese home kitchen with a woman cooking at the stove, pots steaming, seen from behind, warm light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 台所",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-hikkoshi": {
+    "imagePath": "/generated-word-images/pack-ja-home-hikkoshi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-hikkoshi.webp",
+    "imageAlt": "переезд: 引っ越し",
+    "imagePrompt": "Movers carrying plain cardboard boxes and furniture from a small truck into a Japanese apartment building on moving day. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 引っ越し",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-kaidan": {
+    "imagePath": "/generated-word-images/pack-ja-home-kaidan.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-kaidan.webp",
+    "imageAlt": "лестница: 階段",
+    "imagePrompt": "A wooden staircase inside a Japanese house leading up to the second floor, soft light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 階段",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-mado": {
+    "imagePath": "/generated-word-images/pack-ja-home-mado.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-mado.webp",
+    "imageAlt": "окно: 窓",
+    "imagePrompt": "A window being opened in a Japanese apartment, white curtains moving in the breeze, green trees outside. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 窓",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-ofuro": {
+    "imagePath": "/generated-word-images/pack-ja-home-ofuro.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-ofuro.webp",
+    "imageAlt": "ванна: お風呂",
+    "imagePrompt": "A Japanese home bathroom with a deep bathtub filled with steaming hot water. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: お風呂",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-reizouko": {
+    "imagePath": "/generated-word-images/pack-ja-home-reizouko.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-reizouko.webp",
+    "imageAlt": "холодильник: 冷蔵庫",
+    "imagePrompt": "An open refrigerator that is completely empty, interior light on, in a Japanese apartment kitchen. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 冷蔵庫",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-home-souji": {
+    "imagePath": "/generated-word-images/pack-ja-home-souji.webp",
+    "imageUrl": "/generated-word-images/pack-ja-home-souji.webp",
+    "imageAlt": "уборка: 掃除",
+    "imagePrompt": "A person vacuuming a tidy Japanese apartment room, sunlight through the window. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 掃除",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-atsumeru": {
+    "imagePath": "/generated-word-images/pack-ja-n4-atsumeru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-atsumeru.webp",
+    "imageAlt": "собирать: 集める",
+    "imagePrompt": "An open stamp collection album with many colorful postage stamps showing flowers, birds and landscapes, a magnifying glass and tweezers beside it. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 集める",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-fukuzatsu": {
+    "imagePath": "/generated-word-images/pack-ja-n4-fukuzatsu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-fukuzatsu.webp",
+    "imageAlt": "сложный, запутанный: 複雑",
+    "imagePrompt": "A very complicated tangle of many cables and wires behind a desk, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 複雑",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-hakobu": {
+    "imagePath": "/generated-word-images/pack-ja-n4-hakobu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-hakobu.webp",
+    "imageAlt": "переносить, перевозить: 運ぶ",
+    "imagePrompt": "A Japanese man carrying a large cardboard box up the stairs of a house. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 運ぶ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-hazukashii": {
+    "imagePath": "/generated-word-images/pack-ja-n4-hazukashii.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-hazukashii.webp",
+    "imageAlt": "стыдно, неловко: 恥ずかしい",
+    "imagePrompt": "A shy young Japanese person blushing and covering their face with one hand while singing karaoke in front of friends. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 恥ずかしい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-iken": {
+    "imagePath": "/generated-word-images/pack-ja-n4-iken.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-iken.webp",
+    "imageAlt": "мнение: 意見",
+    "imagePrompt": "A Japanese team meeting around a table, one woman raising her hand to share her opinion while the others listen attentively. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 意見",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-isogu": {
+    "imagePath": "/generated-word-images/pack-ja-n4-isogu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-isogu.webp",
+    "imageAlt": "спешить: 急ぐ",
+    "imagePrompt": "A Japanese businesswoman hurrying along a city sidewalk holding her bag, slight motion blur. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 急ぐ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-junbi": {
+    "imagePath": "/generated-word-images/pack-ja-n4-junbi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-junbi.webp",
+    "imageAlt": "подготовка: 準備",
+    "imagePrompt": "An open suitcase being packed with folded clothes, a camera and toiletries on a bed in a Japanese room, preparing for a trip. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 準備",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-keiken": {
+    "imagePath": "/generated-word-images/pack-ja-n4-keiken.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-keiken.webp",
+    "imageAlt": "опыт: 経験",
+    "imagePrompt": "An experienced senior Japanese professional confidently mentoring a young colleague at a laptop in a modern international office. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 経験",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-kibishii": {
+    "imagePath": "/generated-word-images/pack-ja-n4-kibishii.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-kibishii.webp",
+    "imageAlt": "строгий: 厳しい",
+    "imagePrompt": "A strict Japanese father with arms crossed tapping his wristwatch as his teenage son arrives late at the front door. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 厳しい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-kimeru": {
+    "imagePath": "/generated-word-images/pack-ja-n4-kimeru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-kimeru.webp",
+    "imageAlt": "решать, выбирать: 決める",
+    "imagePrompt": "Two Japanese friends at a café table with travel brochures showing only pictures, one pointing decisively at a photo of the sea while the other nods in agreement. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 決める",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-kowareru": {
+    "imagePath": "/generated-word-images/pack-ja-n4-kowareru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-kowareru.webp",
+    "imageAlt": "ломаться: 壊れる",
+    "imagePrompt": "A broken laptop with a cracked screen on a desk, a frustrated person holding their head in the background. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 壊れる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-maniau": {
+    "imagePath": "/generated-word-images/pack-ja-n4-maniau.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-maniau.webp",
+    "imageAlt": "успеть (вовремя): 間に合う",
+    "imagePrompt": "A breathless young Japanese man jumping onto a train just before the doors close at a station platform. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 間に合う",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-mezurashii": {
+    "imagePath": "/generated-word-images/pack-ja-n4-mezurashii.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-mezurashii.webp",
+    "imageAlt": "редкий, необычный: 珍しい",
+    "imagePrompt": "An unusually completely empty wide street in central Tokyo with no cars, early morning. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 珍しい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-modoru": {
+    "imagePath": "/generated-word-images/pack-ja-n4-modoru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-modoru.webp",
+    "imageAlt": "возвращаться: 戻る",
+    "imagePrompt": "A Japanese office worker coming back through the glass door into the office in the late afternoon, colleagues waving to welcome him back. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 戻る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-shiraberu": {
+    "imagePath": "/generated-word-images/pack-ja-n4-shiraberu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-shiraberu.webp",
+    "imageAlt": "выяснять, искать (сведения): 調べる",
+    "imagePrompt": "A student looking up a word in a thick paper dictionary at a desk, finger running down the blurred page. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 調べる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-shourai": {
+    "imagePath": "/generated-word-images/pack-ja-n4-shourai.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-shourai.webp",
+    "imageAlt": "будущее: 将来",
+    "imagePrompt": "A Japanese child wearing a toy doctor's coat and stethoscope, dreaming about the future, in a bright room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 将来",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-shuukan": {
+    "imagePath": "/generated-word-images/pack-ja-n4-shuukan.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-shuukan.webp",
+    "imageAlt": "привычка: 習慣",
+    "imagePrompt": "A Japanese person jogging at sunrise along a riverside path, a healthy daily routine. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 習慣",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-teinei": {
+    "imagePath": "/generated-word-images/pack-ja-n4-teinei.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-teinei.webp",
+    "imageAlt": "вежливый; аккуратный: 丁寧",
+    "imagePrompt": "A polite Japanese shop clerk bowing while carefully handing a neatly wrapped purchase to a customer with both hands. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 丁寧",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-todokeru": {
+    "imagePath": "/generated-word-images/pack-ja-n4-todokeru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-todokeru.webp",
+    "imageAlt": "доставлять, относить: 届ける",
+    "imagePrompt": "A young Japanese man handing a wrapped package to his friend at the front door of a house. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 届ける",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-tsuzukeru": {
+    "imagePath": "/generated-word-images/pack-ja-n4-tsuzukeru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-tsuzukeru.webp",
+    "imageAlt": "продолжать: 続ける",
+    "imagePrompt": "A determined Japanese woman studying at her desk late in the evening with a tall stack of finished notebooks beside her, lamp light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 続ける",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-yakusoku": {
+    "imagePath": "/generated-word-images/pack-ja-n4-yakusoku.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-yakusoku.webp",
+    "imageAlt": "обещание; договорённость: 約束",
+    "imagePrompt": "Two Japanese friends making a pinky promise, close-up of their hooked little fingers, café background. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 約束",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-yasashii": {
+    "imagePath": "/generated-word-images/pack-ja-n4-yasashii.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-yasashii.webp",
+    "imageAlt": "добрый, мягкий: 優しい",
+    "imagePrompt": "A kind Japanese grandmother smiling gently and handing a cup of tea to her grandchild at home, warm light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 優しい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n4-yotei": {
+    "imagePath": "/generated-word-images/pack-ja-n4-yotei.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n4-yotei.webp",
+    "imageAlt": "план, расписание: 予定",
+    "imagePrompt": "An open weekend planner with colorful picture stickers of a picnic, a movie and a café, next to a coffee cup and a phone. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 予定",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-atarashii": {
+    "imagePath": "/generated-word-images/pack-ja-n5-atarashii.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-atarashii.webp",
+    "imageAlt": "новый: 新しい",
+    "imagePrompt": "A pair of brand-new shiny sneakers being taken out of a plain shoebox. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 新しい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-chiisai": {
+    "imagePath": "/generated-word-images/pack-ja-n5-chiisai.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-chiisai.webp",
+    "imageAlt": "маленький: 小さい",
+    "imagePrompt": "A tiny handbag held in the palm of a woman's hand on a Japanese street, close-up. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 小さい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-furui": {
+    "imagePath": "/generated-word-images/pack-ja-n5-furui.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-furui.webp",
+    "imageAlt": "старый (о вещах): 古い",
+    "imagePrompt": "An old faded sepia photograph lying on a wooden table next to antique objects in a Japanese home. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 古い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-hanasu": {
+    "imagePath": "/generated-word-images/pack-ja-n5-hanasu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-hanasu.webp",
+    "imageAlt": "говорить, разговаривать: 話す",
+    "imagePrompt": "A Japanese teacher and a foreign student talking face to face in a classroom, both smiling and gesturing. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 話す",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-iku": {
+    "imagePath": "/generated-word-images/pack-ja-n5-iku.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-iku.webp",
+    "imageAlt": "идти, ехать: 行く",
+    "imagePrompt": "A Japanese schoolboy with a backpack walking to school along a residential street in the morning, seen from behind. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 行く",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-kaku": {
+    "imagePath": "/generated-word-images/pack-ja-n5-kaku.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-kaku.webp",
+    "imageAlt": "писать: 書く",
+    "imagePrompt": "Close-up of a hand writing with a pen on a sheet of paper at a desk, the writing out of focus and illegible. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 書く",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-kau": {
+    "imagePath": "/generated-word-images/pack-ja-n5-kau.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-kau.webp",
+    "imageAlt": "покупать: 買う",
+    "imagePrompt": "A customer buying bread at a small bakery near a Japanese train station, handing money to the baker. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 買う",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-kiku": {
+    "imagePath": "/generated-word-images/pack-ja-n5-kiku.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-kiku.webp",
+    "imageAlt": "слушать; спрашивать: 聞く",
+    "imagePrompt": "A young Japanese person listening to music with headphones, eyes closed, in their room at night. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 聞く",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-matsu": {
+    "imagePath": "/generated-word-images/pack-ja-n5-matsu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-matsu.webp",
+    "imageAlt": "ждать: 待つ",
+    "imagePrompt": "A person waiting at a bus stop on a Japanese street, looking at their wristwatch. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 待つ",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-miru": {
+    "imagePath": "/generated-word-images/pack-ja-n5-miru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-miru.webp",
+    "imageAlt": "смотреть, видеть: 見る",
+    "imagePrompt": "A Japanese family watching television on a sofa in the evening, seen from behind, the screen glowing. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 見る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-neru": {
+    "imagePath": "/generated-word-images/pack-ja-n5-neru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-neru.webp",
+    "imageAlt": "ложиться спать, спать: 寝る",
+    "imagePrompt": "A Japanese person sleeping peacefully on a futon in a dark room at night, moonlight through the window. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 寝る",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-nomu": {
+    "imagePath": "/generated-word-images/pack-ja-n5-nomu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-nomu.webp",
+    "imageAlt": "пить: 飲む",
+    "imagePrompt": "A Japanese woman drinking a glass of water in her kitchen. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 飲む",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-okane": {
+    "imagePath": "/generated-word-images/pack-ja-n5-okane.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-okane.webp",
+    "imageAlt": "деньги: お金",
+    "imagePrompt": "Coins and folded banknotes spilling out of an open wallet on a table, seen at an angle with no readable details. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: お金",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-okiru": {
+    "imagePath": "/generated-word-images/pack-ja-n5-okiru.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-okiru.webp",
+    "imageAlt": "вставать, просыпаться: 起きる",
+    "imagePrompt": "A Japanese person waking up and stretching in bed as morning sunlight fills the room. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 起きる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-ookii": {
+    "imagePath": "/generated-word-images/pack-ja-n5-ookii.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-ookii.webp",
+    "imageAlt": "большой: 大きい",
+    "imagePrompt": "A very big dog sitting next to a small child in a Japanese park, showing how large the dog is. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 大きい",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-taberu": {
+    "imagePath": "/generated-word-images/pack-ja-n5-taberu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-taberu.webp",
+    "imageAlt": "есть: 食べる",
+    "imagePrompt": "A Japanese man eating rice from a bowl with chopsticks at breakfast, morning light. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 食べる",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-takai": {
+    "imagePath": "/generated-word-images/pack-ja-n5-takai.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-takai.webp",
+    "imageAlt": "дорогой; высокий: 高い",
+    "imagePrompt": "An elegant expensive fine-dining table in a luxury Tokyo restaurant with exquisite dishes, crystal glasses and a night city view. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 高い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-yasui": {
+    "imagePath": "/generated-word-images/pack-ja-n5-yasui.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-yasui.webp",
+    "imageAlt": "дешёвый: 安い",
+    "imagePrompt": "A Japanese vegetable shop with baskets of fresh vegetables and a few coins in a customer's hand, cheap and abundant, no price tags. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 安い",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-n5-yomu": {
+    "imagePath": "/generated-word-images/pack-ja-n5-yomu.webp",
+    "imageUrl": "/generated-word-images/pack-ja-n5-yomu.webp",
+    "imageAlt": "читать: 読む",
+    "imagePrompt": "A Japanese commuter reading a paperback book while standing on a train. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 読む",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-plants-mi": {
+    "imagePath": "/generated-word-images/pack-ja-plants-mi.webp",
+    "imageUrl": "/generated-word-images/pack-ja-plants-mi.webp",
+    "imageAlt": "плод: 実",
+    "imagePrompt": "A tree branch heavy with ripe persimmon fruits in a Japanese garden in autumn. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 実",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
+  },
+  "pack-ja-travel-densha": {
+    "imagePath": "/generated-word-images/pack-ja-travel-densha.webp",
+    "imageUrl": "/generated-word-images/pack-ja-travel-densha.webp",
+    "imageAlt": "электропоезд: 電車",
+    "imagePrompt": "A commuter electric train arriving at a station platform in Tokyo, daytime, no signs. Photorealistic, no text, no letters, no numbers, no logos.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 電車",
     "imageProvider": "openai-imagegen",
     "imageAttribution": "Создано специально для étudier"
   }
