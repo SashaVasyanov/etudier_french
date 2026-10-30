@@ -846,13 +846,11 @@
     "imagePath": "/generated-word-images/a1-chance-152.webp",
     "imageUrl": "/generated-word-images/a1-chance-152.webp",
     "imageAlt": "удача: chance",
-    "imagePrompt": "Real associative image for \"chance\" (удача). Query: chance.",
-    "imageSource": "https://www.flickr.com/photos/55514420@N00/3099678849",
-    "imageSourceTitle": "Fat Chance Belly Dance",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"Fat Chance Belly Dance\" by davidyuweb is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"удача\". The scene illustrates the situation: \"Удачи на экзамене!\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: chance",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-experience-156": {
     "imagePath": "/generated-word-images/a1-experience-156.webp",
@@ -1694,13 +1692,11 @@
     "imagePath": "/generated-word-images/a1-a-342.webp",
     "imageUrl": "/generated-word-images/a1-a-342.webp",
     "imageAlt": "в, к: à",
-    "imagePrompt": "Real associative image for \"à\" (в, к). Query: French grammar book.",
-    "imageSource": "https://www.flickr.com/photos/42329213@N00/2324915506",
-    "imageSourceTitle": "I am so done with French this semester.",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"I am so done with French this semester.\" by emilybean is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"в, к\". The scene illustrates the situation: \"Завтра утром мы едем в Париж.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: à",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-en-343": {
     "imagePath": "/generated-word-images/a1-en-343.webp",
@@ -1718,13 +1714,11 @@
     "imagePath": "/generated-word-images/a1-dans-344.webp",
     "imageUrl": "/generated-word-images/a1-dans-344.webp",
     "imageAlt": "внутри: dans",
-    "imagePrompt": "Real associative image for \"dans\" (внутри). Query: French grammar book.",
-    "imageSource": "https://www.flickr.com/photos/42329213@N00/2324915506",
-    "imageSourceTitle": "I am so done with French this semester.",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"I am so done with French this semester.\" by emilybean is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"внутри\". The scene illustrates the situation: \"Ключи в сумке.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: dans",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-sous-345": {
     "imagePath": "/generated-word-images/a1-sous-345.webp",
@@ -1742,13 +1736,11 @@
     "imagePath": "/generated-word-images/a1-avec-346.webp",
     "imageUrl": "/generated-word-images/a1-avec-346.webp",
     "imageAlt": "с: avec",
-    "imagePrompt": "Real associative image for \"avec\" (с). Query: French grammar book.",
-    "imageSource": "https://www.flickr.com/photos/42329213@N00/2324915506",
-    "imageSourceTitle": "I am so done with French this semester.",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"I am so done with French this semester.\" by emilybean is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"с\". The scene illustrates the situation: \"Я иду в кино со своим другом.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: avec",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-sans-347": {
     "imagePath": "/generated-word-images/a1-sans-347.webp",
@@ -1778,13 +1770,11 @@
     "imagePath": "/generated-word-images/a1-avant-352.webp",
     "imageUrl": "/generated-word-images/a1-avant-352.webp",
     "imageAlt": "раньше: avant",
-    "imagePrompt": "Real associative image for \"avant\" (раньше). Query: avant calendar.",
-    "imageSource": "https://www.flickr.com/photos/45172261@N05/5541564577",
-    "imageSourceTitle": "Montréal 1792. Chapelle de Notre-Dame-des-Victoires, Hôtel Dieu.",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Montréal 1792. Chapelle de Notre-Dame-des-Victoires, Hôtel Dieu.\" by DubyDub2009 is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"раньше\". The scene illustrates the situation: \"Приходи в шесть, не раньше.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: avant",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-apres-353": {
     "imagePath": "/generated-word-images/a1-apres-353.webp",
@@ -1854,13 +1844,11 @@
     "imagePath": "/generated-word-images/a1-comment-363.webp",
     "imageUrl": "/generated-word-images/a1-comment-363.webp",
     "imageAlt": "как: comment",
-    "imagePrompt": "Real associative image for \"comment\" (как). Query: French grammar book.",
-    "imageSource": "https://www.flickr.com/photos/42329213@N00/2324915506",
-    "imageSourceTitle": "I am so done with French this semester.",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"I am so done with French this semester.\" by emilybean is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"как\". The scene illustrates the situation: \"Как ты произносишь это слово?\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: comment",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-qui-364": {
     "imagePath": "/generated-word-images/a1-qui-364.webp",
@@ -1902,13 +1890,11 @@
     "imagePath": "/generated-word-images/a1-ca-va-368.webp",
     "imageUrl": "/generated-word-images/a1-ca-va-368.webp",
     "imageAlt": "всё в порядке: ça va",
-    "imagePrompt": "Real associative image for \"ça va\" (всё в порядке). Query: ça va expression.",
-    "imageSource": "https://www.flickr.com/photos/40159434@N02/4182225973",
-    "imageSourceTitle": "Day 4 - Un peu de lumière",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"Day 4 - Un peu de lumière\" by [Segle] - REFLEX IS BACK ! is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"всё в порядке\". The scene illustrates the situation: \"Нет, спасибо, всё в порядке.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ça va",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-comment-ca-va-369": {
     "imagePath": "/generated-word-images/a1-comment-ca-va-369.webp",
@@ -1922,37 +1908,31 @@
     "imagePath": "/generated-word-images/a1-a-bientot-370.webp",
     "imageUrl": "/generated-word-images/a1-a-bientot-370.webp",
     "imageAlt": "до скорого: à bientôt",
-    "imagePrompt": "Real associative image for \"à bientôt\" (до скорого). Query: à bientôt expression.",
-    "imageSource": "https://www.flickr.com/photos/49123127@N00/193626825",
-    "imageSourceTitle": "Alejandro Jodorowsky",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"Alejandro Jodorowsky\" by Rantes) is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"до скорого\". The scene illustrates the situation: \"Спасибо за всё, до скорого!\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: à bientôt",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-bonne-journee-371": {
     "imagePath": "/generated-word-images/a1-bonne-journee-371.webp",
     "imageUrl": "/generated-word-images/a1-bonne-journee-371.webp",
     "imageAlt": "хорошего дня: bonne journée",
-    "imagePrompt": "Real associative image for \"bonne journée\" (хорошего дня). Query: bonne journée.",
-    "imageSource": "https://www.flickr.com/photos/79505738@N03/29674755797",
-    "imageSourceTitle": "IMG_2380D Max Ernst 1891-1976 Paris Bonne journée Satanas. Good Day Satanas. Aalborg. Museum of Modern Art.",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"IMG_2380D Max Ernst 1891-1976 Paris Bonne journée Satanas. Good Day Satanas. Aalborg. Museum of Modern Art.\" by jean louis mazieres is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"хорошего дня\". The scene illustrates the situation: \"Спасибо, мадам, хорошего дня!\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bonne journée",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-bonne-soiree-372": {
     "imagePath": "/generated-word-images/a1-bonne-soiree-372.webp",
     "imageUrl": "/generated-word-images/a1-bonne-soiree-372.webp",
     "imageAlt": "хорошего вечера: bonne soirée",
-    "imagePrompt": "Real associative image for \"bonne soirée\" (хорошего вечера). Query: bonne soirée.",
-    "imageSource": "https://www.flickr.com/photos/129684398@N07/52425831339",
-    "imageSourceTitle": "Bonne soirée !! (in Explore)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Bonne soirée !! (in Explore)\" by clairetresse is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"хорошего вечера\". The scene illustrates the situation: \"Спасибо за ужин, хорошего вечера!\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bonne soirée",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-bonne-nuit-373": {
     "imagePath": "/generated-word-images/a1-bonne-nuit-373.webp",
@@ -1978,13 +1958,11 @@
     "imagePath": "/generated-word-images/a1-d-accord-378.webp",
     "imageUrl": "/generated-word-images/a1-d-accord-378.webp",
     "imageAlt": "согласен: d'accord",
-    "imagePrompt": "Real associative image for \"d'accord\" (согласен). Query: d'accord expression.",
-    "imageSource": "https://www.flickr.com/photos/29487767@N02/16258252025",
-    "imageSourceTitle": "Je suis CHARLIE",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"Je suis CHARLIE\" by Daniela Hartmann (alles-schlumpf) is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"согласен\". The scene illustrates the situation: \"Хорошо, начинаем сейчас.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: d'accord",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-a-droite-384": {
     "imagePath": "/generated-word-images/a1-a-droite-384.webp",
@@ -2000,13 +1978,11 @@
     "imagePath": "/generated-word-images/a1-a-gauche-385.webp",
     "imageUrl": "/generated-word-images/a1-a-gauche-385.webp",
     "imageAlt": "слева: à gauche",
-    "imagePrompt": "Real associative image for \"à gauche\" (слева). Query: à gauche expression.",
-    "imageSource": "https://www.flickr.com/photos/28853433@N02/4679198690",
-    "imageSourceTitle": "Female technicians testing chemicals used in synthetic rubber manufacture, Polymer Rubber Corp., October 1943 / Techniciennes analysant des produits chimiques servant à la fabrication du caoutchouc synthétique, Polymer Rubber Corp., octobre 1943",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Female technicians testing chemicals used in synthetic rubber manufacture, Polymer Rubber Corp., October 1943 / Techniciennes analysant des produits chimiques servant à la fabrication du caoutchouc synthétique, Polymer Rubber Corp., octobre 1943\" by BiblioArchives / LibraryArchives is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"слева\". The scene illustrates the situation: \"Булочная слева от почты.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: à gauche",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-une-fois-391": {
     "imagePath": "/generated-word-images/a1-une-fois-391.webp",
@@ -2036,25 +2012,21 @@
     "imagePath": "/generated-word-images/a1-a-demain-393.webp",
     "imageUrl": "/generated-word-images/a1-a-demain-393.webp",
     "imageAlt": "до завтра: à demain",
-    "imagePrompt": "Real associative image for \"à demain\" (до завтра). Query: à demain calendar.",
-    "imageSource": "https://www.flickr.com/photos/26515293@N03/8158363768",
-    "imageSourceTitle": "Pique-nique à bicyclette",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nd/2.0/",
-    "imageAttribution": "\"Pique-nique à bicyclette\" by bakelith is licensed under CC BY-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"до завтра\". The scene illustrates the situation: \"Мне пора, до завтра!\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: à demain",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-bon-appetit-394": {
     "imagePath": "/generated-word-images/a1-bon-appetit-394.webp",
     "imageUrl": "/generated-word-images/a1-bon-appetit-394.webp",
     "imageAlt": "приятного аппетита: bon appétit",
-    "imagePrompt": "Real associative image for \"bon appétit\" (приятного аппетита). Query: small object.",
-    "imageSource": "https://www.flickr.com/photos/36390568@N07/4655971252",
-    "imageSourceTitle": "Small object of bronze",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Small object of bronze\" by The Swedish History Museum, Stockholm is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"приятного аппетита\". The scene illustrates the situation: \"Ужин готов, приятного аппетита!\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bon appétit",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-a-la-maison-395": {
     "imagePath": "/generated-word-images/a1-a-la-maison-395.webp",
@@ -2080,13 +2052,11 @@
     "imagePath": "/generated-word-images/a1-a-pied-398.webp",
     "imageUrl": "/generated-word-images/a1-a-pied-398.webp",
     "imageAlt": "пешком: à pied",
-    "imagePrompt": "Real associative image for \"à pied\" (пешком). Query: à pied travel.",
-    "imageSource": "https://www.flickr.com/photos/72746018@N00/2601399794",
-    "imageSourceTitle": "Shiva Natarâdja, Seigneur de la Danse (musée Guimet)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Shiva Natarâdja, Seigneur de la Danse (musée Guimet)\" by dalbera is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"пешком\". The scene illustrates the situation: \"Я хожу на работу пешком.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: à pied",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-en-voiture-399": {
     "imagePath": "/generated-word-images/a1-en-voiture-399.webp",
@@ -2268,25 +2238,21 @@
     "imagePath": "/generated-word-images/a1-copain-433.webp",
     "imageUrl": "/generated-word-images/a1-copain-433.webp",
     "imageAlt": "приятель: copain",
-    "imagePrompt": "Real associative image for \"copain\" (приятель). Query: copain.",
-    "imageSource": "https://www.flickr.com/photos/60894088@N00/634720908",
-    "imageSourceTitle": "Les Copains à la Piscine",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Les Copains à la Piscine\" by kahala is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"приятель\". The scene illustrates the situation: \"Я играю в футбол с приятелями.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: copain",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-copine-434": {
     "imagePath": "/generated-word-images/a1-copine-434.webp",
     "imageUrl": "/generated-word-images/a1-copine-434.webp",
     "imageAlt": "подруга: copine",
-    "imagePrompt": "Real associative image for \"copine\" (подруга). Query: copine.",
-    "imageSource": "https://www.flickr.com/photos/48563015@N07/16767654549",
-    "imageSourceTitle": "Copines coquines ..Roguish young people Madagascar Malagasy",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"Copines coquines ..Roguish young people Madagascar Malagasy\" by geolis06 is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"подруга\". The scene illustrates the situation: \"Сегодня вечером она гуляет с подругами.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: copine",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-groupe-435": {
     "imagePath": "/generated-word-images/a1-groupe-435.webp",
@@ -3452,25 +3418,21 @@
     "imagePath": "/generated-word-images/a1-bouteille-536.webp",
     "imageUrl": "/generated-word-images/a1-bouteille-536.webp",
     "imageAlt": "бутылка: bouteille",
-    "imagePrompt": "Real associative image for \"bouteille\" (бутылка). Query: bouteille home.",
-    "imageSource": "https://www.flickr.com/photos/30416691@N00/6180328807",
-    "imageSourceTitle": "Gobi Studio",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Gobi Studio\" by Semio is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"бутылка\". The scene illustrates the situation: \"Можешь открыть бутылку воды?\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bouteille",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-boite-537": {
     "imagePath": "/generated-word-images/a1-boite-537.webp",
     "imageUrl": "/generated-word-images/a1-boite-537.webp",
     "imageAlt": "коробка: boîte",
-    "imagePrompt": "Real associative image for \"boîte\" (коробка). Query: boîte home.",
-    "imageSource": "https://www.flickr.com/photos/39306713@N08/14831033408",
-    "imageSourceTitle": "Déménagement : Vivre dans les boîtes",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Déménagement : Vivre dans les boîtes\" by MartinDube is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"коробка\". The scene illustrates the situation: \"Я складываю фотографии в коробку.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: boîte",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-paquet-538": {
     "imagePath": "/generated-word-images/a1-paquet-538.webp",
@@ -4698,13 +4660,11 @@
     "imagePath": "/generated-word-images/a1-adresse-645.webp",
     "imageUrl": "/generated-word-images/a1-adresse-645.webp",
     "imageAlt": "адрес: adresse",
-    "imagePrompt": "Real associative image for \"adresse\" (адрес). Query: adresse.",
-    "imageSource": "https://www.flickr.com/photos/24469639@N00/6223872788",
-    "imageSourceTitle": "Hospital ward, Sainte Adresse, Le Havre, November 1914",
-    "imageProvider": "flickr",
-    "imageLicense": "pdm-1.0",
-    "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-    "imageAttribution": "\"Hospital ward, Sainte Adresse, Le Havre, November 1914\" by whatsthatpicture is marked with Public Domain Mark 1.0. To view the terms, visit https://creativecommons.org/publicdomain/mark/1.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"адрес\". The scene illustrates the situation: \"Какой у тебя адрес?\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: adresse",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-batiment-646": {
     "imagePath": "/generated-word-images/a1-batiment-646.webp",
@@ -5158,13 +5118,11 @@
     "imagePath": "/generated-word-images/a1-chemin-685.webp",
     "imageUrl": "/generated-word-images/a1-chemin-685.webp",
     "imageAlt": "путь: chemin",
-    "imagePrompt": "Real associative image for \"chemin\" (путь). Query: chemin travel.",
-    "imageSource": "https://www.flickr.com/photos/67525885@N00/23483952841",
-    "imageSourceTitle": "Road from Khajuraho to Orchha, India",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Road from Khajuraho to Orchha, India\" by jafsegal (Thanks for the 4,5 million views) is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"путь\". The scene illustrates the situation: \"Ты знаешь дорогу к вокзалу?\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: chemin",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-depart-686": {
     "imagePath": "/generated-word-images/a1-depart-686.webp",
@@ -5536,13 +5494,11 @@
     "imagePath": "/generated-word-images/a1-bateau-719.webp",
     "imageUrl": "/generated-word-images/a1-bateau-719.webp",
     "imageAlt": "лодка: bateau",
-    "imagePrompt": "Real associative image for \"bateau\" (лодка). Query: bateau travel.",
-    "imageSource": "https://www.flickr.com/photos/29008822@N02/4027030475",
-    "imageSourceTitle": "Cambodia",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Cambodia\" by Sylvain Raybaud is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"лодка\". The scene illustrates the situation: \"Мы катаемся на лодке по озеру.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bateau",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-navire-720": {
     "imagePath": "/generated-word-images/a1-navire-720.webp",
@@ -5662,13 +5618,11 @@
     "imagePath": "/generated-word-images/a1-ciel-730.webp",
     "imageUrl": "/generated-word-images/a1-ciel-730.webp",
     "imageAlt": "небо: ciel",
-    "imagePrompt": "Real associative image for \"ciel\" (небо). Query: ciel nature.",
-    "imageSource": "https://www.flickr.com/photos/56650098@N07/7462786662",
-    "imageSourceTitle": "ciel nature",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"ciel nature\" by laetitiablableuz is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"небо\". The scene illustrates the situation: \"Сегодня небо совсем голубое.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ciel",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-lune-731": {
     "imagePath": "/generated-word-images/a1-lune-731.webp",
@@ -5698,13 +5652,11 @@
     "imagePath": "/generated-word-images/a1-air-733.webp",
     "imageUrl": "/generated-word-images/a1-air-733.webp",
     "imageAlt": "воздух: air",
-    "imagePrompt": "Real associative image for \"air\" (воздух). Query: air nature.",
-    "imageSource": "https://www.flickr.com/photos/191555294@N02/53084431801",
-    "imageSourceTitle": "Relaxing in open air Nature enjoying last sunrays of a bautiful day",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Relaxing in open air Nature enjoying last sunrays of a bautiful day\" by teebreuq is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"воздух\". The scene illustrates the situation: \"Мы открываем окно, чтобы впустить воздух.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: air",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-foret-734": {
     "imagePath": "/generated-word-images/a1-foret-734.webp",
@@ -5720,13 +5672,11 @@
     "imagePath": "/generated-word-images/a1-bois-735.webp",
     "imageUrl": "/generated-word-images/a1-bois-735.webp",
     "imageAlt": "лес: bois",
-    "imagePrompt": "Real associative image for \"bois\" (лес). Query: bois nature.",
-    "imageSource": "https://www.flickr.com/photos/26503203@N04/4779611094",
-    "imageSourceTitle": "BUTTERFLY BOY - natural carved wooden toy, summer inspired",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"BUTTERFLY BOY - natural carved wooden toy, summer inspired\" by Rjabinnik and Rounien is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"лес\". The scene illustrates the situation: \"Мы гуляем в лесу.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bois",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-champ-736": {
     "imagePath": "/generated-word-images/a1-champ-736.webp",
@@ -7306,13 +7256,11 @@
     "imagePath": "/generated-word-images/a1-cours-876.webp",
     "imageUrl": "/generated-word-images/a1-cours-876.webp",
     "imageAlt": "урок: cours",
-    "imagePrompt": "Real associative image for \"cours\" (урок). Query: cours work office.",
-    "imageSource": "https://www.flickr.com/photos/28853433@N02/41435409194",
-    "imageSourceTitle": "A logger works to keep logs from catching and jamming in a stream, Gatineau, Quebec / Un draveur empêche les billes de créer un embâcle sur un cours d’eau, Gatineau (Québec)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"A logger works to keep logs from catching and jamming in a stream, Gatineau, Quebec / Un draveur empêche les billes de créer un embâcle sur un cours d’eau, Gatineau (Québec)\" by BiblioArchives / LibraryArchives is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"урок\". The scene illustrates the situation: \"Урок французского начинается в девять часов.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: cours",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-lecon-877": {
     "imagePath": "/generated-word-images/a1-lecon-877.webp",
@@ -7640,13 +7588,11 @@
     "imagePath": "/generated-word-images/a1-appel-906.webp",
     "imageUrl": "/generated-word-images/a1-appel-906.webp",
     "imageAlt": "звонок: appel",
-    "imagePrompt": "Real associative image for \"appel\" (звонок). Query: appel work office.",
-    "imageSource": "https://www.flickr.com/photos/70323761@N00/541576163",
-    "imageSourceTitle": "NYC - New York Supreme Court, Appellate Division - Memorial to All Victims of the Holocaust",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"NYC - New York Supreme Court, Appellate Division - Memorial to All Victims of the Holocaust\" by wallyg is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"звонок\". The scene illustrates the situation: \"Мне нужно сделать важный звонок.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: appel",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-rapport-907": {
     "imagePath": "/generated-word-images/a1-rapport-907.webp",
@@ -7818,13 +7764,11 @@
     "imagePath": "/generated-word-images/a1-compte-922.webp",
     "imageUrl": "/generated-word-images/a1-compte-922.webp",
     "imageAlt": "аккаунт: compte",
-    "imagePrompt": "Real associative image for \"compte\" (аккаунт). Query: compte.",
-    "imageSource": "https://www.flickr.com/photos/24899877@N00/104706583",
-    "imageSourceTitle": "Street Stencil Graffiti - Action PacMan (Compte Borrell with Tamarit Corner - Barcelona)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Street Stencil Graffiti - Action PacMan (Compte Borrell with Tamarit Corner - Barcelona)\" by scalleja is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"аккаунт\". The scene illustrates the situation: \"Я создал аккаунт на этом сайте.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: compte",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-profil-923": {
     "imagePath": "/generated-word-images/a1-profil-923.webp",
@@ -8228,13 +8172,11 @@
     "imagePath": "/generated-word-images/a1-cause-958.webp",
     "imageUrl": "/generated-word-images/a1-cause-958.webp",
     "imageAlt": "причина: cause",
-    "imagePrompt": "Real associative image for \"cause\" (причина). Query: cause.",
-    "imageSource": "https://www.flickr.com/photos/55883582@N08/12305992453",
-    "imageSourceTitle": "Just Cause 2",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"Just Cause 2\" by K-putt is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"причина\". The scene illustrates the situation: \"Какова причина аварии?\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: cause",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-effet-959": {
     "imagePath": "/generated-word-images/a1-effet-959.webp",
@@ -8252,13 +8194,11 @@
     "imagePath": "/generated-word-images/a1-avis-960.webp",
     "imageUrl": "/generated-word-images/a1-avis-960.webp",
     "imageAlt": "мнение: avis",
-    "imagePrompt": "Real associative image for \"avis\" (мнение). Query: avis.",
-    "imageSource": "https://www.flickr.com/photos/21446942@N00/6443746367",
-    "imageSourceTitle": "Porta do Arco - Avis - Portugal",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Porta do Arco - Avis - Portugal\" by Portuguese_eyes is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"мнение\". The scene illustrates the situation: \"По-моему, этот фильм слишком длинный.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: avis",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-sens-962": {
     "imagePath": "/generated-word-images/a1-sens-962.webp",
@@ -8276,13 +8216,11 @@
     "imagePath": "/generated-word-images/a1-but-963.webp",
     "imageUrl": "/generated-word-images/a1-but-963.webp",
     "imageAlt": "цель: but",
-    "imagePrompt": "Real associative image for \"but\" (цель). Query: but object.",
-    "imageSource": "https://www.flickr.com/photos/43147325@N08/6642405335",
-    "imageSourceTitle": "first 10x objective try",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"first 10x objective try\" by Johan J.Ingles-Le Nobel is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"цель\". The scene illustrates the situation: \"Моя цель — говорить по-французски.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: but",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-debut-964": {
     "imagePath": "/generated-word-images/a1-debut-964.webp",
@@ -8396,13 +8334,11 @@
     "imagePath": "/generated-word-images/a1-date-974.webp",
     "imageUrl": "/generated-word-images/a1-date-974.webp",
     "imageAlt": "дата: date",
-    "imagePrompt": "Real associative image for \"date\" (дата). Query: date.",
-    "imageSource": "https://www.flickr.com/photos/61926883@N00/990802343",
-    "imageSourceTitle": "Dates",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Dates\" by DBduo Photography is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"дата\". The scene illustrates the situation: \"Какого числа у тебя день рождения?\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: date",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-histoire-975": {
     "imagePath": "/generated-word-images/a1-histoire-975.webp",
@@ -8516,13 +8452,11 @@
     "imagePath": "/generated-word-images/a1-attention-984.webp",
     "imageUrl": "/generated-word-images/a1-attention-984.webp",
     "imageAlt": "внимание: attention",
-    "imagePrompt": "Real associative image for \"attention\" (внимание). Query: attention.",
-    "imageSource": "https://www.flickr.com/photos/18911896@N00/3984437497",
-    "imageSourceTitle": "Attention chien bizarre",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Attention chien bizarre\" by Simon Bonaventure is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"внимание\". The scene illustrates the situation: \"Ученики слушают с вниманием.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: attention",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-patience-985": {
     "imagePath": "/generated-word-images/a1-patience-985.webp",
@@ -8900,13 +8834,11 @@
     "imagePath": "/generated-word-images/a1-accord-1018.webp",
     "imageUrl": "/generated-word-images/a1-accord-1018.webp",
     "imageAlt": "согласие: accord",
-    "imagePrompt": "Real associative image for \"accord\" (согласие). Query: accord.",
-    "imageSource": "https://www.flickr.com/photos/35468145967@N01/96022679",
-    "imageSourceTitle": "1989 Honda Accord LX SOLD!",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"1989 Honda Accord LX SOLD!\" by [.i.c.e.] is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"согласие\". The scene illustrates the situation: \"Я с тобой согласен.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: accord",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-desaccord-1019": {
     "imagePath": "/generated-word-images/a1-desaccord-1019.webp",
@@ -8924,13 +8856,11 @@
     "imagePath": "/generated-word-images/a1-conseil-1020.webp",
     "imageUrl": "/generated-word-images/a1-conseil-1020.webp",
     "imageAlt": "совет: conseil",
-    "imagePrompt": "Real associative image for \"conseil\" (совет). Query: conseil.",
-    "imageSource": "https://www.flickr.com/photos/117994717@N06/31910009148",
-    "imageSourceTitle": "Conseil d'administration de l'Ecole polytechnique",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Conseil d'administration de l'Ecole polytechnique\" by Ecole polytechnique / Paris / France is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"совет\". The scene illustrates the situation: \"Можно дать тебе совет?\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: conseil",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-promesse-1021": {
     "imagePath": "/generated-word-images/a1-promesse-1021.webp",
@@ -9004,13 +8934,11 @@
     "imagePath": "/generated-word-images/a1-accepter-1051.webp",
     "imageUrl": "/generated-word-images/a1-accepter-1051.webp",
     "imageAlt": "принимать: accepter",
-    "imagePrompt": "Real associative image for \"accepter\" (принимать). Query: accepter action.",
-    "imageSource": "https://www.flickr.com/photos/86822950@N03/7997101156",
-    "imageSourceTitle": "Yunel's eyeblack has a disappointing message.",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Yunel's eyeblack has a disappointing message.\" by james_in_to is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"принимать\". The scene illustrates the situation: \"Она с удовольствием принимает приглашение.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: accepter",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-accompagner-1052": {
     "imagePath": "/generated-word-images/a1-accompagner-1052.webp",
@@ -9028,13 +8956,11 @@
     "imagePath": "/generated-word-images/a1-ajouter-1053.webp",
     "imageUrl": "/generated-word-images/a1-ajouter-1053.webp",
     "imageAlt": "добавлять: ajouter",
-    "imagePrompt": "Real associative image for \"ajouter\" (добавлять). Query: ajouter.",
-    "imageSource": "https://www.flickr.com/photos/73885629@N02/6979449799",
-    "imageSourceTitle": "'... !!!' rien à ajouter",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"'... !!!' rien à ajouter\" by WiLPrZ is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"добавлять\". The scene illustrates the situation: \"Я добавляю немного соли в суп.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ajouter",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-allumer-1054": {
     "imagePath": "/generated-word-images/a1-allumer-1054.webp",
@@ -9052,13 +8978,11 @@
     "imagePath": "/generated-word-images/a1-apporter-1055.webp",
     "imageUrl": "/generated-word-images/a1-apporter-1055.webp",
     "imageAlt": "приносить: apporter",
-    "imagePrompt": "Real associative image for \"apporter\" (приносить). Query: apporter action.",
-    "imageSource": "https://www.flickr.com/photos/57247226@N03/6891847950",
-    "imageSourceTitle": "Black Labrador Retriever Lotte and some Dummy Training ;-) - Water games ;-)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Black Labrador Retriever Lotte and some Dummy Training ;-) - Water games ;-)\" by photography.andreas is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"приносить\". The scene illustrates the situation: \"Я приношу торт на праздник.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: apporter",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-arreter-1056": {
     "imagePath": "https://api.openverse.org/v1/images/afed29e8-e0c2-42e1-b3b2-115ab518ca2d/thumb/",
@@ -9076,13 +9000,11 @@
     "imagePath": "/generated-word-images/a1-avancer-1057.webp",
     "imageUrl": "/generated-word-images/a1-avancer-1057.webp",
     "imageAlt": "продвигаться: avancer",
-    "imagePrompt": "Real associative image for \"avancer\" (продвигаться). Query: avancer action.",
-    "imageSource": "https://www.flickr.com/photos/38035878@N07/8455049733",
-    "imageSourceTitle": "3081-Recreacion de la batalla de Elviña al pie de la Torre de Hercules en A Coruña.",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"3081-Recreacion de la batalla de Elviña al pie de la Torre de Hercules en A Coruña.\" by jl.cernadas is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"продвигаться\". The scene illustrates the situation: \"Машина медленно продвигается по улице.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: avancer",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-balayer-1058": {
     "imagePath": "/generated-word-images/a1-balayer-1058.webp",
@@ -9100,13 +9022,11 @@
     "imagePath": "/generated-word-images/a1-bouger-1059.webp",
     "imageUrl": "/generated-word-images/a1-bouger-1059.webp",
     "imageAlt": "двигаться: bouger",
-    "imagePrompt": "Real associative image for \"bouger\" (двигаться). Query: bouger action.",
-    "imageSource": "https://www.flickr.com/photos/10801270@N02/3832859769",
-    "imageSourceTitle": "affiche1",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"affiche1\" by benkamorvan is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"двигаться\". The scene illustrates the situation: \"Не двигайся, я фотографирую!\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bouger",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-casser-1060": {
     "imagePath": "https://api.openverse.org/v1/images/f3acd845-9930-4fba-be0f-3c278f8abb45/thumb/",
@@ -9124,13 +9044,11 @@
     "imagePath": "/generated-word-images/a1-chanter-1061.webp",
     "imageUrl": "/generated-word-images/a1-chanter-1061.webp",
     "imageAlt": "петь: chanter",
-    "imagePrompt": "Real associative image for \"chanter\" (петь). Query: chanter action.",
-    "imageSource": "https://www.flickr.com/photos/21666432@N08/30770657530",
-    "imageSourceTitle": "La Yegros on Fire!",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"La Yegros on Fire!\" by The French Travel Photographer is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"петь\". The scene illustrates the situation: \"Она очень хорошо поёт.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: chanter",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-charger-1062": {
     "imagePath": "/generated-word-images/a1-charger-1062.webp",
@@ -9160,25 +9078,21 @@
     "imagePath": "/generated-word-images/a1-compter-1064.webp",
     "imageUrl": "/generated-word-images/a1-compter-1064.webp",
     "imageAlt": "считать: compter",
-    "imagePrompt": "Real associative image for \"compter\" (считать). Query: person reading book.",
-    "imageSource": "https://www.flickr.com/photos/147592390@N06/40620744933",
-    "imageSourceTitle": "grayscale photo of person reading book - Credit to https://myfriendscoffee.com/",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"grayscale photo of person reading book - Credit to https://myfriendscoffee.com/\" by John Beans is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"считать\". The scene illustrates the situation: \"Мой сын умеет считать до ста.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: compter",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-couper-1065": {
     "imagePath": "/generated-word-images/a1-couper-1065.webp",
     "imageUrl": "/generated-word-images/a1-couper-1065.webp",
     "imageAlt": "резать: couper",
-    "imagePrompt": "Real associative image for \"couper\" (резать). Query: couper action.",
-    "imageSource": "https://www.flickr.com/photos/92393992@N00/6795675391",
-    "imageSourceTitle": "Manufactured Landscapes discussion",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"Manufactured Landscapes discussion\" by Ric Lander is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"резать\". The scene illustrates the situation: \"Я режу хлеб к завтраку.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: couper",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-crier-1066": {
     "imagePath": "/generated-word-images/a1-crier-1066.webp",
@@ -9592,13 +9506,11 @@
     "imagePath": "/generated-word-images/a1-agreable-1218.webp",
     "imageUrl": "/generated-word-images/a1-agreable-1218.webp",
     "imageAlt": "приятный: agréable",
-    "imagePrompt": "Real associative image for \"agréable\" (приятный). Query: agréable.",
-    "imageSource": "https://www.flickr.com/photos/47850033@N08/42739332005",
-    "imageSourceTitle": "Agréable promenade le long de la mer à Pondichéry",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Agréable promenade le long de la mer à Pondichéry\" by Nithi clicks is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"приятный\". The scene illustrates the situation: \"Сегодня очень приятная погода.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: agréable",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-aimable-1219": {
     "imagePath": "/generated-word-images/a1-aimable-1219.webp",
@@ -9616,49 +9528,41 @@
     "imagePath": "/generated-word-images/a1-ancien-1220.webp",
     "imageUrl": "/generated-word-images/a1-ancien-1220.webp",
     "imageAlt": "древний: ancien",
-    "imagePrompt": "Real associative image for \"ancien\" (древний). Query: ancien.",
-    "imageSource": "https://www.flickr.com/photos/38712296@N07/7670174434",
-    "imageSourceTitle": "Téléphone ancien",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Téléphone ancien\" by zigazou76 is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"древний\". The scene illustrates the situation: \"Мы осматриваем очень древний замок.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ancien",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-autre-1221": {
     "imagePath": "/generated-word-images/a1-autre-1221.webp",
     "imageUrl": "/generated-word-images/a1-autre-1221.webp",
     "imageAlt": "другой: autre",
-    "imagePrompt": "Real associative image for \"autre\" (другой). Query: autre.",
-    "imageSource": "https://www.flickr.com/photos/28853433@N02/7509282566",
-    "imageSourceTitle": "Woman holding 'CKXL' microphone while three other women position themselves to dive into a pool / Femme tenant un microphone 'CKXL' pendant que trois autres femmes se préparent à plonger dans une piscine",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Woman holding 'CKXL' microphone while three other women position themselves to dive into a pool / Femme tenant un microphone 'CKXL' pendant que trois autres femmes se préparent à plonger dans une piscine\" by BiblioArchives / LibraryArchives is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"другой\". The scene illustrates the situation: \"Мне больше нравится другое платье.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: autre",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-bas-1222": {
     "imagePath": "/generated-word-images/a1-bas-1222.webp",
     "imageUrl": "/generated-word-images/a1-bas-1222.webp",
     "imageAlt": "низкий: bas",
-    "imagePrompt": "Real associative image for \"bas\" (низкий). Query: bas adjective.",
-    "imageSource": "https://www.flickr.com/photos/150202650@N03/52465466818",
-    "imageSourceTitle": "1KA00313a_C",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"1KA00313a_C\" by Kernowfile is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"низкий\". The scene illustrates the situation: \"Этот стол слишком низкий для меня.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bas",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-cher-1223": {
     "imagePath": "/generated-word-images/a1-cher-1223.webp",
     "imageUrl": "/generated-word-images/a1-cher-1223.webp",
     "imageAlt": "дорогой: cher",
-    "imagePrompt": "Real associative image for \"cher\" (дорогой). Query: cher.",
-    "imageSource": "https://www.flickr.com/photos/35138325@N02/5762345250",
-    "imageSourceTitle": "Pirate Cher",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"Pirate Cher\" by zorro013 is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"дорогой\". The scene illustrates the situation: \"Этот ресторан слишком дорогой.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: cher",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-complet-1224": {
     "imagePath": "/generated-word-images/a1-complet-1224.webp",
@@ -9676,13 +9580,11 @@
     "imagePath": "/generated-word-images/a1-court-1225.webp",
     "imageUrl": "/generated-word-images/a1-court-1225.webp",
     "imageAlt": "короткий: court",
-    "imagePrompt": "Real associative image for \"court\" (короткий). Query: court adjective.",
-    "imageSource": "https://www.flickr.com/photos/19232773@N00/58542151",
-    "imageSourceTitle": "continuous",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"continuous\" by Kalense Kid is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"короткий\". The scene illustrates the situation: \"У неё короткие волосы.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: court",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-dernier-1226": {
     "imagePath": "/generated-word-images/a1-dernier-1226.webp",
@@ -10000,37 +9902,31 @@
     "imagePath": "/generated-word-images/a1-absolument-1298.webp",
     "imageUrl": "/generated-word-images/a1-absolument-1298.webp",
     "imageAlt": "абсолютно: absolument",
-    "imagePrompt": "Real associative image for \"absolument\" (абсолютно). Query: calendar clock.",
-    "imageSource": "https://www.flickr.com/photos/49968232@N00/5843424397",
-    "imageSourceTitle": "calendar clock",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"calendar clock\" by Leo Reynolds is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"абсолютно\". The scene illustrates the situation: \"Ты уверен? — Да, абсолютно!\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: absolument",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-ailleurs-1299": {
     "imagePath": "/generated-word-images/a1-ailleurs-1299.webp",
     "imageUrl": "/generated-word-images/a1-ailleurs-1299.webp",
     "imageAlt": "в другом месте: ailleurs",
-    "imagePrompt": "Real associative image for \"ailleurs\" (в другом месте). Query: ailleurs calendar.",
-    "imageSource": "https://www.flickr.com/photos/122157938@N03/43076071440",
-    "imageSourceTitle": "Old woman in Nôm, Vietnam",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Old woman in Nôm, Vietnam\" by Théo G-N is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"в другом месте\". The scene illustrates the situation: \"Здесь слишком дорого, пойдём в другое место.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: ailleurs",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-alors-1300": {
     "imagePath": "/generated-word-images/a1-alors-1300.webp",
     "imageUrl": "/generated-word-images/a1-alors-1300.webp",
     "imageAlt": "тогда: alors",
-    "imagePrompt": "Real associative image for \"alors\" (тогда). Query: alors calendar.",
-    "imageSource": "https://www.flickr.com/photos/122157938@N03/43076071440",
-    "imageSourceTitle": "Old woman in Nôm, Vietnam",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Old woman in Nôm, Vietnam\" by Théo G-N is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"тогда\". The scene illustrates the situation: \"Идёт дождь? Тогда остаёмся дома.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: alors",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-au-dessous-1301": {
     "imagePath": "/generated-word-images/a1-au-dessous-1301.webp",
@@ -10060,13 +9956,11 @@
     "imagePath": "/generated-word-images/a1-aussi-1303.webp",
     "imageUrl": "/generated-word-images/a1-aussi-1303.webp",
     "imageAlt": "тоже: aussi",
-    "imagePrompt": "Real associative image for \"aussi\" (тоже). Query: calendar clock.",
-    "imageSource": "https://www.flickr.com/photos/49968232@N00/5843424397",
-    "imageSourceTitle": "calendar clock",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"calendar clock\" by Leo Reynolds is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"тоже\". The scene illustrates the situation: \"Я люблю чай, и моя жена тоже.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: aussi",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-aussitot-1304": {
     "imagePath": "/generated-word-images/a1-aussitot-1304.webp",
@@ -10084,49 +9978,41 @@
     "imagePath": "/generated-word-images/a1-autour-1305.webp",
     "imageUrl": "/generated-word-images/a1-autour-1305.webp",
     "imageAlt": "вокруг: autour",
-    "imagePrompt": "Real associative image for \"autour\" (вокруг). Query: autour calendar.",
-    "imageSource": "https://www.flickr.com/photos/59000460@N03/12305901736",
-    "imageSourceTitle": "Almanach des Postes et des Télégraphes, registre de 1885 - Différentes scènes autour des enfants",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Almanach des Postes et des Télégraphes, registre de 1885 - Différentes scènes autour des enfants\" by Bibliothèque - Les Champs Libres - Rennes is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"вокруг\". The scene illustrates the situation: \"Вокруг дома есть сад.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: autour",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-beaucoup-1306": {
     "imagePath": "/generated-word-images/a1-beaucoup-1306.webp",
     "imageUrl": "/generated-word-images/a1-beaucoup-1306.webp",
     "imageAlt": "много: beaucoup",
-    "imagePrompt": "Real associative image for \"beaucoup\" (много). Query: beautiful landscape.",
-    "imageSource": "https://www.flickr.com/photos/69706441@N03/33382970970",
-    "imageSourceTitle": "Another beautiful landscape impression",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Another beautiful landscape impression\" by PiktourUK is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"много\". The scene illustrates the situation: \"На рынке много народу.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: beaucoup",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-bien-1307": {
     "imagePath": "/generated-word-images/a1-bien-1307.webp",
     "imageUrl": "/generated-word-images/a1-bien-1307.webp",
     "imageAlt": "хорошо: bien",
-    "imagePrompt": "Real associative image for \"bien\" (хорошо). Query: bien calendar.",
-    "imageSource": "https://www.flickr.com/photos/89082145@N00/390309463",
-    "imageSourceTitle": "busy as a bee",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"busy as a bee\" by eisenrah is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"хорошо\". The scene illustrates the situation: \"Ты очень хорошо говоришь по-французски!\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bien",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-bientot-1308": {
     "imagePath": "/generated-word-images/a1-bientot-1308.webp",
     "imageUrl": "/generated-word-images/a1-bientot-1308.webp",
     "imageAlt": "скоро: bientôt",
-    "imagePrompt": "Real associative image for \"bientôt\" (скоро). Query: calendar clock.",
-    "imageSource": "https://www.flickr.com/photos/49968232@N00/5843424397",
-    "imageSourceTitle": "calendar clock",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"calendar clock\" by Leo Reynolds is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"скоро\". The scene illustrates the situation: \"Поезд скоро прибудет.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: bientôt",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a1-dedans-1309": {
     "imagePath": "/generated-word-images/a1-dedans-1309.webp",
