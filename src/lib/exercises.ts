@@ -311,8 +311,9 @@ function canCreateExercise(word: Word, type: ExerciseType): boolean {
   }
 
   if (type === 'definition_choice') {
-    // Interjections (ああ, あっ, oh) cannot be told apart by a definition.
-    return Boolean(word.definition) && word.part_of_speech !== 'interjection' && !word.definition!.includes(word.original);
+    // «Вспомните слово» (as in Skyeng): picture + translation, choose the word.
+    // Needs a picture of its own — a stock fallback would give nothing to look at.
+    return Boolean(word.imageUrl || word.imagePath) && !String(word.imageUrl ?? word.imagePath).startsWith('data:');
   }
 
   // «Заполните пропуск» was dropped: the blank was guessed from the shape of
@@ -410,14 +411,16 @@ export function createExercise(word: Word, optionPool: Word[], type: ExerciseTyp
       };
     }
     case 'definition_choice': {
-      const options = buildChoiceOptions(word, optionPool, 'original', true);
-      if (!word.definition || options.length < 2) return createExercise(word, optionPool, 'translation_to_original_choice', index);
+      // The picture and the translation are the prompt; the definition in the
+      // studied language is a quiet second line, not something to decode.
+      const options = buildChoiceOptions(word, optionPool, 'original', Boolean(word.definition));
+      if (options.length < 2) return createExercise(word, optionPool, 'translation_to_original_choice', index);
       return {
         id: `${word.id}-${type}-${index}`,
         type,
         wordId: word.id,
-        prompt: word.definition,
-        context: word.definition_translation,
+        prompt: word.translation,
+        context: word.definition && !word.definition.includes(word.original) ? word.definition : undefined,
         correctAnswer: word.original,
         options,
       };

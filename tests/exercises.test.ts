@@ -280,8 +280,8 @@ describe('phrase, article and reading tasks', () => {
     throw new Error('no sentence-order task in ten lessons');
   });
 
-  it('asks for the word by its definition when the word has one', () => {
-    const pool = Array.from({ length: 8 }, (_, i) => ({ ...word(`d${i}`), definition: `Définition numéro ${i}.`, definition_translation: `Определение ${i}.` }));
+  it('asks to recall the word from its picture and translation (definition as a quiet line)', () => {
+    const pool = Array.from({ length: 8 }, (_, i) => ({ ...word(`d${i}`), imageUrl: `/generated-word-images/d${i}.webp`, definition: `Définition numéro ${i}.`, definition_translation: `Определение ${i}.` }));
     let task;
     for (let attempt = 0; attempt < 10 && !task; attempt += 1) {
       const session = createLessonSession({ mode: 'default', words: pool, storage: storage(), durationMinutes: 20 })!;
@@ -289,10 +289,19 @@ describe('phrase, article and reading tasks', () => {
     }
     expect(task).toBeTruthy();
     const target = pool.find((item) => item.id === task!.wordId)!;
-    expect(task!.prompt).toBe(target.definition);
+    expect(task!.prompt).toBe(target.translation);
+    expect(task!.context).toBe(target.definition);
     expect(task!.correctAnswer).toBe(target.original);
     expect(task!.options!.some((option) => option.label === target.original)).toBe(true);
     expect(task!.options!.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('does not ask to recall a word from a picture it does not have', () => {
+    const pool = Array.from({ length: 8 }, (_, i) => ({ ...word(`n${i}`), definition: `Définition ${i}.` }));
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const session = createLessonSession({ mode: 'default', words: pool, storage: storage(), durationMinutes: 20 })!;
+      expect(session.exercises.some((exercise) => exercise.type === 'definition_choice')).toBe(false);
+    }
   });
 
   it('spells single French words and Japanese kana, never katakana words', async () => {

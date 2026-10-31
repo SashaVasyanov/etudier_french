@@ -6107,34 +6107,36 @@ ruby rt {
   color: var(--accent);
 }
 
-/* «Какое слово подходит?»: the definition is the prompt. */
-.definition-prompt {
+/* «Вспомните слово»: picture, translation, and the definition as a quiet line. */
+.recall-prompt {
   display: grid;
-  gap: 10px;
+  gap: 6px;
   justify-items: center;
   text-align: center;
 }
 
-.definition-prompt-text {
+.recall-prompt-definition {
   margin: 0;
-  max-width: 34ch;
-  color: var(--label);
-  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
-  font-weight: 600;
-  line-height: 1.4;
+  max-width: 46ch;
+  color: var(--label-2);
+  font-size: 1rem;
+  line-height: 1.5;
   text-wrap: balance;
 }
 
-.definition-prompt-text rt {
-  font-size: 0.5em;
-  font-weight: 500;
+.recall-prompt-definition[lang='ja'] {
+  font-size: 1.12rem;
+}
+
+.recall-prompt-definition rt {
+  font-size: 0.6em;
   color: var(--label-3);
 }
 
-.definition-prompt-hint {
-  margin: 0;
-  color: var(--label-2);
-  font-size: 0.98rem;
+.lesson-card-visual .recall-prompt-image.word-image-frame {
+  width: min(100%, 360px);
+  max-height: clamp(150px, 26vh, 220px);
+  margin-inline: auto;
 }
 
 /* The key: one more clue toward the answer. */

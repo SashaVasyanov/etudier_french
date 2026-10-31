@@ -1017,7 +1017,8 @@
 /* Once answered, the hint and the transcription under the word repeat what the
    answer panel shows, and the options can be slimmer: one screen for the answer. */
 .desktop-app-layout .lesson-card:has(.answer-feedback) .lesson-prompt-copy,
-.desktop-app-layout .lesson-card:has(.answer-feedback) .centered-word-subtitle {
+.desktop-app-layout .lesson-card:has(.answer-feedback) .centered-word-subtitle,
+.desktop-app-layout .lesson-card:has(.answer-feedback) .recall-prompt-definition {
   display: none;
 }
 

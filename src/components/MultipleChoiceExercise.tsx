@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { Exercise, Word } from '../types';
 import { containsJapaneseKanji, getDisplayWord, getExerciseCopy, getJapaneseExampleReading } from '../lib/wordPresentation';
 import { AnswerWordDetails } from './AnswerWordDetails';
@@ -49,8 +49,6 @@ export function MultipleChoiceExercise({
   const isArticle = exercise.type === 'article_choice';
   const isReading = exercise.type === 'kanji_reading_choice';
   const isDefinition = exercise.type === 'definition_choice';
-  // «Подсказка» shows the Russian translation of the definition.
-  const [hintShown, setHintShown] = useState(false);
   const copy = getExerciseCopy(exercise.type, word.language);
   const options = exercise.options;
   // The hint takes away half of the wrong answers (two of four).
@@ -151,20 +149,13 @@ export function MultipleChoiceExercise({
             />
           ) : null}
           {isDefinition ? (
-            <div className="definition-prompt">
-              <p className="definition-prompt-text" lang={word.language === 'japanese' ? 'ja' : 'fr'}>
-                <JapaneseSentence text={exercise.prompt} reading={word.definition === exercise.prompt ? word.definition_reading : null} />
-              </p>
-              {exercise.context ? (
-                hintShown || isSubmitted ? (
-                  <p className="definition-prompt-hint" lang="ru">{exercise.context}</p>
-                ) : (
-                  <button type="button" className="text-action-button definition-hint-button" onClick={() => setHintShown(true)}>
-                    Подсказка: перевод определения
-                  </button>
-                )
+            <div className="recall-prompt">
+              <h2 className="centered-word-title lesson-prompt-title lesson-translation recall-prompt-title">{word.translation}</h2>
+              {word.definition && !word.definition.includes(word.original) ? (
+                <p className="recall-prompt-definition" lang={word.language === 'japanese' ? 'ja' : 'fr'}>
+                  <JapaneseSentence text={word.definition} reading={word.definition_reading} />
+                </p>
               ) : null}
-              <p className="lesson-prompt-copy">{copy.hint}</p>
             </div>
           ) : null}
           {isArticle ? (
@@ -203,6 +194,7 @@ export function MultipleChoiceExercise({
           ) : null}
         </header>
       }
+      visual={isDefinition && !isSubmitted ? <WordImage word={word} size="large" className="lesson-word-image lesson-choice-image recall-prompt-image" /> : null}
       body={
         <>
           {canHint && !isSubmitted ? (
@@ -262,7 +254,7 @@ export function MultipleChoiceExercise({
                     <SentenceAudioButton text={word.example_original} language={word.language} />
                   </div>
                 ) : (
-                  <AnswerContext word={word} showDefinition={!isDefinition} />
+                  <AnswerContext word={word} />
                 )}
               </div>
               {showAnswerImage || onReplayAudio ? (

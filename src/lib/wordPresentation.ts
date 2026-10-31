@@ -399,9 +399,9 @@ export function getExerciseCopy(
       };
     case 'definition_choice':
       return {
-        eyebrow: 'Определение',
-        title: 'Какое слово подходит?',
-        hint: `Прочитайте определение на ${targetLanguageLabel} и выберите слово.`,
+        eyebrow: 'Вспомните слово',
+        title: 'Вспомните слово',
+        hint: `Посмотрите на картинку и перевод и выберите слово на ${targetLanguageLabel}.`,
       };
     case 'translation_to_original_choice':
       return {
