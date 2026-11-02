@@ -148,7 +148,6 @@ function Segmented<T extends string>({ value, options, onChange, label }: {
 export default function StatisticsScreen({ learningLanguage, storage, words }: StatisticsScreenProps) {
   const [chartMode, setChartMode] = useState<ChartMode>('ahead');
   const [breakdownMode, setBreakdownMode] = useState<BreakdownMode>('levels');
-  const [showDetails, setShowDetails] = useState(false);
 
   const progressList = useMemo(() => words.map((word) => getWordProgress(storage, word.id)), [storage, words]);
   const inMemoryWords = useMemo(
@@ -259,73 +258,61 @@ export default function StatisticsScreen({ learningLanguage, storage, words }: S
         {chartTotal === 0 && chartMode === 'past' ? <p className="stats-empty stats-chart-empty">Пройдите урок — здесь появится неделя</p> : null}
       </section>
 
-      <button
-        type="button"
-        className="stats-more"
-        aria-expanded={showDetails}
-        aria-controls="stats-details"
-        onClick={() => setShowDetails((open) => !open)}
-      >
-        {showDetails ? 'Скрыть подробности' : 'Подробнее'}
-        <span className={showDetails ? 'stats-chevron open' : 'stats-chevron'} aria-hidden="true" />
-      </button>
+      <div className="stats-details">
+        <section className="stats-glass stats-detail-card">
+          <div className="stats-card-head">
+            <div>
+              <h2>Сколько держится в памяти</h2>
+              <p>
+                {recallRate !== null
+                  ? `На повторениях вспоминаете ${Math.round(recallRate * 100)}%`
+                  : 'Срок, через который слово начнёт забываться'}
+              </p>
+            </div>
+          </div>
+          <ShareBar items={strengthShares} emptyText="Появится после первых повторений." />
+        </section>
 
-      {showDetails ? (
-        <div id="stats-details" className="stats-details">
-          <section className="stats-glass stats-detail-card">
-            <div className="stats-card-head">
-              <div>
-                <h2>Сколько держится в памяти</h2>
-                <p>
-                  {recallRate !== null
-                    ? `На повторениях вспоминаете ${Math.round(recallRate * 100)}%`
-                    : 'Срок, через который слово начнёт забываться'}
-                </p>
-              </div>
+        <section className="stats-glass stats-detail-card">
+          <div className="stats-card-head">
+            <div>
+              <h2>Освоенные слова</h2>
+              <p>
+                {countRu(learnedWordList.length, RU_WORDS)}
+                {wordStats.inProgress > 0 ? ` · в работе ${wordStats.inProgress}` : ''}
+                {wordStats.difficult > 0 ? ` · сложных ${wordStats.difficult}` : ''}
+              </p>
             </div>
-            <ShareBar items={strengthShares} emptyText="Появится после первых повторений." />
-          </section>
+            <Segmented
+              label="Разбивка освоенных слов"
+              value={breakdownMode}
+              onChange={setBreakdownMode}
+              options={[{ value: 'levels', label: 'Уровни' }, { value: 'speech', label: 'Части речи' }]}
+            />
+          </div>
+          <ShareBar items={breakdown} emptyText="Появится, когда первые слова будут освоены." />
+        </section>
 
-          <section className="stats-glass stats-detail-card">
-            <div className="stats-card-head">
-              <div>
-                <h2>Освоенные слова</h2>
-                <p>
-                  {countRu(learnedWordList.length, RU_WORDS)}
-                  {wordStats.inProgress > 0 ? ` · в работе ${wordStats.inProgress}` : ''}
-                  {wordStats.difficult > 0 ? ` · сложных ${wordStats.difficult}` : ''}
-                </p>
+        <section className="stats-glass stats-detail-card stats-detail-wide">
+          <div className="stats-card-head">
+            <div>
+              <h2>Уроки за год</h2>
+              <p>{completedLessons} {pluralRu(completedLessons, ['урок', 'урока', 'уроков'])} всего</p>
+            </div>
+          </div>
+          <div className="stats-months" role="img" aria-label={monthly.map((item) => `${item.label} — ${item.count}`).join(', ')}>
+            {monthly.map((item) => (
+              <div key={item.key} className="stats-month">
+                <span className="stats-month-value">{item.count > 0 ? item.count : ''}</span>
+                <span className="stats-month-track">
+                  <span style={{ height: item.count === 0 ? 0 : `${Math.max(8, (item.count / monthlyMax) * 100)}%` }} />
+                </span>
+                <small>{item.label}</small>
               </div>
-              <Segmented
-                label="Разбивка освоенных слов"
-                value={breakdownMode}
-                onChange={setBreakdownMode}
-                options={[{ value: 'levels', label: 'Уровни' }, { value: 'speech', label: 'Части речи' }]}
-              />
-            </div>
-            <ShareBar items={breakdown} emptyText="Появится, когда первые слова будут освоены." />
-          </section>
-
-          <section className="stats-glass stats-detail-card stats-detail-wide">
-            <div className="stats-card-head">
-              <div>
-                <h2>Уроки за год</h2>
-                <p>{completedLessons} {pluralRu(completedLessons, ['урок', 'урока', 'уроков'])} всего</p>
-              </div>
-            </div>
-            <div className="stats-months" role="img" aria-label={monthly.map((item) => `${item.label} — ${item.count}`).join(', ')}>
-              {monthly.map((item) => (
-                <div key={item.key} className="stats-month">
-                  <span className="stats-month-track">
-                    <span style={{ height: item.count === 0 ? 0 : `${Math.max(8, (item.count / monthlyMax) * 100)}%` }} />
-                  </span>
-                  <small>{item.label}</small>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      ) : null}
+            ))}
+          </div>
+        </section>
+      </div>
     </section>
   );
 }

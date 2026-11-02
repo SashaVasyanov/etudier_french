@@ -342,7 +342,6 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-  animation: stats-reveal 240ms ease both;
 }
 
 @keyframes stats-reveal {
@@ -418,14 +417,22 @@
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 8px;
-  height: 92px;
+  height: 118px;
 }
 
 .stats-month {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) 18px;
+  grid-template-rows: 18px minmax(0, 1fr) 18px;
   justify-items: center;
   gap: 6px;
+}
+
+.stats-month-value {
+  color: var(--label-2);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 18px;
 }
 
 .stats-month-track {
