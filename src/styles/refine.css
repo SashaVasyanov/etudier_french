@@ -982,36 +982,67 @@
 }
 
 .desktop-app-layout .answer-feedback-word {
-  font-size: 2.1rem;
-  line-height: 1.15;
+  color: var(--label);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 .desktop-app-layout .answer-feedback-reading {
-  font-size: 1.3rem;
+  color: var(--label);
+  font-size: 1.6rem;
   font-weight: 600;
+  opacity: 0.9;
 }
 
 .desktop-app-layout .answer-feedback-translation {
-  font-size: 1rem;
+  font-size: 1.15rem;
+}
+
+/* The definition and the example must read easily at arm's length:
+   full-strength text, larger kana, furigana that is not a smudge. */
+.desktop-app-layout .answer-context {
+  gap: 14px;
+}
+
+.desktop-app-layout .answer-context-definition {
+  color: var(--label);
 }
 
 .desktop-app-layout .answer-context-definition [lang='ja'],
 .desktop-app-layout .answer-context-definition[lang='ja'] {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  line-height: 1.5;
 }
 
 .desktop-app-layout .answer-context .word-example-original {
-  font-size: 1.2rem;
+  color: var(--label);
+  font-size: 1.5rem;
+  line-height: 1.6;
 }
 
 .desktop-app-layout .answer-context rt,
 .desktop-app-layout .answer-context .word-example-original rt {
-  font-size: 0.62em;
+  color: var(--label);
+  font-size: 0.6em;
+  opacity: 0.85;
 }
 
 .desktop-app-layout .answer-context .word-example-translation,
 .desktop-app-layout .answer-context-definition-translation {
-  font-size: 0.92rem;
+  color: color-mix(in srgb, var(--label) 82%, transparent);
+  font-size: 1.1rem;
+  line-height: 1.45;
+}
+
+.desktop-app-layout .answer-context .word-example-reading {
+  color: color-mix(in srgb, var(--label) 78%, transparent);
+  font-size: 1.05rem;
+}
+
+.desktop-app-layout .answer-context .word-example {
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
 }
 
 /* Once answered, the hint and the transcription under the word repeat what the
