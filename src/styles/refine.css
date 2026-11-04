@@ -1087,3 +1087,54 @@
 .desktop-app-layout .answer-feedback-aside .feedback-replay-button {
   margin-left: 0;
 }
+
+/* The rest of the answer panel (sentence listening, word order, dictation,
+   typo diff) gets the same readable size and full-strength text. */
+.desktop-app-layout .answer-feedback .feedback-example {
+  justify-content: flex-start;
+  gap: 14px;
+  color: var(--label);
+  font-size: 1.3rem;
+  line-height: 1.6;
+}
+
+.desktop-app-layout .answer-feedback .feedback-example [lang='ja'] {
+  font-size: 1.5rem;
+}
+
+.desktop-app-layout .answer-feedback .feedback-example rt {
+  color: var(--label);
+  font-size: 0.6em;
+  opacity: 0.85;
+}
+
+.desktop-app-layout .answer-feedback .feedback-example .sentence-audio-button {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+}
+
+.desktop-app-layout .answer-feedback .detail-copy {
+  color: color-mix(in srgb, var(--label) 82%, transparent);
+  font-size: 1.1rem;
+}
+
+.desktop-app-layout .answer-dictation > span[lang='fr'] {
+  color: var(--label);
+  font-size: 1.4rem;
+}
+
+.desktop-app-layout .answer-diff {
+  font-size: 1.25rem;
+}
+
+.desktop-app-layout .answer-diff-row small {
+  min-width: 44px;
+  font-size: 0.9rem;
+}
+
+.desktop-app-layout .answer-feedback .feedback-example .sentence-audio-button svg {
+  width: 18px;
+  height: 18px;
+}
