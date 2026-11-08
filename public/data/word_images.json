@@ -10876,13 +10876,11 @@
     "imagePath": "/generated-word-images/a2-avertir-1152.webp",
     "imageUrl": "/generated-word-images/a2-avertir-1152.webp",
     "imageAlt": "предупреждать: avertir",
-    "imagePrompt": "Real associative image for \"avertir\" (предупреждать). Query: green leaves.",
-    "imageSource": "https://www.flickr.com/photos/65749227@N00/2674088380",
-    "imageSourceTitle": "Green leaves",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"Green leaves\" by robynejay is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/."
+    "imagePrompt": "A photorealistic everyday scene in France that clearly shows the meaning \"предупреждать\". The scene illustrates the situation: \"Предупреждаю тебя, собака злая.\" If people appear, they are French people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: avertir",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "a2-bavarder-1153": {
     "imagePath": "/generated-word-images/a2-bavarder-1153.webp",
@@ -16646,17 +16644,14 @@
     "imageAssociationWordId": "a1-prendre-253"
   },
   "ja-0406": {
-    "imagePath": "/generated-word-images/b1-gestion-1436.webp",
-    "imageUrl": "/generated-word-images/b1-gestion-1436.webp",
-    "imageAlt": "командование, управление (войсками): 司令する",
-    "imagePrompt": "Shared real associative image for \"司令する\" (командование, управление (войсками)) via \"gestion\".",
-    "imageSource": "https://www.flickr.com/photos/59000460@N03/12323790033",
-    "imageSourceTitle": "Description historique, topographique et naturelle de l'ancienne Armorique - Ouverture des Etats de Bretagne",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Description historique, topographique et naturelle de l'ancienne Armorique - Ouverture des Etats de Bretagne\" by Bibliothèque - Les Champs Libres - Rennes is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/.",
-    "imageAssociationWordId": "b1-gestion-1436"
+    "imagePath": "/generated-word-images/ja-0406.webp",
+    "imageUrl": "/generated-word-images/ja-0406.webp",
+    "imageAlt": "командование / командир: 司令",
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"командование / командир\". The scene illustrates the situation: \"Командир приказал отряду выступать.\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 司令",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0407": {
     "imagePath": "/generated-word-images/ja-0407.webp",
@@ -17271,17 +17266,14 @@
     "imageAttribution": "Создано специально для étudier"
   },
   "ja-0522": {
-    "imagePath": "/generated-word-images/a1-seulement-1324.webp",
-    "imageUrl": "/generated-word-images/a1-seulement-1324.webp",
-    "imageAlt": "только: 限",
-    "imagePrompt": "Shared real associative image for \"限\" (только) via \"seulement\".",
-    "imageSource": "https://www.flickr.com/photos/19678502@N00/30639080492",
-    "imageSourceTitle": "FotoInsight_Photo_Advent_Calendar_A3_W600xH335",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"FotoInsight_Photo_Advent_Calendar_A3_W600xH335\" by kbrumann is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/.",
-    "imageAssociationWordId": "a1-seulement-1324"
+    "imagePath": "/generated-word-images/ja-0522.webp",
+    "imageUrl": "/generated-word-images/ja-0522.webp",
+    "imageAlt": "только / лишь: 限り",
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"только / лишь\". The scene illustrates the situation: \"Шанс есть только в этот раз.\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 限り",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0526": {
     "imagePath": "/generated-word-images/a2-bonheur-144.webp",
@@ -20136,18 +20128,14 @@
     "imageAssociationScore": 188
   },
   "ja-0899": {
-    "imagePath": "/generated-word-images/b1-adapter-1464.webp",
-    "imageUrl": "/generated-word-images/b1-adapter-1464.webp",
+    "imagePath": "/generated-word-images/ja-0899.webp",
+    "imageUrl": "/generated-word-images/ja-0899.webp",
     "imageAlt": "тормозить (сдерживать) (что-л.) / мешать (препятствовать) (чему-л.): 阻止する",
-    "imagePrompt": "Unique real associative image for \"阻止する\" (тормозить (сдерживать) (что-л.) / мешать (препятствовать) (чему-л.)) via \"adapter\".",
-    "imageSource": "https://www.flickr.com/photos/33000102@N03/39902641763",
-    "imageSourceTitle": "ADAPT action in DC with Phil Ateto",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"ADAPT action in DC with Phil Ateto\" by Backbone Campaign is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/.",
-    "imageAssociationWordId": "b1-adapter-1464",
-    "imageAssociationScore": 98
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"тормозить (сдерживать) (что-л.) / мешать (препятствовать) (чему-л.)\". The scene illustrates the situation: \"Полиция помешала преступнику сбежать.\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 阻止する",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0902": {
     "imagePath": "/generated-word-images/b1-ca-depend-375.webp",
@@ -22212,18 +22200,14 @@
     "imageAttribution": "Создано специально для étudier"
   },
   "ja-0574": {
-    "imagePath": "/generated-word-images/a1-courgette-608.webp",
-    "imageUrl": "/generated-word-images/a1-courgette-608.webp",
+    "imagePath": "/generated-word-images/ja-0574.webp",
+    "imageUrl": "/generated-word-images/ja-0574.webp",
     "imageAlt": "федерация: 連邦",
-    "imagePrompt": "Unique real associative image for \"連邦\" (федерация) via \"courgette\".",
-    "imageSource": "https://www.flickr.com/photos/74105777@N00/7920453668",
-    "imageSourceTitle": "Vegetables",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Vegetables\" by adactio is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/.",
-    "imageAssociationWordId": "a1-courgette-608",
-    "imageAssociationScore": 98
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"федерация\". The scene illustrates the situation: \"Россия — федеративное государство.\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 連邦",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0578": {
     "imagePath": "/generated-word-images/ja-0578.webp",
@@ -22287,18 +22271,14 @@
     "imageAssociationScore": 368
   },
   "ja-0604": {
-    "imagePath": "/generated-word-images/a1-feuille-747.webp",
-    "imageUrl": "/generated-word-images/a1-feuille-747.webp",
+    "imagePath": "/generated-word-images/ja-0604.webp",
+    "imageUrl": "/generated-word-images/ja-0604.webp",
     "imageAlt": "полковник / (мор.) капитан 1-го ранга: 大佐",
-    "imagePrompt": "Unique real associative image for \"大佐\" (полковник / (мор.) капитан 1-го ранга) via \"feuille\".",
-    "imageSource": "https://www.flickr.com/photos/24998164@N06/35022877171",
-    "imageSourceTitle": "La tempête a soufflée #feuille #feuilles #nature #leaves #vert #green #arbre #photography #paysage #tree #arbres #photo #couleurs #promenade #leaf #feuille #photooftheday #ville #urban #ville #city #street #picoftheday #igerslille #lille #lillemaville #ha",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
-    "imageAttribution": "\"La tempête a soufflée #feuille #feuilles #nature #leaves #vert #green #arbre #photography #paysage #tree #arbres #photo #couleurs #promenade #leaf #feuille #photooftheday #ville #urban #ville #city #street #picoftheday #igerslille #lille #lillemaville #ha\" by eric.delcroix is licensed under CC BY-NC-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/2.0/.",
-    "imageAssociationWordId": "a1-feuille-747",
-    "imageAssociationScore": 98
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"полковник / (мор.) капитан 1-го ранга\". The scene illustrates the situation: \"Его повысили до полковника.\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 大佐",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0608": {
     "imagePath": "/generated-word-images/a1-elle-315.webp",
@@ -22441,18 +22421,14 @@
     "imageAssociationWordId": "a2-choix-150"
   },
   "ja-0640": {
-    "imagePath": "/generated-word-images/a1-ail-606.webp",
-    "imageUrl": "/generated-word-images/a1-ail-606.webp",
+    "imagePath": "/generated-word-images/ja-0640.webp",
+    "imageUrl": "/generated-word-images/ja-0640.webp",
     "imageAlt": "манеж, скаковой круг: 馬場",
-    "imagePrompt": "Unique real associative image for \"馬場\" (манеж, скаковой круг) via \"ail\".",
-    "imageSource": "https://www.flickr.com/photos/28652129@N06/15528474688",
-    "imageSourceTitle": "Shadowland",
-    "imageProvider": "flickr",
-    "imageLicense": "by-sa-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "imageAttribution": "\"Shadowland\" by Anne Worner is licensed under CC BY-SA 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/2.0/.",
-    "imageAssociationWordId": "a1-ail-606",
-    "imageAssociationScore": 98
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"манеж, скаковой круг\". The scene illustrates the situation: \"Утром лошади неспешно бегают по манежу.\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 馬場",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0642": {
     "imagePath": "/generated-word-images/ja-0642.webp",
@@ -23121,32 +23097,24 @@
     "imageAttribution": "Создано специально для étudier"
   },
   "ja-0773": {
-    "imagePath": "/generated-word-images/a2-louer-1458.webp",
-    "imageUrl": "/generated-word-images/a2-louer-1458.webp",
+    "imagePath": "/generated-word-images/ja-0773.webp",
+    "imageUrl": "/generated-word-images/ja-0773.webp",
     "imageAlt": "пытать: 拷問する",
-    "imagePrompt": "Unique real associative image for \"拷問する\" (пытать) via \"louer\".",
-    "imageSource": "https://www.flickr.com/photos/25422862@N02/8067838591",
-    "imageSourceTitle": "Electric Blue-Bike testdrive in Mons",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Electric Blue-Bike testdrive in Mons\" by ines s. is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/.",
-    "imageAssociationWordId": "a2-louer-1458",
-    "imageAssociationScore": 98
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"пытать\". The scene illustrates the situation: \"Солдаты пытали пленного.\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 拷問する",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0776": {
-    "imagePath": "/generated-word-images/a1-lezard-774.webp",
-    "imageUrl": "/generated-word-images/a1-lezard-774.webp",
+    "imagePath": "/generated-word-images/ja-0776.webp",
+    "imageUrl": "/generated-word-images/ja-0776.webp",
     "imageAlt": "(воен.) капитан / (мор.) капитан-лейтенант: 大尉",
-    "imagePrompt": "Unique real associative image for \"大尉\" ((воен.) капитан / (мор.) капитан-лейтенант) via \"lézard\".",
-    "imageSource": "https://www.flickr.com/photos/78649137@N05/41585663831",
-    "imageSourceTitle": "Lézard vert occidental (Lacerta bilineata)",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-nd-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
-    "imageAttribution": "\"Lézard vert occidental (Lacerta bilineata)\" by fra298 is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/2.0/.",
-    "imageAssociationWordId": "a1-lezard-774",
-    "imageAssociationScore": 98
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"(воен.) капитан / (мор.) капитан-лейтенант\". The scene illustrates the situation: \"Капитан проверил состояние подразделения.\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 大尉",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0777": {
     "imagePath": "/generated-word-images/ja-0777.webp",
@@ -23280,18 +23248,14 @@
     "imageAttribution": "Создано специально для étudier"
   },
   "ja-0797": {
-    "imagePath": "/generated-word-images/a1-toucher-1096.webp",
-    "imageUrl": "/generated-word-images/a1-toucher-1096.webp",
+    "imagePath": "/generated-word-images/ja-0797.webp",
+    "imageUrl": "/generated-word-images/ja-0797.webp",
     "imageAlt": "прикрывать / конвоировать: 援護する",
-    "imagePrompt": "Unique real associative image for \"援護する\" (прикрывать / конвоировать) via \"toucher\".",
-    "imageSource": "https://www.flickr.com/photos/41538865@N06/6576937695",
-    "imageSourceTitle": "LES CHAMPS ELYSÉES",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"LES CHAMPS ELYSÉES\" by marsupilami92 is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/.",
-    "imageAssociationWordId": "a1-toucher-1096",
-    "imageAssociationScore": 98
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"прикрывать / конвоировать\". The scene illustrates the situation: \"Солдаты прикрывали товарищей.\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 援護する",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0798": {
     "imagePath": "/generated-word-images/ja-0798.webp",
@@ -23318,18 +23282,14 @@
     "imageAssociationScore": 188
   },
   "ja-0800": {
-    "imagePath": "/generated-word-images/a1-drap-513.webp",
-    "imageUrl": "/generated-word-images/a1-drap-513.webp",
-    "imageAlt": "приказ (письменный): 令状",
-    "imagePrompt": "Unique real associative image for \"令状\" (приказ (письменный)) via \"drap\".",
-    "imageSource": "https://www.flickr.com/photos/26082117@N07/9152531924",
-    "imageSourceTitle": "Bouges-le-Château (Indre).",
-    "imageProvider": "flickr",
-    "imageLicense": "by-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "imageAttribution": "\"Bouges-le-Château (Indre).\" by sybarite48 is licensed under CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/.",
-    "imageAssociationWordId": "a1-drap-513",
-    "imageAssociationScore": 98
+    "imagePath": "/generated-word-images/ja-0800.webp",
+    "imageUrl": "/generated-word-images/ja-0800.webp",
+    "imageAlt": "ордер: 令状",
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"ордер\". The scene illustrates the situation: \"У вас есть ордер на обыск?\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 令状",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0802": {
     "imagePath": "/generated-word-images/ja-0802.webp",
@@ -23802,18 +23762,14 @@
     "imageAttribution": "Создано специально для étudier"
   },
   "ja-0903": {
-    "imagePath": "/generated-word-images/a1-uf-565.webp",
-    "imageUrl": "/generated-word-images/a1-uf-565.webp",
+    "imagePath": "/generated-word-images/ja-0903.webp",
+    "imageUrl": "/generated-word-images/ja-0903.webp",
     "imageAlt": "майор / (мор.) капитан 3-го ранга: 少佐",
-    "imagePrompt": "Unique real associative image for \"少佐\" (майор / (мор.) капитан 3-го ранга) via \"œuf\".",
-    "imageSource": "https://www.flickr.com/photos/100142027@N04/34042150164",
-    "imageSourceTitle": "Œuf meurette en trompe l'œil version céleri-cacao",
-    "imageProvider": "flickr",
-    "imageLicense": "by-nc-2.0",
-    "imageLicenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
-    "imageAttribution": "\"Œuf meurette en trompe l'œil version céleri-cacao\" by Inspirational Food is licensed under CC BY-NC 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/2.0/.",
-    "imageAssociationWordId": "a1-uf-565",
-    "imageAssociationScore": 8
+    "imagePrompt": "A photorealistic everyday scene in Japan that clearly shows the meaning \"майор / (мор.) капитан 3-го ранга\". The scene illustrates the situation: \"Майор сообщил об изменении плана операции.\" If people appear, they are Japanese people. Natural light, simple composition with one clear subject. Photorealistic, no text, no letters, no numbers, no logos, no signs, no captions.",
+    "imageSource": "generated:openai-imagegen",
+    "imageSourceTitle": "Generated association: 少佐",
+    "imageProvider": "openai-imagegen",
+    "imageAttribution": "Создано специально для étudier"
   },
   "ja-0906": {
     "imagePath": "/generated-word-images/a1-bus-27.webp",
